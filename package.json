@@ -119,5 +119,12 @@
   },
   "msw": {
     "workerDirectory": "src"
+  },
+  "cypress-cucumber-preprocessor": {
+    "json": {
+      "enabled": true,
+      "formatter": "cypress/cucumber-json-formatter",
+      "output": "cucumber-report.json"
+    }
   }
 }

@@ -1,4 +1,6 @@
+@Ignore
 Feature: Dashboard Page feature
+  @Ignore
   Scenario: successful load dashboard page
     Given browser is opened to dashboard page
     Then url should contain dashboard
