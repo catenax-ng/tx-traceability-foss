@@ -20,21 +20,21 @@
  ********************************************************************************/
 
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
+import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { RoleService } from '@core/user/role.service';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Injectable()
-export class AuthGuard extends KeycloakAuthGuard {
-  constructor(protected router: Router, protected keycloakService: KeycloakService) {
-    super(router, keycloakService);
-  }
+export class AuthGuard implements CanActivate {
+  constructor(private readonly oAuthService: OAuthService, private readonly roleService: RoleService) {}
 
-  public async isAccessAllowed(route: ActivatedRouteSnapshot): Promise<boolean> {
-    if (!this.authenticated) {
-      await this.keycloakService.login().then();
+  public canActivate(route: ActivatedRouteSnapshot): boolean {
+    const hasValidAccessToken = this.oAuthService.hasValidAccessToken();
+    if (!hasValidAccessToken) {
+      void this.oAuthService.tryLogin();
+      return false;
     }
 
-    // Get the roles required from the route.
     const requiredRoles = route.data.roles;
 
     // Allow the user to proceed if no additional roles are required to access the route.
@@ -42,7 +42,6 @@ export class AuthGuard extends KeycloakAuthGuard {
       return true;
     }
 
-    // Allow the user to proceed if all the required roles are present.
-    return requiredRoles.every(role => this.roles.includes(role));
+    return requiredRoles.every(role => this.roleService.hasAccess(role));
   }
 }

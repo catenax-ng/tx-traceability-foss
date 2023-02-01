@@ -21,7 +21,7 @@
 
 import { Injectable } from '@angular/core';
 import { environment } from '@env';
-import { KeycloakService } from 'keycloak-angular';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 export interface UserData {
   username: string;
@@ -37,22 +37,25 @@ export interface UserData {
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private readonly keycloakService: KeycloakService) {}
+  constructor(private readonly oAuthService: OAuthService) {}
 
   public getBearerToken(): string {
-    return 'Bearer ' + this.keycloakService.getKeycloakInstance().token;
+    return 'Bearer ' + this.oAuthService.getAccessToken();
   }
 
   public getUserData(): UserData {
+    console.log(this.oAuthService.getIdentityClaims());
+    alert(this.oAuthService.getIdentityClaims());
+
     const {
       preferred_username: username = '',
       given_name: firstname = '',
       family_name: surname = '',
       email = '',
       resource_access = {},
-      auth_time: key_auth_time,
+      auth_time: key_auth_time = '',
       bpn = '',
-    } = this.keycloakService.getKeycloakInstance().tokenParsed;
+    } = (this.oAuthService.getIdentityClaims() || {}) as any;
 
     const auth_time = key_auth_time.toString();
     const roles = resource_access[environment.clientId]?.roles ?? [];
@@ -61,6 +64,6 @@ export class AuthService {
   }
 
   public logOut(): void {
-    void this.keycloakService.logout();
+    this.oAuthService.logOut();
   }
 }

@@ -45,7 +45,8 @@
               "src/assets/images",
               "src/assets/locales",
               "src/mockServiceWorker.js",
-              "src/favicon"
+              "src/favicon",
+              "src/silent-refresh.html"
             ],
             "styles": ["src/styles.scss"],
             "scripts": []
@@ -182,7 +183,8 @@
               "src/assets/images",
               "src/assets/locales",
               "src/mockServiceWorker.js",
-              "src/favicon"
+              "src/favicon",
+              "src/silent-refresh.html"
             ],
             "styles": ["src/styles.scss"],
             "customWebpackConfig": {

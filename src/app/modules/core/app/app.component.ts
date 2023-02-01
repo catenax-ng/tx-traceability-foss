@@ -20,7 +20,11 @@
  ********************************************************************************/
 
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { authCodeFlowConfig } from '@core/auth/keycloak.helper';
 import { environment } from '@env';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { filter } from 'rxjs/operators';
 import * as mockService from '../../../mocks/mock';
 
 @Component({
@@ -29,7 +33,25 @@ import * as mockService from '../../../mocks/mock';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor() {
+  constructor(private readonly router: Router, private readonly oauthService: OAuthService) {
+    this.configureCodeFlow();
+
+    // Automatically load user profile
+    this.oauthService.events.pipe(filter(e => e.type === 'token_received')).subscribe(_ => {
+      console.debug('state', this.oauthService.state);
+      void this.oauthService.loadUserProfile();
+
+      const scopes = this.oauthService.getGrantedScopes();
+      console.debug('scopes', scopes);
+    });
+
     if (environment.mockService) void mockService.worker.start({ onUnhandledRequest: 'bypass' });
+  }
+
+  private async configureCodeFlow() {
+    this.oauthService.configure(authCodeFlowConfig);
+    void this.oauthService.loadDiscoveryDocumentAndTryLogin();
+
+    this.oauthService.setupAutomaticSilentRefresh();
   }
 }

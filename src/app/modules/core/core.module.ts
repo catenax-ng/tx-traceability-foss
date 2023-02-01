@@ -34,6 +34,7 @@ import { PageNotFoundModule } from '@page/page-not-found/page-not-found.module';
 import { PartsModule } from '@page/parts/parts.module';
 import { ToastService } from '@shared/components/toasts/toast.service';
 import { I18NextModule } from 'angular-i18next';
+import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { ApiInterceptor } from './api/api.interceptor';
 import { ApiService } from './api/api.service';
@@ -62,20 +63,15 @@ import { UserService } from './user/user.service';
     OtherPartsModule,
     AdminModule,
     I18NextModule.forRoot(),
+    OAuthModule.forRoot(),
   ],
   providers: [
     ApiService,
     AuthService,
     UserService,
     {
-      provide: KeycloakService,
-      useClass: environment.authDisabled ? MockedKeycloakService : KeycloakService,
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: KeycloakHelper,
-      multi: true,
-      deps: [KeycloakService],
+      provide: OAuthService,
+      useClass: environment.authDisabled ? OAuthService : OAuthService,
     },
     {
       provide: MAT_DATE_LOCALE,
