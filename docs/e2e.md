@@ -34,7 +34,12 @@ To be able to use Behavior-driven development (BDD) approach we have configured 
 
 ## How it works on github actions (CI/CD)
 
+### Overview
+
 - configuration file is here: `.github/workflows/e2e-tests.yml`
+- this job is triggered by 3 ways:
+  - automatically - for every PR or on push to main
+  - manually - by Test Manager
 - we run in parallel e2e tests for 3 browser engines: chrome, firefox and webkit (used by Safari)
 - we use one common pre-stage named 'install'
 - then base on 'install' stage cache result it runs 3 separated threads for every browser
@@ -42,3 +47,17 @@ To be able to use Behavior-driven development (BDD) approach we have configured 
   - cypress-run-firefox
   - cypress-run-webkit
 - every thread as a part of result has an Artifact section with cypress generated files like videos or screenshots. we can download zip file with those files and open video/screenshot to check what happened.
+
+### Xray (Jira) integration
+
+#### Cucumber scenarios in Xray
+
+- in first initial step "install" we fetch .feature files from Xray by scripts/xray_download_feature_files.sh
+- then every cypress browser execution use these scenarios
+- we keep a package with downloaded scenarios as artifact in Github job (named: cypress - e2e)
+
+#### Xray Test Execution Reports
+
+- after every cypress browser execution we generate test results in cucumber format (we use cypress/cucumber-json-formatter: https://github.com/badeball/cypress-cucumber-preprocessor/blob/master/docs/json-report.md)
+- those test executions results are imported to Xray by this script: scripts/xray_push_test_results.sh
+- IMPORTANT! - we don't send reports if the job was triggered by PR event

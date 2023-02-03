@@ -124,7 +124,7 @@
     "json": {
       "enabled": true,
       "formatter": "cypress/cucumber-json-formatter",
-      "output": "cucumber-report.json"
+      "output": "cypress/reports/cucumber-report.json"
     }
   }
 }

@@ -4,11 +4,18 @@
 name: E2E Tests - Xray
 
 on:
-  # TODO: do we need it?
   # triggered manually by Test Manager
   workflow_dispatch:
+    inputs:
+      jira_filter_id:
+        description: 'Jira filter ID to fetch test scenarios'
+        required: false
+        # by default, we use this filter: https://jira.catena-x.net/issues/?filter=11645
+        default: 11645
+  # or automatically by merge to main
   push:
     branches: [ main ]
+  # or in PR
   pull_request:
 
 jobs:
@@ -17,8 +24,8 @@ jobs:
     container:
       # if you need to change image please make sure use the same version in all places
       # (here and in cypress/Dockerfile)
-      image: cypress/browsers:node16.16.0-chrome107-ff107-edge
-      options: --user 1001
+#      image: cypress/browsers:node16.16.0-chrome107-ff107-edge
+#      options: --user 1001
 
     # Install YARN dependencies, cache them correctly
     steps:
@@ -35,6 +42,22 @@ jobs:
         with:
           cmd: install # will run `yarn install` command
 
+    # Fetch feature files
+      - name: Fetch .feature files from Jira Xray
+        env:
+          JIRA_USERNAME: ${{ secrets.ORG_IRS_JIRA_USERNAME }}
+          JIRA_PASSWORD: ${{ secrets.ORG_IRS_JIRA_PASSWORD }}
+          JIRA_FILTER_ID: ${{ github.event.inputs.jira_filter_id }}
+        run: |
+          ./scripts/xray_download_feature_files.sh
+
+      - name: Save cypress/e2e folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress - e2e
+          if-no-files-found: error
+          path: cypress/e2e
+
   cypress-run-chrome:
     timeout-minutes: 15
     runs-on: ubuntu-latest
@@ -47,19 +70,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Download the cypress/e2e folder
+        uses: actions/download-artifact@v3
+        with:
+          name: cypress - e2e
+          path: cypress/e2e
+
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
 
-      - name: Fetch .feature files from Jira Xray
-        env:
-          JIRA_USERNAME: ${{ secrets.ORG_IRS_JIRA_USERNAME }}
-          JIRA_PASSWORD: ${{ secrets.ORG_IRS_JIRA_PASSWORD }}
-        run: |
-#          ./scripts/xray_download_feature_files.sh
-          curl -u $JIRA_USERNAME:$JIRA_PASSWORD "https://jira.catena-x.net/rest/raven/1.0/export/test?filter=11645" -o features.zip
-          unzip -o features.zip -d cypress/e2e
       - name: Cypress run all tests
         uses: cypress-io/github-action@v5.0.5 # use the explicit version number
         with:
@@ -69,12 +90,13 @@ jobs:
           browser: chrome
 
       - name: Submit results to Xray
-        if: success() || failure()
+        # we don't want to submit results to xray when it was run by PR
+        if: github.event_name != 'pull_request' && (success() || failure())
         env:
           JIRA_USERNAME: ${{ secrets.ORG_IRS_JIRA_USERNAME }}
           JIRA_PASSWORD: ${{ secrets.ORG_IRS_JIRA_PASSWORD }}
         run: |
-          ./scripts/cypress_push_results_to_xray.sh
+          ./scripts/xray_push_test_results.sh
 
       - name: Archive cypress artifacts
         if: success() || failure()
@@ -85,80 +107,110 @@ jobs:
             cypress/videos/
             cypress/screenshots/
 
-#  cypress-run-firefox:
-#    timeout-minutes: 15
-#    runs-on: ubuntu-latest
-#    container:
-#      image: cypress/browsers:node16.16.0-chrome107-ff107-edge
-#      options: --user 1001
-#    needs: install
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#
+  cypress-run-firefox:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node16.16.0-chrome107-ff107-edge
+      options: --user 1001
+    needs: install
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download the cypress/e2e folder
+        uses: actions/download-artifact@v3
+        with:
+          name: cypress - e2e
+          path: cypress/e2e
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Cypress run all tests
+        uses: cypress-io/github-action@v5.0.5 # use the explicit version number
+        with:
+          start: npm start
+          wait-on: "http://localhost:4200"
+          wait-on-timeout: 120
+          browser: firefox
+
+      - name: Submit results to Xray
+        # we don't want to submit results to xray when it was run by PR
+        if: github.event_name != 'pull_request' && (success() || failure())
+        env:
+          JIRA_USERNAME: ${{ secrets.ORG_IRS_JIRA_USERNAME }}
+          JIRA_PASSWORD: ${{ secrets.ORG_IRS_JIRA_PASSWORD }}
+        run: |
+          ./scripts/xray_push_test_results.sh
+
+      - name: Archive cypress artifacts
+        if: success() || failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress generated files - firefox
+          path: |
+            cypress/videos/
+            cypress/screenshots/
+
+  cypress-run-webkit:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    needs: install
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download the cypress/e2e folder
+        uses: actions/download-artifact@v3
+        with:
+          name: cypress - e2e
+          path: cypress/e2e
+
+# commented because if we use it here, we face with that problem:
+# "http://localhost:4200 timed out on retry 151 of 5, elapsed 150449ms, limit 150000ms
+#  Error: connect ECONNREFUSED 127.0.0.1:4200"
+
 #      - name: Use Node.js 18.x
 #        uses: actions/setup-node@v3
 #        with:
 #          node-version: 18.x
-#
-#      - name: Cypress run all tests
-#        uses: cypress-io/github-action@v5.0.5 # use the explicit version number
-#        with:
-#          start: npm start
-#          wait-on: "http://localhost:4200"
-#          wait-on-timeout: 120
-#          browser: firefox
-#
-#      - name: Archive cypress artifacts
-#        if: success() || failure()
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: cypress generated files - firefox
-#          path: |
-#            cypress/videos/
-#            cypress/screenshots/
-#
-#  cypress-run-webkit:
-#    timeout-minutes: 15
-#    runs-on: ubuntu-latest
-#    needs: install
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#
-## commented because if we use it here, we face with that problem:
-## "http://localhost:4200 timed out on retry 151 of 5, elapsed 150449ms, limit 150000ms
-##  Error: connect ECONNREFUSED 127.0.0.1:4200"
-#
-##      - name: Use Node.js 18.x
-##        uses: actions/setup-node@v3
-##        with:
-##          node-version: 18.x
-#
-#      - name: Use Node.js 16.x
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: 16.x
-#
-#      # https://docs.cypress.io/guides/guides/launching-browsers#Linux-Dependencies
-#      - name: Install additional dependencies
-#        run: npx playwright install --with-deps webkit
-#
-#      - name: Cypress run all tests
-#        uses: cypress-io/github-action@v5.0.5 # use the explicit version number
-#        with:
-#          start: npm start
-#          wait-on: "http://localhost:4200"
-#          wait-on-timeout: 120
-#          browser: webkit
-#
-#      - name: Archive cypress artifacts
-#        if: success() || failure()
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: cypress generated files - webkit
-#          path: |
-#            cypress/videos/
-#            cypress/screenshots/
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      # https://docs.cypress.io/guides/guides/launching-browsers#Linux-Dependencies
+      - name: Install additional dependencies
+        run: npx playwright install --with-deps webkit
+
+      - name: Cypress run all tests
+        uses: cypress-io/github-action@v5.0.5 # use the explicit version number
+        with:
+          start: npm start
+          wait-on: "http://localhost:4200"
+          wait-on-timeout: 120
+          browser: webkit
+
+      - name: Submit results to Xray
+        # we don't want to submit results to xray when it was run by PR
+        if: github.event_name != 'pull_request' && (success() || failure())
+        env:
+          JIRA_USERNAME: ${{ secrets.ORG_IRS_JIRA_USERNAME }}
+          JIRA_PASSWORD: ${{ secrets.ORG_IRS_JIRA_PASSWORD }}
+        run: |
+          ./scripts/xray_push_test_results.sh
+
+      - name: Archive cypress artifacts
+        if: success() || failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress generated files - webkit
+          path: |
+            cypress/videos/
+            cypress/screenshots/
