@@ -24,7 +24,7 @@ To be able to use Behavior-driven development (BDD) approach we have configured 
 
 ### Using docker browsers
 
-- local env - docker image (use the same browser engine versions as github CI/CD)
+- local env - docker image (use the same browser engine versions as GitHub CI/CD)
   - run this command first to build docker image with cypress browsers: `docker compose -f cypress/docker-compose.yml build `
   - then make sure you have running frontend app: `yarn start` because docker image uses localhost url to connect run tests
   - then we can run E2E cypress tests on these browsers:
@@ -32,7 +32,7 @@ To be able to use Behavior-driven development (BDD) approach we have configured 
     - firefox - `docker compose -f cypress/docker-compose.yml run cypress --browser=firefox`
     - webkit (safari's engine) - `docker compose -f cypress/docker-compose.yml run cypress --browser=webkit`
 
-## How it works on github actions (CI/CD)
+## How it works on GitHub actions (CI/CD)
 
 ### Overview
 
@@ -50,14 +50,19 @@ To be able to use Behavior-driven development (BDD) approach we have configured 
 
 ### Xray (Jira) integration
 
+### Configuration
+
+By default, to fetch .feature files with Cucumber scenarios we use this jira filter: https://jira.catena-x.net/issues/?filter=11645.
+But when we run GitHub job manually, we can set different value in parameter "jira_filter_id".
+
 #### Cucumber scenarios in Xray
 
-- in first initial step "install" we fetch .feature files from Xray by scripts/xray_download_feature_files.sh
+- in first initial step "install" we fetch .feature files from Xray by scripts/xray-download-feature-files.sh
 - then every cypress browser execution use these scenarios
-- we keep a package with downloaded scenarios as artifact in Github job (named: cypress - e2e)
+- we keep a package with downloaded scenarios as artifact in GitHub job (named: cypress - e2e)
 
 #### Xray Test Execution Reports
 
 - after every cypress browser execution we generate test results in cucumber format (we use cypress/cucumber-json-formatter: https://github.com/badeball/cypress-cucumber-preprocessor/blob/master/docs/json-report.md)
-- those test executions results are imported to Xray by this script: scripts/xray_push_test_results.sh
+- those test executions results are imported to Xray by this script: scripts/xray-push-test-results.sh
 - IMPORTANT! - we don't send reports if the job was triggered by PR event
