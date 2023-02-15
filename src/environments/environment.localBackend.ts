@@ -27,7 +27,7 @@ export const environment = {
   authDisabled: false,
   mockService: false,
   keycloakUrl: 'https://centralidp.dev.demo.catena-x.net/auth',
-  clientId: 'Cl10-CX-Part',
+  clientId: 'Cl17-CX-Part',
   defaultRealm: 'CX-Central',
   apiUrl: 'http://localhost:8080/api',
 };
