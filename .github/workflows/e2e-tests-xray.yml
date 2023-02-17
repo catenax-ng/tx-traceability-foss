@@ -21,12 +21,6 @@ on:
 jobs:
   install:
     runs-on: ubuntu-latest
-    container:
-      # if you need to change image please make sure use the same version in all places
-      # (here and in cypress/Dockerfile)
-#      image: cypress/browsers:node16.16.0-chrome107-ff107-edge
-#      options: --user 1001
-
     # Install YARN dependencies, cache them correctly
     steps:
       - name: Checkout
@@ -49,7 +43,7 @@ jobs:
           JIRA_PASSWORD: ${{ secrets.ORG_IRS_JIRA_PASSWORD }}
           JIRA_FILTER_ID: ${{ github.event.inputs.jira_filter_id }}
         run: |
-          ./scripts/xray_download_feature_files.sh
+          ./scripts/xray-download-feature-files.sh
 
       - name: Save cypress/e2e folder
         uses: actions/upload-artifact@v3
@@ -62,6 +56,8 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
+      # if you need to change image please make sure use the same version in all places
+      # (here and in cypress/Dockerfile)
       image: cypress/browsers:node16.16.0-chrome107-ff107-edge
       options: --user 1001
     needs: install
@@ -82,7 +78,7 @@ jobs:
           node-version: 18.x
 
       - name: Cypress run all tests
-        uses: cypress-io/github-action@v5.0.5 # use the explicit version number
+        uses: cypress-io/github-action@v5.0.7 # use the explicit version number
         with:
           start: npm start
           wait-on: "http://localhost:4200"
@@ -96,7 +92,7 @@ jobs:
           JIRA_USERNAME: ${{ secrets.ORG_IRS_JIRA_USERNAME }}
           JIRA_PASSWORD: ${{ secrets.ORG_IRS_JIRA_PASSWORD }}
         run: |
-          ./scripts/xray_push_test_results.sh
+          ./scripts/xray-push-test-results.sh
 
       - name: Archive cypress artifacts
         if: success() || failure()
@@ -111,6 +107,8 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     container:
+      # if you need to change image please make sure use the same version in all places
+      # (here and in cypress/Dockerfile)
       image: cypress/browsers:node16.16.0-chrome107-ff107-edge
       options: --user 1001
     needs: install
@@ -131,7 +129,7 @@ jobs:
           node-version: 18.x
 
       - name: Cypress run all tests
-        uses: cypress-io/github-action@v5.0.5 # use the explicit version number
+        uses: cypress-io/github-action@v5.0.7 # use the explicit version number
         with:
           start: npm start
           wait-on: "http://localhost:4200"
@@ -145,7 +143,7 @@ jobs:
           JIRA_USERNAME: ${{ secrets.ORG_IRS_JIRA_USERNAME }}
           JIRA_PASSWORD: ${{ secrets.ORG_IRS_JIRA_PASSWORD }}
         run: |
-          ./scripts/xray_push_test_results.sh
+          ./scripts/xray-push-test-results.sh
 
       - name: Archive cypress artifacts
         if: success() || failure()
@@ -190,7 +188,7 @@ jobs:
         run: npx playwright install --with-deps webkit
 
       - name: Cypress run all tests
-        uses: cypress-io/github-action@v5.0.5 # use the explicit version number
+        uses: cypress-io/github-action@v5.0.7 # use the explicit version number
         with:
           start: npm start
           wait-on: "http://localhost:4200"
@@ -204,7 +202,7 @@ jobs:
           JIRA_USERNAME: ${{ secrets.ORG_IRS_JIRA_USERNAME }}
           JIRA_PASSWORD: ${{ secrets.ORG_IRS_JIRA_PASSWORD }}
         run: |
-          ./scripts/xray_push_test_results.sh
+          ./scripts/xray-push-test-results.sh
 
       - name: Archive cypress artifacts
         if: success() || failure()
