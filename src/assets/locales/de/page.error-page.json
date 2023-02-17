@@ -1,0 +1,8 @@
+{
+  "errorPage": {
+    "title": "Fehler Seite"
+  },
+  "pageNotFound": {
+    "message": "Die von Ihnen angeforderte Seite konnte nicht gefunden werden."
+  }
+}

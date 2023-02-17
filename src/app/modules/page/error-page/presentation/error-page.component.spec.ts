@@ -19,14 +19,28 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { SharedModule } from '@shared/shared.module';
-import { TemplateModule } from '@shared/template.module';
-import { PageNotFoundComponent } from './presentation/page-not-found.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-@NgModule({
-  declarations: [PageNotFoundComponent],
-  imports: [CommonModule, TemplateModule, SharedModule],
-})
-export class PageNotFoundModule {}
+import { ErrorPageComponent } from './error-page.component';
+import { renderComponent } from '@tests/test-render.utils';
+import { DashboardComponent } from '@page/dashboard/presentation/dashboard.component';
+import { DashboardModule } from '@page/dashboard/dashboard.module';
+import { SharedModule } from '@shared/shared.module';
+import { PartsModule } from '@page/parts/parts.module';
+import { screen } from '@testing-library/angular';
+import { ErrorPageModule } from '@page/error-page/error-page.module';
+
+describe('ErrorPageComponent', () => {
+  const renderErrorPageComponent = ({ roles = [] } = {}) =>
+    renderComponent(ErrorPageComponent, {
+      imports: [ErrorPageModule, SharedModule],
+      translations: ['page.error-page'],
+      roles,
+    });
+
+  it('should render header', async () => {
+    await renderErrorPageComponent();
+
+    expect(screen.getByText('Error page')).toBeInTheDocument();
+  });
+});

@@ -19,21 +19,23 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { PageNotFoundModule } from '@page/page-not-found/page-not-found.module';
-import { PageNotFoundComponent } from '@page/page-not-found/presentation/page-not-found.component';
-import { screen } from '@testing-library/angular';
-import { renderComponent } from '@tests/test-render.utils';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { I18NEXT_NAMESPACE_RESOLVER } from 'angular-i18next';
+import { ErrorPageComponent } from '@page/error-page/presentation/error-page.component';
 
-describe('PagNotFound', () => {
-  const renderMap = () =>
-    renderComponent(PageNotFoundComponent, {
-      imports: [PageNotFoundModule],
-    });
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    component: ErrorPageComponent,
+    data: { i18nextNamespaces: ['page.error-page'] },
+    resolve: { i18next: I18NEXT_NAMESPACE_RESOLVER },
+  },
+];
 
-  it('should render page not found component', async () => {
-    await renderMap();
-
-    expect(screen.getByText('404')).toBeInTheDocument();
-    expect(screen.getByText('The page you requested could not be found')).toBeInTheDocument();
-  });
-});
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class ErrorPageRoutingModule {}

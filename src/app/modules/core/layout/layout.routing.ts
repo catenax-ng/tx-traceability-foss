@@ -30,31 +30,49 @@ import { OTHER_PARTS_BASE_ROUTE } from '@page/other-parts/other-parts-route';
 import { PARTS_BASE_ROUTE } from '@page/parts/parts-route';
 
 export /** @type {*} */
+// every page (except error pages) require at least "user" role
+// (to be able to detect unauthorized user and redirect to error page)
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     redirectTo: 'dashboard',
   },
+  // TODO: use base route?
+  {
+    path: 'no-permissions',
+    loadChildren: () => import('@page/error-page/error-page.module').then(m => m.ErrorPageModule),
+    data: {
+      errorPage: {
+        // TODO: use ErrorPageType
+        type: 'noPermissions',
+      },
+    },
+  },
   {
     path: DASHBOARD_BASE_ROUTE,
     loadChildren: () => import('../../page/dashboard/dashboard.module').then(m => m.DashboardModule),
     data: {
       breadcrumb: 'home',
+      roles: ['user'],
     },
+    canActivate: [RoleGuard],
   },
   {
     path: PARTS_BASE_ROUTE,
     loadChildren: () => import('../../page/parts/parts.module').then(m => m.PartsModule),
     data: {
       breadcrumb: 'parts',
+      roles: ['user'],
     },
+    canActivate: [RoleGuard],
   },
   {
     path: OTHER_PARTS_BASE_ROUTE,
     loadChildren: () => import('@page/other-parts/other-parts.module').then(m => m.OtherPartsModule),
     data: {
       breadcrumb: 'otherParts',
+      roles: ['user'],
     },
     canActivate: [RoleGuard],
   },
@@ -63,6 +81,7 @@ const routes: Routes = [
     loadChildren: () => import('../../page/investigations/investigations.module').then(m => m.InvestigationsModule),
     data: {
       breadcrumb: 'investigations',
+      roles: ['user'],
     },
     canActivate: [RoleGuard],
   },
@@ -71,7 +90,9 @@ const routes: Routes = [
     loadChildren: () => import('../../page/about/about.module').then(m => m.AboutModule),
     data: {
       breadcrumb: 'about',
+      roles: ['user'],
     },
+    canActivate: [RoleGuard],
   },
   {
     path: ADMIN_BASE_ROUTE,
