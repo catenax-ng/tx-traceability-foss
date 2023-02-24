@@ -23,8 +23,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from '@layout/layout/layout.component';
 import { AuthGuard } from './auth/auth.guard';
-import { ErrorPageComponent } from '@page/error-page/presentation/error-page.component';
-import { ErrorPageModule } from '@page/error-page/error-page.module';
+import { ErrorPageType } from '@page/error-page/model/error-page.model';
 
 export /** @type {*} */
 const routes: Routes = [
@@ -41,8 +40,7 @@ const routes: Routes = [
     component: LayoutComponent,
     data: {
       errorPage: {
-        // TODO: use ErrorPageType
-        type: 'pageNotFound',
+        type: ErrorPageType.pageNotFound,
       },
     },
     loadChildren: () => import('../page/error-page/error-page.module').then(m => m.ErrorPageModule),

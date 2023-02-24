@@ -19,28 +19,107 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ErrorPageComponent } from './error-page.component';
 import { renderComponent } from '@tests/test-render.utils';
-import { DashboardComponent } from '@page/dashboard/presentation/dashboard.component';
-import { DashboardModule } from '@page/dashboard/dashboard.module';
 import { SharedModule } from '@shared/shared.module';
-import { PartsModule } from '@page/parts/parts.module';
 import { screen } from '@testing-library/angular';
 import { ErrorPageModule } from '@page/error-page/error-page.module';
+import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { ErrorPageType } from '@page/error-page/model/error-page.model';
 
 describe('ErrorPageComponent', () => {
-  const renderErrorPageComponent = ({ roles = [] } = {}) =>
+  const renderErrorPageComponent = ({ errorPage = {}, roles = [] } = {}) =>
     renderComponent(ErrorPageComponent, {
       imports: [ErrorPageModule, SharedModule],
-      translations: ['page.error-page'],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: new BehaviorSubject({
+              errorPage,
+            }),
+          } as unknown as ActivatedRoute,
+        },
+      ],
       roles,
     });
 
-  it('should render header', async () => {
-    await renderErrorPageComponent();
+  it('should render generic error page - with user role', async () => {
+    const { fixture } = await renderErrorPageComponent({ errorPage: {}, roles: ['user'] });
 
-    expect(screen.getByText('Error page')).toBeInTheDocument();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(screen.getByText('errorPage.title')).toBeInTheDocument();
+    expect(screen.getByText('errorPage.message')).toBeInTheDocument();
+    expect(screen.getByText('actions.homepage')).toBeInTheDocument();
+  });
+
+  it('should render generic error page - no user role', async () => {
+    const { fixture } = await renderErrorPageComponent({ errorPage: {}, roles: [] });
+
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(screen.getByText('errorPage.title')).toBeInTheDocument();
+    expect(screen.getByText('errorPage.message')).toBeInTheDocument();
+    expect(screen.getByText('layout.nav.signOut')).toBeInTheDocument();
+  });
+
+  it('should render page-not-found page - with user role', async () => {
+    const { fixture } = await renderErrorPageComponent({
+      errorPage: { type: ErrorPageType.pageNotFound },
+      roles: ['user'],
+    });
+
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(screen.getByText('pageNotFound.title')).toBeInTheDocument();
+    expect(screen.getByText('pageNotFound.message')).toBeInTheDocument();
+    expect(screen.getByText('actions.homepage')).toBeInTheDocument();
+  });
+
+  it('should render page-not-found page - no user role', async () => {
+    const { fixture } = await renderErrorPageComponent({
+      errorPage: { type: ErrorPageType.pageNotFound },
+      roles: [],
+    });
+
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(screen.getByText('pageNotFound.title')).toBeInTheDocument();
+    expect(screen.getByText('pageNotFound.message')).toBeInTheDocument();
+    expect(screen.getByText('layout.nav.signOut')).toBeInTheDocument();
+  });
+
+  it('should render no-permissions page - with user role', async () => {
+    const { fixture } = await renderErrorPageComponent({
+      errorPage: { type: ErrorPageType.noPermissions },
+      roles: ['user'],
+    });
+
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(screen.getByText('noPermissions.title')).toBeInTheDocument();
+    expect(screen.getByText('noPermissions.message')).toBeInTheDocument();
+    expect(screen.getByText('actions.homepage')).toBeInTheDocument();
+  });
+
+  it('should render no-permissions page - no user role', async () => {
+    const { fixture } = await renderErrorPageComponent({
+      errorPage: { type: ErrorPageType.noPermissions },
+      roles: [],
+    });
+
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(screen.getByText('noPermissions.title')).toBeInTheDocument();
+    expect(screen.getByText('noPermissions.message')).toBeInTheDocument();
+    expect(screen.getByText('layout.nav.signOut')).toBeInTheDocument();
   });
 });

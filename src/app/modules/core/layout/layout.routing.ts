@@ -28,6 +28,7 @@ import { DASHBOARD_BASE_ROUTE } from '@page/dashboard/dashboard-route';
 import { INVESTIGATION_BASE_ROUTE } from '@page/investigations/investigations-external-route';
 import { OTHER_PARTS_BASE_ROUTE } from '@page/other-parts/other-parts-route';
 import { PARTS_BASE_ROUTE } from '@page/parts/parts-route';
+import { ErrorPageType } from '@page/error-page/model/error-page.model';
 
 export /** @type {*} */
 // every page (except error pages) require at least "user" role
@@ -38,14 +39,12 @@ const routes: Routes = [
     pathMatch: 'full',
     redirectTo: 'dashboard',
   },
-  // TODO: use base route?
   {
     path: 'no-permissions',
     loadChildren: () => import('@page/error-page/error-page.module').then(m => m.ErrorPageModule),
     data: {
       errorPage: {
-        // TODO: use ErrorPageType
-        type: 'noPermissions',
+        type: ErrorPageType.noPermissions,
       },
     },
   },

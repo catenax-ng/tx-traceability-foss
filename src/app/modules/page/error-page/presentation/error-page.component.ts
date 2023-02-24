@@ -19,8 +19,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { RoleService } from '@core/user/role.service';
 import { LayoutFacade } from '@shared/abstraction/layout-facade';
@@ -30,7 +30,7 @@ import { LayoutFacade } from '@shared/abstraction/layout-facade';
   templateUrl: './error-page.component.html',
   styleUrls: ['./error-page.component.scss'],
 })
-export class ErrorPageComponent implements OnInit {
+export class ErrorPageComponent {
   public title: string = 'errorPage.title';
   public message: string = 'errorPage.message';
   public actionUrl: string = '#';
@@ -59,8 +59,6 @@ export class ErrorPageComponent implements OnInit {
       this.showSignOutButton = true;
     }
   }
-
-  ngOnInit(): void {}
 
   public logOut(): void {
     this.layoutFacade.logOut();
