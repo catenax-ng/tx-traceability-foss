@@ -44,7 +44,7 @@ describe('Dashboard', () => {
   it('should render total of parts', async () => {
     await renderDashboard();
 
-    expect(await screen.findByText('3')).toBeInTheDocument();
+    expect(await waitFor(() => screen.getByText('3'))).toBeInTheDocument();
 
     expect(screen.getByText('pageDashboard.totalOfParts.label')).toHaveAttribute(
       'id',
@@ -85,7 +85,7 @@ describe('Dashboard', () => {
     it('should render count for investigations', async () => {
       await renderDashboard();
 
-      expect(await screen.findByText('20')).toBeInTheDocument();
+      expect(await waitFor(() => screen.getByText('20'))).toBeInTheDocument();
 
       expect(screen.getByText('pageDashboard.totalInvestigations.label')).toHaveAttribute(
         'id',
