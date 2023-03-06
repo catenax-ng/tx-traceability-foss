@@ -23,8 +23,8 @@ import { OtherPartsState } from '@page/other-parts/core/other-parts.state';
 import { PartsState } from '@page/parts/core/parts.state';
 import { Part } from '@page/parts/model/parts.model';
 import { PartsAssembler } from '@shared/assembler/parts.assembler';
-import { screen, waitFor } from '@testing-library/angular';
-import { renderComponent } from '@tests/test-render.utils';
+import { fireEvent, screen, waitFor } from '@testing-library/angular';
+import { getTableCheckbox, renderComponent } from '@tests/test-render.utils';
 import { firstValueFrom } from 'rxjs';
 import {
   OTHER_PARTS_MOCK_1,
@@ -48,15 +48,8 @@ describe('Other Parts', () => {
     renderComponent(OtherPartsComponent, {
       imports: [OtherPartsModule],
       providers: [{ provide: OtherPartsState, useFactory: () => otherPartsState }, { provide: PartsState }],
-      translations: ['page.otherParts', 'partDetail'],
       roles,
     });
-
-  it('should render part header', async () => {
-    await renderOtherParts();
-
-    expect(screen.getByText('Other Parts')).toBeInTheDocument();
-  });
 
   it('should render part table', async () => {
     await renderOtherParts();
@@ -77,14 +70,13 @@ describe('Other Parts', () => {
     await renderOtherParts();
     const tabElements = await screen.findAllByRole('tab');
 
-    // WIP: expect(tabElements.length).toEqual(2);
     expect(tabElements.length).toEqual(1);
   });
 
   it('should render selected parts information', async () => {
     await renderOtherParts({ roles: ['user'] });
     await screen.findByTestId('table-component--test-id');
-    const selectedPartsInfo = await screen.getByText('0 Parts selected for this page.');
+    const selectedPartsInfo = await screen.getByText('page.selectedParts.info');
 
     expect(selectedPartsInfo).toBeInTheDocument();
   });
@@ -136,13 +128,10 @@ describe('Other Parts', () => {
   describe('onTableConfigChange', () => {
     it('should request supplier parts if first tab is selected', async () => {
       await renderOtherParts({ roles: ['user'] });
+      fireEvent.click(screen.getByText('pageOtherParts.tab.supplier'));
 
-      const supplierTabElement = screen.getByText('Supplier Parts');
-      supplierTabElement.click();
-
-      await waitFor(() => expect(screen.getByText('Manufacturer')).toBeInTheDocument());
-      const tableHeaderElement = screen.getByText('Manufacturer');
-      tableHeaderElement.click();
+      await waitFor(() => expect(screen.getByText('table.partsColumn.manufacturer')).toBeInTheDocument());
+      fireEvent.click(screen.getByText('table.partsColumn.manufacturer'));
 
       const supplierParts = await firstValueFrom(otherPartsState.supplierParts$);
       await waitFor(() =>
@@ -167,14 +156,12 @@ describe('Other Parts', () => {
 
     // Disabled until BE catches up WIP
     xit('should request customer parts if second tab is selected', async () => {
-      await renderOtherParts({ roles: ['user'] });
+      const fixture = await renderOtherParts({ roles: ['user'] });
 
-      const customerTabElement = screen.getByText('Customer Parts');
-      customerTabElement.click();
+      fireEvent.click(screen.getByText('pageOtherParts.tab.customer'));
 
-      await waitFor(() => expect(screen.getByText('Manufacturer')).toBeInTheDocument());
-      const tableHeaderElement = screen.getByText('Manufacturer');
-      tableHeaderElement.click();
+      await waitFor(() => expect(screen.getByText('partDetail.manufacturer')).toBeInTheDocument());
+      fireEvent.click(screen.getByText('partDetail.manufacturer'));
 
       const customerParts = await firstValueFrom(otherPartsState.customerParts$);
       await waitFor(() =>
@@ -203,21 +190,17 @@ describe('Other Parts', () => {
     const { fixture } = await renderOtherParts({ roles: ['user'] });
     const expectedPart = PartsAssembler.assembleOtherPart(OTHER_PARTS_MOCK_6);
 
-    const supplierTabElement = screen.getByText('Supplier Parts');
-    supplierTabElement.click();
+    fireEvent.click(screen.getByText('pageOtherParts.tab.supplier'));
+    fireEvent.click(await getTableCheckbox(screen, 0));
 
-    const selectAllElement = await waitFor(() => screen.getAllByTestId('select-one--test-id')[0]);
-    (selectAllElement.firstChild as HTMLElement).click();
-
-    const selectedText_1 = await waitFor(() => screen.getByText('1 Part selected for this page.'));
+    const selectedText_1 = await waitFor(() => screen.getByText('page.selectedParts.info'));
     expect(selectedText_1).toBeInTheDocument();
     expect(fixture.componentInstance.currentSelectedItems).toEqual([expectedPart]);
 
     // Disabled until BE catches up WIP
-    /*const customerTabElement = screen.getByText('Customer Parts');
-    customerTabElement.click();
+    /* fireEvent.click(screen.getByText('pageOtherParts.tab.customer'));
 
-    const selectedText_2 = await waitFor(() => screen.getByText('0 Parts selected for this page.'));
+    const selectedText_2 = await waitFor(() => screen.getByText('page.selectedParts.info'));
     expect(selectedText_2).toBeInTheDocument();
     fixture.componentInstance.clearSelected();
     await waitFor(() => expect(fixture.componentInstance.currentSelectedItems).toEqual([]));*/

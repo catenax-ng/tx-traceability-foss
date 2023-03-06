@@ -27,10 +27,10 @@ module.exports = function (config) {
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
-      require('karma-jasmine-html-reporter'),
       require('karma-coverage'),
       require('karma-sonarqube-reporter'),
       require('@angular-devkit/build-angular/plugins/karma'),
+      'karma-spec-reporter',
     ],
     client: {
       jasmine: {
@@ -38,7 +38,6 @@ module.exports = function (config) {
         // the possible options are listed at https://jasmine.github.io/api/edge/Configuration.html
         // for example, you can disable the random execution with `random: false`
         // or set a specific seed with `seed: 4321`
-        seed: 39166,
       },
       clearContext: false, // leave Jasmine Spec Runner output visible in browser
     },
@@ -54,7 +53,7 @@ module.exports = function (config) {
         { type: 'lcov', subdir: 'lcov-report' },
       ],
     },
-    reporters: ['progress', 'kjhtml', 'sonarqube'],
+    reporters: ['spec', 'sonarqube'],
     sonarqubeReporter: {
       basePath: 'src', // test files folder
       filePattern: '**/*spec.ts', // test files glob pattern
@@ -78,7 +77,7 @@ module.exports = function (config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    autoWatch: true,
+    autoWatch: false,
     browsers: ['Chrome'],
     singleRun: true,
     restartOnFileChange: true,

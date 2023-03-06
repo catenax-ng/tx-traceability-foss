@@ -34,17 +34,10 @@ describe('Parts', () => {
     return renderComponent(`<app-sidenav></app-sidenav><app-parts></app-parts>`, {
       declarations: [SidenavComponent, PartsComponent],
       imports: [PartsModule, SharedModule, LayoutModule, OtherPartsModule],
-      translations: ['page.parts', 'partDetail'],
       providers: [{ provide: SidenavService }],
       roles: ['admin'],
     });
   };
-
-  it('should render part header', async () => {
-    await renderParts();
-
-    expect(screen.getByText('My Parts')).toBeInTheDocument();
-  });
 
   it('should render part table', async () => {
     await renderParts();

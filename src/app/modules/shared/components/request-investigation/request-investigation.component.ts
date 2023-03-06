@@ -20,8 +20,8 @@
  ********************************************************************************/
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { getInvestigationInboxRoute } from '@page/investigations/investigations-external-route';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { getRoute, INVESTIGATION_BASE_ROUTE } from '@core/known-route';
 import { OtherPartsFacade } from '@page/other-parts/core/other-parts.facade';
 import { Part } from '@page/parts/model/parts.model';
 import { CtaSnackbarService } from '@shared/components/call-to-action-snackbar/cta-snackbar.service';
@@ -51,12 +51,12 @@ export class RequestInvestigationComponent {
     private readonly ctaSnackbarService: CtaSnackbarService,
   ) {}
 
-  private readonly textAreaControl = new FormControl(undefined, [
+  private readonly textAreaControl = new UntypedFormControl(undefined, [
     Validators.required,
     Validators.maxLength(1000),
     Validators.minLength(15),
   ]);
-  public readonly investigationFormGroup = new FormGroup({ description: this.textAreaControl });
+  public readonly investigationFormGroup = new UntypedFormGroup({ description: this.textAreaControl });
 
   public submitInvestigation(): void {
     this.investigationFormGroup.markAllAsTouched();
@@ -88,7 +88,7 @@ export class RequestInvestigationComponent {
   }
 
   private openCtaSnackbar(count: number): void {
-    const { link, queryParams } = getInvestigationInboxRoute(NotificationStatusGroup.QUEUED_AND_REQUESTED);
+    const { link, queryParams } = getRoute(INVESTIGATION_BASE_ROUTE, NotificationStatusGroup.QUEUED_AND_REQUESTED);
 
     this.ctaSnackbarService.show(
       {

@@ -26,7 +26,6 @@ jobs:
       run: CHROMIUM_BIN=$(which chrome) npm run test:ci # will run `test:ci` command
     - name: Run SonarCloud check
       uses: SonarSource/sonarcloud-github-action@master
-      if: ${{ vars.SONAR_ORGANIZATION != '' && vars.SONAR_PROJECT_KEY != '' }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
