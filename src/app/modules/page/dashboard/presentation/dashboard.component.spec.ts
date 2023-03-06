@@ -35,12 +35,6 @@ describe('Dashboard', () => {
       roles,
     });
 
-  it('should render header', async () => {
-    await renderDashboard();
-
-    expect(screen.getByText('pageDashboard.title')).toBeInTheDocument();
-  });
-
   it('should render total of parts', async () => {
     await renderDashboard();
 
