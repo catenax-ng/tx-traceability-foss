@@ -47,6 +47,7 @@ jobs:
           JIRA_FILTER_ID: ${{ github.event.inputs.jira_filter_id }}
         working-directory: frontend
         run: |
+          chmod +x ./scripts/xray-download-feature-files.sh
           ./scripts/xray-download-feature-files.sh
 
       - name: Save cypress/e2e folder
