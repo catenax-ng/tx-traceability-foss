@@ -106,3 +106,4 @@ Create a new application in ArgoCD and point it to your repository / Helm chart 
 * API docs: `http://localhost:8080/api/v3/api-docs`
 * Application health liveness endpoint: `http://localhost:8081/actuator/health/liveness`
 * Application health readiness endpoint: `http://localhost:8081/actuator/health/readiness`
+
