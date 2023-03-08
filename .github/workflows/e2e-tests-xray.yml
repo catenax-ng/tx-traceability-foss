@@ -78,7 +78,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: cypress - e2e
-          path: cypress/e2e
+          path: frontend/cypress/e2e
 
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3
@@ -108,8 +108,8 @@ jobs:
         with:
           name: cypress generated files - chrome
           path: |
-            cypress/videos/
-            cypress/screenshots/
+            frontend/cypress/videos/
+            frontend/cypress/screenshots/
 
   cypress-run-firefox:
     timeout-minutes: 15
@@ -132,7 +132,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: cypress - e2e
-          path: cypress/e2e
+          path: frontend/cypress/e2e
 
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3
@@ -162,8 +162,8 @@ jobs:
         with:
           name: cypress generated files - firefox
           path: |
-            cypress/videos/
-            cypress/screenshots/
+            frontend/cypress/videos/
+            frontend/cypress/screenshots/
 
   cypress-run-webkit:
     timeout-minutes: 15
@@ -181,7 +181,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: cypress - e2e
-          path: cypress/e2e
+          path: frontend/cypress/e2e
 
 # commented because if we use it here, we face with that problem:
 # "http://localhost:4200 timed out on retry 151 of 5, elapsed 150449ms, limit 150000ms
@@ -224,5 +224,5 @@ jobs:
         with:
           name: cypress generated files - webkit
           path: |
-            cypress/videos/
-            cypress/screenshots/
+            frontend/cypress/videos/
+            frontend/cypress/screenshots/
