@@ -28,6 +28,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: LINUX
+        run: pwd && ls -la
+
       - name: KICS scan
         uses: checkmarx/kics-github-action@master
         with:
@@ -53,9 +56,6 @@ jobs:
           # GITHUB_TOKEN enables this github action to access github API and post comments in a pull request
           # token: ${{ secrets.GITHUB_TOKEN }}
           # enable_comments: true
-
-      - name: LINUX
-        run: pwd && ls -la
 
       # Upload findings to GitHub Advanced Security Dashboard
       - name: Upload SARIF file for GitHub Advanced Security Dashboard
