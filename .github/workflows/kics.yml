@@ -35,7 +35,7 @@ jobs:
         uses: checkmarx/kics-github-action@master
         with:
           # Scanning directory .
-          path: "."
+          path: "/home/runner/work/tx-traceability-foss-frontend/tx-traceability-foss-frontend/frontend"
           # Excluded paths:
           # - docker-compose.yml - used only on local env
           # - in cypress dir docker related files used only on local env
@@ -82,7 +82,7 @@ jobs:
         uses: checkmarx/kics-github-action@master
         with:
           # Scanning directory .
-          path: "."
+          path: "/home/runner/work/tx-traceability-foss-frontend/tx-traceability-foss-frontend/backend"
 
           exclude_paths: openapi/,infrastructure/,src/main/resources/swagger.yml
           # Fail on HIGH severity results
