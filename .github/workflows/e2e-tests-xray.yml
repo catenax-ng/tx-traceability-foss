@@ -85,10 +85,6 @@ jobs:
         with:
           node-version: 18.x
 
-      - name: Log files and directories in current directory
-        run: ls -la
-
-
       - name: Cypress run all tests
         uses: cypress-io/github-action@v5.0.7 # use the explicit version number
         with:
