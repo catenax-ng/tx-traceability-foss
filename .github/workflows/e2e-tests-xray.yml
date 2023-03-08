@@ -85,14 +85,10 @@ jobs:
         with:
           node-version: 18.x
 
-      - name: Change working directory to frontend
-        working-directory: frontend
-        run: |
-
       - name: Cypress run all tests
         uses: cypress-io/github-action@v5.0.7 # use the explicit version number
         with:
-          start: npm start
+          start: npm start -p frontend/package.json
           wait-on: "http://localhost:4200"
           wait-on-timeout: 120
           browser: chrome
