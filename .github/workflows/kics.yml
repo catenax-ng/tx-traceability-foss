@@ -3,7 +3,7 @@ name: "KICS"
 on:
   workflow_dispatch:
   push:
-    branches: [main, master, action_corrections]
+    branches: [main, master]
   # pull_request:
   # The branches below must be a subset of the branches above
   # branches: [main, master]
@@ -75,9 +75,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: LINUX
-        run: pwd && ls -la
-
       - name: KICS scan
         uses: checkmarx/kics-github-action@master
         with:
@@ -101,9 +98,6 @@ jobs:
           # GITHUB_TOKEN enables this github action to access github API and post comments in a pull request
           # token: ${{ secrets.GITHUB_TOKEN }}
           # enable_comments: true
-
-      - name: LINUX
-        run: pwd && ls -la
 
       # Upload findings to GitHub Advanced Security Dashboard
       - name: Upload SARIF file for GitHub Advanced Security Dashboard
