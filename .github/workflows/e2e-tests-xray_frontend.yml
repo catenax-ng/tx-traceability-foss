@@ -145,6 +145,7 @@ jobs:
           wait-on: "http://localhost:4200"
           wait-on-timeout: 120
           browser: firefox
+          working-directory: frontend
 
       - name: Submit results to Xray
         # we don't want to submit results to xray when it was run by PR
@@ -207,6 +208,7 @@ jobs:
           wait-on: "http://localhost:4200"
           wait-on-timeout: 120
           browser: webkit
+          working-directory: frontend
 
       - name: Submit results to Xray
         # we don't want to submit results to xray when it was run by PR

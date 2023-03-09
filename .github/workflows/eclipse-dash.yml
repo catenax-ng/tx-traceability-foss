@@ -39,7 +39,6 @@ jobs:
         run: |
           chmod u+x ../.github/scripts/eclipse_dash.sh
           ../.github/scripts/eclipse_dash.sh
-        shell: bash
 
       - name: upload results
         if: always()
