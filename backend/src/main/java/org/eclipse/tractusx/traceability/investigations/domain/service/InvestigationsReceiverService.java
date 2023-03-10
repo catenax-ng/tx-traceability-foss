@@ -90,7 +90,7 @@ public class InvestigationsReceiverService {
 		Notification notification = notificationMapper.toReceiverNotification(edcNotification);
 		Investigation investigation = investigationMapper.toReceiverInvestigation(bpn, edcNotification.getInformation(), notification);
 		InvestigationId savedInvestigation = repository.save(investigation);
-		logger.info("Stored received notification as investigation with id {}", savedInvestigation.value());
+		logger.info("Stored received notification as investigation {}", savedInvestigation);
 	}
 
 	private void closeInvestigation(EDCNotification edcNotification) {
