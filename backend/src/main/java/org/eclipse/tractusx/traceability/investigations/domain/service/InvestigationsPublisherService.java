@@ -115,7 +115,13 @@ public class InvestigationsPublisherService {
 		investigation.send(applicationBpn);
 		repository.update(investigation);
 		final boolean isReceiver = investigation.getInvestigationSide().equals(InvestigationSide.RECEIVER);
-		logger.info("Send Investigation investigationside {}", investigation.getInvestigationSide().name());
+		String side ="";
+		if (investigation.getInvestigationSide() != null){
+			side = investigation.getInvestigationSide().name();
+		} else {
+			side = "not set";
+		}
+		logger.info("Send Investigation investigationside {}", side);
 		investigation.getNotifications().forEach(notification -> notificationsService.updateAsync(notification, isReceiver));
 	}
 
