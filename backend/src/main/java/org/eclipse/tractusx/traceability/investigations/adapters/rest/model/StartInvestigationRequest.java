@@ -41,7 +41,6 @@ public record StartInvestigationRequest(
 	@ApiModelProperty(example = "The future targetDate of the investigation")
 	@Future(message = "Specify at least the current day or a date in future")
 	Instant targetDate,
-	@NotNull
 	@EnumValidator(enumClass = Severity.class)
 	@ApiModelProperty(example = "MINOR")
 	String severity
