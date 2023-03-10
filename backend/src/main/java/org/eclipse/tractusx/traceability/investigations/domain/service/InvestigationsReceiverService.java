@@ -27,10 +27,7 @@ import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.NotificationType;
-import org.eclipse.tractusx.traceability.investigations.domain.model.Investigation;
-import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationId;
-import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
-import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
+import org.eclipse.tractusx.traceability.investigations.domain.model.*;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationReceiverBpnMismatchException;
 import org.eclipse.tractusx.traceability.investigations.domain.ports.InvestigationsRepository;
@@ -123,7 +120,17 @@ public class InvestigationsReceiverService {
 		}
 
 		repository.update(investigation);
-		investigation.getNotifications().forEach(notificationsService::updateAsync);
+
+		final boolean isReceiver = investigation.getInvestigationSide().equals(InvestigationSide.RECEIVER);
+		String side ="";
+		if (investigation.getInvestigationSide() != null){
+			side = investigation.getInvestigationSide().name();
+		} else {
+			side = "not set";
+		}
+		logger.info("Send Investigation investigationside {}", side);
+
+		investigation.getNotifications().forEach(notification -> notificationsService.updateAsync(notification, isReceiver));
 	}
 
 	private List<Notification> invalidNotifications(final Investigation investigation, final BPN applicationBpn) {
