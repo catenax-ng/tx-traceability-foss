@@ -62,23 +62,7 @@ public class EDCUrlProviderDispatcher implements EDCUrlProvider {
 
 	@Override
 	public List<String> getEdcUrls(String bpn) {
-		final List<String> edcUrls;
-
-		try {
-			edcUrls = dataspaceDiscoveryService.getEdcUrls(bpn);
-		} catch (Exception e) {
-			logger.warn("Exception during fetching edc urls for {} bpn. Using fallback method if available", bpn);
-
 			return getEdcUrlsFallback(bpn);
-		}
-
-		if (!edcUrls.isEmpty()) {
-			return edcUrls;
-		} else {
-			logger.warn("No edc urls present for {} bpn. Using fallback method if available", bpn);
-
-			return getEdcUrlsFallback(bpn);
-		}
 	}
 
 	private List<String> getEdcUrlsFallback(String bpn) {
