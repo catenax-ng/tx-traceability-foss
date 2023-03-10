@@ -174,7 +174,7 @@ class InvestigationsReceiverServiceTest {
 
 		// Then
 		Mockito.verify(mockRepository).update(investigationTestData);
-		Mockito.verify(mockNotificationsService, times(2)).updateAsync(any(Notification.class));
+		Mockito.verify(mockNotificationsService, times(2)).updateAsync(any(Notification.class), anyBoolean());
 	}
 
 	@Test
