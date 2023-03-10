@@ -53,11 +53,11 @@ public class NotificationsService {
 		} else {
 			receiverBpn = notification.getReceiverBpnNumber();
 		}
+
 		List<String> receiverEdcUrls = edcUrlProvider.getEdcUrls(receiverBpn);
 
 		for (String receiverEdcUrl : receiverEdcUrls) {
 			Notification notificationToSend = notification.copy();
-
 			edcFacade.startEDCTransfer(notificationToSend, receiverEdcUrl, senderEdcUrl);
 			repository.update(notificationToSend);
 		}
