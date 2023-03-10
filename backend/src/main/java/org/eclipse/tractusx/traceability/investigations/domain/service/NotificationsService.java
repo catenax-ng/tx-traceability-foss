@@ -48,16 +48,20 @@ public class NotificationsService {
 	public void updateAsync(Notification notification, boolean isReceiver) {
 		String senderEdcUrl = edcUrlProvider.getSenderUrl();
 		String receiverBpn;
+		String senderBpn;
 		if (isReceiver) {
 			receiverBpn = notification.getSenderBpnNumber();
+			senderBpn = notification.getReceiverBpnNumber();
+
 		} else {
 			receiverBpn = notification.getReceiverBpnNumber();
+			senderBpn = notification.getSenderBpnNumber();
 		}
 
 		List<String> receiverEdcUrls = edcUrlProvider.getEdcUrls(receiverBpn);
 
 		for (String receiverEdcUrl : receiverEdcUrls) {
-			Notification notificationToSend = notification.copy();
+			Notification notificationToSend = notification.copy(senderBpn, receiverBpn);
 			edcFacade.startEDCTransfer(notificationToSend, receiverEdcUrl, senderEdcUrl);
 			repository.update(notificationToSend);
 		}
