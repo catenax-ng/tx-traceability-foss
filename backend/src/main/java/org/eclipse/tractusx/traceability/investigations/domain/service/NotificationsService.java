@@ -48,6 +48,8 @@ public class NotificationsService {
 	public void updateAsync(Notification notification) {
 		String senderEdcUrl = edcUrlProvider.getSenderUrl();
 
+		// A -> B ( b is receiver )
+		// B -> A ( b is receiver )
 		List<String> receiverEdcUrls = edcUrlProvider.getEdcUrls(notification.getReceiverBpnNumber());
 
 		for (String receiverEdcUrl : receiverEdcUrls) {
