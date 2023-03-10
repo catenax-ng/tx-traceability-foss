@@ -132,7 +132,7 @@ public class InvestigationsEDCFacade {
 				.addHeader("Content-Type", Constants.JSON.type())
 				.post(RequestBody.create(body, Constants.JSON))
 				.build();
-
+			logger.info(":::: Send notification request dataReference.getAuthKey :{}, dataReference.getAuthCode : {}", dataReference.getAuthKey(), dataReference.getAuthCode());
 			logger.info(":::: Send notification Data  body :{}, dataReferenceEndpoint :{}", body, dataReference.getEndpoint());
 			httpCallService.sendRequest(request);
 

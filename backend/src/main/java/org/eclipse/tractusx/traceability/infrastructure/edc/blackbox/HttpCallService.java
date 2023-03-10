@@ -99,7 +99,7 @@ public class HttpCallService {
 		try (var response = httpClient.newCall(request).execute()) {
 			var body = response.body();
 			if (!response.isSuccessful() || body == null) {
-				throw new BadRequestException(format("Control plane responded with: %s %s", response.code(), body != null ? body.string() : ""));
+				throw new BadRequestException(format("Control plane responded with: %s and message: %s and boy: %s", response.code(), response.message(), body != null ? body.string() : ""));
 			}
 		} catch (Exception e) {
 			throw e;
