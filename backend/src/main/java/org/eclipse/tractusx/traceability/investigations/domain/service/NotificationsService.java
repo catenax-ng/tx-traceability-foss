@@ -26,9 +26,12 @@ import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.Investigati
 import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
 import org.eclipse.tractusx.traceability.investigations.domain.ports.EDCUrlProvider;
 import org.eclipse.tractusx.traceability.investigations.domain.ports.InvestigationsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 @Service
@@ -37,6 +40,8 @@ public class NotificationsService {
 	private final InvestigationsEDCFacade edcFacade;
 	private final InvestigationsRepository repository;
 	private final EDCUrlProvider edcUrlProvider;
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
 
 	public NotificationsService(InvestigationsEDCFacade edcFacade, InvestigationsRepository repository, EDCUrlProvider edcUrlProvider) {
 		this.edcFacade = edcFacade;
@@ -63,6 +68,7 @@ public class NotificationsService {
 		for (String receiverEdcUrl : receiverEdcUrls) {
 			Notification notificationToSend = notification.copy(senderBpn, receiverBpn);
 			edcFacade.startEDCTransfer(notificationToSend, receiverEdcUrl, senderEdcUrl);
+			logger.info("NotificationUpdate (NotificationService) id: {}, refId: {}", notificationToSend.getId(), notificationToSend.getNotificationReferenceId());
 			repository.update(notificationToSend);
 		}
 	}

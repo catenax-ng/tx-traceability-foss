@@ -71,6 +71,7 @@ public class InvestigationsEDCFacade {
 	}
 
 	public void startEDCTransfer(Notification notification, String receiverEdcUrl, String senderEdcUrl) {
+		logger.info("Start transfer with notification id: {}", notification.getId());
 		Map<String, String> header = new HashMap<>();
 		header.put("x-api-key", edcProperties.getApiAuthKey());
 		try {
