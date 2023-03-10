@@ -86,7 +86,6 @@ public class InvestigationsPublisherService {
 				targetDate,
 				severity
 			)).forEach(investigation::addNotification);
-
 		return repository.save(investigation);
 	}
 
@@ -115,8 +114,8 @@ public class InvestigationsPublisherService {
 		investigation.send(applicationBpn);
 		repository.update(investigation);
 		final boolean isReceiver = investigation.getInvestigationSide().equals(InvestigationSide.RECEIVER);
-		String side ="";
-		if (investigation.getInvestigationSide() != null){
+		String side = "";
+		if (investigation.getInvestigationSide() != null) {
 			side = investigation.getInvestigationSide().name();
 		} else {
 			side = "not set";

@@ -110,11 +110,11 @@ class InvestigationsReceiverServiceTest {
 		);
 
 		Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.RECEIVED, InvestigationStatus.RECEIVED, "recipientBPN");
-		Notification noticiationTestData = NotificationTestDataFactory.createNotificationTestData();
+		Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
 		EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
 			"it", notification);
 
-		when(mockNotificationMapper.toReceiverNotification(edcNotification)).thenReturn(noticiationTestData);
+		when(mockNotificationMapper.toReceiverNotification(edcNotification, InvestigationStatus.RECEIVED)).thenReturn(notificationTestData);
 		when(mockInvestigationMapper.toReceiverInvestigation(any(BPN.class), anyString(), any(Notification.class))).thenReturn(investigationTestData);
 
 		// When
@@ -170,7 +170,7 @@ class InvestigationsReceiverServiceTest {
 		when(mockReadService.loadInvestigation(any(InvestigationId.class))).thenReturn(investigationTestData);
 
 		// When
-		service.updateInvestigation(bpn, investigationIdRaw, status, reason);
+		service.updateInvestigationPublisher(bpn, investigationIdRaw, status, reason);
 
 		// Then
 		Mockito.verify(mockRepository).update(investigationTestData);
@@ -211,7 +211,7 @@ class InvestigationsReceiverServiceTest {
 
 		// When
 		assertThrows(NotificationStatusTransitionNotAllowed.class, () -> {
-			service.updateInvestigation(bpn, investigationIdRaw, status, reason);
+			service.updateInvestigationPublisher(bpn, investigationIdRaw, status, reason);
 		});
 
 		// Then
@@ -253,7 +253,7 @@ class InvestigationsReceiverServiceTest {
 
 		// When
 		assertThrows(InvestigationReceiverBpnMismatchException.class, () -> {
-			service.updateInvestigation(bpn, investigationIdRaw, status, reason);
+			service.updateInvestigationPublisher(bpn, investigationIdRaw, status, reason);
 		});
 
 		// Then

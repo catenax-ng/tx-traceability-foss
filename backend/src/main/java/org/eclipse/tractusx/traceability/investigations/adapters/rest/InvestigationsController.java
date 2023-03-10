@@ -180,7 +180,7 @@ public class InvestigationsController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void updateInvestigation(@PathVariable Long investigationId, @Valid @RequestBody UpdateInvestigationRequest updateInvestigationRequest) {
 		validate(updateInvestigationRequest);
-		investigationsReceiverService.updateInvestigation(traceabilityProperties.getBpn(), investigationId, updateInvestigationRequest.status(), updateInvestigationRequest.reason());
+		investigationsReceiverService.updateInvestigationPublisher(traceabilityProperties.getBpn(), investigationId, updateInvestigationRequest.status(), updateInvestigationRequest.reason());
 	}
 }
 

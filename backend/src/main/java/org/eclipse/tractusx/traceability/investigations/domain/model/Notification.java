@@ -147,7 +147,6 @@ public class Notification {
 	}
 
 
-
 	public Notification copy(final String senderBpnNumber, final String receiverBpnNumber) {
 		return new Notification(
 			id,
