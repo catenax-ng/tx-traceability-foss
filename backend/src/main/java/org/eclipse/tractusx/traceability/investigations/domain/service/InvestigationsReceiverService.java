@@ -64,13 +64,12 @@ public class InvestigationsReceiverService {
 
 	public void handleNotificationReceiverCallback(EDCNotification edcNotification) {
 		logger.info("Received notification response with edcNotification {}", edcNotification);
-
 		BPN recipientBPN = BPN.of(edcNotification.getRecipientBPN());
-
+		logger.info("handleNotificationReceiverCallback recipientBPN {}", recipientBPN);
 		validateNotificationReceiverCallback(edcNotification);
-
+		logger.info("handleNotificationReceiverCallback validateNotificationReceiverCallback");
 		InvestigationStatus investigationStatus = edcNotification.convertInvestigationStatus();
-
+		logger.info("handleNotificationReceiverCallback investigationStatus {}", investigationStatus);
 		switch (investigationStatus) {
 			case SENT -> receiveInvestigation(edcNotification, recipientBPN);
 			case CLOSED -> closeInvestigation(edcNotification);
@@ -87,8 +86,11 @@ public class InvestigationsReceiverService {
 	}
 
 	private void receiveInvestigation(EDCNotification edcNotification, BPN bpn) {
+		logger.info("receiveInvestigation1");
 		Notification notification = notificationMapper.toReceiverNotification(edcNotification);
+		logger.info("receiveInvestigation2");
 		Investigation investigation = investigationMapper.toReceiverInvestigation(bpn, edcNotification.getInformation(), notification);
+		logger.info("receiveInvestigation3");
 		InvestigationId savedInvestigation = repository.save(investigation);
 		logger.info("Stored received notification as investigation {}", savedInvestigation);
 	}
