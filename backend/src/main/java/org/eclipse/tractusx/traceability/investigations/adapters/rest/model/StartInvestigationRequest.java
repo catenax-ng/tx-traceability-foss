@@ -32,16 +32,14 @@ import java.time.Instant;
 import java.util.List;
 
 public record StartInvestigationRequest(
-	@Size(min = 1, max = 100, message = "Specify at least 1 and at most 100 partIds")
+
 	@ApiModelProperty(example = "[\"urn:uuid:fe99da3d-b0de-4e80-81da-882aebcca978\"]")
 	List<String> partIds,
-	@Size(min = 15, max = 1000, message = "Description should have at least 15 characters and at most 1000 characters")
+
 	@ApiModelProperty(example = "The description of the investigation")
 	String description,
 	@ApiModelProperty(example = "The future targetDate of the investigation")
-	@Future(message = "Specify at least the current day or a date in future")
 	Instant targetDate,
-	@EnumValidator(enumClass = Severity.class)
 	@ApiModelProperty(example = "MINOR")
 	String severity
 ) {

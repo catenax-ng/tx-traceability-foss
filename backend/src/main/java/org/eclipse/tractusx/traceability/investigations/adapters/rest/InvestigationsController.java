@@ -77,10 +77,10 @@ public class InvestigationsController {
 		@ApiResponse(responseCode = "403", description = "Forbidden.")})
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public StartInvestigationResponse investigateAssets(@RequestBody @Valid StartInvestigationRequest request) {
+	public StartInvestigationResponse investigateAssets(@RequestBody StartInvestigationRequest request) {
 		InvestigationId investigationId =
 			investigationsPublisherService.startInvestigation(
-				traceabilityProperties.getBpn(), request.partIds(), request.description(), request.targetDate(), Severity.valueOf(request.severity()));
+				traceabilityProperties.getBpn(), request.partIds(), request.description(), request.targetDate(), Severity.MINOR);
 
 		return new StartInvestigationResponse(investigationId.value());
 	}
