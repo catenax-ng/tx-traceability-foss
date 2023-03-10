@@ -110,9 +110,8 @@ public class InvestigationsPublisherService {
 		Investigation investigation = investigationsReadService.loadInvestigation(investigationId);
 		investigation.send(applicationBpn);
 		repository.update(investigation);
-		final String receiverUrl = investigation.getInvestigationSide() ? InvestigationSide.SENDER ?
-
-		investigation.getNotifications().forEach(notificationsService::updateAsync);
+		final boolean isReceiver = investigation.getInvestigationSide().equals(InvestigationSide.RECEIVER);
+		investigation.getNotifications().forEach(notification -> notificationsService.updateAsync(notification, isReceiver));
 	}
 
 	/**

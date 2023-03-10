@@ -38,7 +38,7 @@ public class EDCNotificationFactory {
 			senderEDC,
 			notification.getReceiverBpnNumber(),
 			NotificationType.QMINVESTIGATION.getValue(),
-			"MINOR",
+			notification.getSeverity().name(),
 			null,
 			notification.getInvestigationStatus().name(),
 			notification.getTargetDate().toString()

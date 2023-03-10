@@ -45,12 +45,15 @@ public class NotificationsService {
 	}
 
 	@Async(value = AssetsAsyncConfig.UPDATE_NOTIFICATION_EXECUTOR)
-	public void updateAsync(Notification notification) {
+	public void updateAsync(Notification notification, boolean isReceiver) {
 		String senderEdcUrl = edcUrlProvider.getSenderUrl();
-
-		// A -> B ( b is receiver )
-		// B -> A ( b is receiver )
-		List<String> receiverEdcUrls = edcUrlProvider.getEdcUrls(notification.getReceiverBpnNumber());
+		String receiverBpn;
+		if (isReceiver) {
+			receiverBpn = notification.getSenderBpnNumber();
+		} else {
+			receiverBpn = notification.getReceiverBpnNumber();
+		}
+		List<String> receiverEdcUrls = edcUrlProvider.getEdcUrls(receiverBpn);
 
 		for (String receiverEdcUrl : receiverEdcUrls) {
 			Notification notificationToSend = notification.copy();
@@ -58,5 +61,9 @@ public class NotificationsService {
 			edcFacade.startEDCTransfer(notificationToSend, receiverEdcUrl, senderEdcUrl);
 			repository.update(notificationToSend);
 		}
+	}
+
+	public void updateAsync(Notification notification) {
+		updateAsync(notification, false);
 	}
 }
