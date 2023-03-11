@@ -141,7 +141,7 @@ public class InvestigationsReceiverService {
 		} else {
 			side = "not set";
 		}
-		logger.info("Send Investigation investigationside {}", side);
+		logger.info("updateInvestigationPublisher with investigation {}", investigation);
 
 		investigation.getNotifications().forEach(notification -> notificationsService.updateAsync(notification, isReceiver));
 	}
