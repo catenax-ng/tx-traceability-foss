@@ -143,8 +143,8 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
 	}
 
 	@Override
-	public Optional<Investigation> findByNotificationReferenceId(String notificationId) {
-		return investigationRepository.findByNotificationsNotificationReferenceId(notificationId)
+	public Optional<Investigation> findByNotificationReferenceId(String notificationReferenceId) {
+		return investigationRepository.findByNotificationsNotificationReferenceId(notificationReferenceId)
 			.map(this::toInvestigation);
 	}
 
