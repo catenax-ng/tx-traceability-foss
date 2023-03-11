@@ -35,6 +35,8 @@ import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
 import org.eclipse.tractusx.traceability.investigations.domain.service.InvestigationsPublisherService;
 import org.eclipse.tractusx.traceability.investigations.domain.service.InvestigationsReadService;
 import org.eclipse.tractusx.traceability.investigations.domain.service.InvestigationsReceiverService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.lang.invoke.MethodHandles;
 
 import static org.eclipse.tractusx.traceability.investigations.adapters.rest.validation.UpdateInvestigationValidator.validate;
 
@@ -56,7 +60,7 @@ public class InvestigationsController {
 	private final InvestigationsPublisherService investigationsPublisherService;
 	private final InvestigationsReceiverService investigationsReceiverService;
 	private final TraceabilityProperties traceabilityProperties;
-
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	public InvestigationsController(InvestigationsReadService investigationsReadService,
 									InvestigationsPublisherService investigationsPublisherService,
 									InvestigationsReceiverService investigationsReceiverService,
@@ -81,7 +85,7 @@ public class InvestigationsController {
 		InvestigationId investigationId =
 			investigationsPublisherService.startInvestigation(
 				traceabilityProperties.getBpn(), request.partIds(), request.description(), request.targetDate(), Severity.valueOf(request.severity()));
-
+		logger.info("Received API /investigations with params: {}", request);
 		return new StartInvestigationResponse(investigationId.value());
 	}
 
@@ -95,6 +99,7 @@ public class InvestigationsController {
 		@ApiResponse(responseCode = "403", description = "Forbidden.")})
 	@GetMapping("/created")
 	public PageResult<InvestigationData> getCreatedInvestigations(Pageable pageable) {
+		logger.info("Received API /created with params: {}", pageable);
 		return investigationsReadService.getCreatedInvestigations(pageable);
 	}
 
@@ -108,6 +113,7 @@ public class InvestigationsController {
 		@ApiResponse(responseCode = "403", description = "Forbidden.")})
 	@GetMapping("/received")
 	public PageResult<InvestigationData> getReceivedInvestigations(Pageable pageable) {
+		logger.info("Received API /investigations/received with params: {}", pageable);
 		return investigationsReadService.getReceivedInvestigations(pageable);
 	}
 
@@ -121,6 +127,7 @@ public class InvestigationsController {
 		@ApiResponse(responseCode = "403", description = "Forbidden.")})
 	@GetMapping("/{investigationId}")
 	public InvestigationData getInvestigation(@PathVariable Long investigationId) {
+		logger.info("Received API /investigations/{}", investigationId);
 		return investigationsReadService.findInvestigation(investigationId);
 	}
 
@@ -135,6 +142,7 @@ public class InvestigationsController {
 	@PostMapping("/{investigationId}/approve")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void approveInvestigation(@PathVariable Long investigationId) {
+		logger.info("Received API /investigations/{}/approve", investigationId);
 		investigationsPublisherService.sendInvestigation(traceabilityProperties.getBpn(), investigationId);
 	}
 
@@ -149,6 +157,7 @@ public class InvestigationsController {
 	@PostMapping("/{investigationId}/cancel")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void cancelInvestigation(@PathVariable Long investigationId) {
+		logger.info("Received API /investigations/{}/cancel", investigationId);
 		investigationsPublisherService.cancelInvestigation(traceabilityProperties.getBpn(), investigationId);
 	}
 
@@ -164,6 +173,7 @@ public class InvestigationsController {
 	@PostMapping("/{investigationId}/close")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void closeInvestigation(@PathVariable Long investigationId, @Valid @RequestBody CloseInvestigationRequest closeInvestigationRequest) {
+		logger.info("Received API /investigations/{}/close with params {}", investigationId, closeInvestigationRequest);
 		investigationsPublisherService.closeInvestigation(traceabilityProperties.getBpn(), investigationId, closeInvestigationRequest.reason());
 	}
 
@@ -180,6 +190,7 @@ public class InvestigationsController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void updateInvestigation(@PathVariable Long investigationId, @Valid @RequestBody UpdateInvestigationRequest updateInvestigationRequest) {
 		validate(updateInvestigationRequest);
+		logger.info("Received API /investigations/{}/update with params {}", investigationId, updateInvestigationRequest);
 		investigationsReceiverService.updateInvestigationPublisher(traceabilityProperties.getBpn(), investigationId, updateInvestigationRequest.status(), updateInvestigationRequest.reason());
 	}
 }
