@@ -162,6 +162,10 @@ public class Investigation {
 		this.closeReason = "canceled";
 	}
 
+	public void update(InvestigationStatus status) {
+		changeStatusTo(status);
+	}
+
 	public void close(BPN applicationBpn, String reason) {
 		validateBPN(applicationBpn);
 		changeStatusTo(InvestigationStatus.CLOSED);
