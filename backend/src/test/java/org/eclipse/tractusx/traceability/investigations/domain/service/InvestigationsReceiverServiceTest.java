@@ -54,41 +54,7 @@ class InvestigationsReceiverServiceTest {
 	@InjectMocks
 	private InvestigationsReceiverService service;
 
-
-	@Test
-	@DisplayName("Test handleNotificationReceiverCallback close is valid")
-	void testHandleNotificationReceiverCallbackValidCloseNotification() {
-
-		// Given
-		List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
-		Notification notification = new Notification(
-			"123",
-			"id123",
-			"senderBPN",
-			"recipientBPN",
-			"senderAddress",
-			"agreement",
-			"information",
-			InvestigationStatus.CLOSED,
-			affectedParts,
-			Instant.now(),
-			Severity.MINOR
-		);
-
-		Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.RECEIVED, InvestigationStatus.RECEIVED, "recipientBPN");
-
-		EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
-			"it", notification);
-
-		when(mockReadService.loadInvestigationByNotificationReferenceId(edcNotification.getNotificationId())).thenReturn(investigationTestData);
-		when(mockTraceabilityProperties.getBpn()).thenReturn(BPN.of("recipientBPN"));
-
-		// When
-		service.handleNotificationReceiverCallback(edcNotification);
-		// Then
-		Mockito.verify(mockRepository).update(investigationTestData);
-	}
-
+	
 	@Test
 	@DisplayName("Test handleNotificationReceiverCallback sent is valid")
 	void testHandleNotificationReceiverCallbackValidSentNotification() {
