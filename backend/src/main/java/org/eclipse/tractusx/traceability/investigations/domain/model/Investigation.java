@@ -244,7 +244,7 @@ public class Investigation {
 			.map(AffectedPart::assetId)
 			.forEach(newAssetIds::add);
 
-		assetIds.addAll(newAssetIds);
+		assetIds = List.copyOf(newAssetIds);
 	}
 
 	@Override
