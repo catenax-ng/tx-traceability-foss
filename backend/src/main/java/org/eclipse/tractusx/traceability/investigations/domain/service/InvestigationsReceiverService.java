@@ -102,8 +102,6 @@ public class InvestigationsReceiverService {
 		Investigation investigation = investigationsReadService.loadInvestigationByNotificationId(edcNotification.getRelatedNotificationId());
 		logger.info("receiveUpdateInvestigation investigation with status {}", investigation);
 		investigation.addNotification(notification);
-		logger.info("receiveUpdateInvestigation addNotification with status {}", investigation);
-		investigation.update(notification.getInvestigationStatus());
 		InvestigationId savedInvestigation = repository.save(investigation);
 		logger.info("Stored received notification in investigation {}", savedInvestigation);
 	}
