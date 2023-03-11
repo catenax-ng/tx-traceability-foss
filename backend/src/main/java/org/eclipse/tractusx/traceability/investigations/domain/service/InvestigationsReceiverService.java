@@ -98,8 +98,11 @@ public class InvestigationsReceiverService {
 	private void receiveUpdateInvestigation(EDCNotification edcNotification, InvestigationStatus investigationStatus) {
 		logger.info("receiveUpdateInvestigation with status {}", investigationStatus);
 		Notification notification = notificationMapper.toReceiverNotification(edcNotification, investigationStatus);
+		logger.info("receiveUpdateInvestigation notification with status {}", notification);
 		Investigation investigation = investigationsReadService.loadInvestigationByNotificationReferenceId(edcNotification.getRelatedNotificationId());
+		logger.info("receiveUpdateInvestigation investigation with status {}", investigation);
 		investigation.addNotification(notification);
+		logger.info("receiveUpdateInvestigation addNotification with status {}", investigation);
 		InvestigationId savedInvestigation = repository.save(investigation);
 		logger.info("Stored received notification in investigation {}", savedInvestigation);
 	}
