@@ -70,8 +70,9 @@ public class InvestigationsPublisherService {
 	public InvestigationId startInvestigation(BPN applicationBpn, List<String> assetIds, String description, Instant targetDate, Severity severity) {
 		Investigation investigation = Investigation.startInvestigation(clock.instant(), applicationBpn, description);
 
-		Map<String, List<Asset>> assetsByManufacturer = assetRepository.getAssetsById(assetIds).stream().collect(Collectors.groupingBy(Asset::getManufacturerId));
 
+		Map<String, List<Asset>> assetsByManufacturer = assetRepository.getAssetsById(assetIds).stream().collect(Collectors.groupingBy(Asset::getManufacturerId));
+		logger.info("Assets Size: {}", assetsByManufacturer.size());
 		assetsByManufacturer.entrySet().stream()
 			.map(it -> new Notification(
 				UUID.randomUUID().toString(),
@@ -86,6 +87,8 @@ public class InvestigationsPublisherService {
 				targetDate,
 				severity
 			)).forEach(investigation::addNotification);
+		logger.info("Start Investigation {}", investigation);
+		repository.save(investigation);
 		return repository.save(investigation);
 	}
 
@@ -113,14 +116,10 @@ public class InvestigationsPublisherService {
 		Investigation investigation = investigationsReadService.loadInvestigation(investigationId);
 		investigation.send(applicationBpn);
 		repository.update(investigation);
+
 		final boolean isReceiver = investigation.getInvestigationSide().equals(InvestigationSide.RECEIVER);
-		String side = "";
-		if (investigation.getInvestigationSide() != null) {
-			side = investigation.getInvestigationSide().name();
-		} else {
-			side = "not set";
-		}
-		logger.info("Send Investigation investigationside {}", side);
+		// TODO on this point the referenceId of the notification is null - that is why unique result exception will be thrown
+		logger.info("Send Investigation {}", investigation);
 		investigation.getNotifications().forEach(notification -> notificationsService.updateAsync(notification, isReceiver));
 	}
 
