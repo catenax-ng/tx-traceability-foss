@@ -175,6 +175,7 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
 	private void update(NotificationEntity notificationEntity, Notification notification) {
 		notificationEntity.setEdcUrl(notification.getEdcUrl());
 		notificationEntity.setContractAgreementId(notification.getContractAgreementId());
+		notificationEntity.setNotificationReferenceId(notification.getNotificationReferenceId());
 	}
 
 	private Investigation toInvestigation(InvestigationEntity investigationEntity) {

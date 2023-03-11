@@ -29,6 +29,7 @@ import org.eclipse.tractusx.traceability.investigations.domain.model.Investigati
 import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
