@@ -88,7 +88,6 @@ public class InvestigationsPublisherService {
 				severity
 			)).forEach(investigation::addNotification);
 		logger.info("Start Investigation {}", investigation);
-		repository.save(investigation);
 		return repository.save(investigation);
 	}
 
