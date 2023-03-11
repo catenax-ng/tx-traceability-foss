@@ -162,4 +162,21 @@ public class Notification {
 			severity
 		);
 	}
+
+	@Override
+	public String toString() {
+		return "Notification{" +
+			"id='" + id + '\'' +
+			", notificationReferenceId='" + notificationReferenceId + '\'' +
+			", senderBpnNumber='" + senderBpnNumber + '\'' +
+			", receiverBpnNumber='" + receiverBpnNumber + '\'' +
+			", edcUrl='" + edcUrl + '\'' +
+			", contractAgreementId='" + contractAgreementId + '\'' +
+			", affectedParts=" + affectedParts +
+			", description='" + description + '\'' +
+			", investigationStatus=" + investigationStatus +
+			", targetDate=" + targetDate +
+			", severity=" + severity +
+			'}';
+	}
 }

@@ -243,4 +243,22 @@ public class Investigation {
 			.map(AffectedPart::assetId)
 			.forEach(assetIds::add);
 	}
+
+	@Override
+	public String toString() {
+		return "Investigation{" +
+			"investigationId=" + investigationId +
+			", bpn=" + bpn +
+			", investigationStatus=" + investigationStatus +
+			", investigationSide=" + investigationSide +
+			", description='" + description + '\'' +
+			", createdAt=" + createdAt +
+			", assetIds=" + assetIds +
+			", notifications=" + notifications +
+			", sendTo='" + sendTo + '\'' +
+			", closeReason='" + closeReason + '\'' +
+			", acceptReason='" + acceptReason + '\'' +
+			", declineReason='" + declineReason + '\'' +
+			'}';
+	}
 }
