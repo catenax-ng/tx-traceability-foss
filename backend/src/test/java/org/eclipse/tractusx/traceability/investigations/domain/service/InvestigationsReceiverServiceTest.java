@@ -54,7 +54,7 @@ class InvestigationsReceiverServiceTest {
 	@InjectMocks
 	private InvestigationsReceiverService service;
 
-	
+
 	@Test
 	@DisplayName("Test handleNotificationReceiverCallback sent is valid")
 	void testHandleNotificationReceiverCallbackValidSentNotification() {
