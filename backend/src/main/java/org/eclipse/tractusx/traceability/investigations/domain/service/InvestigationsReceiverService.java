@@ -99,7 +99,7 @@ public class InvestigationsReceiverService {
 		logger.info("receiveUpdateInvestigation with status {}", investigationStatus);
 		Notification notification = notificationMapper.toReceiverNotification(edcNotification, investigationStatus);
 		logger.info("receiveUpdateInvestigation notification with status {}", notification);
-		Investigation investigation = investigationsReadService.loadInvestigationByNotificationReferenceId(edcNotification.getRelatedNotificationId());
+		Investigation investigation = investigationsReadService.loadInvestigationByNotificationId(edcNotification.getRelatedNotificationId());
 		logger.info("receiveUpdateInvestigation investigation with status {}", investigation);
 		investigation.addNotification(notification);
 		logger.info("receiveUpdateInvestigation addNotification with status {}", investigation);
@@ -109,7 +109,7 @@ public class InvestigationsReceiverService {
 
 	private void closeInvestigation(EDCNotification edcNotification) {
 		logger.info("closeInvestigation");
-		Investigation investigation = investigationsReadService.loadInvestigationByNotificationReferenceId(edcNotification.getNotificationId());
+		Investigation investigation = investigationsReadService.loadInvestigationByNotificationId(edcNotification.getNotificationId());
 		investigation.close(traceabilityProperties.getBpn(), edcNotification.getInformation());
 		repository.update(investigation);
 	}

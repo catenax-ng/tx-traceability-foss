@@ -80,4 +80,9 @@ public class InvestigationsReadService {
 		return repository.findByNotificationReferenceId(notificationReferenceId)
 			.orElseThrow(() -> new InvestigationNotFoundException(notificationReferenceId));
 	}
+
+	public Investigation loadInvestigationByNotificationId(String notificationId) {
+		return repository.findByNotificationId(notificationId)
+			.orElseThrow(() -> new InvestigationNotFoundException(notificationId));
+	}
 }

@@ -149,6 +149,12 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
 	}
 
 	@Override
+	public Optional<Investigation> findByNotificationId(String notificationId) {
+		return investigationRepository.findByNotificationsNotificationId(notificationId)
+			.map(this::toInvestigation);
+	}
+
+	@Override
 	public long countInvestigations(Set<InvestigationStatus> statuses) {
 		return investigationRepository.countAllByStatusIn(statuses);
 	}
