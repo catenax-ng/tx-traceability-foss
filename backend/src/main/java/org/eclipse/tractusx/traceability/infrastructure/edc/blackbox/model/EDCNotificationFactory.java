@@ -33,6 +33,7 @@ public class EDCNotificationFactory {
 	}
 
 	public static EDCNotification createQualityInvestigation(String senderEDC, Notification notification){
+
 		EDCNotificationHeader header = new EDCNotificationHeader(
 			notification.getId(),
 			notification.getSenderBpnNumber(),
@@ -40,7 +41,7 @@ public class EDCNotificationFactory {
 			notification.getReceiverBpnNumber(),
 			NotificationType.QMINVESTIGATION.getValue(),
 			notification.getSeverity() != null ? notification.getSeverity().name() : Severity.MINOR.name(),
-			null,
+			notification.getNotificationReferenceId(),
 			notification.getInvestigationStatus().name(),
 			notification.getTargetDate().toString()
 		);
