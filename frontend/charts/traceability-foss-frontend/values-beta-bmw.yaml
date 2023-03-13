@@ -1,0 +1,24 @@
+image:
+  tag: $ARGOCD_APP_REVISION
+  CATENAX_PORTAL_API_URL: 'https://traceability-bmw.beta.demo.catena-x.net/api'
+  CATENAX_PORTAL_KEYCLOAK_URL: 'https://centralidp.beta.demo.catena-x.net/auth'
+  CATENAX_PORTAL_BACKEND_DOMAIN: 'catena-x.net'
+  CATENAX_PORTAL_URL: 'https://portal.beta.demo.catena-x.net/'
+
+nameOverride: "traceability-foss-bmw-frontend"
+fullnameOverride: "traceability-foss-bmw-frontend"
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: "traceability-portal-bmw.beta.demo.catena-x.net"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - "traceability-portal-bmw.beta.demo.catena-x.net"
+      secretName: "traceability-portal-bmw.beta.demo.catena-x.net-tls"
