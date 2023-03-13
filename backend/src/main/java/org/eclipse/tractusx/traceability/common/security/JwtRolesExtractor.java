@@ -21,8 +21,8 @@
 
 package org.eclipse.tractusx.traceability.common.security;
 
-import com.nimbusds.jose.shaded.json.JSONArray;
-import com.nimbusds.jose.shaded.json.JSONObject;
+import com.nimbusds.jose.shaded.gson.JsonArray;
+import com.nimbusds.jose.shaded.gson.JsonObject;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.Collections;
@@ -43,11 +43,11 @@ class JwtRolesExtractor {
 			.flatMap(it -> Optional.ofNullable(it.get(resourceClient)))
 			.orElse(null);
 
-		if (resourceAccess instanceof JSONObject resourceAccessCasted) {
+		if (resourceAccess instanceof JsonObject resourceAccessCasted) {
 			Object roles = resourceAccessCasted.get(ROLES);
 
-			if (roles instanceof JSONArray rolesArray) {
-				return rolesArray.stream()
+			if (roles instanceof JsonArray rolesArray) {
+				return rolesArray.asList().stream()
 					.map(Object::toString)
 					.map(JwtRole::parse)
 					.filter(Optional::isPresent)

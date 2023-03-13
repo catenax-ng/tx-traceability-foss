@@ -25,7 +25,6 @@ import org.eclipse.tractusx.traceability.common.properties.FeignProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
-@ConstructorBinding
 @ConfigurationProperties("feign.default")
 public class FeignDefaultProperties extends FeignProperties {
 

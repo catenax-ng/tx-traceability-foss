@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.7</version>
+		<version>3.0.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -48,7 +48,7 @@
 		<jruby.version>9.3.9.0</jruby.version>
 		<resilience4j.version>2.0.2</resilience4j.version>
 		<schedlock.version>4.42.0</schedlock.version>
-		<spock-core.version>2.1-M1-groovy-3.0</spock-core.version>
+		<spock-core.version>2.4-M1-groovy-4.0</spock-core.version>
 		<spring-cloud.version>2021.0.5</spring-cloud.version>
 		<springfox.version>3.0.0</springfox.version>
 		<jetbrains-annotation.version>13.0</jetbrains-annotation.version>
@@ -204,6 +204,11 @@
 			<artifactId>java-jwt</artifactId>
 			<version>${auth-0-java-jwt.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>9.30.2</version>
+        </dependency>
 		<dependency>
 			<groupId>io.github.resilience4j</groupId>
 			<artifactId>resilience4j-feign</artifactId>
@@ -290,12 +295,18 @@
 			<version>${commons-io.version}</version>
 		</dependency>
 
-		<dependency>
+		<!-- dependency>
 			<groupId>org.codehaus.groovy</groupId>
 			<artifactId>groovy-all</artifactId>
 			<version>${groovy-all.version}</version>
 			<type>pom</type>
-		</dependency>
+		</dependency -->
+
+        <dependency>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>4.0.9</version>
+        </dependency>
 
 		<!-- test dependencies spring boot managed -->
 		<dependency>

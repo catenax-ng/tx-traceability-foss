@@ -55,30 +55,33 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-			.httpBasic().disable()
-			.formLogin().disable()
-			.logout().disable()
-			.csrf().disable()
-			.cors()
-			.and()
-			.anonymous().disable()
-			.authorizeRequests()
-			.antMatchers("/api/callback/endpoint-data-reference").permitAll()
-			.antMatchers("/api/qualitynotifications/receive").permitAll()
-			.antMatchers("/api/**").authenticated()
-			.and()
-			.oauth2Client()
-			.and()
-			.oauth2ResourceServer()
-			.jwt()
-			.jwtAuthenticationConverter(new JwtAuthenticationTokenConverter(resourceClient));
+            .authorizeHttpRequests(auth -> {
+                auth.requestMatchers("/api/callback/endpoint-data-reference").permitAll();
+                auth.requestMatchers("/api/qualitynotifications/receive").permitAll();
+                auth.requestMatchers("/api/**").authenticated();
+            })
+            .httpBasic().disable()
+            .formLogin().disable()
+            .logout().disable()
+            .csrf().disable()
+            .cors()
+            .and()
+            .anonymous().disable()
+            .authorizeRequests()
+            .and()
+            .oauth2Client()
+            .and()
+            .oauth2ResourceServer()
+            .jwt()
+            .jwtAuthenticationConverter(new JwtAuthenticationTokenConverter(resourceClient));
 
 		return http.build();
 	}
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().antMatchers(WHITELIST_URLS);
+		/* return (web) -> web.ignoring().antMatchers(WHITELIST_URLS); */
+        return null;
 	}
 
 	@Bean

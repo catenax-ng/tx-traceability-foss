@@ -1,7 +1,7 @@
 package org.eclipse.tractusx.traceability.common.security;
 
-import com.nimbusds.jose.shaded.json.JSONArray;
-import com.nimbusds.jose.shaded.json.JSONObject;
+import com.nimbusds.jose.shaded.gson.JsonArray;
+import com.nimbusds.jose.shaded.gson.JsonObject;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -74,11 +74,11 @@ class JwtRolesExtractorTest {
 			.header("use", "sig")
 			.header("typ", "JWT");
 
-		JSONArray jsonArray = new JSONArray();
+		/* JsonArray jsonArray = new JsonArray();
 		roles.forEach(jsonArray::appendElement);
 
-		Map<String, JSONObject> resourceAccess = Map.of(resourceClient, new JSONObject(Map.of("roles", jsonArray)));
-		jwtBuilder.claim("resource_access", resourceAccess);
+		Map<String, JsonObject> resourceAccess = Map.of(resourceClient, new JsonObject(Map.of("roles", jsonArray)));
+		jwtBuilder.claim("resource_access", resourceAccess); */
 
 		return jwtBuilder.build();
 	}

@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -82,7 +82,7 @@ public class EdcPolicyDefinitionService {
 			throw new CreateEdcPolicyDefinitionException(e);
 		}
 
-		HttpStatus responseCode = createPolicyDefinitionResponse.getStatusCode();
+		HttpStatusCode responseCode = createPolicyDefinitionResponse.getStatusCode();
 
 		if (responseCode.value() == 409) {
 			logger.info("{} notification asset policy definition already exists in the EDC", notificationAssetId);

@@ -41,7 +41,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import static org.eclipse.tractusx.traceability.investigations.adapters.rest.validation.UpdateInvestigationValidator.validate;
 
