@@ -23,7 +23,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { getRoute, INVESTIGATION_BASE_ROUTE } from '@core/known-route';
 import { OtherPartsFacade } from '@page/other-parts/core/other-parts.facade';
-import { Part, QualityType } from '@page/parts/model/parts.model';
+import { Part } from '@page/parts/model/parts.model';
 import { CtaSnackbarService } from '@shared/components/call-to-action-snackbar/cta-snackbar.service';
 import { SelectOption } from '@shared/components/select/select.component';
 import { DateValidators } from '@shared/components/dateTime/dateValidators.model';
@@ -48,19 +48,14 @@ export class RequestInvestigationComponent {
   @Output() restorePart = new EventEmitter<Part>();
   @Output() clearSelected = new EventEmitter<void>();
   @Output() submitted = new EventEmitter<void>();
-  public severityOptions: SelectOption[];
+
   public selectedSeverity: Severity = Severity.MINOR;
 
   constructor(
     private readonly investigationsService: InvestigationsService,
     private readonly otherPartsFacade: OtherPartsFacade,
     private readonly ctaSnackbarService: CtaSnackbarService,
-  ) {
-    this.severityOptions = Object.values(Severity).map(value => ({
-      lable: value,
-      value: value,
-    }));
-  }
+  ) {}
 
   private readonly textAreaControl = new UntypedFormControl(undefined, [
     Validators.required,
@@ -150,7 +145,7 @@ export class RequestInvestigationComponent {
     this.textAreaControl.reset();
   }
 
-  public updateSeverity(selectedSeverity: string) {
-    this.selectedSeverity = selectedSeverity as Severity;
+  public onSeveritySelected(selectedSeverity: Severity) {
+    this.selectedSeverity = selectedSeverity;
   }
 }

@@ -19,11 +19,30 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-// for now we leave this model in shared module, because of problems to handle separated SeverityModule
-// to have SeverityModule we would need to rearrange our SharedModule
-export enum Severity {
-  MINOR = 'MINOR',
-  MAJOR = 'MAJOR',
-  CRITICAL = 'CRITICAL',
-  LIFE_THREATENING = 'LIFE-THREATENING',
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { SelectOption } from '@shared/components/select/select.component';
+import { Severity } from '@shared/model/severity.model';
+
+@Component({
+  selector: 'app-severity-select',
+  templateUrl: './severity-select.component.html',
+})
+export class SeveritySelectComponent {
+  public options: SelectOption[];
+  public selectedValue: Severity = Severity.MINOR;
+
+  @Input() translationContext: string;
+  @Output() selectedEvent = new EventEmitter<Severity>();
+
+  constructor() {
+    this.options = Object.values(Severity).map(value => ({
+      lable: value,
+      value: value,
+    }));
+  }
+
+  public selectValue(selectedSeverity: string) {
+    this.selectedValue = selectedSeverity as Severity;
+    this.selectedEvent.emit(this.selectedValue);
+  }
 }

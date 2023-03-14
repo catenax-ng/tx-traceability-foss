@@ -66,13 +66,8 @@ SPDX-License-Identifier: Apache-2.0
     </div>
     <div>
       <p class="regular-text mb-2">{{ 'requestInvestigations.severityDescription' | i18n }}</p>
-      <app-select
-        [lable]="'requestInvestigations.severity' | i18n"
-        [options]="severityOptions"
-        [optionsRenderer]="severityOptionTmp"
-        [selectedValue]="selectedSeverity"
-        (selected)="updateSeverity($event)"
-      ></app-select>
+      <app-severity-select [translationContext]="'requestInvestigations'" (selectedEvent)="onSeveritySelected($event)">
+      </app-severity-select>
     </div>
   </div>
 
@@ -91,7 +86,3 @@ SPDX-License-Identifier: Apache-2.0
 </form>
 
 <mat-progress-bar *ngIf="isLoading$ | async" mode="indeterminate"></mat-progress-bar>
-
-<ng-template let-lable="value" #severityOptionTmp>
-  <app-severity [severity]="lable"></app-severity>
-</ng-template>
