@@ -19,39 +19,37 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Severity } from '@shared/model/severity.model';
 import { SharedModule } from '@shared/shared.module';
-import { screen } from '@testing-library/angular';
+import { screen, waitFor } from '@testing-library/angular';
 import { renderComponent } from '@tests/test-render.utils';
 
 import { SeveritySelectComponent } from './severity-select.component';
 
 describe('SeveritySelectComponent', () => {
   const renderSeveritySelect = (selectedValue?: Severity) => {
-    return renderComponent(`<app-severity-select >Test</app-severity-select>`, {
+    return renderComponent(`<app-severity-select [selectedValue]="'${selectedValue}'">Test</app-severity-select>`, {
       imports: [SharedModule],
-      componentProperties: { selectedValue },
     });
   };
 
   it('should render selected Minor icon', async () => {
-    await renderSeveritySelect();
-    expect(screen.getByText('info')).toBeInTheDocument();
+    await renderSeveritySelect(Severity.MINOR);
+    expect(await waitFor(() => screen.getByText('info'))).toBeInTheDocument();
   });
 
   it('should render selected Major icon', async () => {
     await renderSeveritySelect(Severity.MAJOR);
-    expect(screen.getByText('warning')).toBeInTheDocument();
+    expect(await waitFor(() => screen.getByText('warning'))).toBeInTheDocument();
   });
 
   it('should render selected Critical icon', async () => {
     await renderSeveritySelect(Severity.CRITICAL);
-    expect(screen.getByText('error_outline')).toBeInTheDocument();
+    expect(await waitFor(() => screen.getByText('error_outline'))).toBeInTheDocument();
   });
 
   it('should render selected LifeThreatening icon', async () => {
     await renderSeveritySelect(Severity.LIFE_THREATENING);
-    expect(screen.getByText('error')).toBeInTheDocument();
+    expect(await waitFor(() => screen.getByText('error'))).toBeInTheDocument();
   });
 });

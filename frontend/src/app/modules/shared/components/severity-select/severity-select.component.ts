@@ -29,8 +29,8 @@ import { Severity } from '@shared/model/severity.model';
 })
 export class SeveritySelectComponent {
   public options: SelectOption[];
-  public selectedValue: Severity = Severity.MINOR;
 
+  @Input() selectedValue: Severity;
   @Input() translationContext: string;
   @Output() selectedEvent = new EventEmitter<Severity>();
 

@@ -20,7 +20,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 <app-select
-  [lable]="'requestInvestigations.severity' | i18n"
+  [lable]="translationContext + '.severity' | i18n"
   [options]="options"
   [optionsRenderer]="severityOptionTmp"
   [selectedValue]="selectedValue"
