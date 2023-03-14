@@ -48,8 +48,7 @@ class JwtRolesExtractor {
 
 			if (roles instanceof JsonArray rolesArray) {
 				return rolesArray.asList().stream()
-					.map(Object::toString)
-					.map(JwtRole::parse)
+					.map(r->JwtRole.parse(r.getAsString()))
 					.filter(Optional::isPresent)
 					.map(Optional::get)
 					.collect(Collectors.toSet());

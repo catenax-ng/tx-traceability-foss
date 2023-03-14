@@ -74,12 +74,12 @@ class JwtRolesExtractorTest {
 			.header("use", "sig")
 			.header("typ", "JWT");
 
-		/* JsonArray jsonArray = new JsonArray();
-		roles.forEach(jsonArray::appendElement);
-
-		Map<String, JsonObject> resourceAccess = Map.of(resourceClient, new JsonObject(Map.of("roles", jsonArray)));
-		jwtBuilder.claim("resource_access", resourceAccess); */
-
+		JsonArray jsonArray = new JsonArray();
+        roles.forEach(jsonArray::add);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.add("roles", jsonArray);
+        Map<String, JsonObject> resourceAccess = Map.of(resourceClient, jsonObject);
+        jwtBuilder.claim("resource_access", resourceAccess);
 		return jwtBuilder.build();
 	}
 }
