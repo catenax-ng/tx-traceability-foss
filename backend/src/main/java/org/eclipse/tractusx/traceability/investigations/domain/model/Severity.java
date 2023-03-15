@@ -5,9 +5,19 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "Describes the criticality of a notification")
 public enum Severity {
-	MINOR,
-	MAJOR,
-	CRITICAL,
-	@ApiModelProperty(name = "LIFE-THREATENING")
-	LIFE_THREATENING
+    MINOR("MINOR"),
+    MAJOR("MAJOR"),
+    CRITICAL("CRITICAL"),
+    @ApiModelProperty(name = "LIFE-THREATENING")
+    LIFE_THREATENING("LIFE-THREATENING");
+
+    private Severity(String realName) {
+        this.realName = realName;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    private final String realName;
 }
