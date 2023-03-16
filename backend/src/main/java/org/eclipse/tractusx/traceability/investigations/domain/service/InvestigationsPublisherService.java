@@ -133,8 +133,7 @@ public class InvestigationsPublisherService {
         logger.info("InvestigationPublisherService: closeInvestigation {}", investigation);
 		investigation.close(applicationBpn, reason);
 		repository.update(investigation);
-        // We only want to set the latest notification to be closed to preserve history - might be better to create new one?
-        investigation.getNotificationWithHighestStatus().ifPresent(notificationsService::updateAsync);
+        investigation.getNotifications().forEach(notificationsService::updateAsync);
 	}
 
 	/**
