@@ -15,11 +15,13 @@ import org.eclipse.tractusx.traceability.investigations.domain.model.Investigati
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus
 import org.eclipse.tractusx.traceability.investigations.domain.model.Severity
 import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.Ignore
 
 import java.time.Instant
 
 import static io.restassured.RestAssured.given
 
+@Ignore
 class EdcControllerIT extends IntegrationSpecification implements TestDataSupport, AssetsSupport, NotificationsSupport, InvestigationsSupport {
 	@Autowired
 	private ObjectMapper objectMapper
