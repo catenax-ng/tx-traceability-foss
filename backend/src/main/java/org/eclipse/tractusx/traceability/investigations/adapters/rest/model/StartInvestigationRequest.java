@@ -23,6 +23,7 @@ package org.eclipse.tractusx.traceability.investigations.adapters.rest.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import org.eclipse.tractusx.traceability.investigations.adapters.rest.validation.EnumValidator;
+import org.eclipse.tractusx.traceability.investigations.adapters.rest.validation.ValidSeverity;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
 
 import javax.validation.constraints.Future;
@@ -42,7 +43,7 @@ public record StartInvestigationRequest(
 	@Future(message = "Specify at least the current day or a date in future")
 	Instant targetDate,
 	@NotNull
-	@EnumValidator(enumClass = Severity.class)
+	@ValidSeverity()
 	@ApiModelProperty(example = "MINOR")
 	String severity
 ) {
