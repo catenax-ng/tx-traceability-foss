@@ -129,14 +129,10 @@ public class InvestigationsReceiverService {
     }
 
     private void closeInvestigation(EDCNotification edcNotification) {
-        if (notificationOnMySideExists(edcNotification)) {
             logger.info("InvestigationReceiverService#closeInvestigation incoming");
-            Investigation investigation = investigationsReadService.loadInvestigationByNotificationId(edcNotification.getRelatedNotificationId());
+            Investigation investigation = investigationsReadService.loadInvestigationByNotificationId(edcNotification.getNotificationId());
             investigation.close(traceabilityProperties.getBpn(), edcNotification.getInformation());
             repository.update(investigation);
-        }
-
-
     }
 
     private boolean notificationOnMySideExists(EDCNotification edcNotification) {
