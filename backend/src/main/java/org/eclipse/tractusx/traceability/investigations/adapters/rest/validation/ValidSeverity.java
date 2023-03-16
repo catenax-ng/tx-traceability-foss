@@ -35,7 +35,7 @@ import java.lang.annotation.Target;
 @Documented
 public @interface ValidSeverity {
 
-    String message() default "Invalid severity";
+    String message() default "Invalid severity please use one of MINOR, MAJOR, CRITICAL, LIFE-THREATENING";
 
     Class<?>[] groups() default {};
 
