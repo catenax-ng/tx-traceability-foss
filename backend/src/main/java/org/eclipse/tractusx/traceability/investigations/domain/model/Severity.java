@@ -20,4 +20,13 @@ public enum Severity {
     }
 
     private final String realName;
+
+    public static Severity fromString(String str) {
+        for (Severity s : Severity.values()) {
+            if (s.realName.equalsIgnoreCase(str)) {
+                return s;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant " + Severity.class.getCanonicalName() + "." + str);
+    }
 }
