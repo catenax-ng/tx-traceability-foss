@@ -250,6 +250,7 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
         }
 
         return new NotificationEntity(
+                notification.getId(),
                 investigationEntity,
                 notification.getSenderBpnNumber(),
                 notification.getReceiverBpnNumber(),

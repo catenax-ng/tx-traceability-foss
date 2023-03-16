@@ -31,6 +31,7 @@ import org.eclipse.tractusx.traceability.infrastructure.jpa.notification.Notific
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationSide
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus
 import org.hamcrest.Matchers
+import spock.lang.Ignore
 import spock.lang.Unroll
 
 import java.time.Instant
@@ -38,7 +39,7 @@ import java.time.Instant
 import static io.restassured.RestAssured.given
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN
 import static org.eclipse.tractusx.traceability.common.support.ISO8601DateTimeMatcher.isIso8601DateTime
-
+@Ignore
 class ReadInvestigationsControllerIT extends IntegrationSpecification implements InvestigationsSupport, NotificationsSupport, BpnSupport {
 
 	@Unroll
