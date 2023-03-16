@@ -133,7 +133,7 @@ public class InvestigationsPublisherService {
         logger.info("InvestigationPublisherService: closeInvestigation {}", investigation);
 		investigation.close(applicationBpn, reason);
 		repository.update(investigation);
-		investigation.getNotifications().stream().filter(Notification::existOnReceiverSide).forEach(notificationsService::updateAsync);
+		investigation.getNotifications()/*.filter(Notification::existOnReceiverSide)*/.forEach(notificationsService::updateAsync);
 	}
 
 	/**

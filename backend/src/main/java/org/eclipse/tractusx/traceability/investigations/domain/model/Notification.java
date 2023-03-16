@@ -21,6 +21,7 @@
 
 package org.eclipse.tractusx.traceability.investigations.domain.model;
 
+import com.nimbusds.oauth2.sdk.util.StringUtils;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.NotificationStatusTransitionNotAllowed;
 
 import java.time.Instant;
@@ -30,155 +31,155 @@ import java.util.List;
 import static java.util.Objects.requireNonNullElseGet;
 
 public class Notification {
-	private final String id;
-	private final String notificationReferenceId;
-	private final String senderBpnNumber;
-	private final String receiverBpnNumber;
-	private String edcUrl;
-	private String contractAgreementId;
-	private final List<AffectedPart> affectedParts;
-	private String description;
-	private InvestigationStatus investigationStatus;
+    private final String id;
+    private final String notificationReferenceId;
+    private final String senderBpnNumber;
+    private final String receiverBpnNumber;
+    private String edcUrl;
+    private String contractAgreementId;
+    private final List<AffectedPart> affectedParts;
+    private String description;
+    private InvestigationStatus investigationStatus;
 
-	private Instant targetDate;
+    private Instant targetDate;
 
-	private Severity severity;
+    private Severity severity;
 
-	public Notification(String id,
-						String notificationReferenceId,
-						String senderBpnNumber,
-						String receiverBpnNumber,
-						String edcUrl,
-						String contractAgreementId,
-						String description,
-						InvestigationStatus investigationStatus,
-						List<AffectedPart> affectedParts,
-						Instant targetDate,
-						Severity severity) {
-		this.id = id;
-		this.notificationReferenceId = notificationReferenceId;
-		this.senderBpnNumber = senderBpnNumber;
-		this.receiverBpnNumber = receiverBpnNumber;
-		this.edcUrl = edcUrl;
-		this.contractAgreementId = contractAgreementId;
-		this.description = description;
-		this.investigationStatus = investigationStatus;
-		this.affectedParts = requireNonNullElseGet(affectedParts, ArrayList::new);
-		this.targetDate = targetDate;
-		this.severity = severity;
-	}
-
-	void changeStatusTo(InvestigationStatus to) {
-		boolean transitionAllowed = investigationStatus.transitionAllowed(to);
-
-		if (!transitionAllowed) {
-			throw new NotificationStatusTransitionNotAllowed(id, investigationStatus, to);
-		}
-		this.investigationStatus = to;
-	}
-
-    public boolean existOnReceiverSide(){
-       return !this.getNotificationReferenceId().isBlank();
+    public Notification(String id,
+                        String notificationReferenceId,
+                        String senderBpnNumber,
+                        String receiverBpnNumber,
+                        String edcUrl,
+                        String contractAgreementId,
+                        String description,
+                        InvestigationStatus investigationStatus,
+                        List<AffectedPart> affectedParts,
+                        Instant targetDate,
+                        Severity severity) {
+        this.id = id;
+        this.notificationReferenceId = notificationReferenceId;
+        this.senderBpnNumber = senderBpnNumber;
+        this.receiverBpnNumber = receiverBpnNumber;
+        this.edcUrl = edcUrl;
+        this.contractAgreementId = contractAgreementId;
+        this.description = description;
+        this.investigationStatus = investigationStatus;
+        this.affectedParts = requireNonNullElseGet(affectedParts, ArrayList::new);
+        this.targetDate = targetDate;
+        this.severity = severity;
     }
 
-	public String getId() {
-		return id;
-	}
+    void changeStatusTo(InvestigationStatus to) {
+        boolean transitionAllowed = investigationStatus.transitionAllowed(to);
 
-	public String getNotificationReferenceId() {
-		return notificationReferenceId;
-	}
+        if (!transitionAllowed) {
+            throw new NotificationStatusTransitionNotAllowed(id, investigationStatus, to);
+        }
+        this.investigationStatus = to;
+    }
 
-	public String getContractAgreementId() {
-		return contractAgreementId;
-	}
+    public boolean existOnReceiverSide() {
+        return StringUtils.isNotBlank(this.getNotificationReferenceId());
+    }
 
-	public void setContractAgreementId(String contractAgreementId) {
-		this.contractAgreementId = contractAgreementId;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public List<AffectedPart> getAffectedParts() {
-		return affectedParts;
-	}
+    public String getNotificationReferenceId() {
+        return notificationReferenceId;
+    }
 
-	public String getSenderBpnNumber() {
-		return senderBpnNumber;
-	}
+    public String getContractAgreementId() {
+        return contractAgreementId;
+    }
 
-	public String getReceiverBpnNumber() {
-		return receiverBpnNumber;
-	}
+    public void setContractAgreementId(String contractAgreementId) {
+        this.contractAgreementId = contractAgreementId;
+    }
 
-	public void setEdcUrl(String edcUrl) {
-		this.edcUrl = edcUrl;
-	}
+    public List<AffectedPart> getAffectedParts() {
+        return affectedParts;
+    }
 
-	public String getEdcUrl() {
-		return edcUrl;
-	}
+    public String getSenderBpnNumber() {
+        return senderBpnNumber;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getReceiverBpnNumber() {
+        return receiverBpnNumber;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setEdcUrl(String edcUrl) {
+        this.edcUrl = edcUrl;
+    }
 
-	public InvestigationStatus getInvestigationStatus() {
-		return investigationStatus;
-	}
+    public String getEdcUrl() {
+        return edcUrl;
+    }
 
-	public Instant getTargetDate() {
-		return this.targetDate;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setInvestigationStatus(InvestigationStatus investigationStatus) {
-		this.investigationStatus = investigationStatus;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public Severity getSeverity() {
-		return severity;
-	}
+    public InvestigationStatus getInvestigationStatus() {
+        return investigationStatus;
+    }
 
-	public void setSeverity(Severity severity) {
-		this.severity = severity;
-	}
+    public Instant getTargetDate() {
+        return this.targetDate;
+    }
 
-	public void setTargetDate(Instant targetDate) {
-		this.targetDate = targetDate;
-	}
+    public void setInvestigationStatus(InvestigationStatus investigationStatus) {
+        this.investigationStatus = investigationStatus;
+    }
 
-	public Notification copy(String senderBpnNumber, String receiverBpnNumber) {
-		return new Notification(
-			id,
-			notificationReferenceId,
-			senderBpnNumber,
-			receiverBpnNumber,
-			edcUrl,
-			contractAgreementId,
-			description,
-			investigationStatus,
-			affectedParts,
-			targetDate,
-			severity
-		);
-	}
+    public Severity getSeverity() {
+        return severity;
+    }
 
-	@Override
-	public String toString() {
-		return "Notification{" +
-			"id='" + id + '\'' +
-			", notificationReferenceId='" + notificationReferenceId + '\'' +
-			", senderBpnNumber='" + senderBpnNumber + '\'' +
-			", receiverBpnNumber='" + receiverBpnNumber + '\'' +
-			", edcUrl='" + edcUrl + '\'' +
-			", contractAgreementId='" + contractAgreementId + '\'' +
-			", affectedParts=" + affectedParts +
-			", description='" + description + '\'' +
-			", investigationStatus=" + investigationStatus +
-			", targetDate=" + targetDate +
-			", severity=" + severity +
-			'}';
-	}
+    public void setSeverity(Severity severity) {
+        this.severity = severity;
+    }
+
+    public void setTargetDate(Instant targetDate) {
+        this.targetDate = targetDate;
+    }
+
+    public Notification copy(String senderBpnNumber, String receiverBpnNumber) {
+        return new Notification(
+                id,
+                notificationReferenceId,
+                senderBpnNumber,
+                receiverBpnNumber,
+                edcUrl,
+                contractAgreementId,
+                description,
+                investigationStatus,
+                affectedParts,
+                targetDate,
+                severity
+        );
+    }
+
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "id='" + id + '\'' +
+                ", notificationReferenceId='" + notificationReferenceId + '\'' +
+                ", senderBpnNumber='" + senderBpnNumber + '\'' +
+                ", receiverBpnNumber='" + receiverBpnNumber + '\'' +
+                ", edcUrl='" + edcUrl + '\'' +
+                ", contractAgreementId='" + contractAgreementId + '\'' +
+                ", affectedParts=" + affectedParts +
+                ", description='" + description + '\'' +
+                ", investigationStatus=" + investigationStatus +
+                ", targetDate=" + targetDate +
+                ", severity=" + severity +
+                '}';
+    }
 }
