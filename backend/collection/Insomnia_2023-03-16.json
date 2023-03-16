@@ -1,9 +1,65 @@
 {
   "_type": "export",
   "__export_format": 4,
-  "__export_date": "2023-03-15T14:47:50.295Z",
+  "__export_date": "2023-03-16T09:22:53.506Z",
   "__export_source": "insomnia.desktop.app:v2023.1.0",
   "resources": [
+    {
+      "_id": "req_afa1d2c01aa644ceaa07d6685143f293",
+      "parentId": "fld_6be8e24114714f69b782947340286402",
+      "modified": 1678957038353,
+      "created": 1678953975947,
+      "url": "http://localhost:8080/api/investigations",
+      "name": "Create",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"partIds\": [\"urn:uuid:fe99da3d-b0de-4e80-81da-882aebcca978\"],  \n  \"description\":\"{% now 'iso-8601', '' %}-requested-by-max\",\n\t\"severity\": \"LIFE-THREATENING\",\n  \"targetDate\": \"2024-02-04T13:48:54Z\" \n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_14fe7a99385f4bc9bf4cfb9c7c53d3a1', 'b64::JC5hY2Nlc3NfdG9rZW4=::46b', 'never', 60 %}"
+      },
+      "metaSortKey": -1678953975947,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_6be8e24114714f69b782947340286402",
+      "parentId": "wrk_68149bd7f1b049478b987da824737944",
+      "modified": 1678953973767,
+      "created": 1678953973767,
+      "name": "Local",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1678953973767,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_68149bd7f1b049478b987da824737944",
+      "parentId": null,
+      "modified": 1678372641671,
+      "created": 1678372423780,
+      "name": "Catena-X",
+      "description": "",
+      "scope": "collection",
+      "_type": "workspace"
+    },
     {
       "_id": "req_14fe7a99385f4bc9bf4cfb9c7c53d3a1",
       "parentId": "fld_c398c2e9533d4463ad7d9251b26405f2",
@@ -74,19 +130,9 @@
       "_type": "request_group"
     },
     {
-      "_id": "wrk_68149bd7f1b049478b987da824737944",
-      "parentId": null,
-      "modified": 1678372641671,
-      "created": 1678372423780,
-      "name": "Catena-X",
-      "description": "",
-      "scope": "collection",
-      "_type": "workspace"
-    },
-    {
       "_id": "req_52a0d24879db45a69d185e0c67b9f433",
       "parentId": "fld_e1256f3a13794c4faa70f3dbe141f521",
-      "modified": 1678891570692,
+      "modified": 1678957266872,
       "created": 1678443692900,
       "url": "{{ _.baseUrl }}/api/investigations",
       "name": "Create",
@@ -94,7 +140,7 @@
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n\t\"partIds\": {{ _.assetId }},\n  \"description\":\"{% now 'iso-8601', '' %}-requested-by-max\",\n\t\"severity\": \"MAJOR\",\n  \"targetDate\": \"2024-02-04T13:48:54Z\" \n}"
+        "text": "{\n\t\"partIds\": {{ _.assetId }},\n  \"description\":\"{% now 'iso-8601', '' %}-requested-by-max\",\n\t\"severity\": \"LIFE-THdREATENING\",\n  \"targetDate\": \"2024-02-04T13:48:54Z\" \n}"
       },
       "parameters": [],
       "headers": [
@@ -241,7 +287,7 @@
     {
       "_id": "req_5a892acf8c654d9b855cd5b88c63e182",
       "parentId": "fld_e1256f3a13794c4faa70f3dbe141f521",
-      "modified": 1678891470058,
+      "modified": 1678954712888,
       "created": 1678372844863,
       "url": "{{ _.baseUrl }}/api/investigations/received?page=0&size=5",
       "name": "Received",
@@ -249,7 +295,7 @@
       "method": "GET",
       "body": {
         "mimeType": "application/json",
-        "text": "{ \n\t\"description\": \"The description of the investigation\",  \n\t\"partIds\": [\"urn:uuid:fe99da3d-b0de-4e80-81da-882aebcca978\"],  \n\t\"severity\": \"MINOR\", \n\t\"targetDate\": \"2023-03-15T10:12:30.690Z\"}"
+        "text": ""
       },
       "parameters": [],
       "headers": [
@@ -276,7 +322,7 @@
     {
       "_id": "req_3f15b6718d3a4995a4e1ccebe05c746e",
       "parentId": "fld_e1256f3a13794c4faa70f3dbe141f521",
-      "modified": 1678891465481,
+      "modified": 1678954718656,
       "created": 1678444754820,
       "url": "{{ _.baseUrl }}/api/investigations/created?page=0&size=20",
       "name": "Created",
@@ -284,7 +330,7 @@
       "method": "GET",
       "body": {
         "mimeType": "application/json",
-        "text": "{ \n\t\"description\": \"The description of the investigation\",  \n\t\"partIds\": [\"urn:uuid:fe99da3d-b0de-4e80-81da-882aebcca978\"],  \n\t\"severity\": \"MINOR\", \n\t\"targetDate\": \"2023-03-15T10:12:30.690Z\"}"
+        "text": ""
       },
       "parameters": [],
       "headers": [
@@ -309,17 +355,52 @@
       "_type": "request"
     },
     {
-      "_id": "req_a612fc0297e04c278da4a621a1df7095",
+      "_id": "req_a7029126fa794e13a91c274c72e9ae68",
       "parentId": "fld_e1256f3a13794c4faa70f3dbe141f521",
-      "modified": 1678891478708,
-      "created": 1678444421749,
-      "url": "https://traceability-test.dev.demo.catena-x.net/api/investigations/received",
-      "name": "Received",
+      "modified": 1678954727074,
+      "created": 1678456288470,
+      "url": "{{ _.baseUrl }}/api/investigations/80",
+      "name": "InvestigationById",
       "description": "",
       "method": "GET",
       "body": {
         "mimeType": "application/json",
-        "text": "{ \n\t\"description\": \"The description of the investigation\",  \n\t\"partIds\": [\"urn:uuid:fe99da3d-b0de-4e80-81da-882aebcca978\"],  \n\t\"severity\": \"MINOR\", \n\t\"targetDate\": \"2023-03-15T10:12:30.690Z\"}"
+        "text": ""
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_14fe7a99385f4bc9bf4cfb9c7c53d3a1', 'b64::JC5hY2Nlc3NfdG9rZW4=::46b', 'when-expired', 60 %}",
+        "prefix": "Bearer"
+      },
+      "metaSortKey": -1678381742923.0625,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_a612fc0297e04c278da4a621a1df7095",
+      "parentId": "fld_e1256f3a13794c4faa70f3dbe141f521",
+      "modified": 1678893042078,
+      "created": 1678444421749,
+      "url": "{{ _.baseUrl }}/api/investigations/{% response 'body', 'req_5a892acf8c654d9b855cd5b88c63e182', 'b64::JC5jb250ZW50WzBdLmlk::46b', 'never', 60 %}/update",
+      "name": "Acknowledge (Takes Id from Received)",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{ \n\t\"reason\": \"\",  \n\t\"status\": \"ACKNOWLEDGED\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -344,17 +425,17 @@
       "_type": "request"
     },
     {
-      "_id": "req_a7029126fa794e13a91c274c72e9ae68",
+      "_id": "req_8c45d94904784e57887c6d3359540719",
       "parentId": "fld_e1256f3a13794c4faa70f3dbe141f521",
-      "modified": 1678891481050,
-      "created": 1678456288470,
-      "url": "https://traceability-test.dev.demo.catena-x.net/api/investigations/80",
-      "name": "InvestigationById",
+      "modified": 1678893067220,
+      "created": 1678893031171,
+      "url": "{{ _.baseUrl }}/api/investigations/{% response 'body', 'req_5a892acf8c654d9b855cd5b88c63e182', 'b64::JC5jb250ZW50WzBdLmlk::46b', 'never', 60 %}/update",
+      "name": "Accepted (Takes Id from Received)",
       "description": "",
-      "method": "GET",
+      "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{ \n\t\"description\": \"The description of the investigation\",  \n\t\"partIds\": [\"urn:uuid:fe99da3d-b0de-4e80-81da-882aebcca978\"],  \n\t\"severity\": \"MINOR\", \n\t\"targetDate\": \"2023-03-15T10:12:30.690Z\"}"
+        "text": "{ \n  \"reason\":\"{% now 'iso-8601', '' %}-accepted-by-max\",\n\t\"status\": \"ACCEPTED\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -368,7 +449,42 @@
         "token": "{% response 'body', 'req_14fe7a99385f4bc9bf4cfb9c7c53d3a1', 'b64::JC5hY2Nlc3NfdG9rZW4=::46b', 'when-expired', 60 %}",
         "prefix": "Bearer"
       },
-      "metaSortKey": -1678372793936.75,
+      "metaSortKey": -1678372755908.3125,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_ce7a575e61874e7692bdebfadd5db645",
+      "parentId": "fld_e1256f3a13794c4faa70f3dbe141f521",
+      "modified": 1678893251921,
+      "created": 1678893088697,
+      "url": "{{ _.baseUrl }}/api/investigations/{% response 'body', 'req_5a892acf8c654d9b855cd5b88c63e182', 'b64::JC5jb250ZW50WzBdLmlk::46b', 'never', 60 %}/update",
+      "name": "Declined (Takes Id from Received)",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{ \n  \"reason\":\"{% now 'iso-8601', '' %}-declined-by-max\",\n\t\"status\": \"DECLINED\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_14fe7a99385f4bc9bf4cfb9c7c53d3a1', 'b64::JC5hY2Nlc3NfdG9rZW4=::46b', 'when-expired', 60 %}",
+        "prefix": "Bearer"
+      },
+      "metaSortKey": -1678372736881.5938,
       "isPrivate": false,
       "settingStoreCookies": true,
       "settingSendCookies": true,
@@ -402,7 +518,7 @@
     {
       "_id": "jar_aac0b4507f60ebb4c4d7f7e5912428f1f3ff6097",
       "parentId": "wrk_68149bd7f1b049478b987da824737944",
-      "modified": 1678891618929,
+      "modified": 1678957263524,
       "created": 1678372423801,
       "name": "Default Jar",
       "cookies": [
@@ -420,7 +536,7 @@
           "hostOnly": true,
           "creation": "2023-03-10T19:41:21.717Z",
           "lastAccessed": "2023-03-15T11:51:01.634Z",
-          "id": "6240797906299496"
+          "id": "010631418948305438"
         },
         {
           "key": "AUTH_SESSION_ID_LEGACY",
@@ -434,7 +550,7 @@
           "hostOnly": true,
           "creation": "2023-03-10T19:41:21.718Z",
           "lastAccessed": "2023-03-15T11:51:01.634Z",
-          "id": "8323005911727857"
+          "id": "09968287971882472"
         },
         {
           "key": "KC_RESTART",
@@ -448,7 +564,7 @@
           "hostOnly": true,
           "creation": "2023-03-10T19:41:21.718Z",
           "lastAccessed": "2023-03-10T19:42:21.241Z",
-          "id": "7228435221449487"
+          "id": "6926388342047174"
         },
         {
           "key": "KC_RESTART",
@@ -462,8 +578,8 @@
           ],
           "hostOnly": true,
           "creation": "2023-03-15T14:19:51.817Z",
-          "lastAccessed": "2023-03-15T14:46:58.929Z",
-          "id": "8806992235628575"
+          "lastAccessed": "2023-03-16T08:55:39.295Z",
+          "id": "9664946048150298"
         },
         {
           "key": "KC_RESTART",
@@ -477,8 +593,19 @@
           ],
           "hostOnly": true,
           "creation": "2023-03-15T14:31:18.369Z",
-          "lastAccessed": "2023-03-15T14:44:50.799Z",
-          "id": "5308192817504764"
+          "lastAccessed": "2023-03-16T09:01:03.524Z",
+          "id": "32881475336376487"
+        },
+        {
+          "key": "JSESSIONID",
+          "value": "A3501B78EC19BDD65CD55F5B8B92A088",
+          "domain": "localhost",
+          "path": "/",
+          "httpOnly": true,
+          "hostOnly": true,
+          "creation": "2023-03-16T08:06:53.016Z",
+          "lastAccessed": "2023-03-16T08:07:49.681Z",
+          "id": "5741068356328418"
         }
       ],
       "_type": "cookie_jar"
@@ -523,7 +650,7 @@
     {
       "_id": "env_09e8ec33341e4ca1b91da4470fbc6ea2",
       "parentId": "env_aac0b4507f60ebb4c4d7f7e5912428f1f3ff6097",
-      "modified": 1678890667673,
+      "modified": 1678945689842,
       "created": 1678785132947,
       "name": "dev",
       "data": {
@@ -550,7 +677,7 @@
     {
       "_id": "env_c654574bb74444ccb9243b8241d3e187",
       "parentId": "env_aac0b4507f60ebb4c4d7f7e5912428f1f3ff6097",
-      "modified": 1678890659233,
+      "modified": 1678956484964,
       "created": 1678785140494,
       "name": "test",
       "data": {
@@ -572,6 +699,33 @@
       "color": null,
       "isPrivate": false,
       "metaSortKey": 1678785140494,
+      "_type": "environment"
+    },
+    {
+      "_id": "env_b0d5bb29e17e4524a060faeebe8138bf",
+      "parentId": "env_aac0b4507f60ebb4c4d7f7e5912428f1f3ff6097",
+      "modified": 1678953838269,
+      "created": 1678953706593,
+      "name": "New Environment",
+      "data": {
+        "baseUrl": "http://localhost:8080",
+        "iamUrl": "https://centralidp.dev.demo.catena-x.net",
+        "client_id": "",
+        "client_secret": "",
+        "assetId": "urn:uuid:10e78a62-1728-423f-ae23-e063d321268d"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "baseUrl",
+          "iamUrl",
+          "client_id",
+          "client_secret",
+          "assetId"
+        ]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1678953706593,
       "_type": "environment"
     }
   ]
