@@ -39,7 +39,7 @@ public class NotificationMapper {
 	 */
 	public Notification toReceiverNotification(EDCNotification edcNotification, InvestigationStatus investigationStatus) {
 		return new Notification(
-			UUID.randomUUID().toString(),
+			edcNotification.getNotificationId(),
 			edcNotification.getNotificationId(),
 			edcNotification.getSenderBPN(),
 			edcNotification.getRecipientBPN(),

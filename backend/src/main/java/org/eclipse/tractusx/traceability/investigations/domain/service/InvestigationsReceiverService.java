@@ -32,12 +32,14 @@ import org.eclipse.tractusx.traceability.investigations.domain.model.Investigati
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationIllegalUpdate;
+import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationNotFoundException;
 import org.eclipse.tractusx.traceability.investigations.domain.ports.InvestigationsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Optional;
 
 @Component
 public class InvestigationsReceiverService {
@@ -97,19 +99,33 @@ public class InvestigationsReceiverService {
 
     private void receiveUpdateInvestigation(EDCNotification edcNotification, InvestigationStatus investigationStatus) {
         logger.info("receiveUpdateInvestigation with status {}", investigationStatus);
-        Notification notification = notificationMapper.toReceiverNotification(edcNotification, investigationStatus);
-        Investigation investigation = investigationsReadService.loadInvestigationByNotificationId(edcNotification.getRelatedNotificationId());
+        Investigation investigation = investigationsReadService.loadInvestigationByNotificationId(edcNotification.getNotificationId());
 
-        switch (investigationStatus) {
-            case ACKNOWLEDGED -> investigation.acknowledge(notification);
-            case ACCEPTED -> investigation.accept(notification);
-            case DECLINED -> investigation.decline(notification);
-            default -> throw new InvestigationIllegalUpdate("Failed to handle notification due to unhandled %s status".formatted(investigationStatus));
+        //Notification notification = notificationMapper.toReceiverNotification(edcNotification, investigationStatus);
+        Optional<Notification> notificationOptional = investigation.getNotification(edcNotification.getNotificationId());
+
+        if (notificationOptional.isPresent()){
+            Notification notification = notificationOptional.get();
+            notification.updateDescription(edcNotification.getInformation());
+
+
+            switch (investigationStatus) {
+                case ACKNOWLEDGED -> investigation.acknowledge(notification);
+                case ACCEPTED -> investigation.accept(notification);
+                case DECLINED -> investigation.decline(notification);
+                default -> throw new InvestigationIllegalUpdate("Failed to handle notification due to unhandled %s status".formatted(investigationStatus));
+            }
+
+            InvestigationId savedInvestigation = repository.update(investigation);
+
+            logger.info("Stored received notification in investigation {}", savedInvestigation);
+        } else{
+            String format = String.format("No notification found with id %s", edcNotification.getNotificationId());
+            throw new InvestigationNotFoundException(format);
         }
-        investigation.addNotification(notification);
-        InvestigationId savedInvestigation = repository.update(investigation);
 
-        logger.info("Stored received notification in investigation {}", savedInvestigation);
+
+
     }
 
     private void closeInvestigation(EDCNotification edcNotification) {

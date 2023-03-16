@@ -82,6 +82,14 @@ public class Notification {
         return StringUtils.isNotBlank(this.getNotificationReferenceId());
     }
 
+    public void updateDescription(String description){
+        this.description = description;
+    }
+
+    public void updateInvestigationStatus(InvestigationStatus investigationStatus){
+        this.investigationStatus = investigationStatus;
+    }
+
     public String getId() {
         return id;
     }
