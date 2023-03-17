@@ -28,6 +28,7 @@ import {
   NotificationsResponse,
   NotificationStatus,
 } from '../model/notification.model';
+import { Severity } from '@shared/model/severity.model';
 
 export class InvestigationsAssembler {
   public static assembleInvestigations(response: NotificationsResponse): Notifications {
@@ -44,14 +45,30 @@ export class InvestigationsAssembler {
       reason = { accept: '', close: '', decline: '' },
       description = '',
       status: _status,
+      severity: _severity,
       createdDate: _createdDate = '',
       createdBy = '',
+      targetDate: _targetDate = '',
     } = response;
 
     const isFromSender = channel === 'SENDER';
     const status = NotificationStatus[_status] ?? null;
+    const severity = Object.values(Severity).find(element => element == _severity);
     const createdDate = new CalendarDateModel(_createdDate);
+    const targetDate = new CalendarDateModel(_targetDate);
 
-    return { id, description, createdBy, sendTo, reason, assetIds, isFromSender, status, createdDate };
+    return {
+      id,
+      description,
+      createdBy,
+      sendTo,
+      reason,
+      assetIds,
+      isFromSender,
+      status,
+      severity,
+      createdDate,
+      targetDate,
+    };
   }
 }

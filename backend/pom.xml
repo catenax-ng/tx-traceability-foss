@@ -36,8 +36,9 @@
 		<spotbugs-plugin.version>4.7.3.0</spotbugs-plugin.version>
 		<spring-boot-maven-plugin.version>3.0.2</spring-boot-maven-plugin.version>
 		<surefire-plugin.version>3.0.0-M9</surefire-plugin.version>
+        <apache-groovy.version>4.0.10</apache-groovy.version>
 
-		<!-- versions for 3rd party dependecies -->
+        <!-- versions for 3rd party dependecies -->
 		<ascii-doctor-j-diagram.version>2.2.3</ascii-doctor-j-diagram.version>
 		<ascii-dcotor-j.version>2.5.7</ascii-dcotor-j.version>
 		<auth-0-java-jwt.version>3.19.2</auth-0-java-jwt.version>
@@ -293,10 +294,10 @@
 			<version>${commons-io.version}</version>
 		</dependency>
 
-        <dependency>
+        <dependency> <!-- use a specific Groovy version rather than the one specified by spock-core -->
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
-            <version>4.0.9</version>
+            <version>${apache-groovy.version}</version>
         </dependency>
 
 		<!-- test dependencies spring boot managed -->

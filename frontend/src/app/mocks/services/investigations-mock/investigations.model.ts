@@ -21,17 +21,23 @@
 
 import type { NotificationResponse } from '@shared/model/notification.model';
 import { NotificationStatus } from '@shared/model/notification.model';
+import { Severity } from '@shared/model/severity.model';
 import { getRandomAsset } from '../parts-mock/parts.model';
 import { MOCK_part_1 } from '../parts-mock/parts.test.model';
 import { getRandomIntFromInterval, getRandomText } from '../text-generator.helper';
 
 export const InvestigationIdPrefix = 'id-';
+
+// TODO: rethink this approach
+const severities = [Severity.MINOR, Severity.MAJOR, Severity.CRITICAL, Severity.LIFE_THREATENING];
+
 export const buildMockInvestigations = (
   statuses: NotificationStatus[],
   channel: 'SENDER' | 'RECEIVER',
 ): NotificationResponse[] =>
   new Array(25).fill(null).map((_, index) => {
     const status = statuses[index % statuses.length];
+    const severity = severities[index % severities.length];
 
     const close = status === NotificationStatus.CLOSED ? getRandomText(getRandomIntFromInterval(15, 500)) : '';
     const isDeclined = Math.random() >= 0.5;
@@ -50,11 +56,13 @@ export const buildMockInvestigations = (
       id: `${InvestigationIdPrefix}${index + 1}`,
       description: `Investigation No ${index + 1} ${getRandomText(getRandomIntFromInterval(15, 500))}`,
       status,
+      severity,
       channel,
       createdBy: 'OEM A',
       sendTo: 'OEM B',
       reason: { close, decline, accept },
       createdDate: `2022-05-${(index + 1).toString().padStart(2, '0')}T12:34:12`,
+      targetDate: `2022-05-${(index + 2).toString().padStart(2, '0')}T11:34:12Z`,
       assetIds: [MOCK_part_1.id, getRandomAsset().id, getRandomAsset().id, getRandomAsset().id],
     };
   });
@@ -63,10 +71,12 @@ const MockEmptyInvestigation: NotificationResponse = {
   id: `${InvestigationIdPrefix}000`,
   description: `Investigation No 000`,
   status: NotificationStatus.CREATED,
+  severity: Severity.MINOR,
   createdBy: 'OEM A',
   sendTo: 'OEM B',
   reason: { close: '', decline: '', accept: '' },
   createdDate: `2022-05-01T12:34:12`,
+  targetDate: `2022-02-01T12:34:12`,
   assetIds: [getRandomAsset().id],
   channel: 'SENDER',
 };

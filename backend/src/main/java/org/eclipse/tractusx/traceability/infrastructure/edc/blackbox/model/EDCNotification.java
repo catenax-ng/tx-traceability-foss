@@ -70,6 +70,9 @@ public record EDCNotification(@Valid
 	}
 
 	@JsonIgnore
+	public String getRelatedNotificationId() {return header.relatedNotificationId(); }
+
+	@JsonIgnore
 	public List<AffectedPart> getListOfAffectedItems() {
 		return content.listOfAffectedItems().stream()
 			.map(AffectedPart::new)
@@ -91,7 +94,9 @@ public record EDCNotification(@Valid
 	}
 
 	public Instant getTargetDate() {
-		return Instant.parse(header.targetDate());
+        if (header.targetDate() != null){
+            return Instant.parse(header.targetDate());
+        } return null;
 	}
 }
 

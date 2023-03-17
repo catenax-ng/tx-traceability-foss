@@ -42,25 +42,32 @@ export class NotificationTabComponent implements AfterViewInit {
   @Input() hasPagination = true;
   @Input() translationContext: 'commonInvestigation' | 'pageAlerts';
   @Input() menuActionsConfig: MenuActionConfig<Notification>[];
+  @Input() optionalColumns: Array<'targetDate' | 'severity'> = [];
 
   @Output() pagination = new EventEmitter<TablePaginationEventConfig>();
   @Output() selected = new EventEmitter<Notification>();
 
   @ViewChild('statusTmp') statusTemplate: TemplateRef<unknown>;
+  @ViewChild('severityTmp') severityTemplate: TemplateRef<unknown>;
   @ViewChild('descriptionTmp') descriptionTemplate: TemplateRef<unknown>;
+  @ViewChild('targetDateTmp') targetDateTemplate: TemplateRef<unknown>;
 
   public tableConfig: TableConfig<keyof Notification>;
 
   public ngAfterViewInit(): void {
-    const displayedColumns: DisplayColumns<keyof Notification>[] = ['description', 'status', 'createdDate', 'menu'];
+    const defaultColumns: DisplayColumns<keyof Notification>[] = ['description', 'status', 'createdDate'];
+    const displayedColumns: DisplayColumns<keyof Notification>[] = [...defaultColumns, ...this.optionalColumns, 'menu'];
+
     this.tableConfig = {
       displayedColumns,
-      header: CreateHeaderFromColumns(displayedColumns, 'table.partsColumn'),
+      header: CreateHeaderFromColumns(displayedColumns, 'table.column'),
       hasPagination: this.hasPagination,
       menuActionsConfig: this.menuActionsConfig || [],
       cellRenderers: {
         status: this.statusTemplate,
+        severity: this.severityTemplate,
         description: this.descriptionTemplate,
+        targetDate: this.targetDateTemplate,
       },
     };
   }
