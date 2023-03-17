@@ -25,7 +25,7 @@ import org.eclipse.tractusx.traceability.common.security.JwtAuthenticationTokenC
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
@@ -36,8 +36,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-@EnableGlobalMethodSecurity(
-	prePostEnabled = true,
+@EnableMethodSecurity(
 	securedEnabled = true
 )
 public class SecurityConfig {
@@ -55,11 +54,6 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-            .authorizeHttpRequests(auth -> {
-                auth.requestMatchers("/api/callback/endpoint-data-reference").permitAll();
-                auth.requestMatchers("/api/qualitynotifications/receive").permitAll();
-                auth.requestMatchers("/api/**").authenticated();
-            })
             .httpBasic().disable()
             .formLogin().disable()
             .logout().disable()
@@ -67,8 +61,11 @@ public class SecurityConfig {
             .cors()
             .and()
             .anonymous().disable()
-            .authorizeRequests()
-            .and()
+                .authorizeRequests()
+                .requestMatchers("/api/callback/endpoint-data-reference").permitAll()
+                .requestMatchers("/api/qualitynotifications/receive").permitAll()
+                .requestMatchers("/api/**").authenticated()
+                .and()
             .oauth2Client()
             .and()
             .oauth2ResourceServer()
@@ -80,8 +77,7 @@ public class SecurityConfig {
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
-		/* return (web) -> web.ignoring().antMatchers(WHITELIST_URLS); */
-        return null;
+		return (web) -> web.ignoring().requestMatchers(WHITELIST_URLS);
 	}
 
 	@Bean
