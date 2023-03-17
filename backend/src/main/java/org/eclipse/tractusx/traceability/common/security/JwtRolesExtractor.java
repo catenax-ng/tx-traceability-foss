@@ -21,11 +21,12 @@
 
 package org.eclipse.tractusx.traceability.common.security;
 
-import com.nimbusds.jose.shaded.gson.JsonArray;
-import com.nimbusds.jose.shaded.gson.JsonObject;
+import com.nimbusds.jose.shaded.gson.internal.LinkedTreeMap;
 import org.springframework.security.oauth2.jwt.Jwt;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,18 +44,28 @@ class JwtRolesExtractor {
 			.flatMap(it -> Optional.ofNullable(it.get(resourceClient)))
 			.orElse(null);
 
-		if (resourceAccess instanceof JsonObject resourceAccessCasted) {
-			Object roles = resourceAccessCasted.get(ROLES);
+        if (resourceAccess instanceof LinkedTreeMap<?,?> resourceAccessCasted) {
+            Object roles = resourceAccessCasted.get(ROLES);
 
-			if (roles instanceof JsonArray rolesArray) {
-				return rolesArray.asList().stream()
-					.map(r->JwtRole.parse(r.getAsString()))
-					.filter(Optional::isPresent)
-					.map(Optional::get)
-					.collect(Collectors.toSet());
-			}
-		}
+            if (roles instanceof ArrayList<?> arrayList) {
+                return arrayList.stream()
+                        .map(JwtRolesExtractor::castStringOrNull)
+                        .filter(Objects::nonNull)
+                        .map(JwtRole::parse)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toSet());
+            }
+        }
 
-		return Collections.emptySet();
-	}
+        return Collections.emptySet();
+    }
+
+    private static String castStringOrNull(Object o) {
+        if (o instanceof String casted) {
+            return casted;
+        } else {
+            return null;
+        }
+    }
 }
