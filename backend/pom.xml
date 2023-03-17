@@ -36,7 +36,6 @@
 		<spotbugs-plugin.version>4.7.3.0</spotbugs-plugin.version>
 		<spring-boot-maven-plugin.version>3.0.2</spring-boot-maven-plugin.version>
 		<surefire-plugin.version>3.0.0-M9</surefire-plugin.version>
-		<groovy-all.version>3.0.13</groovy-all.version>
 
 		<!-- versions for 3rd party dependecies -->
 		<ascii-doctor-j-diagram.version>2.2.3</ascii-doctor-j-diagram.version>
@@ -48,8 +47,7 @@
 		<jruby.version>9.3.9.0</jruby.version>
 		<resilience4j.version>2.0.2</resilience4j.version>
 		<schedlock.version>4.42.0</schedlock.version>
-		<spock-core.version>2.4-M1-groovy-4.0</spock-core.version>
-		<spring-cloud.version>2021.0.5</spring-cloud.version>
+		<spring-cloud.version>2022.0.1</spring-cloud.version>
 		<jetbrains-annotation.version>13.0</jetbrains-annotation.version>
 		<feign-form.version>3.8.0</feign-form.version>
 		<feign-slf4j.version>11.10</feign-slf4j.version>
@@ -63,7 +61,7 @@
 		<testcontainer-postgresql.version>1.17.6</testcontainer-postgresql.version>
 		<testcontainer-spock.version>1.17.6</testcontainer-spock.version>
 		<rest-assured.version>5.2.0</rest-assured.version>
-		<spock-bom.version>2.1-groovy-3.0</spock-bom.version>
+        <spock-core.version>2.4-M1-groovy-4.0</spock-core.version>
         <springdoc.version>2.0.2</springdoc.version>
 
 		<!-- Sonar related properties -->
@@ -295,13 +293,6 @@
 			<version>${commons-io.version}</version>
 		</dependency>
 
-		<!-- dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy-all</artifactId>
-			<version>${groovy-all.version}</version>
-			<type>pom</type>
-		</dependency -->
-
         <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
@@ -356,13 +347,6 @@
 		</dependency>
 
 		<!-- Integration Testing Dependencies -->
-		<dependency>
-			<groupId>org.spockframework</groupId>
-			<artifactId>spock-bom</artifactId>
-			<version>${spock-bom.version}</version>
-			<type>pom</type>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.spockframework</groupId>
 			<artifactId>spock-core</artifactId>
