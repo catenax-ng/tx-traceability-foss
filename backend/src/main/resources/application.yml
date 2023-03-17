@@ -114,3 +114,6 @@ resilience4j:
         waitDuration: 30s
         enableExponentialBackoff: true
         exponentialBackoffMultiplier: 2
+logging:
+  level:
+    root: info
