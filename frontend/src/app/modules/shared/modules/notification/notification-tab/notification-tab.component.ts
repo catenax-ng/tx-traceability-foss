@@ -42,7 +42,7 @@ export class NotificationTabComponent implements AfterViewInit {
   @Input() hasPagination = true;
   @Input() translationContext: 'commonInvestigation' | 'pageAlerts';
   @Input() menuActionsConfig: MenuActionConfig<Notification>[];
-  @Input() optionalColumns: Array<'targetDate' | 'severity'> = [];
+  @Input() optionalColumns: Array<'targetDate' | 'severity' | 'createdBy' | 'sendTo'> = [];
 
   @Output() pagination = new EventEmitter<TablePaginationEventConfig>();
   @Output() selected = new EventEmitter<Notification>();
@@ -51,6 +51,8 @@ export class NotificationTabComponent implements AfterViewInit {
   @ViewChild('severityTmp') severityTemplate: TemplateRef<unknown>;
   @ViewChild('descriptionTmp') descriptionTemplate: TemplateRef<unknown>;
   @ViewChild('targetDateTmp') targetDateTemplate: TemplateRef<unknown>;
+  @ViewChild('createdByTmp') createdByTemplate: TemplateRef<unknown>;
+  @ViewChild('sendToTmp') sendToTemplate: TemplateRef<unknown>;
 
   public tableConfig: TableConfig<keyof Notification>;
 
@@ -68,6 +70,8 @@ export class NotificationTabComponent implements AfterViewInit {
         severity: this.severityTemplate,
         description: this.descriptionTemplate,
         targetDate: this.targetDateTemplate,
+        createdBy: this.createdByTemplate,
+        sendTo: this.sendToTemplate,
       },
     };
   }
