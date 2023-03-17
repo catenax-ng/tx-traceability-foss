@@ -37,20 +37,20 @@ import org.springframework.http.MediaType;
 
 @Configuration
 @OpenAPIDefinition
-@PropertySource("classpath:git.properties")
+//@PropertySource("classpath:git.properties")
 public class OpenApiConfig {
 
-    @Value("${git.branch}")
+//    @Value("${git.branch}")
     private String git_branch;
-    @Value("${git.commit.author.time}")
+//    @Value("${git.commit.author.time}")
     private String git_commit_author_time;
-    @Value("${git.commit.id.abbrev}")
+//    @Value("${git.commit.id.abbrev}")
     private String git_commit_id_abbrev;
-    @Value("${git.commit.message.short}")
+//    @Value("${git.commit.message.short}")
     private String git_commit_message_short;
-    @Value("${git.commit.user.email}")
+//    @Value("${git.commit.user.email}")
     private String git_commit_user_email;
-    @Value("${git.commit.user.name}")
+//    @Value("${git.commit.user.name}")
     private String git_commit_user_name;
 
     @Bean
