@@ -2,12 +2,15 @@ package org.eclipse.tractusx.traceability.common.security;
 
 import com.nimbusds.jose.shaded.gson.JsonArray;
 import com.nimbusds.jose.shaded.gson.JsonObject;
+import com.nimbusds.jose.shaded.gson.internal.LinkedTreeMap;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -64,6 +67,7 @@ class JwtRolesExtractorTest {
 		assertTrue(extractedRoles.isEmpty());
 	}
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
 	private Jwt createToken(Set<String> roles, String resourceClient) {
 		Jwt.Builder jwtBuilder = Jwt.withTokenValue("some-value")
 			.issuer(UUID.randomUUID().toString())
@@ -74,11 +78,10 @@ class JwtRolesExtractorTest {
 			.header("use", "sig")
 			.header("typ", "JWT");
 
-		JsonArray jsonArray = new JsonArray();
-        roles.forEach(jsonArray::add);
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.add("roles", jsonArray);
-        Map<String, JsonObject> resourceAccess = Map.of(resourceClient, jsonObject);
+        List rolesList = new ArrayList(roles);
+        LinkedTreeMap resourceAccessMappings = new LinkedTreeMap();
+        resourceAccessMappings.put("roles", rolesList);
+        Map<String, LinkedTreeMap> resourceAccess = Map.of(resourceClient, resourceAccessMappings);
         jwtBuilder.claim("resource_access", resourceAccess);
 		return jwtBuilder.build();
 	}
