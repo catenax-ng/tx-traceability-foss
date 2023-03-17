@@ -64,6 +64,6 @@ server:
 
 logging:
   level:
-    org.springframework.web.client.RestTemplate: DEBUG
-    org.springframework.security: TRACE
-    org.springframework: TRACE
+    org.springframework.web.client.RestTemplate: INFO
+    org.springframework.security: INFO
+    org.springframework: INFO
