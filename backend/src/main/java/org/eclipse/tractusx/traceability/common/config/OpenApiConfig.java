@@ -29,29 +29,13 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.responses.ApiResponse;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 
 @Configuration
 @OpenAPIDefinition
-//@PropertySource("classpath:git.properties")
 public class OpenApiConfig {
-
-//    @Value("${git.branch}")
-    private String git_branch;
-//    @Value("${git.commit.author.time}")
-    private String git_commit_author_time;
-//    @Value("${git.commit.id.abbrev}")
-    private String git_commit_id_abbrev;
-//    @Value("${git.commit.message.short}")
-    private String git_commit_message_short;
-//    @Value("${git.commit.user.email}")
-    private String git_commit_user_email;
-//    @Value("${git.commit.user.name}")
-    private String git_commit_user_name;
 
     @Bean
     public OpenAPI baseOpenAPI() {
@@ -73,28 +57,16 @@ public class OpenApiConfig {
         components.addResponses("badRequestAPI", badRequestAPI);
         components.addResponses("internalServerErrorAPI", internalServerErrorAPI);
         return new OpenAPI()
-            .components(components)
-            .info(new Info()
-                    .title("Trace-FOSS - OpenAPI Documentation")
-                    .version("1.0.0")
-                    .description("Trace-FOSS is a system for tracking parts along the supply chain. " +
-                        "A high level of transparency across the supplier network enables faster intervention " +
-                        "based on a recorded event in the supply chain. This saves costs by seamlessly tracking parts" +
-                        " and creates trust through clearly defined and secure data access by the companies and persons" +
-                        " involved in the process.")
-                    .license(new License().name("License: Apache 2.0"))
-            );
+                .components(components)
+                .info(new Info()
+                        .title("Trace-FOSS - OpenAPI Documentation")
+                        .version("1.0.0")
+                        .description("Trace-FOSS is a system for tracking parts along the supply chain. " +
+                                "A high level of transparency across the supplier network enables faster intervention " +
+                                "based on a recorded event in the supply chain. This saves costs by seamlessly tracking parts" +
+                                " and creates trust through clearly defined and secure data access by the companies and persons" +
+                                " involved in the process.")
+                        .license(new License().name("License: Apache 2.0"))
+                );
     }
-
-    private String git_info() {
-        return String.format("%s/%s - %s - %s - %s <%s>",
-                git_commit_id_abbrev,
-                git_branch,
-                git_commit_author_time,
-                git_commit_message_short,
-                git_commit_user_name,
-                git_commit_user_email
-        );
-    }
-
 }

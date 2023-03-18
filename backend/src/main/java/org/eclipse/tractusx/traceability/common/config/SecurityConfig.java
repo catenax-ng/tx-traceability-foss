@@ -37,59 +37,59 @@ import java.util.List;
 
 @Configuration
 @EnableMethodSecurity(
-	securedEnabled = true
+        securedEnabled = true
 )
 public class SecurityConfig {
 
-	private static final String[] WHITELIST_URLS = {
-		"/api/v3/api-docs/**",
-		"/api/swagger-ui/**",
-		"/api/swagger-ui.html",
-		"/actuator/**"
-	};
+    private static final String[] WHITELIST_URLS = {
+            "/api/v3/api-docs/**",
+            "/api/swagger-ui/**",
+            "/api/swagger-ui.html",
+            "/actuator/**"
+    };
 
-	@Value("${jwt.resource-client}")
-	private String resourceClient;
+    @Value("${jwt.resource-client}")
+    private String resourceClient;
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-            .httpBasic().disable()
-            .formLogin().disable()
-            .logout().disable()
-            .csrf().disable()
-            .cors()
-            .and()
-            .anonymous().disable()
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .httpBasic().disable()
+                .formLogin().disable()
+                .logout().disable()
+                .csrf().disable()
+                .cors()
+                .and()
+                .anonymous().disable()
                 .authorizeRequests()
                 .requestMatchers("/api/callback/endpoint-data-reference").permitAll()
                 .requestMatchers("/api/qualitynotifications/receive").permitAll()
                 .requestMatchers("/api/**").authenticated()
                 .and()
-            .oauth2Client()
-            .and()
-            .oauth2ResourceServer()
-            .jwt()
-            .jwtAuthenticationConverter(new JwtAuthenticationTokenConverter(resourceClient));
+                .oauth2Client()
+                .and()
+                .oauth2ResourceServer()
+                .jwt()
+                .jwtAuthenticationConverter(new JwtAuthenticationTokenConverter(resourceClient));
 
-		return http.build();
-	}
+        return http.build();
+    }
 
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers(WHITELIST_URLS);
-	}
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().requestMatchers(WHITELIST_URLS);
+    }
 
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource(@Value("${cors.origins}") List<String> origins) {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(origins);
-		configuration.setAllowedMethods(List.of("*"));
-		configuration.setAllowedHeaders(List.of("*"));
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(@Value("${cors.origins}") List<String> origins) {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(origins);
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
 
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
 
-		return source;
-	}
+        return source;
+    }
 }

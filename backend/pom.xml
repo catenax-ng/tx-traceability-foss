@@ -478,10 +478,6 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <filters>
-                        <!-- filter>${project.build.sourceDirectory}/../filters/git.properties</filter -->
-                       <!-- <filter>${project.build.directory}/classes/git.properties</filter>-->
-                    </filters>
                     <resources>
                         <resource>
                             <directory>src/main/resources</directory>
