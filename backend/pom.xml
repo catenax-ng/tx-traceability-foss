@@ -39,11 +39,12 @@
         <apache-groovy.version>4.0.10</apache-groovy.version>
 
         <!-- versions for 3rd party dependecies -->
+        <nimbus-jose-jwt.version>9.30.2</nimbus-jose-jwt.version>
 		<ascii-doctor-j-diagram.version>2.2.3</ascii-doctor-j-diagram.version>
 		<ascii-dcotor-j.version>2.5.7</ascii-dcotor-j.version>
 		<auth-0-java-jwt.version>4.3.0</auth-0-java-jwt.version>
 		<eclipse-license-tool.version>0.0.1-SNAPSHOT</eclipse-license-tool.version>
-		<feign.version>12.1</feign.version>
+		<feign.version>12.2</feign.version>
 		<jakarta-ws-rs.version>3.1.0</jakarta-ws-rs.version>
 		<jruby.version>9.3.9.0</jruby.version>
 		<resilience4j.version>2.0.2</resilience4j.version>
@@ -52,16 +53,16 @@
 		<jetbrains-annotation.version>13.0</jetbrains-annotation.version>
 		<feign-form.version>3.8.0</feign-form.version>
 		<feign-slf4j.version>11.10</feign-slf4j.version>
-		<scribe-java.version>8.3.2</scribe-java.version>
+		<scribe-java.version>8.3.3</scribe-java.version>
 		<findbugs-jsr305.version>3.0.2</findbugs-jsr305.version>
 		<swagger-annotation.version>1.5.20</swagger-annotation.version>
-		<jackson-databind-nullable.version>0.2.4</jackson-databind-nullable.version>
+		<jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
 		<commons-io.version>2.11.0</commons-io.version>
 		<jose4j.version>0.9.2</jose4j.version>
 		<restito.version>1.1.0</restito.version>
 		<testcontainer-postgresql.version>1.17.6</testcontainer-postgresql.version>
 		<testcontainer-spock.version>1.17.6</testcontainer-spock.version>
-		<rest-assured.version>5.2.0</rest-assured.version>
+		<rest-assured.version>5.3.0</rest-assured.version>
         <spock-core.version>2.4-M1-groovy-4.0</spock-core.version>
         <springdoc.version>2.0.2</springdoc.version>
 
@@ -218,7 +219,7 @@
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
-            <version>9.30.2</version>
+            <version>${nimbus-jose-jwt.version}</version>
         </dependency>
 		<dependency>
 			<groupId>io.github.resilience4j</groupId>
