@@ -2,6 +2,8 @@ name: "Veracode upload and scan - Frontend"
 
 on:
   workflow_dispatch:
+  pull_request:
+    - 'frontend/**'
   push:
     branches: [ main ]
     paths:
