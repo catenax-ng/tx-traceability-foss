@@ -1,6 +1,7 @@
 name: "Veracode upload and scan"
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
   schedule:
