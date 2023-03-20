@@ -5,22 +5,22 @@ on:
   push:
     branches-ignore:
       - 'main'
-  pull_request:
-    branches: main
-    paths-ignore:
-      - '**/*.md'
-      - '**/*.txt'
-      - 'api/**'
-      - 'api-tests/**'
-      - 'charts/**'
-      - 'ci/**'
-      - 'docs/**'
-      - 'dev/**'
-      - 'testdata-transform/**'
-      - 'testing/**'
-      - 'uml-diagrams/**'
-      - 'README.md'
-      - 'CHANGELOG.md'
+#  pull_request:
+#    branches: main
+#    paths-ignore:
+#      - '**/*.md'
+#      - '**/*.txt'
+#      - 'api/**'
+#      - 'api-tests/**'
+#      - 'charts/**'
+#      - 'ci/**'
+#      - 'docs/**'
+#      - 'dev/**'
+#      - 'testdata-transform/**'
+#      - 'testing/**'
+#      - 'uml-diagrams/**'
+#      - 'README.md'
+#      - 'CHANGELOG.md'
 
 jobs:
   build-frontend:
