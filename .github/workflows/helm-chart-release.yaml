@@ -73,6 +73,8 @@ jobs:
 
       - name: Run chart-releaser for the backend
         uses: helm/chart-releaser-action@v1.5.0
+        with:
+          charts_dir: backend/charts/traceability-foss-backend
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           CR_RELEASE_NAME_TEMPLATE: "${{ env.RELEASE_VERSION }}"
