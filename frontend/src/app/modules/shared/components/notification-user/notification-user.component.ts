@@ -30,5 +30,5 @@ export class NotificationUserComponent {
   @Input()
   user: NotificationUser;
   @Input()
-  mode: string;
+  mode: 'normal' | 'sup';
 }
