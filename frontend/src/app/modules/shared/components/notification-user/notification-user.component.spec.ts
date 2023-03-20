@@ -39,12 +39,12 @@ describe('NotificationUserComponent', () => {
   it('should render user name and number from createdBy', async () => {
     await renderUser();
     expect(screen.getByText(defaultNotification.createdBy.name)).toBeInTheDocument();
-    expect(screen.getByText(defaultNotification.createdBy.number)).toBeInTheDocument();
+    expect(screen.getByText(defaultNotification.createdBy.bpn)).toBeInTheDocument();
   });
 
   it('should render user name and number from sendTo', async () => {
     await renderUser(defaultNotification.sendTo);
     expect(screen.getByText(defaultNotification.sendTo.name)).toBeInTheDocument();
-    expect(screen.getByText(defaultNotification.sendTo.number)).toBeInTheDocument();
+    expect(screen.getByText(defaultNotification.sendTo.bpn)).toBeInTheDocument();
   });
 });

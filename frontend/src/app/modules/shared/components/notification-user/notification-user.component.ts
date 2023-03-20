@@ -25,7 +25,6 @@ import { NotificationUser } from '@shared/model/notification.model';
 @Component({
   selector: 'app-notification-user',
   templateUrl: './notification-user.component.html',
-  styleUrls: ['./notification-user.component.scss'],
 })
 export class NotificationUserComponent {
   @Input()

@@ -58,8 +58,8 @@ export class InvestigationsAssembler {
     const severity = Object.values(Severity).find(element => element == _severity);
     const createdDate = new CalendarDateModel(_createdDate);
     const targetDate = new CalendarDateModel(_targetDate);
-    const createdBy = { number: _createdBy, name: _createdByName };
-    const sendTo = { number: _sendTo, name: _sendToName };
+    const createdBy = { bpn: _createdBy, name: _createdByName };
+    const sendTo = { bpn: _sendTo, name: _sendToName };
 
     return {
       id,

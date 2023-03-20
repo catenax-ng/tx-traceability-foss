@@ -60,13 +60,7 @@ SPDX-License-Identifier: Apache-2.0
   <p class="notification--table__description">{{ text | formatDate : { dateStyle: 'short', timeStyle: 'short' } }}</p>
 </ng-template>
 
-<ng-template #createdByTmp let-text="value">
-  <p class="notification--table__description">
-    <app-notification-user [user]="text"></app-notification-user>
-  </p>
-</ng-template>
-
-<ng-template #sendToTmp let-text="value">
+<ng-template #userTmp let-text="value">
   <p class="notification--table__description">
     <app-notification-user [user]="text"></app-notification-user>
   </p>

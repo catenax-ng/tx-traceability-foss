@@ -51,8 +51,7 @@ export class NotificationTabComponent implements AfterViewInit {
   @ViewChild('severityTmp') severityTemplate: TemplateRef<unknown>;
   @ViewChild('descriptionTmp') descriptionTemplate: TemplateRef<unknown>;
   @ViewChild('targetDateTmp') targetDateTemplate: TemplateRef<unknown>;
-  @ViewChild('createdByTmp') createdByTemplate: TemplateRef<unknown>;
-  @ViewChild('sendToTmp') sendToTemplate: TemplateRef<unknown>;
+  @ViewChild('userTmp') userTemplate: TemplateRef<unknown>;
 
   public tableConfig: TableConfig<keyof Notification>;
 
@@ -70,8 +69,8 @@ export class NotificationTabComponent implements AfterViewInit {
         severity: this.severityTemplate,
         description: this.descriptionTemplate,
         targetDate: this.targetDateTemplate,
-        createdBy: this.createdByTemplate,
-        sendTo: this.sendToTemplate,
+        createdBy: this.userTemplate,
+        sendTo: this.userTemplate,
       },
     };
   }

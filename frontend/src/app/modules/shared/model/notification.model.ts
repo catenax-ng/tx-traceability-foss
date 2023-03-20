@@ -51,7 +51,7 @@ export interface NotificationReason {
 }
 
 export interface NotificationUser {
-  number?: string;
+  bpn?: string;
   name?: string;
 }
 
