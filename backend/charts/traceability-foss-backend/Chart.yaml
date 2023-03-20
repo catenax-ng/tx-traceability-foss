@@ -2,8 +2,8 @@ apiVersion: v2
 name: traceability-foss-backend
 description: A Helm chart for Traceability backend application
 type: application
-version: 1.1.6
-appVersion: "2.2.5"
+version: 1.1.7
+appVersion: "2.2.6"
 dependencies:
   - name: postgresql
     repository: https://charts.bitnami.com/bitnami
