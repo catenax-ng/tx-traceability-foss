@@ -452,7 +452,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- plugin>
+            <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>${spotbugs-plugin.version}</version>
@@ -460,7 +460,7 @@
                     <effort>Max</effort>
                     <threshold>Low</threshold>
                     <xmlOutput>true</xmlOutput>
-                    <failThreshold>Low</failThreshold>
+                    <failThreshold>High</failThreshold>
                     <excludeFilterFile>ci/spotbugs-excludes.xml</excludeFilterFile>
                     <plugins>
                         <plugin>
@@ -478,7 +478,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin -->
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
