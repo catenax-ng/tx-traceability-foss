@@ -109,6 +109,6 @@ jobs:
       - name: Run chart-releaser for the frontend
         uses: helm/chart-releaser-action@v1.4.1
         with:
-          charts_dir: frontend/charts/traceability-foss-frontend
+          charts_dir: frontend/charts
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
