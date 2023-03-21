@@ -43,8 +43,13 @@ describe('NotificationsInboxComponent', () => {
 
   const mapNotificationResponse = (data: NotificationResponse): Notification => {
     const isFromSender = data.channel === 'SENDER';
+    const createdDate = new CalendarDateModel(data.createdDate);
+    const targetDate = new CalendarDateModel(data.targetDate);
+    const createdBy = { bpn: data.createdBy, name: data.createdByName };
+    const sendTo = { bpn: data.createdBy, name: data.createdByName };
     delete data.channel;
-    return { ...data, createdDate: new CalendarDateModel(data.createdDate), isFromSender };
+
+    return { ...data, createdDate, targetDate, isFromSender, createdBy, sendTo };
   };
 
   const renderNotificationsInbox = () => {

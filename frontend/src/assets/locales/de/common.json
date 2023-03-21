@@ -52,7 +52,7 @@
       "shellDescriptorsFetchDelta": "Abruf-Delta",
       "endDate": "Enddatum"
     },
-    "partsColumn": {
+    "column": {
       "id": "ID",
       "name": "Name",
       "manufacturer": "Hersteller",
@@ -65,9 +65,11 @@
       "childInvestigation": "Qualitätsprüfung",
       "description": "Beschreibung",
       "status": "Status",
+      "targetDate": "Rückmeldedatum",
       "createdDate": "Erstelldatum",
       "createdBy": "Erstellt von",
-      "sendTo": "Gesendet an"
+      "sendTo": "Gesendet an",
+      "severity": "Gefahrenstufe"
     }
   },
   "dataLoading": {
@@ -80,6 +82,12 @@
     "Major": "Schwerwiegend",
     "Critical": "Kritisch",
     "LifeThreatening": "Lebensgefährlich"
+  },
+  "severity": {
+    "MINOR": "Gering",
+    "MAJOR": "Schwerwiegend",
+    "CRITICAL": "Kritisch",
+    "LIFE-THREATENING": "Lebensgefährlich"
   },
   "map": {
     "LogoControl.Title": "Mapbox logo",
@@ -100,6 +108,9 @@
     "minLength": "Bitte geben Sie mindestens {{minLength}} Zeichen ein.",
     "maxLength": "Bitte geben Sie maximal {{maxLength}} Zeichen ein.",
     "pattern": "Bitte geben Sie die Daten in folgendem Format ein: {{pattern}}.",
+    "maxDate": "Bitte wählen Sie ein Datum vor dem {{- maxDate}}.",
+    "minDate": "Bitte wählen Sie ein Datum nach dem {{- minDate}}.",
+    "currentDate": "Bitte wählen Sie ein Datum nach dem {{- currentDate}}.",
     "generic": "Die Eingabe ist ungültig."
   },
   "qualityInvestigation": {
@@ -110,10 +121,14 @@
   "requestInvestigations": {
     "headline": "Qualitätsprüfung anfordern",
     "textAreaDescription": "Fügen sie eine Beschreibung hinzu.",
+    "targetDateDescription": "Bitte geben Sie das Datum an, bis wann Sie eine Antwort erwarten.",
     "restoreItem": "Zuletzt gelöschtes Produkt wiederherstellen?",
     "textAreaLabel": "Beschreibung",
+    "targetDateLabel": "Rückmeldedatum",
     "cancel": "ABBRUCH",
-    "submit": "ZUR WARTESCHLANGE HINZUFÜGEN"
+    "submit": "ZUR WARTESCHLANGE HINZUFÜGEN",
+    "severity": "Gefahrenstufe",
+    "severityDescription": "Wählen Sie die Gefahrenstufe für das vorliegende Problem"
   },
   "pagination": {
     "itemsPerPageLabel": "Artikel pro Seite:",

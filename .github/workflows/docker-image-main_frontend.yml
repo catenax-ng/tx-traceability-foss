@@ -1,4 +1,4 @@
-name: Build&Push Docker image
+name: Backend Build&Push Docker image on main
 on:
   push:
     branches: main
@@ -34,4 +34,4 @@ jobs:
         with:
           context: frontend/
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.repository }}:fe_latest , ${{ env.REGISTRY }}/${{ github.repository }}:fe_${{ github.sha }}
+          tags: ${{ env.REGISTRY }}/${{ github.repository }}-frontend:latest , ${{ env.REGISTRY }}/${{ github.repository }}-frontend:${{ github.sha }}

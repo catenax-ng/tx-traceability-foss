@@ -22,6 +22,7 @@
 import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { CalendarDateModel } from '@core/model/calendar-date.model';
 import { Notification, NotificationStatus } from '@shared/model/notification.model';
+import { Severity } from '@shared/model/severity.model';
 import { AcceptNotificationModalComponent } from '@shared/modules/notification/modal/accept/accept-notification-modal.component';
 import { AcknowledgeNotificationModalComponent } from '@shared/modules/notification/modal/acknowledge/acknowledge-notification-modal.component';
 import { ApproveNotificationModalComponent } from '@shared/modules/notification/modal/approve/approve-notification-modal.component';
@@ -121,12 +122,13 @@ class CloseModalComponent implements AfterViewInit {
 export const notificationTemplate: Notification = {
   id: 'id-1',
   description: 'Investigation No 1',
-  createdBy: 'OEM A',
-  sendTo: 'OEM B',
+  createdBy: { name: 'OEM xxxxxxxxxxxxxxx A', bpn: 'BPN10000000OEM0A' },
+  sendTo: { name: 'OEM xxxxxxxxxxxxxxx B', bpn: 'BPN20000000OEM0B' },
   reason: { close: '', accept: '', decline: '' },
   isFromSender: false,
   assetIds: ['MOCK_part_1'],
   status: null,
+  severity: Severity.MINOR,
   createdDate: new CalendarDateModel('2022-05-01T10:34:12.000Z'),
 };
 

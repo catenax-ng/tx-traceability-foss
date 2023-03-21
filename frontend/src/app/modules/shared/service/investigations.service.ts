@@ -23,6 +23,7 @@ import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from '@core/api/api.service';
 import { environment } from '@env';
+import { DateTimeString } from '@shared/components/dateTime/dateTime.component';
 import type { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { InvestigationsAssembler } from '../assembler/investigations.assembler';
@@ -34,6 +35,7 @@ import {
   NotificationsResponse,
   NotificationStatus,
 } from '../model/notification.model';
+import { Severity } from '@shared/model/severity.model';
 
 @Injectable({
   providedIn: 'root',
@@ -65,8 +67,15 @@ export class InvestigationsService {
       .pipe(map(notification => InvestigationsAssembler.assembleInvestigation(notification)));
   }
 
-  public postInvestigation(partIds: string[], description: string): Observable<string> {
-    const body = { partIds, description };
+  public postInvestigation(
+    partIds: string[],
+    description: string,
+    severity: Severity,
+    dateString: DateTimeString,
+  ): Observable<string> {
+    // targetDate is an optional field
+    const targetDate = null === dateString ? null : new Date(dateString).toISOString();
+    const body = { partIds, description, severity, targetDate };
 
     return this.apiService
       .post<NotificationCreateResponse>(`${this.url}/investigations`, body)

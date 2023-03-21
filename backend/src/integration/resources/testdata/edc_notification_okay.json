@@ -8,12 +8,12 @@
 		"severity": "CRITICAL",
 		"relatedNotificationId": "",
 		"status": "SENT",
-		"targetDate": ""
+		"targetDate": "2099-03-11T22:44:06.333826952Z"
 	},
 	"content": {
 		"information": "Some long description",
 		"listOfAffectedItems": [
-			"urn:uuid:171fed54-26aa-4848-a025-81aaca557f37"
+			"urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"
 		]
 	}
 }

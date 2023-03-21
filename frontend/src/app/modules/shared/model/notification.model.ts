@@ -21,6 +21,7 @@
 
 import type { CalendarDateModel } from '@core/model/calendar-date.model';
 import type { Pagination, PaginationResponse } from '@core/model/pagination.model';
+import { Severity } from '@shared/model/severity.model';
 
 export enum NotificationStatus {
   ACCEPTED = 'ACCEPTED',
@@ -49,30 +50,41 @@ export interface NotificationReason {
   decline: string | null;
 }
 
+export interface NotificationUser {
+  bpn?: string;
+  name?: string;
+}
+
 export interface NotificationResponse {
   id: string;
   description: string;
   status: NotificationStatus;
+  severity: Severity;
 
   createdDate: string;
   createdBy: string;
+  createdByName?: string;
   sendTo: string;
+  sendToName?: string;
   reason: NotificationReason;
   assetIds: string[];
   channel: 'SENDER' | 'RECEIVER';
+  targetDate?: string;
 }
 
 export interface Notification {
   id: string;
   description: string;
   status: NotificationStatus | null;
+  severity: Severity | null;
 
   createdDate: CalendarDateModel;
-  createdBy: string;
-  sendTo: string;
+  createdBy: NotificationUser;
+  sendTo: NotificationUser;
   reason: NotificationReason;
   assetIds: string[];
   isFromSender: boolean;
+  targetDate?: CalendarDateModel;
 }
 
 export type NotificationsResponse = PaginationResponse<NotificationResponse>;

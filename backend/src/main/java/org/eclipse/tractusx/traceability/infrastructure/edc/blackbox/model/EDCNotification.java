@@ -26,8 +26,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.eclipse.tractusx.traceability.investigations.domain.model.AffectedPart;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,6 +70,9 @@ public record EDCNotification(@Valid
 	}
 
 	@JsonIgnore
+	public String getRelatedNotificationId() {return header.relatedNotificationId(); }
+
+	@JsonIgnore
 	public List<AffectedPart> getListOfAffectedItems() {
 		return content.listOfAffectedItems().stream()
 			.map(AffectedPart::new)
@@ -91,7 +94,9 @@ public record EDCNotification(@Valid
 	}
 
 	public Instant getTargetDate() {
-		return Instant.parse(header.targetDate());
+        if (header.targetDate() != null){
+            return Instant.parse(header.targetDate());
+        } return null;
 	}
 }
 

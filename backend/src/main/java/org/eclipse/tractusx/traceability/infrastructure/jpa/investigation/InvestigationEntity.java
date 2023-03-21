@@ -26,16 +26,16 @@ import org.eclipse.tractusx.traceability.infrastructure.jpa.notification.Notific
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationSide;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.List;
 
@@ -68,28 +68,6 @@ public class InvestigationEntity {
 	private Instant updated;
 
 	public InvestigationEntity() {
-	}
-
-	public InvestigationEntity(Long id,
-							   List<AssetEntity> assets,
-							   String bpn,
-							   InvestigationStatus status,
-							   InvestigationSide side,
-							   String closeReason,
-							   String acceptReason,
-							   String description,
-							   Instant created,
-							   Instant updated) {
-		this.id = id;
-		this.assets = assets;
-		this.bpn = bpn;
-		this.status = status;
-		this.side = side;
-		this.closeReason = closeReason;
-		this.acceptReason = acceptReason;
-		this.description = description;
-		this.created = created;
-		this.updated = updated;
 	}
 
 	public InvestigationEntity(List<AssetEntity> assets, String bpn, String description, InvestigationStatus status, InvestigationSide side, Instant created) {
