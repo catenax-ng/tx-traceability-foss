@@ -10,7 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added functionality to update notifications – Quality Investigations
 - Included a guide for connecting sonarcloud to IntelliJ -> Contribution.md
 - Added properties targetDate and severity to the Quality Investigations
+- Added native datetime component to be used for Quality Investigation
 - Included reason for accept, decline and closure of a Quality Investigation
+- Added additional information to be displayed on the Quality Investigation detail page
 
 ### Changed
 - Changed github action docker-release to have maven cache instead of previously used gradle
