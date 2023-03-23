@@ -3,4 +3,4 @@ name: product-traceability-foss
 description: An umbrella Helm chart for Kubernetes
 type: application
 version: 1.1.6
-appVersion: "3.0.2"
+appVersion: "3.0.3"
