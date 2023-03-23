@@ -1,9 +1,9 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.global.backend.ingress.enabled -}}
   {{- $fullName := include "traceability-foss-backend.fullname" . -}}
-  {{- $svcPort := .Values.service.port -}}
-  {{- if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
-  {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
-  {{- $_ := set .Values.ingress.annotations "kubernetes.io/ingress.class" .Values.ingress.className}}
+  {{- $svcPort := .Values.global.backend.service.port -}}
+  {{- if and .Values.global.backend.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
+  {{- if not (hasKey .Values.global.backend.ingress.annotations "kubernetes.io/ingress.class") }}
+  {{- $_ := set .Values.global.backend.ingress.annotations "kubernetes.io/ingress.class" .Values.global.backend.ingress.className}}
   {{- end }}
   {{- end }}
   {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -15,21 +15,21 @@ apiVersion: extensions/v1beta1
   {{- end }}
 kind: Ingress
 metadata:
-  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  namespace: {{ .Values.global.backend.namespace | default .Release.Namespace }}
   name: {{ $fullName }}
   labels:
     {{- include "traceability-foss-backend.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+  {{- with .Values.global.backend.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
-  ingressClassName: {{ .Values.ingress.className }}
+  {{- if and .Values.global.backend.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  ingressClassName: {{ .Values.global.backend.ingress.className }}
   {{- end }}
-  {{- if .Values.ingress.tls }}
+  {{- if .Values.global.backend.ingress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
+    {{- range .Values.global.backend.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -38,7 +38,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
+    {{- range .Values.global.backend.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
