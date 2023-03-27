@@ -80,7 +80,7 @@ module.exports = {
       primaryLight: '#9fc6ea',
       primaryDark: '#0d55af',
 
-      secondaryLight: '#e8fe63',
+      secondaryLight: '#9fc6ea',
       secondaryDark: '#d4e3fe',
 
       danger: '#D91E18',
@@ -99,8 +99,8 @@ module.exports = {
 
       // Alert colors
       error: '#D91E18',
-      success: '#3db014',
-      warning: '#ffad1f',
+      success: '#00AA55',
+      warning: '#F2BA00',
       alert: '#fe6702',
       info: '#046B99',
       inactive: '#D8D8D8',
@@ -136,7 +136,7 @@ module.exports = {
       receivedLight: '#e1f1fe',
       receivedDark: '#2b4078',
 
-      pendingLight: '#ffecbd',
+      pendingLight: '#FFECBD',
       pendingDark: '#975b26',
 
       confirmedLight: '#e2f6c7',
