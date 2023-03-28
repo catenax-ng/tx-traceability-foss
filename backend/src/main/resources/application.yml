@@ -25,7 +25,7 @@ traceability:
   registry.manufacturerIdKey: manufacturerId
 
 edc:
-  ids: "/api/v1/ids/management"
+  ids: "/api/v1/ids"
   negotiation: "/management/contractnegotiations"
   transfer: "/management/transferprocess"
   catalog: "/management/catalog?providerUrl="
