@@ -192,7 +192,7 @@ irs-helm:
   edc:
     controlplane:
       endpoint:
-        data: http://tracex-test-consumer-controlplane:8181/data
+        data: http://tracex-test-consumer-controlplane:8181/api/v1/management
       apikey:
         secret: <path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>
 
@@ -233,7 +233,7 @@ irs-edc-consumer:
     namespace: product-traceability-foss
 
     image:
-      tag: "0.1.2"
+      tag: "0.3.0"
 
     ingresses:
       - enabled: true
@@ -243,8 +243,8 @@ irs-edc-consumer:
           nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
           nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         endpoints:
-          - ids
-          - data
+          - protocol
+          - management
         className: "nginx"
         tls:
           - hosts:
@@ -294,7 +294,7 @@ irs-edc-consumer:
         edc.dataplane.selector.consumer.properties={ "publicApiUrl": "https://tracex-test-consumer-dataplane.dev.demo.catena-x.net/api/public/" }
 
         edc.oauth.client.id=3A:F4:B9:17:B7:01:BC:4D:A7:8B:58:19:18:30:7F:65:30:BB:90:62:keyid:3A:F4:B9:17:B7:01:BC:4D:A7:8B:58:19:18:30:7F:65:30:BB:90:62
-        edc.oauth.public.key.alias=daps-cert-edc-test-provider-dev
+        edc.oauth.certificate.alias=daps-cert-edc-test-provider-dev
         edc.oauth.private.key.alias=daps-cert-key-edc-test-provider-dev
         edc.oauth.provider.audience=idsc:IDS_CONNECTORS_ALL
         edc.oauth.provider.jwks.url=https://daps1.int.demo.catena-x.net/.well-known/jwks.json
@@ -343,7 +343,7 @@ irs-edc-consumer:
       readOnlyRootFilesystem: false
 
     image:
-      tag: "0.1.2"
+      tag: "0.3.0"
 
     ingresses:
       - enabled: true
@@ -388,7 +388,7 @@ irs-edc-consumer:
         edc.receiver.http.endpoint=http://product-traceability-foss-backend-test-irs-aaswrapper:9192/callback/endpoint-data-reference
 
         edc.oauth.client.id=3A:F4:B9:17:B7:01:BC:4D:A7:8B:58:19:18:30:7F:65:30:BB:90:62:keyid:3A:F4:B9:17:B7:01:BC:4D:A7:8B:58:19:18:30:7F:65:30:BB:90:62
-        edc.oauth.public.key.alias=daps-cert-edc-test-provider-dev
+        edc.oauth.certificate.alias=daps-cert-edc-test-provider-dev
         edc.oauth.private.key.alias=daps-cert-key-edc-test-provider-dev
         edc.oauth.provider.audience=idsc:IDS_CONNECTORS_ALL
         edc.oauth.provider.jwks.url=https://daps1.int.demo.catena-x.net/.well-known/jwks.json
