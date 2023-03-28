@@ -26,9 +26,9 @@ traceability:
 
 edc:
   ids: "/api/v1/ids"
-  negotiation: "/management/contractnegotiations"
-  transfer: "/management/transferprocess"
-  catalog: "/management/catalog?providerUrl="
+  negotiation: "/api/v1/management/contractnegotiations"
+  transfer: "/api/v1/management/transferprocess"
+  catalog: "/api/v1/management/catalog?providerUrl="
   api-auth-key: ${EDC_API_KEY}
   bpn-provider-url-mappings:
     {}
