@@ -134,7 +134,7 @@ irs-edc-consumer:
       readOnlyRootFilesystem: false
 
     image:
-      tag: "0.1.2"
+      tag: "0.3.0"
 
     ingresses:
       - enabled: true
@@ -144,8 +144,8 @@ irs-edc-consumer:
           nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
           nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         endpoints:
-          - ids
-          - data
+          - protocol
+          - management
         className: "nginx"
         tls:
           - hosts:
@@ -244,7 +244,7 @@ irs-edc-consumer:
       readOnlyRootFilesystem: false
 
     image:
-      tag: "0.1.2"
+      tag: "0.3.0"
 
     ingresses:
       - enabled: true
@@ -289,7 +289,7 @@ irs-edc-consumer:
         edc.receiver.http.endpoint=http://product-traceability-foss-backend-irs-aaswrapper:9192/callback/endpoint-data-reference
 
         edc.oauth.client.id=60:99:BC:FC:9B:F9:5D:58:C4:94:1D:02:65:3E:88:B6:F9:C7:23:B3:keyid:60:99:BC:FC:9B:F9:5D:58:C4:94:1D:02:65:3E:88:B6:F9:C7:23:B3
-        edc.oauth.public.key.alias=daps-cert-dev
+        edc.oauth.certificate.alias=daps-cert-dev
         edc.oauth.private.key.alias=daps-cert-key-dev
         edc.oauth.provider.audience=idsc:IDS_CONNECTORS_ALL
         edc.oauth.provider.jwks.url=https://daps1.int.demo.catena-x.net/.well-known/jwks.json
@@ -385,7 +385,7 @@ irs-helm:
   edc:
     controlplane:
       endpoint:
-        data: http://tracex-consumer-controlplane:8181/data
+        data: http://tracex-consumer-controlplane:8181/api/v1/management
       apikey:
         secret: <path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>
 
