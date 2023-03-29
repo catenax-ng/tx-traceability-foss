@@ -328,65 +328,47 @@ irs-edc-consumer:
     configuration:
       # -- EDC configuration.properties configuring aspects of the [eclipse-dataspaceconnector](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector)
       properties: |-
-        edc.api.auth.key=<path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>
-        ids.webhook.address=https://tracex-consumer-controlplane.dev.demo.catena-x.net
-
-        edc.ids.id=urn:connector:edc-consumer-controlplane
-        edc.ids.catalog.id=urn:catalog:default
-        #edc.ids.endpoint=https://tracex-consumer-controlplane.dev.demo.catena-x.net/api/v1/ids
-        #edc.oauth.endpoint.audience=https://tracex-consumer-controlplane.dev.demo.catena-x.net/api/v1/ids/data
 
         edc.receiver.http.dynamic.endpoint=https://traceability.dev.demo.catena-x.net/api/callback/endpoint-data-reference
-
-        edc.transfer.dataplane.sync.endpoint=http://tracex-consumer-dataplane:8185/api/public
-        edc.transfer.proxy.endpoint=https://tracex-consumer-dataplane.dev.demo.catena-x.net/api/public/
-        edc.transfer.proxy.token.signer.privatekey.alias=token-signer-cert-key-dev
-        edc.transfer.proxy.token.verifier.publickey.alias=token-signer-cert-dev
+        #edc.transfer.proxy.token.signer.privatekey.alias=token-signer-cert-key-dev
+        #edc.transfer.proxy.token.verifier.publickey.alias=token-signer-cert-dev
 
         edc.dataplane.selector.consumer.url=http://tracex-consumer-dataplane:9999/api/dataplane/control
-        edc.dataplane.selector.consumer.sourcetypes=HttpData
-        edc.dataplane.selector.consumer.destinationtypes=HttpProxy
-        edc.dataplane.selector.consumer.properties={ "publicApiUrl": "https://tracex-consumer-dataplane.dev.demo.catena-x.net/api/public/" }
 
         edc.oauth.client.id=60:99:BC:FC:9B:F9:5D:58:C4:94:1D:02:65:3E:88:B6:F9:C7:23:B3:keyid:60:99:BC:FC:9B:F9:5D:58:C4:94:1D:02:65:3E:88:B6:F9:C7:23:B3
         edc.oauth.certificate.alias=daps-cert-dev
         edc.oauth.private.key.alias=daps-cert-key-dev
-        edc.oauth.provider.audience=idsc:IDS_CONNECTORS_ALL
+
         edc.oauth.provider.jwks.url=https://daps1.int.demo.catena-x.net/.well-known/jwks.json
         edc.oauth.token.url=https://daps1.int.demo.catena-x.net/token
 
         edc.vault.hashicorp.url=https://vault.demo.catena-x.net
         edc.vault.hashicorp.token=<path:traceability-foss/data/dev/edc#edc.vault.hashicorp.token>
-        edc.vault.hashicorp.timeout.seconds=30
-        edc.vault.hashicorp.health.check.enabled=true
-        edc.vault.hashicorp.health.check.standby.ok=true
         edc.vault.hashicorp.api.secret.path=/v1/traceability-foss
 
         edc.data.encryption.keys.alias=edc-data-encryption-keys-alias
         edc.data.encryption.algorithm=NONE
 
-        # Postgresql related configuration TODO this could be removed completely
-        edc.datasource.asset.name=asset
+        # Postgresql related configuration
         edc.datasource.asset.url=jdbc:postgresql://tracex-consumer-edc-postgresql-hl:5432/edc
         edc.datasource.asset.user=<path:traceability-foss/data/dev/edc/database#user>
         edc.datasource.asset.password=<path:traceability-foss/data/dev/edc/database#password>
-        edc.datasource.contractdefinition.name=contractdefinition
+
         edc.datasource.contractdefinition.url=jdbc:postgresql://tracex-consumer-edc-postgresql-hl:5432/edc
         edc.datasource.contractdefinition.user=<path:traceability-foss/data/dev/edc/database#user>
         edc.datasource.contractdefinition.password=<path:traceability-foss/data/dev/edc/database#password>
-        edc.datasource.contractnegotiation.name=contractnegotiation
+
         edc.datasource.contractnegotiation.url=jdbc:postgresql://tracex-consumer-edc-postgresql-hl:5432/edc
         edc.datasource.contractnegotiation.user=<path:traceability-foss/data/dev/edc/database#user>
         edc.datasource.contractnegotiation.password=<path:traceability-foss/data/dev/edc/database#password>
-        edc.datasource.policy.name=policy
+
         edc.datasource.policy.url=jdbc:postgresql://tracex-consumer-edc-postgresql-hl:5432/edc
         edc.datasource.policy.user=<path:traceability-foss/data/dev/edc/database#user>
         edc.datasource.policy.password=<path:traceability-foss/data/dev/edc/database#password>
-        edc.datasource.transferprocess.name=transferprocess
+
         edc.datasource.transferprocess.url=jdbc:postgresql://tracex-consumer-edc-postgresql-hl:5432/edc
         edc.datasource.transferprocess.user=<path:traceability-foss/data/dev/edc/database#user>
         edc.datasource.transferprocess.password=<path:traceability-foss/data/dev/edc/database#password>
-
 
 
   # Values for consumer edc-dataplane.
