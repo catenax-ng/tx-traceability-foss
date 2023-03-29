@@ -312,8 +312,8 @@ irs-edc-consumer:
 
         edc.ids.id=urn:connector:edc-consumer-controlplane
         edc.ids.catalog.id=urn:catalog:default
-        edc.ids.endpoint=https://tracex-consumer-controlplane.dev.demo.catena-x.net/api/v1/ids
-        edc.oauth.endpoint.audience=https://tracex-consumer-controlplane.dev.demo.catena-x.net/api/v1/ids/data
+        #edc.ids.endpoint=https://tracex-consumer-controlplane.dev.demo.catena-x.net/api/v1/ids
+        #edc.oauth.endpoint.audience=https://tracex-consumer-controlplane.dev.demo.catena-x.net/api/v1/ids/data
 
         edc.receiver.http.dynamic.endpoint=https://traceability.dev.demo.catena-x.net/api/callback/endpoint-data-reference
 
@@ -344,7 +344,7 @@ irs-edc-consumer:
         edc.data.encryption.keys.alias=edc-data-encryption-keys-alias
         edc.data.encryption.algorithm=NONE
 
-        # Postgresql related configuration
+        # Postgresql related configuration TODO this could be removed completely
         edc.datasource.asset.name=asset
         edc.datasource.asset.url=jdbc:postgresql://tracex-consumer-edc-postgresql-hl:5432/edc
         edc.datasource.asset.user=<path:traceability-foss/data/dev/edc/database#user>
