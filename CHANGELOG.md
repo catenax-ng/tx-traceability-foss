@@ -9,8 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added validation for UpdateInvestigationRequest, reason for (decline, accepted, close)
 - Added Title to sections that might be cut of with three dots (...)
 - Added hint to input field with additional information for max and min length validation
+- Added license headers to all chart specific files
 
 ### Changed
+- Updated all environment specific helm chart files to follow same structure
+- Upgraded all environments to use most recent release of irs including edc charts 0.3.0
+- Removed unnecessary properties on irs charts
 - Restructured helm charts to an parent helm chart which includes frontend and backend
 - Updated database fields within Investigation table (accept_reason, decline_reason, close_reason)
 - Used same shadow for other parts table than we use for my parts table
