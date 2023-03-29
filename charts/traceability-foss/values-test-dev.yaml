@@ -345,10 +345,24 @@ irs-edc-consumer:
         edc.data.encryption.keys.alias=edc-data-encryption-keys-alias
         edc.data.encryption.algorithm=NONE
         edc.datasource.asset.url=jdbc:postgresql://tracex-test-consumer-edc-postgresql-hl:5432/edc
+        edc.datasource.asset.user=<path:traceability-foss/data/dev/edc/database#user>
+        edc.datasource.asset.password=<path:traceability-foss/data/dev/edc/database#password>
+
         edc.datasource.contractdefinition.url=jdbc:postgresql://tracex-test-consumer-edc-postgresql-hl:5432/edc
+        edc.datasource.contractdefinition.user=<path:traceability-foss/data/dev/edc/database#user>
+        edc.datasource.contractdefinition.password=<path:traceability-foss/data/dev/edc/database#password>
+
         edc.datasource.contractnegotiation.url=jdbc:postgresql://tracex-test-consumer-edc-postgresql-hl:5432/edc
+        edc.datasource.contractnegotiation.user=<path:traceability-foss/data/dev/edc/database#user>
+        edc.datasource.contractnegotiation.password=<path:traceability-foss/data/dev/edc/database#password>
+
         edc.datasource.policy.url=jdbc:postgresql://tracex-test-consumer-edc-postgresql-hl:5432/edc
+        edc.datasource.policy.user=<path:traceability-foss/data/dev/edc/database#user>
+        edc.datasource.policy.password=<path:traceability-foss/data/dev/edc/database#password>
+
         edc.datasource.transferprocess.url=jdbc:postgresql://tracex-test-consumer-edc-postgresql-hl:5432/edc
+        edc.datasource.transferprocess.user=<path:traceability-foss/data/dev/edc/database#user>
+        edc.datasource.transferprocess.password=<path:traceability-foss/data/dev/edc/database#password>
 
 
   # Values for consumer edc-dataplane.
@@ -401,22 +415,17 @@ irs-edc-consumer:
     configuration:
       properties: |-
         edc.api.auth.key=<path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>
-
         edc.dataplane.token.validation.endpoint=http://tracex-test-consumer-controlplane:8182/validation/token
-
         edc.receiver.http.dynamic.endpoint=http://product-traceability-foss-backend-test-irs-aaswrapper:9192/callback/endpoint-data-reference
 
         edc.oauth.client.id=3A:F4:B9:17:B7:01:BC:4D:A7:8B:58:19:18:30:7F:65:30:BB:90:62:keyid:3A:F4:B9:17:B7:01:BC:4D:A7:8B:58:19:18:30:7F:65:30:BB:90:62
         edc.oauth.certificate.alias=daps-cert-edc-test-provider-dev
         edc.oauth.private.key.alias=daps-cert-key-edc-test-provider-dev
-        edc.oauth.provider.audience=idsc:IDS_CONNECTORS_ALL
+
         edc.oauth.provider.jwks.url=https://daps1.int.demo.catena-x.net/.well-known/jwks.json
         edc.oauth.token.url=https://daps1.int.demo.catena-x.net/token
 
         edc.vault.hashicorp.url=https://vault.demo.catena-x.net
         edc.vault.hashicorp.token=<path:traceability-foss/data/dev/edc#edc.vault.hashicorp.token>
-        edc.vault.hashicorp.timeout.seconds=30
-        edc.vault.hashicorp.health.check.enabled=true
-        edc.vault.hashicorp.health.check.standby.ok=true
         edc.vault.hashicorp.api.secret.path=/v1/traceability-foss
 
