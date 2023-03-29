@@ -312,17 +312,17 @@ irs-edc-consumer:
           token:
             verifier:
               publickey:
-                alias: irs-dev-daps-cert-consumer
+                alias: daps-cert-dev
             signer:
               privatekey:
-                alias: irs-dev-daps-cert-consumer-key
+                alias: daps-cert-key-dev
       api:
         auth:
           key: <path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>
       controlplane:
-        url: "tracex-consumer-controlplane.dev.demo.catena-x.net"
+        url: "https://tracex-consumer-controlplane.dev.demo.catena-x.net"
       dataplane:
-        url: "tracex-consumer-dataplane.dev.demo.catena-x.net"
+        url: "https://tracex-consumer-dataplane.dev.demo.catena-x.net"
 
 
     configuration:
