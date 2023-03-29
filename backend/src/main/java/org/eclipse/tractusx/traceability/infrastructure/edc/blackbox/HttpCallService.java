@@ -22,15 +22,12 @@ package org.eclipse.tractusx.traceability.infrastructure.edc.blackbox;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.MultivaluedMap;
-import okhttp3.Headers;
+import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.catalog.Catalog;
+import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.AtomicConstraint;
+import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.LiteralExpression;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
-import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.catalog.Catalog;
-import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.catalog.CatalogRequest;
-import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.AtomicConstraint;
-import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.LiteralExpression;
 import org.eclipse.tractusx.traceability.infrastructure.edc.properties.EdcProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,16 +65,18 @@ public class HttpCallService {
 			.build();
 	}
 
-    public Catalog getCatalogFromProvider(
-            String consumerEdcDataManagementUrl,
-            String providerConnectorControlPlaneIDSUrl,
-            Map<String, String> headers
-    ) throws IOException {
-        var url = consumerEdcDataManagementUrl + edcProperties.getCatalogPath() + providerConnectorControlPlaneIDSUrl;
-        var request = new Request.Builder().url(url);
-        headers.forEach(request::addHeader);
-        return (Catalog) sendRequest(request.build(), Catalog.class);
-    }
+
+	public Catalog getCatalogFromProvider(
+		String consumerEdcDataManagementUrl,
+		String providerConnectorControlPlaneIDSUrl,
+		Map<String, String> headers
+	) throws IOException {
+		var url = consumerEdcDataManagementUrl + edcProperties.getCatalogPath() + providerConnectorControlPlaneIDSUrl;
+		var request = new Request.Builder().url(url);
+		headers.forEach(request::addHeader);
+
+		return (Catalog) sendRequest(request.build(), Catalog.class);
+	}
 
 
 	public Object sendRequest(Request request, Class<?> responseObject) throws IOException {
