@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 - Added validation for UpdateInvestigationRequest, reason for (decline, accepted, close)
 - Added Title to sections that might be cut of with three dots (...)
+- Added documentation regarding base docker image and prepared for future QG updates
 - Added hint to input field with additional information for max and min length validation
 - Added license headers to all chart specific files
 
@@ -26,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Improved error page styles and fixed menu urls in terms of 404 pages
 - Improved visibility for field validation and added * to required fields
 - Improved validation error message for max and min length
+- Updated Investigation model with `createdByName` and `sendToName` fields
 
 ## [3.0.0] - 2023-03-21
 
