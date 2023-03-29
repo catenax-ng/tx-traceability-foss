@@ -229,7 +229,7 @@ irs-helm:
   edc:
     controlplane:
       endpoint:
-        data: http://tracex-consumer-controlplane:8181/data
+        data: http://tracex-consumer-controlplane:8181/api/v1/management
       apikey:
         secret: <path:traceability-foss/data/beta/edc/controlplane#edc.api.control.auth.apikey.value>
 
