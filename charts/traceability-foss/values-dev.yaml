@@ -1,3 +1,13 @@
+#########################
+# Global Values configuration     #
+#########################
+global:
+  enablePrometheus: false
+  enableGrafana: false
+
+#########################
+# Frontend Chart Values configuration     #
+#########################
 frontend:
   image:
     tag: $ARGOCD_APP_REVISION
@@ -20,6 +30,10 @@ frontend:
       - hosts:
           - "traceability-portal.dev.demo.catena-x.net"
         secretName: "traceability-portal.dev.demo.catena-x.net-tls"
+
+#########################
+# Backend Chart Values configuration     #
+#########################
 backend:
   image:
     repository: ghcr.io/catenax-ng/tx-traceability-foss
@@ -92,6 +106,46 @@ backend:
     apiKey: "<path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>"
     providerUrl: "https://tracex-consumer-controlplane.dev.demo.catena-x.net"
 
+#########################
+# PG Admin configuration     #
+#########################
+pgadmin4:
+  enabled: true
+  strategy:
+    type: Recreate
+  networkPolicy:
+    enabled: false
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    hosts:
+      - host: tracex-pgadmin4.dev.demo.catena-x.net
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - hosts:
+          - tracex-pgadmin4.dev.demo.catena-x.net
+        secretName: tls-secret
+  env:
+    email: pgadmin4@trace.foss
+    password: "<path:traceability-foss/data/dev/database#pgadminPassword>"
+    variables:
+      - name: PGADMIN_CONFIG_UPGRADE_CHECK_ENABLED
+        value: "False"
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 256m
+      memory: 512Mi
+
+#########################
+# Postgres configuration     #
+#########################
 postgresql:
   enabled: true
 
@@ -104,16 +158,77 @@ postgresql:
     database: "trace"
     username: "trace"
 
-global:
-  enablePrometheus: false
-  enableGrafana: false
+#########################
+# IRS configuration     #
+#########################
+irs-helm:
+  enabled: true
 
+  nameOverride: "tracex-irs"
+  fullnameOverride: "tracex-irs"
+
+  namespace: product-traceability-foss
+
+  springprofile: dev
+
+  irsUrl: "https://tracex-irs.dev.demo.catena-x.net"
+
+  ingress:
+    enabled: true
+    hosts:
+      - host: "tracex-irs.dev.demo.catena-x.net"
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls:
+      - hosts:
+          - "tracex-irs.dev.demo.catena-x.net"
+        secretName: tls-secret
+  digitalTwinRegistry:
+    url: https://trace-x-registry.dev.demo.catena-x.net
+  semanticsHub:
+    url: https://semantics.int.demo.catena-x.net/hub/api/v1
+  bpdm:
+    url: https://partners-pool.int.demo.catena-x.net
+
+  minioUser: <path:traceability-foss/data/dev/minio#user>
+  minioPassword: <path:traceability-foss/data/dev/minio#password>
+  minioUrl: http://tracex-irs-minio:9000
+
+  keycloak:
+    oauth2:
+      clientId: <path:traceability-foss/data/int/keycloak/oauth2#clientId>
+      clientSecret: <path:traceability-foss/data/int/keycloak/oauth2#clientSecret>
+      clientTokenUri: https://centralidp.int.demo.catena-x.net/auth/realms/CX-Central/protocol/openid-connect/token
+      jwkSetUri: https://centralidp.int.demo.catena-x.net/auth/realms/CX-Central/protocol/openid-connect/certs
+
+  edc:
+    controlplane:
+      endpoint:
+        data: http://tracex-consumer-controlplane:8181/api/v1/management
+      apikey:
+        secret: <path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>
+
+  minio:
+    nameOverride: "tracex-irs-minio"
+    fullnameOverride: "tracex-irs-minio"
+    serviceAccount:
+      create: false
+    rootUser: <path:traceability-foss/data/dev/minio#user>
+    rootPassword: <path:traceability-foss/data/dev/minio#password>
+
+###################################
+# IRS EDC Consumer configuration  #
+###################################
 irs-edc-consumer:
   enabled: true
 
   postgresql:
     nameOverride: "tracex-consumer-edc-postgresql"
     fullnameOverride: "tracex-consumer-edc-postgresql"
+
+    securityContext:
+      readOnlyRootFilesystem: false
 
     namespace: product-traceability-foss
 
@@ -129,9 +244,6 @@ irs-edc-consumer:
     fullnameOverride: "tracex-consumer-controlplane"
 
     namespace: product-traceability-foss
-
-    securityContext:
-      readOnlyRootFilesystem: false
 
     image:
       tag: "0.3.0"
@@ -180,7 +292,7 @@ irs-edc-consumer:
         edc.ids.id=urn:connector:edc-consumer-controlplane
         edc.ids.catalog.id=urn:catalog:default
         edc.ids.endpoint=https://tracex-consumer-controlplane.dev.demo.catena-x.net/api/v1/ids
-        edc.ids.endpoint.audience=https://tracex-consumer-controlplane.dev.demo.catena-x.net/api/v1/ids/data
+        edc.oauth.endpoint.audience=https://tracex-consumer-controlplane.dev.demo.catena-x.net/api/v1/ids/data
 
         edc.receiver.http.dynamic.endpoint=https://traceability.dev.demo.catena-x.net/api/callback/endpoint-data-reference
 
@@ -301,102 +413,3 @@ irs-edc-consumer:
         edc.vault.hashicorp.health.check.enabled=true
         edc.vault.hashicorp.health.check.standby.ok=true
         edc.vault.hashicorp.api.secret.path=/v1/traceability-foss
-
-pgadmin4:
-  enabled: true
-  strategy:
-    type: Recreate
-  networkPolicy:
-    enabled: false
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      nginx.ingress.kubernetes.io/backend-protocol: HTTP
-    hosts:
-      - host: tracex-pgadmin4.dev.demo.catena-x.net
-        paths:
-          - path: /
-            pathType: Prefix
-    tls:
-      - hosts:
-          - tracex-pgadmin4.dev.demo.catena-x.net
-        secretName: tls-secret
-  env:
-    email: pgadmin4@trace.foss
-    password: "<path:traceability-foss/data/dev/database#pgadminPassword>"
-    variables:
-      - name: PGADMIN_CONFIG_UPGRADE_CHECK_ENABLED
-        value: "False"
-      - name: MAX_LOGIN_ATTEMPTS
-        value: 15
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 1Gi
-    requests:
-      cpu: 256m
-      memory: 512Mi
-    #########################
-    # IRS configuration     #
-    #########################
-irs-helm:
-  enabled: true
-
-  nameOverride: "tracex-irs"
-  fullnameOverride: "tracex-irs"
-
-  namespace: product-traceability-foss
-
-  springprofile: dev
-
-  irsUrl: "https://tracex-irs.dev.demo.catena-x.net"
-
-  ingress:
-    enabled: true
-    hosts:
-      - host: "tracex-irs.dev.demo.catena-x.net"
-        paths:
-          - path: /
-            pathType: ImplementationSpecific
-    tls:
-      - hosts:
-          - "tracex-irs.dev.demo.catena-x.net"
-        secretName: tls-secret
-
-  digitalTwinRegistry:
-    url: https://trace-x-registry.dev.demo.catena-x.net
-  semanticsHub:
-    url: https://semantics.int.demo.catena-x.net/hub/api/v1
-  bpdm:
-    url: https://partners-pool.int.demo.catena-x.net
-
-  minioUser: <path:traceability-foss/data/dev/minio#user>
-  minioPassword: <path:traceability-foss/data/dev/minio#password>
-  minioUrl: http://tracex-irs-minio:9000
-
-  keycloak:
-    oauth2:
-      clientId: <path:traceability-foss/data/int/keycloak/oauth2#clientId>
-      clientSecret: <path:traceability-foss/data/int/keycloak/oauth2#clientSecret>
-      clientTokenUri: https://centralidp.int.demo.catena-x.net/auth/realms/CX-Central/protocol/openid-connect/token
-      jwkSetUri: https://centralidp.int.demo.catena-x.net/auth/realms/CX-Central/protocol/openid-connect/certs
-
-  edc:
-    controlplane:
-      endpoint:
-        data: http://tracex-consumer-controlplane:8181/api/v1/management
-      apikey:
-        secret: <path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>
-
-  minio:
-    nameOverride: "tracex-irs-minio"
-    fullnameOverride: "tracex-irs-minio"
-    serviceAccount:
-      create: false
-    rootUser: <path:traceability-foss/data/dev/minio#user>
-    rootPassword: <path:traceability-foss/data/dev/minio#password>
-
-    ###################################
-    # IRS EDC Consumer configuration  #
-    ###################################

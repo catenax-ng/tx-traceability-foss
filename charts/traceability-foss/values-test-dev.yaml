@@ -1,3 +1,13 @@
+#########################
+# Global Values configuration     #
+#########################
+global:
+  enablePrometheus: false
+  enableGrafana: false
+
+#########################
+# Frontend Chart Values configuration     #
+#########################
 frontend:
   image:
     tag: $ARGOCD_APP_REVISION
@@ -23,6 +33,10 @@ frontend:
       - hosts:
           - "traceability-portal-test.dev.demo.catena-x.net"
         secretName: "traceability-portal-test.dev.demo.catena-x.net-tls"
+
+#########################
+# Backend Chart Values configuration     #
+#########################
 backend:
   image:
     repository: ghcr.io/catenax-ng/tx-traceability-foss
@@ -95,18 +109,9 @@ backend:
     apiKey: "<path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>"
     providerUrl: "https://tracex-test-consumer-controlplane.dev.demo.catena-x.net"
 
-postgresql:
-  enabled: true
-
-  nameOverride: "tracex-backend-test-postgresql"
-  fullnameOverride: "tracex-backend-test-postgresql"
-
-  auth:
-    postgresPassword: "<path:traceability-foss/data/dev/database#postgresPassword>"
-    password: "<path:traceability-foss/data/dev/database#tracePassword>"
-    database: "trace"
-    username: "trace"
-
+#########################
+# PG Admin configuration     #
+#########################
 pgadmin4:
   enabled: true
   strategy:
@@ -141,9 +146,20 @@ pgadmin4:
       cpu: 256m
       memory: 512Mi
 
-global:
-  enablePrometheus: false
-  enableGrafana: false
+#########################
+# Postgres configuration     #
+#########################
+postgresql:
+  enabled: true
+
+  nameOverride: "tracex-backend-test-postgresql"
+  fullnameOverride: "tracex-backend-test-postgresql"
+
+  auth:
+    postgresPassword: "<path:traceability-foss/data/dev/database#postgresPassword>"
+    password: "<path:traceability-foss/data/dev/database#tracePassword>"
+    database: "trace"
+    username: "trace"
 
 #########################
 # IRS configuration     #
@@ -279,9 +295,9 @@ irs-edc-consumer:
         edc.ids.id=urn:connector:edc-consumer-controlplane
         edc.ids.catalog.id=urn:catalog:default
         edc.ids.endpoint=https://tracex-test-consumer-controlplane.dev.demo.catena-x.net/api/v1/ids
-        edc.ids.endpoint.audience=https://tracex-test-consumer-controlplane.dev.demo.catena-x.net/api/v1/ids/data
+        edc.oauth.endpoint.audience=https://tracex-test-consumer-controlplane.dev.demo.catena-x.net/api/v1/ids/data
 
-        edc.receiver.http.endpoint=https://traceability-test.dev.demo.catena-x.net/api/callback/endpoint-data-reference
+        edc.receiver.http.dynamic.endpoint=https://traceability-test.dev.demo.catena-x.net/api/callback/endpoint-data-reference
 
         edc.transfer.dataplane.sync.endpoint=http://tracex-test-consumer-dataplane:8185/api/public
         edc.transfer.proxy.endpoint=https://tracex-test-consumer-dataplane.dev.demo.catena-x.net/api/public/
@@ -385,7 +401,7 @@ irs-edc-consumer:
 
         edc.dataplane.token.validation.endpoint=http://tracex-test-consumer-controlplane:8182/validation/token
 
-        edc.receiver.http.endpoint=http://product-traceability-foss-backend-test-irs-aaswrapper:9192/callback/endpoint-data-reference
+        edc.receiver.http.dynamic.endpoint=http://product-traceability-foss-backend-test-irs-aaswrapper:9192/callback/endpoint-data-reference
 
         edc.oauth.client.id=3A:F4:B9:17:B7:01:BC:4D:A7:8B:58:19:18:30:7F:65:30:BB:90:62:keyid:3A:F4:B9:17:B7:01:BC:4D:A7:8B:58:19:18:30:7F:65:30:BB:90:62
         edc.oauth.certificate.alias=daps-cert-edc-test-provider-dev
