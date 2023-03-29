@@ -283,6 +283,27 @@ irs-edc-consumer:
         java.util.logging.ConsoleHandler.level=INFO
         java.util.logging.SimpleFormatter.format=[%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS] [%4$-7s] %5$s%6$s%n
 
+    edc:
+      postgresql:
+        password: <path:traceability-foss/data/dev/edc/database#password>
+      transfer:
+        proxy:
+          token:
+            verifier:
+              publickey:
+                alias: irs-dev-daps-cert-consumer
+            signer:
+              privatekey:
+                alias: irs-dev-daps-cert-consumer-key
+      api:
+        auth:
+          key: <path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>
+      controlplane:
+        url: "tracex-consumer-controlplane.dev.demo.catena-x.net"
+      dataplane:
+        url: "tracex-consumer-dataplane.dev.demo.catena-x.net"
+
+
     configuration:
       # -- EDC configuration.properties configuring aspects of the [eclipse-dataspaceconnector](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector)
       properties: |-
