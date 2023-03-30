@@ -10,3 +10,5 @@ include::../../../uml-diagrams/runtime-view/get-country-information-for-assets.p
 ==== Overview
 
 When a user requests the map of assets, Traceability-FOSS checks if the user has an adequate role ('ROLE_ADMIN', 'ROLE_SUPERVISOR', 'ROLE_USER'). If yes, then the endpoint returns a JAVA map containing a country names as keys and the number of assets stored for each country and for the given assetId, if they are found.
+
+If no asset has been found, an empty JAVA map will be returned.
