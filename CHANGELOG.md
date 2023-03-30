@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added documentation regarding base docker image and prepared for future QG updates
 - Added hint to input field with additional information for max and min length validation
 - Added license headers to all chart specific files
+- Added information about the specific base image used by our docker images
 
 ### Changed
 - Updated all environment specific helm chart files to follow same structure
