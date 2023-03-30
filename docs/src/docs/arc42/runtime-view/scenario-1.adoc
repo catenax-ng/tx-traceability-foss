@@ -7,6 +7,6 @@ This section describes what happens when user lists all stored assets.
 include::../../../uml-diagrams/runtime-view/return-all-assets.puml[]
 ....
 
-== Overview
+==== Overview
 
 When a user requests all stored assets, Traceability-FOSS checks if the user has an adequate role ('ROLE_ADMIN', 'ROLE_SUPERVISOR', 'ROLE_USER'). If yes, then the endpoint returns a paged result of assets.
