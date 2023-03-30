@@ -23,7 +23,7 @@ apiVersion: v2
 name: traceability-foss
 description: An umbrella Helm chart for eclipse-tractusx/traceability-foss project
 type: application
-version: 1.2.5
+version: 1.2.4
 appVersion: "3.0.0"
 dependencies:
   - name: postgresql
