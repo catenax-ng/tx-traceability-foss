@@ -1,0 +1,12 @@
+= Scenario 2: Return specific Assets
+
+This section describes what happens when user lists all stored assets.
+
+[plantuml, target=return-specific-assets, format=svg]
+....
+include::../../../uml-diagrams/runtime-view/return-specific-assets.puml[]
+....
+
+== Overview
+
+When a user requests all stored assets, Traceability-FOSS checks if the user has an adequate role ('ROLE_ADMIN', 'ROLE_SUPERVISOR', 'ROLE_USER'). If yes, then the endpoint returns a paged result of assets.
