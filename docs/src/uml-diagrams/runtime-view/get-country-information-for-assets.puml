@@ -1,0 +1,47 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+autonumber "<b>[000]"
+
+actor TraceabilityApiConsumer
+activate TraceabilityApiConsumer
+
+
+box "Traceability-FOSS" #LightGrey
+participant TraceabilityAPI
+activate TraceabilityAPI
+participant AssetsController
+activate AssetsController
+participant AssetFacade
+activate AssetFacade
+participant AssetService
+activate AssetService
+participant AssetRepository
+activate AssetRepository
+participant PersistentAssetsRepository
+activate PersistentAssetsRepository
+participant JpaAssetsRepository
+activate JpaAssetsRepository
+database Blobstore
+
+TraceabilityApiConsumer -> TraceabilityAPI : GET /assets/countries
+TraceabilityAPI -> AssetsController :  assetsCountryMap()
+AssetsController -> AssetFacade :  getAssetsCountryMap()
+AssetFacade -> AssetService: getAssetsCountryMap()
+AssetService -> AssetRepository: getAssets()
+AssetRepository -> PersistentAssetsRepository: getAssets()
+PersistentAssetsRepository -> JpaAssetsRepository: findAll()
+JpaAssetsRepository -> Blobstore : success
+
+
+
+JpaAssetsRepository <-- Blobstore
+PersistentAssetsRepository <-- JpaAssetsRepository
+AssetRepository <-- PersistentAssetsRepository
+AssetService <-- AssetRepository
+AssetFacade <-- AssetService
+AssetsController <-- AssetFacade
+TraceabilityAPI <-- AssetsController
+TraceabilityApiConsumer <-- TraceabilityAPI
+
+@enduml
