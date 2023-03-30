@@ -309,7 +309,7 @@ irs-edc-consumer:
 
     edc:
       postgresql:
-        password: <path:traceability-foss/data/dev/edc/database#password>
+        password: <path:traceability-foss/data/beta/edc/database#password>
       transfer:
         proxy:
           token:
@@ -321,11 +321,11 @@ irs-edc-consumer:
                 alias: daps-cert-key-beta-zf
       api:
         auth:
-          key: <path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>
+          key: <path:traceability-foss/data/beta/edc/controlplane#edc.api.control.auth.apikey.value>
       controlplane:
-        url: "https://tracex-test-consumer-controlplane.dev.demo.catena-x.net"
+        url: "https://tracex-consumer-controlplane.beta.demo.catena-x.net"
       dataplane:
-        url: "https://tracex-test-consumer-dataplane.dev.demo.catena-x.net"
+        url: "https://tracex-consumer-dataplane.beta.demo.catena-x.net"
 
 
     configuration:
