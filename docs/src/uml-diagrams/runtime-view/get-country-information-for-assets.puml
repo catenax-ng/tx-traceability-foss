@@ -3,13 +3,13 @@ skinparam monochrome true
 skinparam shadowing false
 autonumber "<b>[000]"
 
-actor TraceabilityApiConsumer
-activate TraceabilityApiConsumer
+actor TraceXApiConsumer
+activate TraceXApiConsumer
 
 
-box "Traceability-FOSS" #LightGrey
-participant TraceabilityAPI
-activate TraceabilityAPI
+box "Trace-X FOSS" #LightGrey
+participant TraceXAPI
+activate TraceXAPI
 participant AssetsController
 activate AssetsController
 participant AssetFacade
@@ -24,8 +24,8 @@ participant JpaAssetsRepository
 activate JpaAssetsRepository
 database Blobstore
 
-TraceabilityApiConsumer -> TraceabilityAPI : GET /assets/countries
-TraceabilityAPI -> AssetsController :  assetsCountryMap()
+TraceXApiConsumer -> TraceXAPI : GET /assets/countries
+TraceXAPI -> AssetsController :  assetsCountryMap()
 AssetsController -> AssetFacade :  getAssetsCountryMap()
 AssetFacade -> AssetService: getAssetsCountryMap()
 AssetService -> AssetRepository: getAssets()
@@ -41,7 +41,7 @@ AssetRepository <-- PersistentAssetsRepository
 AssetService <-- AssetRepository
 AssetFacade <-- AssetService
 AssetsController <-- AssetFacade
-TraceabilityAPI <-- AssetsController
-TraceabilityApiConsumer <-- TraceabilityAPI
+TraceXAPI <-- AssetsController
+TraceXApiConsumer <-- TraceXAPI
 
 @enduml
