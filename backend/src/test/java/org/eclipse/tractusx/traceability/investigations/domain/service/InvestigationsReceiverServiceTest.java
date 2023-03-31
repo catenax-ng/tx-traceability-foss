@@ -70,8 +70,8 @@ class InvestigationsReceiverServiceTest {
 		EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
 			"it", notification);
 
-		when(mockNotificationMapper.toReceiverNotification(edcNotification, InvestigationStatus.SENT)).thenReturn(notificationTestData);
-		when(mockInvestigationMapper.toReceiverInvestigation(any(BPN.class), anyString(), any(Notification.class))).thenReturn(investigationTestData);
+		when(mockNotificationMapper.toNotification(edcNotification)).thenReturn(notificationTestData);
+		when(mockInvestigationMapper.toInvestigation(any(BPN.class), anyString(), any(Notification.class))).thenReturn(investigationTestData);
 
 		// When
 		service.handleNotificationReceiverCallback(edcNotification);

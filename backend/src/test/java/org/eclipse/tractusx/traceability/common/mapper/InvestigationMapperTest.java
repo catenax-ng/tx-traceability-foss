@@ -67,7 +67,7 @@ class InvestigationMapperTest {
 		when(clock.instant()).thenReturn(Instant.parse("2022-03-01T12:00:00Z"));
 
 		// When
-		Investigation result = mapper.toReceiverInvestigation(new BPN(receiver), description, notification);
+		Investigation result = mapper.toInvestigation(new BPN(receiver), description, notification);
 
 		// Then
 		assertEquals(InvestigationStatus.RECEIVED, result.getInvestigationStatus());

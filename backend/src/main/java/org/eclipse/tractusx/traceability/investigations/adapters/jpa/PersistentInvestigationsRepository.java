@@ -173,9 +173,9 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
         investigationEntity.setDeclineReason(investigation.getDeclineReason());
 
         // Persist existing notifications
-        investigationEntity.getNotifications()
+      /*  investigationEntity.getNotifications()
                 .forEach(notification -> investigation.getNotification(notification.getId())
-                        .ifPresent(data -> update(notification, data)));
+                        .ifPresent(data -> update(notification, data)));*/
 
         // Persist new notifications
         persistNewNotifications(investigationEntity, investigation);

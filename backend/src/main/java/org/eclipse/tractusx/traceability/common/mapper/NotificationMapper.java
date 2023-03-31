@@ -22,7 +22,6 @@ package org.eclipse.tractusx.traceability.common.mapper;
 
 import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification;
-import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,7 @@ public class NotificationMapper {
      * @param edcNotification the EDCNotification received by the receiver
      * @return a Notification object representing the notification received by the receiver
      */
-    public Notification toReceiverNotification(EDCNotification edcNotification, InvestigationStatus investigationStatus) {
+    public Notification toNotification(EDCNotification edcNotification) {
         String notificationId = UUID.randomUUID().toString();
         return new Notification(
                 notificationId,
@@ -58,7 +57,7 @@ public class NotificationMapper {
                 edcNotification.getSenderAddress(),
                 null,
                 edcNotification.getInformation(),
-                investigationStatus,
+                edcNotification.convertInvestigationStatus(),
                 edcNotification.getListOfAffectedItems(),
                 edcNotification.getTargetDate(),
                 Severity.valueOf(edcNotification.getSeverity()),
