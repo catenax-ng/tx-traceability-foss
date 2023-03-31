@@ -34,17 +34,16 @@ public class Notification {
 	private final String id;
 	private String notificationReferenceId;
 	private final String senderBpnNumber;
-
     private final String senderManufacturerName;
-
 	private final String receiverBpnNumber;
-
     private final String receiverManufacturerName;
 	private String edcUrl;
 	private String contractAgreementId;
 	private final List<AffectedPart> affectedParts;
 	private String description;
 	private InvestigationStatus investigationStatus;
+    private String edcNotificationId;
+    private String messageId;
 
 	private Instant targetDate;
 
@@ -171,7 +170,27 @@ public class Notification {
 		this.targetDate = targetDate;
 	}
 
-	public Notification copy(String senderBpnNumber, String receiverBpnNumber) {
+    public void setNotificationReferenceId(String notificationReferenceId) {
+        this.notificationReferenceId = notificationReferenceId;
+    }
+
+    public String getEdcNotificationId() {
+        return edcNotificationId;
+    }
+
+    public void setEdcNotificationId(String edcNotificationId) {
+        this.edcNotificationId = edcNotificationId;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
+
+    public Notification copy(String senderBpnNumber, String receiverBpnNumber) {
 		return new Notification(
 			id,
 			notificationReferenceId,
@@ -187,20 +206,24 @@ public class Notification {
 		);
 	}
 
-	@Override
-	public String toString() {
-		return "Notification{" +
-			"id='" + id + '\'' +
-			", notificationReferenceId='" + notificationReferenceId + '\'' +
-			", senderBpnNumber='" + senderBpnNumber + '\'' +
-			", receiverBpnNumber='" + receiverBpnNumber + '\'' +
-			", edcUrl='" + edcUrl + '\'' +
-			", contractAgreementId='" + contractAgreementId + '\'' +
-			", affectedParts=" + affectedParts +
-			", description='" + description + '\'' +
-			", investigationStatus=" + investigationStatus +
-			", targetDate=" + targetDate +
-			", severity=" + severity +
-			'}';
-	}
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "id='" + id + '\'' +
+                ", notificationReferenceId='" + notificationReferenceId + '\'' +
+                ", senderBpnNumber='" + senderBpnNumber + '\'' +
+                ", senderManufacturerName='" + senderManufacturerName + '\'' +
+                ", receiverBpnNumber='" + receiverBpnNumber + '\'' +
+                ", receiverManufacturerName='" + receiverManufacturerName + '\'' +
+                ", edcUrl='" + edcUrl + '\'' +
+                ", contractAgreementId='" + contractAgreementId + '\'' +
+                ", affectedParts=" + affectedParts +
+                ", description='" + description + '\'' +
+                ", investigationStatus=" + investigationStatus +
+                ", edcNotificationId='" + edcNotificationId + '\'' +
+                ", messageId='" + messageId + '\'' +
+                ", targetDate=" + targetDate +
+                ", severity=" + severity +
+                '}';
+    }
 }
