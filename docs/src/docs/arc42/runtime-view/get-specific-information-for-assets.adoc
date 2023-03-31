@@ -4,7 +4,7 @@ This section describes what happens when user lists detailed information for ass
 
 [plantuml, target=get-specific-information-for-assets, format=svg]
 ....
-include::../../../uml-diagrams/runtime-view/get-specific-information-for-assets.puml[]
+include::../../../uml-diagrams/arc42/runtime-view/assets/get-specific-information-for-assets.puml[]
 ....
 
 ==== Overview

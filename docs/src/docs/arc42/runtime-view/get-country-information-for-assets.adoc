@@ -4,7 +4,7 @@ This section describes what happens when user lists the map of assets.
 
 [plantuml, target=get-country-information-for-assets, format=svg]
 ....
-include::../../../uml-diagrams/runtime-view/get-country-information-for-assets.puml[]
+include::../../../uml-diagrams/arc42/runtime-view/assets/get-country-information-for-assets.puml[]
 ....
 
 ==== Overview

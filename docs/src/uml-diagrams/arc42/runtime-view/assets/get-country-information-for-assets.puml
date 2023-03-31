@@ -22,7 +22,7 @@ participant PersistentAssetsRepository
 activate PersistentAssetsRepository
 participant JpaAssetsRepository
 activate JpaAssetsRepository
-database Blobstore
+database Database
 
 TraceXApiConsumer -> TraceXAPI : GET /assets/countries
 TraceXAPI -> AssetsController :  assetsCountryMap()
@@ -31,11 +31,11 @@ AssetFacade -> AssetService: getAssetsCountryMap()
 AssetService -> AssetRepository: getAssets()
 AssetRepository -> PersistentAssetsRepository: getAssets()
 PersistentAssetsRepository -> JpaAssetsRepository: findAll()
-JpaAssetsRepository -> Blobstore : success
+JpaAssetsRepository -> Database : success
 
 
 
-JpaAssetsRepository <-- Blobstore
+JpaAssetsRepository <-- Database
 PersistentAssetsRepository <-- JpaAssetsRepository
 AssetRepository <-- PersistentAssetsRepository
 AssetService <-- AssetRepository

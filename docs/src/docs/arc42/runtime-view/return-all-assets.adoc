@@ -4,7 +4,7 @@ This section describes what happens when user lists all stored assets.
 
 [plantuml, target=return-all-assets, format=svg]
 ....
-include::../../../uml-diagrams/runtime-view/return-all-assets.puml[]
+include::../../../uml-diagrams/arc42/runtime-view/assets/return-all-assets.puml[]
 ....
 
 ==== Overview

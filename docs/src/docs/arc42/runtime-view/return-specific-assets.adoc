@@ -4,7 +4,7 @@ This section describes what happens when user searches for a specific asset.
 
 [plantuml, target=return-specific-assets, format=svg]
 ....
-include::../../../uml-diagrams/runtime-view/return-specific-assets.puml[]
+include::../../../uml-diagrams/arc42/runtime-view/assets/return-specific-assets.puml[]
 ....
 
 ==== Overview

@@ -18,16 +18,16 @@ participant PersistentAssetsRepository
 activate PersistentAssetsRepository
 participant JpaAssetsRepository
 activate JpaAssetsRepository
-database Blobstore
+database Database
 
 TraceXApiConsumer -> TraceXAPI : GET /assets/{assetId}
 TraceXAPI -> AssetsController :  asset(assetId)
 AssetsController -> AssetRepository :  getAssetById(assetId)
 AssetRepository -> PersistentAssetsRepository: getAssetById(assetId)
 PersistentAssetsRepository -> JpaAssetsRepository: findById(assetId)
-JpaAssetsRepository -> Blobstore : success
+JpaAssetsRepository -> Database : success
 
-JpaAssetsRepository <-- Blobstore
+JpaAssetsRepository <-- Database
 PersistentAssetsRepository <-- JpaAssetsRepository
 AssetRepository <-- PersistentAssetsRepository
 AssetsController <-- AssetRepository
