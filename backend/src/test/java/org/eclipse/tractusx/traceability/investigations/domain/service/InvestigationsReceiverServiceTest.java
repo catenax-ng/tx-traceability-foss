@@ -61,7 +61,8 @@ class InvestigationsReceiverServiceTest {
                 InvestigationStatus.SENT,
                 affectedParts,
                 Instant.now(),
-                Severity.MINOR
+                Severity.MINOR,
+                "123"
         );
 
 		Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.RECEIVED, InvestigationStatus.RECEIVED, "recipientBPN");

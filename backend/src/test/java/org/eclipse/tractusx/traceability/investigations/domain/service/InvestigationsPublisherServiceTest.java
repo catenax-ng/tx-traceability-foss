@@ -151,7 +151,8 @@ class InvestigationsPublisherServiceTest {
                 InvestigationStatus.RECEIVED,
                 affectedParts,
                 Instant.now(),
-                Severity.MINOR
+                Severity.MINOR,
+                "123"
         );
 
 		Notification notification2 = new Notification(
@@ -167,7 +168,8 @@ class InvestigationsPublisherServiceTest {
                 InvestigationStatus.RECEIVED,
                 affectedParts,
                 Instant.now(),
-                Severity.MINOR
+                Severity.MINOR,
+                "123"
 		);
 		List<Notification> notifications = new ArrayList<>();
 		notifications.add(notification);
@@ -209,7 +211,8 @@ class InvestigationsPublisherServiceTest {
                 InvestigationStatus.CREATED,
                 affectedParts,
                 Instant.now(),
-                Severity.MINOR
+                Severity.MINOR,
+                "123"
 		);
 
 		List<Notification> notifications = new ArrayList<>();
@@ -253,7 +256,8 @@ class InvestigationsPublisherServiceTest {
                 InvestigationStatus.CREATED,
                 affectedParts,
                 Instant.now(),
-                Severity.MINOR
+                Severity.MINOR,
+                "123"
 		);
 
 		List<Notification> notifications = new ArrayList<>();

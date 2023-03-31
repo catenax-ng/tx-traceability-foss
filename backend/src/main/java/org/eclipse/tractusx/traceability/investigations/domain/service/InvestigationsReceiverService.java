@@ -98,7 +98,7 @@ public class InvestigationsReceiverService {
     private void receiveUpdateInvestigation(EDCNotification edcNotification, InvestigationStatus investigationStatus) {
         logger.info("receiveUpdateInvestigation with status {}", investigationStatus);
         Notification notification = notificationMapper.toReceiverNotification(edcNotification, investigationStatus);
-        Investigation investigation = investigationsReadService.loadInvestigationByNotificationId(edcNotification.getRelatedNotificationId());
+        Investigation investigation = investigationsReadService.loadInvestigationByEdcNotificationId(edcNotification.getNotificationId());
 
         switch (investigationStatus) {
             case ACKNOWLEDGED -> investigation.acknowledge(notification);
@@ -114,7 +114,7 @@ public class InvestigationsReceiverService {
 
     private void closeInvestigation(EDCNotification edcNotification) {
             logger.info("InvestigationReceiverService#closeInvestigation incoming");
-            Investigation investigation = investigationsReadService.loadInvestigationByNotificationReferenceId(edcNotification.getRelatedNotificationId());
+            Investigation investigation = investigationsReadService.loadInvestigationByEdcNotificationId(edcNotification.getNotificationId());
             investigation.close(traceabilityProperties.getBpn(), edcNotification.getInformation());
             repository.update(investigation);
     }

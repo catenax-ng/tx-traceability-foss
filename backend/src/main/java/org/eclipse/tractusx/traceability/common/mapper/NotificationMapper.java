@@ -41,28 +41,30 @@ public class NotificationMapper {
     }
 
     /**
-	 * Creates a Notification object representing the notification received by the receiver for a given EDCNotification.
-	 *
-	 * @param edcNotification the EDCNotification received by the receiver
-	 * @return a Notification object representing the notification received by the receiver
-	 */
-	public Notification toReceiverNotification(EDCNotification edcNotification, InvestigationStatus investigationStatus) {
-		return new Notification(
-			UUID.randomUUID().toString(),
-			edcNotification.getNotificationId(),
-			edcNotification.getSenderBPN(),
-            getManufacturerName(edcNotification.getSenderBPN()),
-            edcNotification.getRecipientBPN(),
-            getManufacturerName(edcNotification.getRecipientBPN()),
-            edcNotification.getSenderAddress(),
-			null,
-			edcNotification.getInformation(),
-			investigationStatus,
-			edcNotification.getListOfAffectedItems(),
-			edcNotification.getTargetDate(),
-			Severity.valueOf(edcNotification.getSeverity())
-		);
-	}
+     * Creates a Notification object representing the notification received by the receiver for a given EDCNotification.
+     *
+     * @param edcNotification the EDCNotification received by the receiver
+     * @return a Notification object representing the notification received by the receiver
+     */
+    public Notification toReceiverNotification(EDCNotification edcNotification, InvestigationStatus investigationStatus) {
+        String notificationId = UUID.randomUUID().toString();
+        return new Notification(
+                notificationId,
+                edcNotification.getNotificationId(),
+                edcNotification.getSenderBPN(),
+                getManufacturerName(edcNotification.getSenderBPN()),
+                edcNotification.getRecipientBPN(),
+                getManufacturerName(edcNotification.getRecipientBPN()),
+                edcNotification.getSenderAddress(),
+                null,
+                edcNotification.getInformation(),
+                investigationStatus,
+                edcNotification.getListOfAffectedItems(),
+                edcNotification.getTargetDate(),
+                Severity.valueOf(edcNotification.getSeverity()),
+                edcNotification.getNotificationId()
+        );
+    }
 
     private String getManufacturerName(String senderBPN) {
         return bpnRepository.findManufacturerName(senderBPN)

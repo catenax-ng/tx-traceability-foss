@@ -36,7 +36,6 @@ import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationReceiverBpnMismatchException;
 import org.eclipse.tractusx.traceability.investigations.domain.ports.InvestigationsRepository;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -92,23 +91,29 @@ public class InvestigationsPublisherService {
         Map<String, List<Asset>> assetsByManufacturer = assetRepository.getAssetsById(assetIds).stream().collect(Collectors.groupingBy(Asset::getManufacturerId));
 
         assetsByManufacturer.entrySet().stream()
-                .map(it -> new Notification(
-                        UUID.randomUUID().toString(),
-                        null,
-                        applicationBpn.value(),
-                        getManufacturerName(applicationBpn.value()),
-                        it.getKey(),
-                        getManufacturerName(it.getKey()),
-                        null,
-                        null,
-                        description,
-                        InvestigationStatus.RECEIVED,
-                        it.getValue().stream().map(Asset::getId).map(AffectedPart::new).toList(),
-                        targetDate,
-                        severity
-                )).forEach(investigation::addNotification);
+                .map(it -> createInitialNotification(applicationBpn, description, targetDate, severity, it)).forEach(investigation::addNotification);
         logger.info("Start Investigation {}", investigation);
         return repository.save(investigation);
+    }
+
+    private Notification createInitialNotification(BPN applicationBpn, String description, Instant targetDate, Severity severity, Map.Entry<String, List<Asset>> asset) {
+        final String notificationId = UUID.randomUUID().toString();
+        return new Notification(
+                notificationId,
+                null,
+                applicationBpn.value(),
+                getManufacturerName(applicationBpn.value()),
+                asset.getKey(),
+                getManufacturerName(asset.getKey()),
+                null,
+                null,
+                description,
+                InvestigationStatus.RECEIVED,
+                asset.getValue().stream().map(Asset::getId).map(AffectedPart::new).toList(),
+                targetDate,
+                severity,
+                notificationId
+        );
     }
 
     private String getManufacturerName(String bpn) {

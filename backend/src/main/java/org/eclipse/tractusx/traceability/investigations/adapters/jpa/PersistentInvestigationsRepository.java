@@ -150,6 +150,12 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
     }
 
     @Override
+    public Optional<Investigation> findByEdcNotificationId(String edcNotificationId) {
+        return investigationRepository.findByNotificationsEdcNotificationId(edcNotificationId)
+                .map(this::toInvestigation);
+    }
+
+    @Override
     public long countInvestigations(Set<InvestigationStatus> statuses) {
         return investigationRepository.countAllByStatusIn(statuses);
     }
@@ -245,7 +251,8 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
                         .map(asset -> new AffectedPart(asset.getId()))
                         .toList(),
                 notificationEntity.getTargetDate(),
-                notificationEntity.getSeverity()
+                notificationEntity.getSeverity(),
+                notificationEntity.getEdcNotificationId()
         );
     }
 
@@ -266,7 +273,8 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
                 notificationAssets,
                 notification.getNotificationReferenceId(),
                 notification.getTargetDate(),
-                notification.getSeverity()
+                notification.getSeverity(),
+                notification.getEdcNotificationId()
         );
     }
 

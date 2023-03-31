@@ -60,7 +60,9 @@ class InvestigationMapperTest {
                 "",
                 InvestigationStatus.RECEIVED,
                 List.of(new AffectedPart("123")),
-                Instant.parse("2022-03-01T12:00:00Z"), Severity.MINOR
+                Instant.parse("2022-03-01T12:00:00Z"),
+                Severity.MINOR,
+                "1"
         );
 		when(clock.instant()).thenReturn(Instant.parse("2022-03-01T12:00:00Z"));
 

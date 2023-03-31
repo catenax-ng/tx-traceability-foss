@@ -30,7 +30,8 @@ public class InvestigationTestDataFactory {
                 notificationInvestigationStatus,
                 List.of(new AffectedPart("part123")),
                 Instant.now(),
-                Severity.MINOR
+                Severity.MINOR,
+                "1"
 		));
 
 		return new Investigation(
@@ -98,7 +99,8 @@ public class InvestigationTestDataFactory {
                 notificationInvestigationStatus,
                 List.of(new AffectedPart("part123")),
                 Instant.now(),
-                Severity.MINOR
+                Severity.MINOR,
+                "123"
 		));
 
 		return new Investigation(

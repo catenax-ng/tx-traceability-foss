@@ -85,4 +85,9 @@ public class InvestigationsReadService {
         return repository.findByNotificationReferenceId(notificationReferenceId)
                 .orElseThrow(() -> new InvestigationNotFoundException(notificationReferenceId));
     }
+
+    public Investigation loadInvestigationByEdcNotificationId(String edcNotificationId) {
+        return repository.findByEdcNotificationId(edcNotificationId)
+                .orElseThrow(() -> new InvestigationNotFoundException(edcNotificationId));
+    }
 }

@@ -77,7 +77,8 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
                 null,
                 null,
                 Instant.parse("2022-03-01T12:00:00Z"),
-                Severity.CRITICAL
+                Severity.CRITICAL,
+                "cda2d956-fa91-4a75-bb4a-8e5ba39b268a"
         )
 
         InvestigationEntity investigation = new InvestigationEntity(
@@ -91,7 +92,7 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
         storedNotification(notificationEntity)
         String notificationId = notificationEntity.getId()
 
-        String notificationJson = readFile("edc_notification_okay_update.json").replaceAll("REPLACE_ME", notificationId)
+        String notificationJson = readFile("edc_notification_okay_update.json").replaceAll("REPLACE_ME", notificationEntity.getEdcNotificationId())
         EDCNotification edcNotification = objectMapper.readValue(notificationJson, EDCNotification.class);
 
         notificationEntities.add(notificationEntity)

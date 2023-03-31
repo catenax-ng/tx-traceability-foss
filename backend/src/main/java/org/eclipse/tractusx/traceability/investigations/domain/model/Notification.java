@@ -31,25 +31,25 @@ import java.util.List;
 import static java.util.Objects.requireNonNullElseGet;
 
 public class Notification {
-	private final String id;
-	private String notificationReferenceId;
-	private final String senderBpnNumber;
+    private final String id;
+    private String notificationReferenceId;
+    private final String senderBpnNumber;
     private final String senderManufacturerName;
-	private final String receiverBpnNumber;
+    private final String receiverBpnNumber;
     private final String receiverManufacturerName;
-	private String edcUrl;
-	private String contractAgreementId;
-	private final List<AffectedPart> affectedParts;
-	private String description;
-	private InvestigationStatus investigationStatus;
+    private String edcUrl;
+    private String contractAgreementId;
+    private final List<AffectedPart> affectedParts;
+    private String description;
+    private InvestigationStatus investigationStatus;
     private String edcNotificationId;
-    private String messageId;
 
-	private Instant targetDate;
 
-	private Severity severity;
+    private Instant targetDate;
 
-	public Notification(String id,
+    private Severity severity;
+
+    public Notification(String id,
                         String notificationReferenceId,
                         String senderBpnNumber,
                         String senderManufacturerName,
@@ -61,114 +61,116 @@ public class Notification {
                         InvestigationStatus investigationStatus,
                         List<AffectedPart> affectedParts,
                         Instant targetDate,
-                        Severity severity) {
-		this.id = id;
-		this.notificationReferenceId = notificationReferenceId;
-		this.senderBpnNumber = senderBpnNumber;
+                        Severity severity,
+                        String edcNotificationId) {
+        this.id = id;
+        this.notificationReferenceId = notificationReferenceId;
+        this.senderBpnNumber = senderBpnNumber;
         this.senderManufacturerName = senderManufacturerName;
         this.receiverBpnNumber = receiverBpnNumber;
         this.receiverManufacturerName = receiverManufacturerName;
         this.edcUrl = edcUrl;
-		this.contractAgreementId = contractAgreementId;
-		this.description = description;
-		this.investigationStatus = investigationStatus;
-		this.affectedParts = requireNonNullElseGet(affectedParts, ArrayList::new);
-		this.targetDate = targetDate;
-		this.severity = severity;
-	}
+        this.contractAgreementId = contractAgreementId;
+        this.description = description;
+        this.investigationStatus = investigationStatus;
+        this.affectedParts = requireNonNullElseGet(affectedParts, ArrayList::new);
+        this.targetDate = targetDate;
+        this.severity = severity;
+        this.edcNotificationId = edcNotificationId;
+    }
 
-	void changeStatusTo(InvestigationStatus to) {
-		boolean transitionAllowed = investigationStatus.transitionAllowed(to);
+    void changeStatusTo(InvestigationStatus to) {
+        boolean transitionAllowed = investigationStatus.transitionAllowed(to);
 
-		if (!transitionAllowed) {
-			throw new NotificationStatusTransitionNotAllowed(id, investigationStatus, to);
-		}
-		this.investigationStatus = to;
-	}
+        if (!transitionAllowed) {
+            throw new NotificationStatusTransitionNotAllowed(id, investigationStatus, to);
+        }
+        this.investigationStatus = to;
+    }
 
     public void updateNotificationReferenceId(String notificationReferenceId) {
         this.notificationReferenceId = notificationReferenceId;
     }
 
-    public boolean existOnReceiverSide(){
-       return StringUtils.isNotBlank(this.getNotificationReferenceId());
+    public boolean existOnReceiverSide() {
+        return StringUtils.isNotBlank(this.getNotificationReferenceId());
     }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getNotificationReferenceId() {
-		return notificationReferenceId;
-	}
+    public String getNotificationReferenceId() {
+        return notificationReferenceId;
+    }
 
-	public String getContractAgreementId() {
-		return contractAgreementId;
-	}
+    public String getContractAgreementId() {
+        return contractAgreementId;
+    }
 
-	public void setContractAgreementId(String contractAgreementId) {
-		this.contractAgreementId = contractAgreementId;
-	}
+    public void setContractAgreementId(String contractAgreementId) {
+        this.contractAgreementId = contractAgreementId;
+    }
 
-	public List<AffectedPart> getAffectedParts() {
-		return affectedParts;
-	}
+    public List<AffectedPart> getAffectedParts() {
+        return affectedParts;
+    }
 
-	public String getSenderBpnNumber() {
-		return senderBpnNumber;
-	}
+    public String getSenderBpnNumber() {
+        return senderBpnNumber;
+    }
 
     public String getSenderManufacturerName() {
         return senderManufacturerName;
     }
 
     public String getReceiverBpnNumber() {
-		return receiverBpnNumber;
-	}
+        return receiverBpnNumber;
+    }
 
     public String getReceiverManufacturerName() {
         return receiverManufacturerName;
     }
 
     public void setEdcUrl(String edcUrl) {
-		this.edcUrl = edcUrl;
-	}
+        this.edcUrl = edcUrl;
+    }
 
-	public String getEdcUrl() {
-		return edcUrl;
-	}
+    public String getEdcUrl() {
+        return edcUrl;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public InvestigationStatus getInvestigationStatus() {
-		return investigationStatus;
-	}
+    public InvestigationStatus getInvestigationStatus() {
+        return investigationStatus;
+    }
 
-	public Instant getTargetDate() {
-		return this.targetDate;
-	}
+    public Instant getTargetDate() {
+        return this.targetDate;
+    }
 
-	public void setInvestigationStatus(InvestigationStatus investigationStatus) {
-		this.investigationStatus = investigationStatus;
-	}
+    public void setInvestigationStatus(InvestigationStatus investigationStatus) {
+        this.investigationStatus = investigationStatus;
+    }
 
-	public Severity getSeverity() {
-		return severity;
-	}
+    public Severity getSeverity() {
+        return severity;
+    }
 
-	public void setSeverity(Severity severity) {
-		this.severity = severity;
-	}
+    public void setSeverity(Severity severity) {
+        this.severity = severity;
+    }
 
-	public void setTargetDate(Instant targetDate) {
-		this.targetDate = targetDate;
-	}
+    public void setTargetDate(Instant targetDate) {
+        this.targetDate = targetDate;
+    }
 
     public void setNotificationReferenceId(String notificationReferenceId) {
         this.notificationReferenceId = notificationReferenceId;
@@ -182,29 +184,24 @@ public class Notification {
         this.edcNotificationId = edcNotificationId;
     }
 
-    public String getMessageId() {
-        return messageId;
-    }
 
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
-    }
 
     public Notification copy(String senderBpnNumber, String receiverBpnNumber) {
-		return new Notification(
-			id,
-			notificationReferenceId,
-			senderBpnNumber,
+        return new Notification(
+                id,
+                notificationReferenceId,
+                senderBpnNumber,
                 senderManufacturerName, receiverBpnNumber,
                 receiverManufacturerName, edcUrl,
-			contractAgreementId,
-			description,
-			investigationStatus,
-			affectedParts,
-			targetDate,
-			severity
-		);
-	}
+                contractAgreementId,
+                description,
+                investigationStatus,
+                affectedParts,
+                targetDate,
+                severity,
+                edcNotificationId
+        );
+    }
 
     @Override
     public String toString() {
@@ -221,7 +218,6 @@ public class Notification {
                 ", description='" + description + '\'' +
                 ", investigationStatus=" + investigationStatus +
                 ", edcNotificationId='" + edcNotificationId + '\'' +
-                ", messageId='" + messageId + '\'' +
                 ", targetDate=" + targetDate +
                 ", severity=" + severity +
                 '}';
