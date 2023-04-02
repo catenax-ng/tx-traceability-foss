@@ -170,6 +170,7 @@ public class Investigation {
     public void acknowledge(Notification notification) {
         changeStatusToWithoutNotifications(InvestigationStatus.ACKNOWLEDGED);
         setInvestigationStatusAndReasonForNotifications(List.of(notification), InvestigationStatus.ACKNOWLEDGED, null);
+        notification.setInvestigationStatus(InvestigationStatus.ACKNOWLEDGED);
     }
 
 
