@@ -92,8 +92,11 @@ public class InvestigationsPublisherService {
 
         Map<String, List<Asset>> assetsByManufacturer = assetRepository.getAssetsById(assetIds).stream().collect(Collectors.groupingBy(Asset::getManufacturerId));
 
-        assetsByManufacturer.entrySet().stream()
-                .map(it -> createNotification(applicationBpn, description, targetDate, severity, it, InvestigationStatus.CREATED)).forEach(investigation::addNotification);
+        assetsByManufacturer
+                .entrySet()
+                .stream()
+                .map(it -> createNotification(applicationBpn, description, targetDate, severity, it, InvestigationStatus.CREATED))
+                .forEach(investigation::addNotification);
         logger.info("Start Investigation {}", investigation);
         return repository.save(investigation);
     }
