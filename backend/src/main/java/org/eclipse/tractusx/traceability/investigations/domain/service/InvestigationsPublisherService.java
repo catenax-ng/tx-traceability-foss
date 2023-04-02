@@ -43,6 +43,8 @@ import org.springframework.stereotype.Service;
 import java.lang.invoke.MethodHandles;
 import java.time.Clock;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -91,12 +93,12 @@ public class InvestigationsPublisherService {
         Map<String, List<Asset>> assetsByManufacturer = assetRepository.getAssetsById(assetIds).stream().collect(Collectors.groupingBy(Asset::getManufacturerId));
 
         assetsByManufacturer.entrySet().stream()
-                .map(it -> createInitialNotification(applicationBpn, description, targetDate, severity, it)).forEach(investigation::addNotification);
+                .map(it -> createNotification(applicationBpn, description, targetDate, severity, it, InvestigationStatus.CREATED)).forEach(investigation::addNotification);
         logger.info("Start Investigation {}", investigation);
         return repository.save(investigation);
     }
 
-    private Notification createInitialNotification(BPN applicationBpn, String description, Instant targetDate, Severity severity, Map.Entry<String, List<Asset>> asset) {
+    private Notification createNotification(BPN applicationBpn, String description, Instant targetDate, Severity severity, Map.Entry<String, List<Asset>> asset, InvestigationStatus investigationStatus) {
         final String notificationId = UUID.randomUUID().toString();
         return new Notification(
                 notificationId,
@@ -108,7 +110,7 @@ public class InvestigationsPublisherService {
                 null,
                 null,
                 description,
-                InvestigationStatus.RECEIVED,
+                investigationStatus,
                 asset.getValue().stream().map(Asset::getId).map(AffectedPart::new).toList(),
                 targetDate,
                 severity,
@@ -135,17 +137,18 @@ public class InvestigationsPublisherService {
     }
 
     /**
-     * Sends an ongoing investigation with the given BPN and ID to the next stage.
+     * Approves an ongoing investigation with the given BPN and ID to the next stage.
      *
      * @param applicationBpn the BPN associated with the investigation
      * @param id             the ID of the investigation to send
      */
-    public void sendInvestigation(BPN applicationBpn, Long id) {
+    public void approveInvestigation(BPN applicationBpn, Long id) {
         InvestigationId investigationId = new InvestigationId(id);
         Investigation investigation = investigationsReadService.loadInvestigation(investigationId);
         investigation.send(applicationBpn);
         repository.update(investigation);
         final boolean isReceiver = investigation.getInvestigationSide().equals(InvestigationSide.RECEIVER);
+        // For each asset within investigation a notification was created before
         investigation.getNotifications().forEach(notification -> notificationsService.updateAsync(notification, isReceiver));
     }
 
@@ -196,18 +199,49 @@ public class InvestigationsPublisherService {
             throw new InvestigationReceiverBpnMismatchException(builder.toString());
         }
 
-        switch (status) {
-            case ACKNOWLEDGED -> investigation.acknowledge();
-            case ACCEPTED -> investigation.accept(reason);
-            case DECLINED -> investigation.decline(reason);
-            default -> throw new InvestigationIllegalUpdate("Can't update %s investigation with %s status".formatted(investigationIdRaw, status));
-        }
 
-        repository.update(investigation);
-
+        List<Notification> allLatestNotificationForEdcNotificationId = getAllLatestNotificationForEdcNotificationId(investigation);
         final boolean isReceiver = investigation.getInvestigationSide().equals(InvestigationSide.RECEIVER);
 
-        investigation.getNotifications().forEach(notification -> notificationsService.updateAsync(notification, isReceiver));
+        allLatestNotificationForEdcNotificationId.forEach(notification -> {
+            Notification notificationToSend = notification.copy(notification.getSenderBpnNumber(), notification.getReceiverBpnNumber());
+            switch (status) {
+                case ACKNOWLEDGED -> investigation.acknowledge(notificationToSend);
+                case ACCEPTED -> investigation.accept(reason, notificationToSend);
+                case DECLINED -> investigation.decline(reason, notificationToSend);
+                default -> throw new InvestigationIllegalUpdate("Can't update %s investigation with %s status".formatted(investigationIdRaw, status));
+            }
+            investigation.getNotifications().add(notificationToSend);
+            notificationsService.updateAsync(notificationToSend, isReceiver);
+        });
+        repository.update(investigation);
+    }
+
+    private List<Notification> getAllLatestNotificationForEdcNotificationId(Investigation investigation) {
+        Map<String, List<Notification>> notificationMap = new HashMap<>();
+
+        for (Notification notification : investigation.getNotifications()) {
+            String edcNotificationId = notification.getEdcNotificationId();
+            List<Notification> notificationGroup = notificationMap.getOrDefault(edcNotificationId, new ArrayList<>());
+            if (notificationGroup.isEmpty()) {
+                notificationGroup.add(notification);
+            } else {
+                Notification highestStatusNotification = notificationGroup.get(0);
+                if (notification.getInvestigationStatus().ordinal() > highestStatusNotification.getInvestigationStatus().ordinal()) {
+                    notificationGroup.clear();
+                    notificationGroup.add(notification);
+                } else if (notification.getInvestigationStatus().ordinal() == highestStatusNotification.getInvestigationStatus().ordinal()) {
+                    throw new IllegalArgumentException("Two notifications with same edcNotificationId have the same status. This can be happen on old datasets.");
+                }
+            }
+            notificationMap.put(edcNotificationId, notificationGroup);
+        }
+
+        List<Notification> latestNotificationElements = new ArrayList<>();
+        for (List<Notification> notificationGroup : notificationMap.values()) {
+            latestNotificationElements.addAll(notificationGroup);
+        }
+        return latestNotificationElements;
     }
 
     private List<Notification> invalidNotifications(final Investigation investigation, final BPN applicationBpn) {

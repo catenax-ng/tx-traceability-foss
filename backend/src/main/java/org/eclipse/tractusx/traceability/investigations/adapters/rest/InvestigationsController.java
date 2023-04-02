@@ -150,7 +150,7 @@ public class InvestigationsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void approveInvestigation(@PathVariable Long investigationId) {
         logger.info(API_LOG_START + "/{}/approve", investigationId);
-        investigationsPublisherService.sendInvestigation(traceabilityProperties.getBpn(), investigationId);
+        investigationsPublisherService.approveInvestigation(traceabilityProperties.getBpn(), investigationId);
     }
 
     @Operation(operationId = "cancelInvestigation",

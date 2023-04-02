@@ -167,6 +167,40 @@ public class Investigation {
 		changeStatusTo(InvestigationStatus.SENT);
 	}
 
+    public void acknowledge(List<Notification> notifications) {
+        changeStatusToWithoutNotifications(InvestigationStatus.ACKNOWLEDGED);
+        setInvestigationStatusAndReasonForNotifications(notifications, InvestigationStatus.ACKNOWLEDGED, null);
+    }
+
+
+    private void setInvestigationStatusAndReasonForNotifications(List<Notification> notifications, InvestigationStatus investigationStatus, String reason) {
+        for (Notification n1 : this.notifications.values()) {
+            for (Notification n2 : notifications) {
+                if (n1.getId().equals(n2.getId())) {
+                    if (reason != null){
+                        n1.setDescription(reason);
+                    }
+                    n1.setInvestigationStatus(investigationStatus);
+                    break; // stop searching
+                }
+            }
+        }
+    }
+
+    public void accept(String reason, Notification notification) {
+        changeStatusToWithoutNotifications(InvestigationStatus.ACCEPTED);
+        this.acceptReason = reason;
+        // TODO refactor to accept one element
+        setInvestigationStatusAndReasonForNotifications(List.of(notification), InvestigationStatus.ACCEPTED, reason);
+    }
+
+    public void decline(String reason, Notification notification) {
+        changeStatusToWithoutNotifications(InvestigationStatus.DECLINED);
+        this.declineReason = reason;
+        // TODO refactor to accept one element
+        setInvestigationStatusAndReasonForNotifications(List.of(notification), InvestigationStatus.DECLINED, reason);
+    }
+
 	public void acknowledge() {
 		changeStatusTo(InvestigationStatus.ACKNOWLEDGED);
 	}

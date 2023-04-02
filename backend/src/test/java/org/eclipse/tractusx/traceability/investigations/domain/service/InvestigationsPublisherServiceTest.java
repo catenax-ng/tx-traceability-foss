@@ -119,7 +119,7 @@ class InvestigationsPublisherServiceTest {
 		when(repository.update(investigation)).thenReturn(investigationId);
 
 		// When
-		investigationsPublisherService.sendInvestigation(bpn, id);
+		investigationsPublisherService.approveInvestigation(bpn, id);
 
 		// Then
 		verify(investigationsReadService).loadInvestigation(investigationId);
@@ -148,7 +148,7 @@ class InvestigationsPublisherServiceTest {
                 "senderAddress",
                 "agreement",
                 "information",
-                InvestigationStatus.RECEIVED,
+                InvestigationStatus.CREATED,
                 affectedParts,
                 Instant.now(),
                 Severity.MINOR,
@@ -165,7 +165,7 @@ class InvestigationsPublisherServiceTest {
                 "senderAddress",
                 "agreement",
                 "information",
-                InvestigationStatus.RECEIVED,
+                InvestigationStatus.SENT,
                 affectedParts,
                 Instant.now(),
                 Severity.MINOR,
@@ -184,7 +184,7 @@ class InvestigationsPublisherServiceTest {
 
 		// Then
 		Mockito.verify(repository).update(investigationTestData);
-		Mockito.verify(notificationsService, times(2)).updateAsync(any(Notification.class), anyBoolean());
+		Mockito.verify(notificationsService, times(1)).updateAsync(any(Notification.class), anyBoolean());
 	}
 
 	@Test

@@ -66,7 +66,6 @@ public class NotificationsService {
 
 		for (String receiverEdcUrl : receiverEdcUrls) {
 			Notification notificationToSend = notification.copy(senderBpn, receiverBpn);
-			logger.info("NotificationUpdate (NotificationService) id: {}, refId: {}", notificationToSend.getId(), notificationToSend.getNotificationReferenceId());
 			edcFacade.startEDCTransfer(notificationToSend, receiverEdcUrl, senderEdcUrl);
 			repository.update(notificationToSend);
 		}
