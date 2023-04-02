@@ -88,27 +88,6 @@ class InvestigationsPublisherServiceTest {
 	}
 
 	@Test
-	void testCloseInvestigationSuccessful() {
-
-		// Given
-		final long id = 1L;
-		final String reason = "TEST_REASON";
-		final BPN bpn = new BPN("bpn123");
-		InvestigationId investigationId = new InvestigationId(id);
-		Investigation investigation = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.RECEIVED);
-		when(investigationsReadService.loadInvestigation(investigationId)).thenReturn(investigation);
-		when(repository.update(investigation)).thenReturn(investigationId);
-
-		// When
-		investigationsPublisherService.closeInvestigation(bpn, id, reason);
-
-		// Then
-		verify(investigationsReadService).loadInvestigation(investigationId);
-		verify(repository).update(investigation);
-		verify(notificationsService).updateAsync(any());
-	}
-
-	@Test
 	void testSendInvestigationSuccessful() {
 		// Given
 		final long id = 1L;

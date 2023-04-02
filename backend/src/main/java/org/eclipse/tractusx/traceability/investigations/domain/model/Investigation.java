@@ -204,6 +204,15 @@ public class Investigation {
         notification.setInvestigationStatus(InvestigationStatus.DECLINED);
     }
 
+    public void close(BPN applicationBpn, String reason, Notification notification) {
+        changeStatusToWithoutNotifications(InvestigationStatus.CLOSED);
+        this.closeReason = reason;
+        // TODO refactor to accept one element
+        setInvestigationStatusAndReasonForNotifications(List.of(notification), InvestigationStatus.CLOSED, reason);
+        notification.setInvestigationStatus(InvestigationStatus.CLOSED);
+    }
+
+
 	public void acknowledge() {
 		changeStatusTo(InvestigationStatus.ACKNOWLEDGED);
 	}

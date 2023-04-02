@@ -21,7 +21,6 @@
 
 package org.eclipse.tractusx.traceability.investigations.domain.service;
 
-import com.nimbusds.oauth2.sdk.util.StringUtils;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.ports.AssetRepository;
 import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
@@ -156,32 +155,6 @@ public class InvestigationsPublisherService {
     }
 
     /**
-     * Closes an ongoing investigation with the given BPN, ID and reason.
-     *
-     * @param applicationBpn the BPN associated with the investigation
-     * @param id             the ID of the investigation to close
-     * @param reason         the reason for closing the investigation
-     */
-    public void closeInvestigation(BPN applicationBpn, Long id, String reason) {
-        InvestigationId investigationId = new InvestigationId(id);
-        Investigation investigation = investigationsReadService.loadInvestigation(investigationId);
-
-        investigation.close(applicationBpn, reason);
-        repository.update(investigation);
-
-        investigation.getNotifications().forEach(notification -> {
-            // Already reference existing
-            if (StringUtils.isNotBlank(notification.getNotificationReferenceId())) {
-                notificationsService.updateAsync(notification);
-                // No reference existing
-            } else {
-                notification.updateNotificationReferenceId(notification.getId());
-                notificationsService.updateAsync(notification);
-            }
-        });
-    }
-
-    /**
      * Updates an ongoing investigation with the given BPN, ID, status and reason.
      *
      * @param applicationBpn     the BPN associated with the investigation
@@ -213,6 +186,7 @@ public class InvestigationsPublisherService {
                 case ACKNOWLEDGED -> investigation.acknowledge(notificationToSend);
                 case ACCEPTED -> investigation.accept(reason, notificationToSend);
                 case DECLINED -> investigation.decline(reason, notificationToSend);
+                case CLOSED -> investigation.close(applicationBpn, reason, notificationToSend);
                 default -> throw new InvestigationIllegalUpdate("Can't update %s investigation with %s status".formatted(investigationIdRaw, status));
             }
             logger.info("::updateInvestigationPublisher::notificationToSend {}", notificationToSend);
