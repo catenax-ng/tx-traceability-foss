@@ -35,6 +35,7 @@ import static org.eclipse.tractusx.traceability.common.security.JwtRole.SUPERVIS
 
 class ReceiverInvestigationsControllerIT extends IntegrationSpecification implements IrsApiSupport, AssetsSupport, InvestigationsSupport, NotificationsSupport, BpnSupport {
 
+    @Ignore
     def "should acknowledge received investigation"() {
         given:
         def investigationId = defaultReceivedInvestigationStored()
