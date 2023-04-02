@@ -167,9 +167,9 @@ public class Investigation {
 		changeStatusTo(InvestigationStatus.SENT);
 	}
 
-    public void acknowledge(List<Notification> notifications) {
+    public void acknowledge(Notification notification) {
         changeStatusToWithoutNotifications(InvestigationStatus.ACKNOWLEDGED);
-        setInvestigationStatusAndReasonForNotifications(notifications, InvestigationStatus.ACKNOWLEDGED, null);
+        setInvestigationStatusAndReasonForNotifications(List.of(notification), InvestigationStatus.ACKNOWLEDGED, null);
     }
 
 
@@ -192,6 +192,7 @@ public class Investigation {
         this.acceptReason = reason;
         // TODO refactor to accept one element
         setInvestigationStatusAndReasonForNotifications(List.of(notification), InvestigationStatus.ACCEPTED, reason);
+        notification.setInvestigationStatus(InvestigationStatus.ACCEPTED);
     }
 
     public void decline(String reason, Notification notification) {
@@ -199,16 +200,14 @@ public class Investigation {
         this.declineReason = reason;
         // TODO refactor to accept one element
         setInvestigationStatusAndReasonForNotifications(List.of(notification), InvestigationStatus.DECLINED, reason);
+        notification.setInvestigationStatus(InvestigationStatus.DECLINED);
     }
 
 	public void acknowledge() {
 		changeStatusTo(InvestigationStatus.ACKNOWLEDGED);
 	}
 
-	public void acknowledge(Notification notification) {
-		changeStatusToWithoutNotifications(InvestigationStatus.ACKNOWLEDGED);
-		notification.setInvestigationStatus(InvestigationStatus.ACKNOWLEDGED);
-	}
+
 
 	public void accept(String reason) {
 		changeStatusTo(InvestigationStatus.ACCEPTED);
