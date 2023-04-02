@@ -96,7 +96,7 @@ public class InvestigationsReceiverService {
             case ACKNOWLEDGED -> investigation.acknowledge(notification);
             case ACCEPTED -> investigation.accept(notification);
             case DECLINED -> investigation.decline(notification);
-            case CLOSED -> investigation.close(traceabilityProperties.getBpn(), edcNotification.getInformation());
+            case CLOSED -> investigation.close(BPN.of(investigation.getBpn()), edcNotification.getInformation());
             default -> throw new InvestigationIllegalUpdate("Failed to handle notification due to unhandled %s status".formatted(edcNotification.convertInvestigationStatus()));
         }
         investigation.addNotification(notification);
