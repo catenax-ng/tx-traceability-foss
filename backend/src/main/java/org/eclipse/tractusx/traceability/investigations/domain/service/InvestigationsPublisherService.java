@@ -206,6 +206,7 @@ public class InvestigationsPublisherService {
         List<Notification> allLatestNotificationForEdcNotificationId = getAllLatestNotificationForEdcNotificationId(investigation);
         final boolean isReceiver = investigation.getInvestigationSide().equals(InvestigationSide.RECEIVER);
 
+        logger.info("::updateInvestigationPublisher::allLatestNotificationForEdcNotificationId {}", allLatestNotificationForEdcNotificationId);
         allLatestNotificationForEdcNotificationId.forEach(notification -> {
             Notification notificationToSend = notification.copy(notification.getSenderBpnNumber(), notification.getReceiverBpnNumber());
             switch (status) {
@@ -214,6 +215,7 @@ public class InvestigationsPublisherService {
                 case DECLINED -> investigation.decline(reason, notificationToSend);
                 default -> throw new InvestigationIllegalUpdate("Can't update %s investigation with %s status".formatted(investigationIdRaw, status));
             }
+            logger.info("::updateInvestigationPublisher::notificationToSend {}", notificationToSend);
             investigation.getNotifications().add(notificationToSend);
             notificationsService.updateAsync(notificationToSend, isReceiver);
         });

@@ -50,6 +50,7 @@ public class NotificationsService {
 
 	@Async(value = AssetsAsyncConfig.UPDATE_NOTIFICATION_EXECUTOR)
 	public void updateAsync(Notification notification, boolean isReceiver) {
+        logger.info("::updateAsync::notification {}", notification);
 		String senderEdcUrl = edcUrlProvider.getSenderUrl();
 		String receiverBpn;
 		String senderBpn;
@@ -66,6 +67,7 @@ public class NotificationsService {
 
 		for (String receiverEdcUrl : receiverEdcUrls) {
 			Notification notificationToSend = notification.copy(senderBpn, receiverBpn);
+            logger.info("::updateAsync::notificationToSend {}", notificationToSend);
 			edcFacade.startEDCTransfer(notificationToSend, receiverEdcUrl, senderEdcUrl);
 			repository.update(notificationToSend);
 		}
