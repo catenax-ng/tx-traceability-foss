@@ -29,7 +29,13 @@ import { RelationComponentState } from '@shared/modules/relations/core/component
 import { LoadedElementsFacade } from '@shared/modules/relations/core/loaded-elements.facade';
 import { RelationsAssembler } from '@shared/modules/relations/core/relations.assembler';
 import { RelationsFacade } from '@shared/modules/relations/core/relations.facade';
-import { OpenElements, TreeData, TreeElement, TreeStructure } from '@shared/modules/relations/model/relations.model';
+import {
+  OpenElements,
+  TreeData,
+  TreeDirection,
+  TreeElement,
+  TreeStructure,
+} from '@shared/modules/relations/model/relations.model';
 import { StaticIdService } from '@shared/service/staticId.service';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, filter, map, switchMap, takeWhile, tap } from 'rxjs/operators';
@@ -171,7 +177,9 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private renderTree(treeData: TreeStructure): void {
-    this.tree.renderTree(treeData);
+    this.tree.renderTree(treeData, TreeDirection.RIGHT);
+    // TODO: need to pass different data set - use the same just for testing now
+    this.tree.renderTree(treeData, TreeDirection.LEFT);
     this.renderMinimap(treeData);
   }
 
@@ -179,7 +187,8 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.showMiniMap) {
       return;
     }
-    this.minimap.renderMinimap(treeData);
+    this.minimap.renderMinimap(treeData, TreeDirection.RIGHT);
+    // this.minimap.renderMinimap(treeData, TreeDirection.LEFT);
   }
 
   public increaseSize(): void {

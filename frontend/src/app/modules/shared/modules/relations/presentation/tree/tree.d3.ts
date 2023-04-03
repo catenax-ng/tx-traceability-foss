@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { TreeData, TreeStructure } from '@shared/modules/relations/model/relations.model';
+import { TreeData, TreeDirection, TreeStructure } from '@shared/modules/relations/model/relations.model';
 import { D3RenderHelper } from '@shared/modules/relations/presentation/helper/d3.render.helper';
 import { HelperD3 } from '@shared/modules/relations/presentation/helper/helper.d3';
 import * as d3 from 'd3';
@@ -65,16 +65,16 @@ export class Tree {
     this.initResizeListener();
   }
 
-  public renderTree(data: TreeStructure): TreeSvg {
+  public renderTree(data: TreeStructure, direction: TreeDirection): TreeSvg {
     const root = d3.hierarchy(data);
 
-    let svg = d3.select(`#${this.id}-svg`) as TreeSvg;
+    let svg = d3.select(`#${this.id}-svg--` + direction) as TreeSvg;
     if (svg.empty()) svg = this.creatMainSvg();
 
     d3.tree().nodeSize([this.r * 3, 250])(root);
 
-    D3RenderHelper.renderTreePaths(svg, root, this.r, this.id);
-    D3RenderHelper.renderTreeNodes(svg, root, this.r, this.id, this.updateChildren, this.openDetails);
+    D3RenderHelper.renderTreePaths(direction, svg, root, this.r, this.id);
+    D3RenderHelper.renderTreeNodes(direction, svg, root, this.r, this.id, this.updateChildren, this.openDetails);
     return svg;
   }
 

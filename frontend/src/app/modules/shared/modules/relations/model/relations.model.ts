@@ -53,3 +53,8 @@ export interface TreeData {
   openDetails?: (data: TreeStructure) => void;
   updateChildren?: (data: TreeStructure) => void;
 }
+
+export enum TreeDirection {
+  LEFT = 'LEFT',
+  RIGHT = 'RIGHT',
+}

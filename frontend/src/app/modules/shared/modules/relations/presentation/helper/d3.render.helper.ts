@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { TreeStructure } from '@shared/modules/relations/model/relations.model';
+import { TreeDirection, TreeStructure } from '@shared/modules/relations/model/relations.model';
 import { HelperD3 } from '@shared/modules/relations/presentation/helper/helper.d3';
 import { TreeNode, TreeSvg } from '@shared/modules/relations/presentation/model.d3';
 import * as d3 from 'd3';
@@ -30,6 +30,7 @@ type SVGSelection = Selection<SVGGElement | HTMLAnchorElement, unknown, null, un
 
 export class D3RenderHelper {
   public static renderTreePaths(
+    direction: TreeDirection,
     svg: TreeSvg,
     root: HierarchyNode<TreeStructure>,
     r: number,
@@ -40,7 +41,7 @@ export class D3RenderHelper {
     const link = d3
       .linkHorizontal<HierarchyCircularLink<TreeStructure>, HierarchyCircularNode<TreeStructure>>()
       .source(({ source }) => ({ ...source, y: source.y + offset } as HierarchyCircularNode<TreeStructure>))
-      .x(({ y }) => y)
+      .x(({ y }) => -y)
       .y(({ x }) => x);
 
     let paths = d3.select(`#${id}--paths`);
@@ -77,13 +78,14 @@ export class D3RenderHelper {
           .attr('class', ({ data }: TreeNode) => `tree--element__circle-${data.state}`);
       }
 
-      circleNode.attr('transform', () => `translate(${y},${x})`);
+      circleNode.attr('transform', () => `translate(-${y},${x})`);
     }
 
     D3RenderHelper.renderNodes(svg, root, r, id, renderElements);
   }
 
   public static renderTreeNodes(
+    direction: TreeDirection,
     svg: TreeSvg,
     root: HierarchyNode<TreeStructure>,
     r: number,
@@ -131,7 +133,7 @@ export class D3RenderHelper {
         .text(() => HelperD3.shortenText(data.text || data.id));
     }
 
-    circleNode.attr('transform', () => `translate(${y},${x})`);
+    circleNode.attr('transform', () => `translate(-${y},${x})`);
   }
 
   public static renderStatusBorder(el: SVGSelection, dataNode: TreeNode, r: number, id: string) {
@@ -174,7 +176,7 @@ export class D3RenderHelper {
 
     statusBorder
       .attr('class', () => `tree--element__border tree--element__border-${data.state}`)
-      .attr('transform', () => `translate(${y},${x})`);
+      .attr('transform', () => `translate(-${y},${x})`);
   }
 
   public static renderLoading(el: SVGSelection, dataNode: TreeNode, r: number, id: string) {
@@ -201,7 +203,7 @@ export class D3RenderHelper {
       .attr(id, `${id}--Loading`)
       .attr('data-testid', 'tree--element__border-loading')
       .classed('tree--element__border-loading', true)
-      .attr('transform', () => `translate(${y},${x})`)
+      .attr('transform', () => `translate(-${y},${x})`)
       .append('g');
 
     arcs.forEach((node, index) =>
@@ -260,7 +262,7 @@ export class D3RenderHelper {
     const { data, x, y } = dataNode;
 
     const circleRadius = 15;
-    el.attr('transform', () => `translate(${y + r + circleRadius + 5},${x})`)
+    el.attr('transform', () => `translate(-${y + r + circleRadius + 5},${x})`)
       .on('click', () => callback(data))
       .attr('data-testid', 'tree--element__closing')
       .classed('tree--element__closing', true);
@@ -287,11 +289,11 @@ export class D3RenderHelper {
       .arc<HierarchyNode<TreeStructure>>()
       .innerRadius(r + 5)
       .outerRadius(r + 15)
-      .startAngle(({ data }) => (data.children?.length ? 0 : 0.3) * Math.PI)
-      .endAngle(({ data }) => (data.children?.length ? 0 : 0.7) * Math.PI);
+      .startAngle(({ data }) => (data.children?.length ? 0 : 1.3) * Math.PI)
+      .endAngle(({ data }) => (data.children?.length ? 0 : 1.7) * Math.PI);
 
     el.append('path')
-      .attr('transform', () => `translate(${y},${x})`)
+      .attr('transform', () => `translate(-${y},${x})`)
       .attr('d', () => arc(dataNode))
       .attr('data-testid', 'tree--element__arrow')
       .classed('tree--element__arrow', true);
@@ -302,6 +304,12 @@ export class D3RenderHelper {
       { x: r + 10 - 4, y: r - 25 },
     ];
 
+    const leftArrow = [
+      { x: -r - 10 + 4, y: -r + 25 },
+      { x: -r - 30 + 4, y: 0 },
+      { x: -r - 10 + 4, y: r - 25 },
+    ];
+
     const curveFunc = d3
       .area<{ x: number; y: number }>()
       .x(({ x }) => x)
@@ -309,8 +317,8 @@ export class D3RenderHelper {
       .y0(r / 2);
 
     el.append('path')
-      .attr('transform', () => `translate(${y},${x})`)
-      .attr('d', () => curveFunc(data.children?.length ? [] : rightArrow))
+      .attr('transform', () => `translate(-${y},${x})`)
+      .attr('d', () => curveFunc(data.children?.length ? [] : leftArrow))
       .attr('data-testid', 'tree--element__arrow')
       .classed('tree--element__arrow', true);
   }

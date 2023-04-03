@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { TreeStructure } from '@shared/modules/relations/model/relations.model';
+import { TreeDirection, TreeStructure } from '@shared/modules/relations/model/relations.model';
 import { D3RenderHelper } from '@shared/modules/relations/presentation/helper/d3.render.helper';
 import { HelperD3 } from '@shared/modules/relations/presentation/helper/helper.d3';
 import { MinimapIds, TreeSvg } from '@shared/modules/relations/presentation/model.d3';
@@ -80,7 +80,7 @@ export class Minimap {
     this.ids = { minimap, main, closeButton, viewport, viewportContainer, circle, closing, icon };
   }
 
-  public renderMinimap(data: TreeStructure): TreeSvg {
+  public renderMinimap(data: TreeStructure, direction: TreeDirection): TreeSvg {
     d3.select(`#${this.ids.main}`).remove();
     const root = d3.hierarchy(data);
 
@@ -88,7 +88,8 @@ export class Minimap {
     if (svg.empty()) svg = this.creatMainSvg(root);
 
     // First draw paths so paths are behind circles.
-    D3RenderHelper.renderTreePaths(svg, root, this.r, this.ids.minimap, true);
+    D3RenderHelper.renderTreePaths(direction, svg, root, this.r, this.ids.minimap, true);
+    // TODO:  needs to adapt direction to the rest of minimap...
     D3RenderHelper.renderMinimapNodes(svg, root, this.r, this.ids.minimap);
     // Recalculate height after circles are drawn because of uneven distribution.
     this.setMapHeight();
