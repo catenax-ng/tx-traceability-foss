@@ -279,6 +279,8 @@ public class Investigation {
 		return new ArrayList<>(notifications.values());
 	}
 
+
+
 	public Optional<Notification> getNotification(String notificationId) {
 		return Optional.ofNullable(notifications.get(notificationId));
 	}

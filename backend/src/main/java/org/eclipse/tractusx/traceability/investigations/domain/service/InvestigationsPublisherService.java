@@ -177,7 +177,18 @@ public class InvestigationsPublisherService {
 
         logger.info("::updateInvestigationPublisher::allLatestNotificationForEdcNotificationId {}", allLatestNotificationForEdcNotificationId);
         allLatestNotificationForEdcNotificationId.forEach(notification -> {
-            Notification notificationToSend = notification.copy(notification.getSenderBpnNumber(), notification.getReceiverBpnNumber());
+            String sender;
+            String receiver;
+
+            // TODO remove workaround for close status
+          if (InvestigationStatus.CLOSED.equals(status)){
+              sender = notification.getReceiverBpnNumber();
+              receiver = notification.getSenderBpnNumber();
+          } else {
+              sender = notification.getSenderBpnNumber();
+              receiver = notification.getReceiverBpnNumber();
+          }
+            Notification notificationToSend = notification.copy(sender, receiver);
             switch (status) {
                 case ACKNOWLEDGED -> investigation.acknowledge(notificationToSend);
                 case ACCEPTED -> investigation.accept(reason, notificationToSend);
@@ -186,7 +197,7 @@ public class InvestigationsPublisherService {
                 default -> throw new InvestigationIllegalUpdate("Can't update %s investigation with %s status".formatted(investigationIdRaw, status));
             }
             logger.info("::updateInvestigationPublisher::notificationToSend {}", notificationToSend);
-            investigation.getNotifications().add(notificationToSend);
+            investigation.addNotification(notificationToSend);
             notificationsService.updateAsync(notificationToSend, isReceiver);
         });
         repository.update(investigation);

@@ -36,7 +36,6 @@ import static java.util.Set.of;
 // Persisting and Updating notifications
 // One the accept from bpn b to bpn a we create two notifications on bpn a side with status 4 (accepted)
 
-
 public enum InvestigationStatus {
 	CREATED(InvestigationSide.SENDER, emptySet()),
 	SENT(InvestigationSide.SENDER, Set.of(InvestigationSide.SENDER)),
