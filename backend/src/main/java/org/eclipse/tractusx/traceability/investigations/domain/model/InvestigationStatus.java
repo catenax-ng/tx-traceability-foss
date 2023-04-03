@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 import static java.util.Collections.emptySet;
 import static java.util.Set.of;
 
+// One approve notification should set InvestigationStatus to SENT
+// Currently investigation already initialized with SENT
 
 public enum InvestigationStatus {
 	CREATED(InvestigationSide.SENDER, emptySet()),

@@ -184,7 +184,7 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
             for (Notification notification : investigation.getNotifications()) {
                 if (notificationExists(investigationEntity, notification.getId())) {
                     logger.info("handleNotificationUpdate::notificationExists with id {} for investigation with id {}", notification.getId(), investigation.getId());
-                    //handleNotificationUpdate(notificationEntity, notification);
+                    handleNotificationUpdate(notificationEntity, notification);
 
                 } else {
                     logger.info("handleNotificationUpdate::new notification with id {} for investigation with id {}", notification.getId(), investigation.getId());
