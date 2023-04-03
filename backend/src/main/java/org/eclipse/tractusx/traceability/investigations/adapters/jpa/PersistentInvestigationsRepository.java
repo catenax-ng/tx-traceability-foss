@@ -36,10 +36,13 @@ import org.eclipse.tractusx.traceability.investigations.domain.model.Investigati
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
 import org.eclipse.tractusx.traceability.investigations.domain.ports.InvestigationsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.lang.invoke.MethodHandles;
 import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +60,9 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
     private final JpaNotificationRepository notificationRepository;
 
     private final Clock clock;
+
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
 
     public PersistentInvestigationsRepository(JpaInvestigationRepository investigationRepository,
                                               JpaAssetsRepository assetsRepository,
@@ -177,8 +183,11 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
         for (NotificationEntity notificationEntity : notificationEntities) {
             for (Notification notification : investigation.getNotifications()) {
                 if (notificationExists(investigationEntity, notification.getId())) {
-                    handleNotificationUpdate(notificationEntity, notification);
+                    logger.info("handleNotificationUpdate::notificationExists with id {} for investigation with id {}", notification.getId(), investigation.getId());
+                    //handleNotificationUpdate(notificationEntity, notification);
+
                 } else {
+                    logger.info("handleNotificationUpdate::new notification with id {} for investigation with id {}", notification.getId(), investigation.getId());
                     List<AssetEntity> assetEntitiesByInvestigation = getAssetEntitiesByInvestigation(investigation);
                     handleNotificationCreate(investigationEntity, notification, assetEntitiesByInvestigation);
                 }
