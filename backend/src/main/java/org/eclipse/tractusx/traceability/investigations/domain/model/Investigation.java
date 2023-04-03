@@ -62,10 +62,6 @@ public class Investigation {
 	private String acceptReason;
 	private String declineReason;
 
-
-	public Investigation() {
-	}
-
 	public Investigation(InvestigationId investigationId,
 						 BPN bpn,
 						 InvestigationStatus investigationStatus,
@@ -209,35 +205,6 @@ public class Investigation {
         notification.setInvestigationStatus(InvestigationStatus.CLOSED);
     }
 
-
-	public void acknowledge() {
-		changeStatusTo(InvestigationStatus.ACKNOWLEDGED);
-	}
-
-
-
-	public void accept(String reason) {
-		changeStatusTo(InvestigationStatus.ACCEPTED);
-		this.acceptReason = reason;
-        this.notifications.values()
-                .forEach(noti -> noti.setDescription(acceptReason));
-	}
-
-	public void accept(Notification notification) {
-		changeStatusToWithoutNotifications(InvestigationStatus.ACCEPTED);
-        notification.setInvestigationStatus(InvestigationStatus.ACCEPTED);
-		this.acceptReason = notification.getDescription();
-        this.notifications.values()
-                .forEach(noti -> noti.setDescription(acceptReason));
-	}
-
-	public void decline(String reason) {
-		changeStatusTo(InvestigationStatus.DECLINED);
-		this.declineReason = reason;
-        this.notifications.values()
-                .forEach(noti -> noti.setDescription(declineReason));
-	}
-
 	private void validateBPN(BPN applicationBpn) {
 		if (!applicationBpn.equals(this.bpn)) {
 			throw new InvestigationIllegalUpdate("%s bpn has no permissions to update investigation with %s id.".formatted(applicationBpn.value(), investigationId.value()));
@@ -277,12 +244,6 @@ public class Investigation {
 
 	public List<Notification> getNotifications() {
 		return new ArrayList<>(notifications.values());
-	}
-
-
-
-	public Optional<Notification> getNotification(String notificationId) {
-		return Optional.ofNullable(notifications.get(notificationId));
 	}
 
 	public String getCloseReason() {
