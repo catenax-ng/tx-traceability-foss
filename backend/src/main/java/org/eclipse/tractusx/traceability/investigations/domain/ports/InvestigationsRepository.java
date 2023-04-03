@@ -35,7 +35,6 @@ import java.util.Set;
 public interface InvestigationsRepository {
 	InvestigationId save(Investigation investigation);
 	InvestigationId update(Investigation investigation);
-	PageResult<Investigation> getInvestigations(Set<InvestigationStatus> investigationStatuses, Pageable pageable);
 	PageResult<Investigation> getInvestigations(InvestigationSide investigationSide, Pageable pageable);
 	Optional<Investigation> findById(InvestigationId investigationId);
 	void update(Notification notification);
