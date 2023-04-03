@@ -66,7 +66,6 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
         assertInvestigationsSize(0)
     }
 
-    @Ignore
     def "should add a notification to an existing investigation on API callback /qualitynotifications/update success"() {
         given:
         defaultAssetsStored()
