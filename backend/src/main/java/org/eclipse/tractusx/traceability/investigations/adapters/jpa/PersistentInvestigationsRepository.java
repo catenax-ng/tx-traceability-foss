@@ -41,6 +41,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -172,8 +173,8 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
         investigationEntity.setAcceptReason(investigation.getAcceptReason());
         investigationEntity.setDeclineReason(investigation.getDeclineReason());
 
-
-        for (NotificationEntity notificationEntity : investigationEntity.getNotifications()) {
+        List<NotificationEntity> notificationEntities = new ArrayList<>(investigationEntity.getNotifications());
+        for (NotificationEntity notificationEntity : notificationEntities) {
             for (Notification notification : investigation.getNotifications()) {
                 if (notificationExists(investigationEntity, notification.getId())) {
                     handleNotificationUpdate(notificationEntity, notification);
@@ -195,7 +196,8 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
     }
 
     private boolean notificationExists(InvestigationEntity investigationEntity, String notificationId) {
-        return investigationEntity.getNotifications().stream().anyMatch(notification -> notification.getId().equals(notificationId));
+        List<NotificationEntity> notificationEntities = new ArrayList<>(investigationEntity.getNotifications());
+        return notificationEntities.stream().anyMatch(notification -> notification.getId().equals(notificationId));
     }
 
     private void handleNotificationUpdate(NotificationEntity notificationEntity, Notification notification) {
