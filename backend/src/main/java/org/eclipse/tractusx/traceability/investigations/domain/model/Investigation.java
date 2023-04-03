@@ -169,46 +169,41 @@ public class Investigation {
 
     public void acknowledge(Notification notification) {
         changeStatusToWithoutNotifications(InvestigationStatus.ACKNOWLEDGED);
-        setInvestigationStatusAndReasonForNotifications(List.of(notification), InvestigationStatus.ACKNOWLEDGED, null);
+        setInvestigationStatusAndReasonForNotification(notification, InvestigationStatus.ACKNOWLEDGED, null);
         notification.setInvestigationStatus(InvestigationStatus.ACKNOWLEDGED);
     }
 
 
-    private void setInvestigationStatusAndReasonForNotifications(List<Notification> notifications, InvestigationStatus investigationStatus, String reason) {
-        for (Notification n1 : this.notifications.values()) {
-            for (Notification n2 : notifications) {
-                if (n1.getId().equals(n2.getId())) {
+    private void setInvestigationStatusAndReasonForNotification(Notification notificationDomain, InvestigationStatus investigationStatus, String reason) {
+        for (Notification notification : this.notifications.values()) {
+                if (notification.getId().equals(notificationDomain.getId())) {
                     if (reason != null){
-                        n1.setDescription(reason);
+                        notification.setDescription(reason);
                     }
-                    n1.setInvestigationStatus(investigationStatus);
-                    break; // stop searching
+                    notification.setInvestigationStatus(investigationStatus);
+                    break;
                 }
-            }
         }
     }
 
     public void accept(String reason, Notification notification) {
         changeStatusToWithoutNotifications(InvestigationStatus.ACCEPTED);
         this.acceptReason = reason;
-        // TODO refactor to accept one element
-        setInvestigationStatusAndReasonForNotifications(List.of(notification), InvestigationStatus.ACCEPTED, reason);
+        setInvestigationStatusAndReasonForNotification(notification, InvestigationStatus.ACCEPTED, reason);
         notification.setInvestigationStatus(InvestigationStatus.ACCEPTED);
     }
 
     public void decline(String reason, Notification notification) {
         changeStatusToWithoutNotifications(InvestigationStatus.DECLINED);
         this.declineReason = reason;
-        // TODO refactor to accept one element
-        setInvestigationStatusAndReasonForNotifications(List.of(notification), InvestigationStatus.DECLINED, reason);
+        setInvestigationStatusAndReasonForNotification(notification, InvestigationStatus.DECLINED, reason);
         notification.setInvestigationStatus(InvestigationStatus.DECLINED);
     }
 
-    public void close(BPN applicationBpn, String reason, Notification notification) {
+    public void close(String reason, Notification notification) {
         changeStatusToWithoutNotifications(InvestigationStatus.CLOSED);
         this.closeReason = reason;
-        // TODO refactor to accept one element
-        setInvestigationStatusAndReasonForNotifications(List.of(notification), InvestigationStatus.CLOSED, reason);
+        setInvestigationStatusAndReasonForNotification(notification, InvestigationStatus.CLOSED, reason);
         notification.setInvestigationStatus(InvestigationStatus.CLOSED);
     }
 
@@ -232,15 +227,6 @@ public class Investigation {
 		this.acceptReason = notification.getDescription();
         this.notifications.values()
                 .forEach(noti -> noti.setDescription(acceptReason));
-	}
-
-	public void decline(Notification notification) {
-		changeStatusTo(InvestigationStatus.DECLINED);
-		notification.setInvestigationStatus(InvestigationStatus.DECLINED);
-		this.declineReason = notification.getDescription();
-        this.notifications.values()
-                .forEach(noti -> noti.setDescription(declineReason));
-
 	}
 
 	public void decline(String reason) {

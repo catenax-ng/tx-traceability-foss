@@ -181,7 +181,7 @@ public class InvestigationsPublisherService {
                 case ACKNOWLEDGED -> investigation.acknowledge(notificationToSend);
                 case ACCEPTED -> investigation.accept(reason, notificationToSend);
                 case DECLINED -> investigation.decline(reason, notificationToSend);
-                case CLOSED -> investigation.close(applicationBpn, reason, notificationToSend);
+                case CLOSED -> investigation.close(reason, notificationToSend);
                 default -> throw new InvestigationIllegalUpdate("Can't update %s investigation with %s status".formatted(investigationIdRaw, status));
             }
             logger.info("::updateInvestigationPublisher::notificationToSend {}", notificationToSend);

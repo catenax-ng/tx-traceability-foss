@@ -29,7 +29,12 @@ import org.eclipse.tractusx.traceability.infrastructure.jpa.investigation.Invest
 import org.eclipse.tractusx.traceability.infrastructure.jpa.investigation.JpaInvestigationRepository;
 import org.eclipse.tractusx.traceability.infrastructure.jpa.notification.JpaNotificationRepository;
 import org.eclipse.tractusx.traceability.infrastructure.jpa.notification.NotificationEntity;
-import org.eclipse.tractusx.traceability.investigations.domain.model.*;
+import org.eclipse.tractusx.traceability.investigations.domain.model.AffectedPart;
+import org.eclipse.tractusx.traceability.investigations.domain.model.Investigation;
+import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationId;
+import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationSide;
+import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
+import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
 import org.eclipse.tractusx.traceability.investigations.domain.ports.InvestigationsRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -83,8 +88,8 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
 
     @Override
     public InvestigationId save(Investigation investigation) {
-        List<String> assetIds = investigation.getAssetIds();
-        List<AssetEntity> assetEntities = assetsRepository.findByIdIn(assetIds);
+
+        List<AssetEntity> assetEntities = getAssetEntitiesByInvestigation(investigation);
 
         if (!assetEntities.isEmpty()) {
             InvestigationEntity investigationEntity = new InvestigationEntity(
@@ -98,15 +103,12 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
 
             investigationRepository.save(investigationEntity);
 
-            List<NotificationEntity> notifications = investigation.getNotifications().stream()
-                    .map(notification -> toNotificationEntity(investigationEntity, notification, assetEntities))
-                    .toList();
-
-            notificationRepository.saveAll(notifications);
+            investigation.getNotifications()
+                    .forEach(notification -> handleNotificationCreate(investigationEntity, notification, assetEntities));
 
             return new InvestigationId(investigationEntity.getId());
         } else {
-            throw new IllegalArgumentException("No assets found for %s asset ids".formatted(String.join(", ", assetIds)));
+            throw new IllegalArgumentException("No assets found for %s asset ids".formatted(String.join(", ", investigation.getAssetIds())));
         }
     }
 
@@ -171,26 +173,29 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
         investigationEntity.setDeclineReason(investigation.getDeclineReason());
 
 
-        for (NotificationEntity notificationEntity : investigationEntity.getNotifications()){
-            for (Notification notification: investigation.getNotifications()){
+        for (NotificationEntity notificationEntity : investigationEntity.getNotifications()) {
+            for (Notification notification : investigation.getNotifications()) {
                 if (notificationExists(investigationEntity, notification.getId())) {
                     handleNotificationUpdate(notificationEntity, notification);
                 } else {
-                    handleNotificationCreate(investigationEntity, investigation, notification);
+                    List<AssetEntity> assetEntitiesByInvestigation = getAssetEntitiesByInvestigation(investigation);
+                    handleNotificationCreate(investigationEntity, notification, assetEntitiesByInvestigation);
                 }
             }
         }
     }
 
-    private void handleNotificationCreate(InvestigationEntity investigationEntity, Investigation investigation, Notification notificationDomain){
-        List<String> assetIds = investigation.getAssetIds();
-        List<AssetEntity> assetEntities = assetsRepository.findByIdIn(assetIds);
+    private List<AssetEntity> getAssetEntitiesByInvestigation(Investigation investigation) {
+        return assetsRepository.findByIdIn(investigation.getAssetIds());
+    }
+
+    private void handleNotificationCreate(InvestigationEntity investigationEntity, Notification notificationDomain, List<AssetEntity> assetEntities) {
         NotificationEntity notificationEntity = toNotificationEntity(investigationEntity, notificationDomain, assetEntities);
         notificationRepository.save(notificationEntity);
     }
 
-    private boolean notificationExists(InvestigationEntity investigationEntity, String notificationId){
-       return investigationEntity.getNotifications().stream().anyMatch(notification -> notification.getId().equals(notificationId));
+    private boolean notificationExists(InvestigationEntity investigationEntity, String notificationId) {
+        return investigationEntity.getNotifications().stream().anyMatch(notification -> notification.getId().equals(notificationId));
     }
 
     private void handleNotificationUpdate(NotificationEntity notificationEntity, Notification notification) {
