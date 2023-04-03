@@ -35,9 +35,9 @@ import static java.util.Objects.requireNonNullElseGet;
 public class Notification {
     private final String id;
     private String notificationReferenceId;
-    private final String senderBpnNumber;
+    private String senderBpnNumber;
     private final String senderManufacturerName;
-    private final String receiverBpnNumber;
+    private String receiverBpnNumber;
     private final String receiverManufacturerName;
     private String edcUrl;
     private String contractAgreementId;
@@ -125,6 +125,14 @@ public class Notification {
 
     public String getSenderBpnNumber() {
         return senderBpnNumber;
+    }
+
+    public void setSenderBpnNumber(String senderBpnNumber) {
+        this.senderBpnNumber = senderBpnNumber;
+    }
+
+    public void setReceiverBpnNumber(String receiverBpnNumber) {
+        this.receiverBpnNumber = receiverBpnNumber;
     }
 
     public String getSenderManufacturerName() {

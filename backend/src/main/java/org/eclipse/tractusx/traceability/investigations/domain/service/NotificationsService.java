@@ -52,24 +52,17 @@ public class NotificationsService {
 	public void updateAsync(Notification notification, boolean isReceiver) {
         logger.info("::updateAsync::notification {}", notification);
 		String senderEdcUrl = edcUrlProvider.getSenderUrl();
-		String receiverBpn;
-		String senderBpn;
 		if (isReceiver) {
-			receiverBpn = notification.getSenderBpnNumber();
-			senderBpn = notification.getReceiverBpnNumber();
-
-		} else {
-			receiverBpn = notification.getReceiverBpnNumber();
-			senderBpn = notification.getSenderBpnNumber();
+			notification.setReceiverBpnNumber(notification.getSenderBpnNumber());
+            notification.setSenderBpnNumber(notification.getReceiverBpnNumber());
 		}
 
-		List<String> receiverEdcUrls = edcUrlProvider.getEdcUrls(receiverBpn);
+		List<String> receiverEdcUrls = edcUrlProvider.getEdcUrls(notification.getReceiverBpnNumber());
 
 		for (String receiverEdcUrl : receiverEdcUrls) {
-			Notification notificationToSend = notification.copy(senderBpn, receiverBpn);
-            logger.info("::updateAsync::notificationToSend {}", notificationToSend);
-			edcFacade.startEDCTransfer(notificationToSend, receiverEdcUrl, senderEdcUrl);
-			repository.update(notificationToSend);
+            logger.info("::updateAsync::notificationToSend {}", notification);
+			edcFacade.startEDCTransfer(notification, receiverEdcUrl, senderEdcUrl);
+			repository.update(notification);
 		}
 	}
     @Async(value = AssetsAsyncConfig.UPDATE_NOTIFICATION_EXECUTOR)
