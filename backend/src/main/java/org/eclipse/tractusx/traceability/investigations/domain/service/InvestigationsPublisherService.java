@@ -151,6 +151,7 @@ public class InvestigationsPublisherService {
     public void approveInvestigation(BPN applicationBpn, Long id) {
         InvestigationId investigationId = new InvestigationId(id);
         Investigation investigation = investigationsReadService.loadInvestigation(investigationId);
+        // TODO create a new notification
         investigation.send(applicationBpn);
         repository.update(investigation);
         final boolean isReceiver = investigation.getInvestigationSide().equals(InvestigationSide.RECEIVER);

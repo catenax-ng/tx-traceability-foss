@@ -167,11 +167,7 @@ public class Investigation {
 		changeStatusTo(InvestigationStatus.SENT);
 	}
 
-    public void acknowledge(Notification notification) {
-        changeStatusToWithoutNotifications(InvestigationStatus.ACKNOWLEDGED);
-        setInvestigationStatusAndReasonForNotification(notification, InvestigationStatus.ACKNOWLEDGED, null);
-        notification.setInvestigationStatus(InvestigationStatus.ACKNOWLEDGED);
-    }
+
 
 
     private void setInvestigationStatusAndReasonForNotification(Notification notificationDomain, InvestigationStatus investigationStatus, String reason) {
@@ -184,6 +180,12 @@ public class Investigation {
                     break;
                 }
         }
+    }
+
+    public void acknowledge(Notification notification) {
+        changeStatusToWithoutNotifications(InvestigationStatus.ACKNOWLEDGED);
+        setInvestigationStatusAndReasonForNotification(notification, InvestigationStatus.ACKNOWLEDGED, null);
+        notification.setInvestigationStatus(InvestigationStatus.ACKNOWLEDGED);
     }
 
     public void accept(String reason, Notification notification) {

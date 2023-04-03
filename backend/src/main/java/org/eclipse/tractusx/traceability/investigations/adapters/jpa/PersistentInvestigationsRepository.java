@@ -46,6 +46,7 @@ import java.lang.invoke.MethodHandles;
 import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -180,19 +181,18 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
         investigationEntity.setDeclineReason(investigation.getDeclineReason());
 
         List<NotificationEntity> notificationEntities = new ArrayList<>(investigationEntity.getNotifications());
-        for (NotificationEntity notificationEntity : notificationEntities) {
-            for (Notification notification : investigation.getNotifications()) {
-                if (notificationExists(investigationEntity, notification.getId())) {
-                    logger.info("handleNotificationUpdate::notificationExists with id {} for investigation with id {}", notification.getId(), investigation.getId());
-                    handleNotificationUpdate(notificationEntity, notification);
-
-                } else {
-                    logger.info("handleNotificationUpdate::new notification with id {} for investigation with id {}", notification.getId(), investigation.getId());
-                    List<AssetEntity> assetEntitiesByInvestigation = getAssetEntitiesByInvestigation(investigation);
-                    handleNotificationCreate(investigationEntity, notification, assetEntitiesByInvestigation);
-                }
+        Map<String, NotificationEntity> notificationEntityMap = notificationEntities.stream().collect(Collectors.toMap(NotificationEntity::getId, notificationEntity -> notificationEntity));
+        for (Notification notification : investigation.getNotifications()) {
+            if (notificationExists(investigationEntity, notification.getId())) {
+                logger.info("handleNotificationUpdate::notificationExists with id {} for investigation with id {}", notification.getId(), investigation.getId());
+                handleNotificationUpdate(notificationEntityMap.get(notification.getId()), notification);
+            } else {
+                logger.info("handleNotificationUpdate::new notification with id {} for investigation with id {}", notification.getId(), investigation.getId());
+                List<AssetEntity> assetEntitiesByInvestigation = getAssetEntitiesByInvestigation(investigation);
+                handleNotificationCreate(investigationEntity, notification, assetEntitiesByInvestigation);
             }
         }
+
     }
 
     private List<AssetEntity> getAssetEntitiesByInvestigation(Investigation investigation) {

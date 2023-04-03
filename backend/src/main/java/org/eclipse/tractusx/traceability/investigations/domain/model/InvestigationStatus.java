@@ -32,6 +32,10 @@ import static java.util.Set.of;
 
 // One approve notification should set InvestigationStatus to SENT
 // Currently investigation already initialized with SENT
+// We need to update the receiver and sender on each new created notification to make sure that the notification will be adressed correctly
+// Persisting and Updating notifications
+// One the accept from bpn b to bpn a we create two notifications on bpn a side with status 4 (accepted)
+
 
 public enum InvestigationStatus {
 	CREATED(InvestigationSide.SENDER, emptySet()),
