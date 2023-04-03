@@ -66,10 +66,8 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
     public void update(Notification notification) {
         NotificationEntity entity = notificationRepository.findById(notification.getId())
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Notification with id %s not found!", notification.getId())));
+        handleNotificationUpdate(entity, notification);
 
-        update(entity, notification);
-
-        notificationRepository.save(entity);
     }
 
     @Override
@@ -77,7 +75,7 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
         InvestigationEntity investigationEntity = investigationRepository.findById(investigation.getId().value())
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Investigation with id %s not found!", investigation.getId().value())));
 
-        update(investigationEntity, investigation);
+        handleNotificationUpdate(investigationEntity, investigation);
         investigationRepository.save(investigationEntity);
 
         return investigation.getId();
@@ -165,48 +163,42 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
         return investigationRepository.countAllBySideEquals(investigationSide);
     }
 
-    private void update(InvestigationEntity investigationEntity, Investigation investigation) {
+    private void handleNotificationUpdate(InvestigationEntity investigationEntity, Investigation investigation) {
         investigationEntity.setStatus(investigation.getInvestigationStatus());
         investigationEntity.setUpdated(clock.instant());
         investigationEntity.setCloseReason(investigation.getCloseReason());
         investigationEntity.setAcceptReason(investigation.getAcceptReason());
         investigationEntity.setDeclineReason(investigation.getDeclineReason());
 
-        // Persist existing notifications
-      /*  investigationEntity.getNotifications()
-                .forEach(notification -> investigation.getNotification(notification.getId())
-                        .ifPresent(data -> update(notification, data)));*/
 
-        // Persist new notifications
-        persistNewNotifications(investigationEntity, investigation);
-
+        for (NotificationEntity notificationEntity : investigationEntity.getNotifications()){
+            for (Notification notification: investigation.getNotifications()){
+                if (notificationExists(investigationEntity, notification.getId())) {
+                    handleNotificationUpdate(notificationEntity, notification);
+                } else {
+                    handleNotificationCreate(investigationEntity, investigation, notification);
+                }
+            }
+        }
     }
 
-    private void persistNewNotifications(InvestigationEntity investigationEntity, Investigation investigation) {
-        List<Notification> notifications = investigation.getNotifications();
-        List<NotificationEntity> notificationEntities = investigationEntity.getNotifications();
-
-        List<Notification> notPersistedNotifications =
-                notifications
-                        .stream()
-                        .filter(notification -> notificationEntities
-                                .stream()
-                                .anyMatch(notificationEntity -> !notificationEntity.getId().equals(notification.getId())))
-                        .toList();
-
+    private void handleNotificationCreate(InvestigationEntity investigationEntity, Investigation investigation, Notification notificationDomain){
         List<String> assetIds = investigation.getAssetIds();
         List<AssetEntity> assetEntities = assetsRepository.findByIdIn(assetIds);
-        List<NotificationEntity> newNotificationEntities = notPersistedNotifications.stream()
-                .map(notification -> toNotificationEntity(investigationEntity, notification, assetEntities))
-                .toList();
-        notificationRepository.saveAll(newNotificationEntities);
+        NotificationEntity notificationEntity = toNotificationEntity(investigationEntity, notificationDomain, assetEntities);
+        notificationRepository.save(notificationEntity);
     }
 
-    private void update(NotificationEntity notificationEntity, Notification notification) {
+    private boolean notificationExists(InvestigationEntity investigationEntity, String notificationId){
+       return investigationEntity.getNotifications().stream().anyMatch(notification -> notification.getId().equals(notificationId));
+    }
+
+    private void handleNotificationUpdate(NotificationEntity notificationEntity, Notification notification) {
         notificationEntity.setEdcUrl(notification.getEdcUrl());
         notificationEntity.setContractAgreementId(notification.getContractAgreementId());
         notificationEntity.setNotificationReferenceId(notification.getNotificationReferenceId());
         notificationEntity.setTargetDate(notification.getTargetDate());
+        notificationRepository.save(notificationEntity);
     }
 
     private Investigation toInvestigation(InvestigationEntity investigationEntity) {
