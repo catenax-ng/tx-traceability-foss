@@ -164,17 +164,8 @@ public class InvestigationsPublisherService {
      */
     public void updateInvestigationPublisher(BPN applicationBpn, Long investigationIdRaw, InvestigationStatus status, String reason) {
         Investigation investigation = investigationsReadService.loadInvestigation(new InvestigationId(investigationIdRaw));
-        List<Notification> invalidNotifications = invalidNotifications(investigation, applicationBpn);
 
-        if (!invalidNotifications.isEmpty()) {
-            StringBuilder builder = new StringBuilder("Investigation receiverBpnNumber mismatch for notifications with IDs: ");
-            for (Notification notification : invalidNotifications) {
-                builder.append(notification.getId()).append(", ");
-            }
-            builder.delete(builder.length() - 2, builder.length()); // Remove the last ", " from the string
-            throw new InvestigationReceiverBpnMismatchException(builder.toString());
-        }
-
+        validate(applicationBpn, status, investigation);
 
         List<Notification> allLatestNotificationForEdcNotificationId = getAllLatestNotificationForEdcNotificationId(investigation);
         final boolean isReceiver = investigation.getInvestigationSide().equals(InvestigationSide.RECEIVER);
@@ -194,6 +185,25 @@ public class InvestigationsPublisherService {
             notificationsService.updateAsync(notificationToSend, isReceiver);
         });
         repository.update(investigation);
+    }
+
+    private void validate(BPN applicationBpn, InvestigationStatus status, Investigation investigation) {
+
+       final boolean isInvalidAcknowledgeOrAcceptOrDecline = !InvestigationSide.RECEIVER.equals(investigation.getInvestigationSide()) && applicationBpn.value().equals(investigation.getBpn());
+       final boolean isInvalidClose = InvestigationStatus.CLOSED.equals(status) && !applicationBpn.value().equals(investigation.getBpn());
+        switch (status) {
+            case ACKNOWLEDGED, ACCEPTED, DECLINED -> {
+                if (isInvalidAcknowledgeOrAcceptOrDecline) {
+                    throw new InvestigationIllegalUpdate("Can't update investigation to status: %s for appBpn: %s and investigationBpn: %s".formatted(status, applicationBpn.value(), investigation.getBpn()));
+                }
+            }
+            case CLOSED -> {
+                if (isInvalidClose) {
+                    throw new InvestigationIllegalUpdate("Can't update investigation to status: %s for appBpn: %s and investigationBpn: %s".formatted(status, applicationBpn.value(), investigation.getBpn()));
+                }
+            }
+            default -> throw new InvestigationIllegalUpdate("Can't perform unknown status update to: %s for investigation with %s status".formatted(status, investigation.getId()));
+        }
     }
 
     private List<Notification> getAllLatestNotificationForEdcNotificationId(Investigation investigation) {

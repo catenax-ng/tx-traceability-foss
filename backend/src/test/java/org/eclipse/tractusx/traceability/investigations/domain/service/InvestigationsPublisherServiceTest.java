@@ -242,7 +242,7 @@ class InvestigationsPublisherServiceTest {
 		List<Notification> notifications = new ArrayList<>();
 		notifications.add(notification);
 
-		Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestDataWithNotificationList(InvestigationStatus.RECEIVED, "recipientBPN", notifications);
+		Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestDataWithNotificationList(InvestigationStatus.RECEIVED, "createrBPN", notifications);
 
 		when(investigationsReadService.loadInvestigation(any(InvestigationId.class))).thenReturn(investigationTestData);
 
