@@ -46,18 +46,16 @@ public class InvestigationsReceiverService {
     private final InvestigationsReadService investigationsReadService;
     private final NotificationMapper notificationMapper;
     private final InvestigationMapper investigationMapper;
-    private final TraceabilityProperties traceabilityProperties;
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public InvestigationsReceiverService(InvestigationsRepository repository,
                                          InvestigationsReadService investigationsReadService,
-                                         NotificationMapper notificationMapper, InvestigationMapper investigationMapper, TraceabilityProperties traceabilityProperties) {
+                                         NotificationMapper notificationMapper, InvestigationMapper investigationMapper) {
 
         this.repository = repository;
         this.investigationsReadService = investigationsReadService;
         this.notificationMapper = notificationMapper;
         this.investigationMapper = investigationMapper;
-        this.traceabilityProperties = traceabilityProperties;
     }
 
     public void handleNotificationReceiverCallback(EDCNotification edcNotification) {

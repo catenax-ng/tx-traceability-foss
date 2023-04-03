@@ -45,7 +45,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class InvestigationsReadServiceTest {
+class InvestigationsReadServiceTest {
 
     @Mock
     private InvestigationsRepository repository;
@@ -115,7 +115,8 @@ public class InvestigationsReadServiceTest {
         when(repository.findById(any(InvestigationId.class))).thenReturn(Optional.empty());
 
         // expect
-        assertThrows(InvestigationNotFoundException.class, () -> investigationsReadService.loadInvestigation(new InvestigationId(0L)));
+        InvestigationId investigationId = new InvestigationId(0L);
+        assertThrows(InvestigationNotFoundException.class, () -> investigationsReadService.loadInvestigation(investigationId));
     }
 
     @Test
