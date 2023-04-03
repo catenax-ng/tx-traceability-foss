@@ -57,7 +57,7 @@ public class NotificationsService {
 		if (isReceiver) {
 			receiverBpn = notification.getSenderBpnNumber();
 			senderBpn = notification.getReceiverBpnNumber();
-//
+
 		} else {
 			receiverBpn = notification.getReceiverBpnNumber();
 			senderBpn = notification.getSenderBpnNumber();

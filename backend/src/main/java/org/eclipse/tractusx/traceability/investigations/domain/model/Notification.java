@@ -28,6 +28,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static java.util.Objects.requireNonNullElseGet;
 
@@ -208,8 +209,9 @@ public class Notification {
 
 
     public Notification copy(String senderBpnNumber, String receiverBpnNumber) {
+        final String notificationId = UUID.randomUUID().toString();
         return new Notification(
-                id,
+                notificationId,
                 notificationReferenceId,
                 senderBpnNumber,
                 senderManufacturerName,
