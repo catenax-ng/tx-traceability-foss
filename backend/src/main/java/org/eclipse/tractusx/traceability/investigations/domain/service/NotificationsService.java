@@ -49,13 +49,9 @@ public class NotificationsService {
 	}
 
 	@Async(value = AssetsAsyncConfig.UPDATE_NOTIFICATION_EXECUTOR)
-	public void updateAsync(Notification notification, boolean isReceiver) {
+	public void updateAsync(Notification notification) {
         logger.info("::updateAsync::notification {}", notification);
 		String senderEdcUrl = edcUrlProvider.getSenderUrl();
-		if (isReceiver) {
-			notification.setReceiverBpnNumber(notification.getSenderBpnNumber());
-            notification.setSenderBpnNumber(notification.getReceiverBpnNumber());
-		}
 
 		List<String> receiverEdcUrls = edcUrlProvider.getEdcUrls(notification.getReceiverBpnNumber());
 
@@ -64,9 +60,5 @@ public class NotificationsService {
 			edcFacade.startEDCTransfer(notification, receiverEdcUrl, senderEdcUrl);
 			repository.update(notification);
 		}
-	}
-    @Async(value = AssetsAsyncConfig.UPDATE_NOTIFICATION_EXECUTOR)
-	public void updateAsync(Notification notification) {
-		updateAsync(notification, false);
 	}
 }

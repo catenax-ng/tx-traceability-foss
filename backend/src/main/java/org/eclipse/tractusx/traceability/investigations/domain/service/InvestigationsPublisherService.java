@@ -152,9 +152,8 @@ public class InvestigationsPublisherService {
         // TODO create a new notification
         investigation.send(applicationBpn);
         repository.update(investigation);
-        final boolean isReceiver = investigation.getInvestigationSide().equals(InvestigationSide.RECEIVER);
         // For each asset within investigation a notification was created before
-        investigation.getNotifications().forEach(notification -> notificationsService.updateAsync(notification, isReceiver));
+        investigation.getNotifications().forEach(notification -> notificationsService.updateAsync(notification));
     }
 
     /**
@@ -171,22 +170,16 @@ public class InvestigationsPublisherService {
         validate(applicationBpn, status, investigation);
 
         List<Notification> allLatestNotificationForEdcNotificationId = getAllLatestNotificationForEdcNotificationId(investigation);
-        final boolean isReceiver = investigation.getInvestigationSide().equals(InvestigationSide.RECEIVER);
 
         logger.info("::updateInvestigationPublisher::allLatestNotificationForEdcNotificationId {}", allLatestNotificationForEdcNotificationId);
         allLatestNotificationForEdcNotificationId.forEach(notification -> {
-            String sender;
-            String receiver;
+            // the receiverBPNNumber of a notification must not be the same as the application. Example BPN A closes investigation and the notification would be go to BPN A (would not make sense)
+            if (notification.getReceiverBpnNumber().equals(applicationBpn.value())){
+                notification.setReceiverBpnNumber(notification.getSenderBpnNumber());
+                notification.setSenderBpnNumber(notification.getReceiverBpnNumber());
+            }
 
-            // TODO remove workaround for close status
-          if (InvestigationStatus.CLOSED.equals(status)){
-              sender = notification.getReceiverBpnNumber();
-              receiver = notification.getSenderBpnNumber();
-          } else {
-              sender = notification.getSenderBpnNumber();
-              receiver = notification.getReceiverBpnNumber();
-          }
-            Notification notificationToSend = notification.copy(sender, receiver);
+            Notification notificationToSend = notification.copy();
             switch (status) {
                 case ACKNOWLEDGED -> investigation.acknowledge(notificationToSend);
                 case ACCEPTED -> investigation.accept(reason, notificationToSend);
@@ -196,7 +189,7 @@ public class InvestigationsPublisherService {
             }
             logger.info("::updateInvestigationPublisher::notificationToSend {}", notificationToSend);
             investigation.addNotification(notificationToSend);
-            notificationsService.updateAsync(notificationToSend, isReceiver);
+            notificationsService.updateAsync(notificationToSend);
         });
         repository.update(investigation);
     }

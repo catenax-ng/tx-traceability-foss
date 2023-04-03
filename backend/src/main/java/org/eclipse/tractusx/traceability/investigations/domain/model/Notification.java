@@ -216,7 +216,7 @@ public class Notification {
     }
 
 
-    public Notification copy(String senderBpnNumber, String receiverBpnNumber) {
+    public Notification copy() {
         final String notificationId = UUID.randomUUID().toString();
         return new Notification(
                 notificationId,

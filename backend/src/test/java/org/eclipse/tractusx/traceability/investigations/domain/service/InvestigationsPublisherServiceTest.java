@@ -105,7 +105,7 @@ class InvestigationsPublisherServiceTest {
 		// Then
 		verify(investigationsReadService).loadInvestigation(investigationId);
 		verify(repository).update(investigation);
-		verify(notificationsService).updateAsync(any(), anyBoolean());
+		verify(notificationsService).updateAsync(any());
 	}
 
 	@Test
@@ -169,7 +169,7 @@ class InvestigationsPublisherServiceTest {
 
 		// Then
 		Mockito.verify(repository).update(investigationTestData);
-		Mockito.verify(notificationsService, times(1)).updateAsync(any(Notification.class), anyBoolean());
+		Mockito.verify(notificationsService, times(1)).updateAsync(any(Notification.class));
 	}
 
 	@Test
