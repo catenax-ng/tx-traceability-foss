@@ -62,7 +62,8 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
   public readonly htmlId: string;
 
   private _rootPart$ = new State<View<Part>>({ loader: true });
-  private tree: Tree;
+  private treeRight: Tree;
+  private treeLeft: Tree;
   private minimap: Minimap;
   private treeData: TreeStructure;
 
@@ -76,6 +77,8 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
     this.rootPart$ = this._rootPart$.observable;
     this.htmlId = staticIdService.generateId(this.htmlIdBase);
+    // TODO: remove
+    console.dir(this.htmlId);
   }
 
   public ngOnInit(): void {
@@ -98,7 +101,8 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-    this.tree = undefined;
+    this.treeRight = undefined;
+    this.treeLeft = undefined;
   }
 
   public ngAfterViewInit(): void {
@@ -139,13 +143,15 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
       updateChildren: this.updateChildren.bind(this),
     };
 
-    this.tree = new Tree(treeConfig);
+    this.treeRight = new Tree(treeConfig);
+    this.treeLeft = new Tree(treeConfig);
 
     if (!this.showMiniMap) {
       return;
     }
 
-    this.minimap = new Minimap(this.tree);
+    this.minimap = new Minimap(this.treeRight);
+    // this.minimap = new Minimap(this.treeLeft);
   }
 
   private updateChildren({ id }: TreeElement): void {
@@ -168,7 +174,7 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    if (!this.tree) {
+    if (!this.treeRight || !this.treeLeft) {
       this.initTree();
     }
 
@@ -177,10 +183,11 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private renderTree(treeData: TreeStructure): void {
-    this.tree.renderTree(treeData, TreeDirection.RIGHT);
+    this.treeRight.renderTree(treeData, TreeDirection.RIGHT);
     // TODO: need to pass different data set - use the same just for testing now
-    this.tree.renderTree(treeData, TreeDirection.LEFT);
-    this.renderMinimap(treeData);
+    this.treeLeft.renderTree(treeData, TreeDirection.LEFT);
+    // TODO:  fix minimap
+    // this.renderMinimap(treeData);
   }
 
   private renderMinimap(treeData: TreeStructure): void {
@@ -188,14 +195,16 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
     this.minimap.renderMinimap(treeData, TreeDirection.RIGHT);
-    // this.minimap.renderMinimap(treeData, TreeDirection.LEFT);
+    this.minimap.renderMinimap(treeData, TreeDirection.LEFT);
   }
 
   public increaseSize(): void {
-    this.tree.changeSize(0.1);
+    this.treeRight.changeSize(0.1);
+    this.treeLeft.changeSize(0.1);
   }
 
   public decreaseSize(): void {
-    this.tree.changeSize(-0.1);
+    this.treeRight.changeSize(-0.1);
+    this.treeLeft.changeSize(-0.1);
   }
 }

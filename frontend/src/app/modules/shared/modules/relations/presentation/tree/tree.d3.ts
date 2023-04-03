@@ -51,6 +51,7 @@ export class Tree {
 
   constructor(treeData: TreeData) {
     this.id = treeData.id;
+    console.dir(this.id);
     this.mainElement = d3.select(`#${this.id}`);
 
     this.width = HelperD3.calculateWidth(this.mainElement);
@@ -68,7 +69,7 @@ export class Tree {
   public renderTree(data: TreeStructure, direction: TreeDirection): TreeSvg {
     const root = d3.hierarchy(data);
 
-    let svg = d3.select(`#${this.id}-svg--` + direction) as TreeSvg;
+    let svg = d3.select(`#${this.id}-svg`) as TreeSvg;
     if (svg.empty()) svg = this.creatMainSvg();
 
     d3.tree().nodeSize([this.r * 3, 250])(root);
