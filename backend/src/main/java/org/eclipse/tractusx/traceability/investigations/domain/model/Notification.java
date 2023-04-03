@@ -216,15 +216,16 @@ public class Notification {
     }
 
 
-    public Notification copy() {
+    // Important - receiver and sender will be saved in switched order
+    public Notification copyAndSwitchSenderAndReceiver() {
         final String notificationId = UUID.randomUUID().toString();
         return new Notification(
                 notificationId,
-                notificationReferenceId,
-                senderBpnNumber,
-                senderManufacturerName,
+                null,
                 receiverBpnNumber,
                 receiverManufacturerName,
+                senderBpnNumber,
+                senderManufacturerName,
                 edcUrl,
                 contractAgreementId,
                 description,
