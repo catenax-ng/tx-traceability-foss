@@ -29,13 +29,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.AssetEntity;
 import org.eclipse.tractusx.traceability.infrastructure.jpa.investigation.InvestigationEntity;
+import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -71,6 +74,9 @@ public class NotificationEntity {
     private Instant targetDate;
     private Severity severity;
     private String edcNotificationId;
+    private LocalDateTime created;
+    private LocalDateTime updated;
+    private InvestigationStatus status;
 
     public NotificationEntity() {
     }
@@ -84,7 +90,8 @@ public class NotificationEntity {
                               String notificationReferenceId,
                               Instant targetDate,
                               Severity severity,
-                              String edcNotificationId) {
+                              String edcNotificationId,
+                              InvestigationStatus status) {
         this.investigation = investigation;
         this.senderBpnNumber = senderBpnNumber;
         this.senderManufacturerName = senderManufacturerName;
@@ -95,6 +102,13 @@ public class NotificationEntity {
         this.targetDate = targetDate;
         this.severity = severity;
         this.edcNotificationId = edcNotificationId;
+        this.created = LocalDateTime.now();
+        this.status = status;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updated = LocalDateTime.now();
     }
 
     public String getId() {
@@ -199,5 +213,29 @@ public class NotificationEntity {
 
     public void setEdcNotificationId(String edcNotificationId) {
         this.edcNotificationId = edcNotificationId;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public LocalDateTime getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(LocalDateTime updated) {
+        this.updated = updated;
+    }
+
+    public InvestigationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(InvestigationStatus status) {
+        this.status = status;
     }
 }

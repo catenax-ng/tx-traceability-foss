@@ -43,9 +43,11 @@ import java.lang.invoke.MethodHandles;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -116,7 +118,9 @@ public class InvestigationsPublisherService {
                 asset.getValue().stream().map(Asset::getId).map(AffectedPart::new).toList(),
                 targetDate,
                 severity,
-                notificationId
+                notificationId,
+                null,
+                null
         );
     }
 
@@ -215,11 +219,16 @@ public class InvestigationsPublisherService {
             if (notificationGroup.isEmpty()) {
                 notificationGroup.add(notification);
             } else {
-                Notification highestStatusNotification = notificationGroup.get(0);
-                if (notification.getInvestigationStatus().ordinal() > highestStatusNotification.getInvestigationStatus().ordinal()) {
+                Notification latestNotification = notificationGroup.stream().max(Comparator.comparing(Notification::getCreated)).orElse(null);
+
+                if (latestNotification == null){
+                    throw new IllegalArgumentException("Two notifications with same edcNotificationId have the same status. This can be happen on old datasets.");
+                }
+
+                if (notification.getCreated().isAfter(latestNotification.getCreated())) {
                     notificationGroup.clear();
                     notificationGroup.add(notification);
-                } else if (notification.getInvestigationStatus().ordinal() == highestStatusNotification.getInvestigationStatus().ordinal()) {
+                } else if (notification.getCreated().isEqual(latestNotification.getCreated())) {
                     throw new IllegalArgumentException("Two notifications with same edcNotificationId have the same status. This can be happen on old datasets.");
                 }
             }
@@ -231,11 +240,5 @@ public class InvestigationsPublisherService {
             latestNotificationElements.addAll(notificationGroup);
         }
         return latestNotificationElements;
-    }
-
-    private List<Notification> invalidNotifications(final Investigation investigation, final BPN applicationBpn) {
-        final String applicationBpnValue = applicationBpn.value();
-        return investigation.getNotifications().stream()
-                .filter(notification -> !notification.getReceiverBpnNumber().equals(applicationBpnValue)).toList();
     }
 }

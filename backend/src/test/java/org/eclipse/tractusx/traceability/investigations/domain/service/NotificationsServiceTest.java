@@ -60,6 +60,8 @@ class NotificationsServiceTest {
                 null,
                 Instant.now(),
                 Severity.MINOR,
+                null,
+                null,
                 null
 		);
 

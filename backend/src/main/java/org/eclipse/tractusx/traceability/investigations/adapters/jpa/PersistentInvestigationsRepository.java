@@ -252,7 +252,9 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
                         .toList(),
                 notificationEntity.getTargetDate(),
                 notificationEntity.getSeverity(),
-                notificationEntity.getEdcNotificationId()
+                notificationEntity.getEdcNotificationId(),
+                notificationEntity.getCreated(),
+                notificationEntity.getUpdated()
         );
     }
 
@@ -274,7 +276,8 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
                 notification.getNotificationReferenceId(),
                 notification.getTargetDate(),
                 notification.getSeverity(),
-                notification.getEdcNotificationId()
+                notification.getEdcNotificationId(),
+                notification.getInvestigationStatus()
         );
     }
 

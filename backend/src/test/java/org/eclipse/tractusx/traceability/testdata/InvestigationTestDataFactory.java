@@ -31,7 +31,9 @@ public class InvestigationTestDataFactory {
                 List.of(new AffectedPart("part123")),
                 Instant.now(),
                 Severity.MINOR,
-                "1"
+                "1",
+                null,
+                null
 		));
 
 		return new Investigation(
@@ -100,7 +102,9 @@ public class InvestigationTestDataFactory {
                 List.of(new AffectedPart("part123")),
                 Instant.now(),
                 Severity.MINOR,
-                "123"
+                "123",
+                null,
+                null
 		));
 
 		return new Investigation(

@@ -61,7 +61,9 @@ public class NotificationMapper {
                 edcNotification.getListOfAffectedItems(),
                 edcNotification.getTargetDate(),
                 Severity.valueOf(edcNotification.getSeverity()),
-                edcNotification.getNotificationId()
+                edcNotification.getNotificationId(),
+                null,
+                null
         );
     }
 

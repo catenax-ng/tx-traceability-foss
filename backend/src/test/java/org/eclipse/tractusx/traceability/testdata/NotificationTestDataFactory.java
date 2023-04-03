@@ -26,7 +26,9 @@ public class NotificationTestDataFactory {
                 affectedParts,
                 Instant.parse("2022-03-01T12:00:00Z"),
                 Severity.MINOR,
-                "123"
+                "123",
+                null,
+                null
         );
     }
 }

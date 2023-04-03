@@ -25,6 +25,7 @@ import com.nimbusds.oauth2.sdk.util.StringUtils;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.NotificationStatusTransitionNotAllowed;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,8 @@ public class Notification {
     private String description;
     private InvestigationStatus investigationStatus;
     private String edcNotificationId;
-
+    private LocalDateTime created;
+    private LocalDateTime updated;
 
     private Instant targetDate;
 
@@ -62,7 +64,9 @@ public class Notification {
                         List<AffectedPart> affectedParts,
                         Instant targetDate,
                         Severity severity,
-                        String edcNotificationId) {
+                        String edcNotificationId,
+                        LocalDateTime created,
+                        LocalDateTime updated) {
         this.id = id;
         this.notificationReferenceId = notificationReferenceId;
         this.senderBpnNumber = senderBpnNumber;
@@ -77,6 +81,8 @@ public class Notification {
         this.targetDate = targetDate;
         this.severity = severity;
         this.edcNotificationId = edcNotificationId;
+        this.created = created;
+        this.updated = updated;
     }
 
     void changeStatusTo(InvestigationStatus to) {
@@ -176,6 +182,22 @@ public class Notification {
         this.notificationReferenceId = notificationReferenceId;
     }
 
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public LocalDateTime getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(LocalDateTime updated) {
+        this.updated = updated;
+    }
+
     public String getEdcNotificationId() {
         return edcNotificationId;
     }
@@ -185,21 +207,24 @@ public class Notification {
     }
 
 
-
     public Notification copy(String senderBpnNumber, String receiverBpnNumber) {
         return new Notification(
                 id,
                 notificationReferenceId,
                 senderBpnNumber,
-                senderManufacturerName, receiverBpnNumber,
-                receiverManufacturerName, edcUrl,
+                senderManufacturerName,
+                receiverBpnNumber,
+                receiverManufacturerName,
+                edcUrl,
                 contractAgreementId,
                 description,
                 investigationStatus,
                 affectedParts,
                 targetDate,
                 severity,
-                edcNotificationId
+                edcNotificationId,
+                created,
+                updated
         );
     }
 
@@ -218,6 +243,8 @@ public class Notification {
                 ", description='" + description + '\'' +
                 ", investigationStatus=" + investigationStatus +
                 ", edcNotificationId='" + edcNotificationId + '\'' +
+                ", created=" + created +
+                ", updated=" + updated +
                 ", targetDate=" + targetDate +
                 ", severity=" + severity +
                 '}';
