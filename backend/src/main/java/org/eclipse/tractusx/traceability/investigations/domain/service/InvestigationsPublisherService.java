@@ -169,7 +169,7 @@ public class InvestigationsPublisherService {
         validate(applicationBpn, status, investigation);
 
         List<Notification> allLatestNotificationForEdcNotificationId = getAllLatestNotificationForEdcNotificationId(investigation);
-
+        List<Notification> notificationsToSend = new ArrayList<>();
         logger.info("::updateInvestigationPublisher::allLatestNotificationForEdcNotificationId {}", allLatestNotificationForEdcNotificationId);
         allLatestNotificationForEdcNotificationId.forEach(notification -> {
             Notification notificationToSend = notification.copyAndSwitchSenderAndReceiver(applicationBpn);
@@ -182,9 +182,10 @@ public class InvestigationsPublisherService {
             }
             logger.info("::updateInvestigationPublisher::notificationToSend {}", notificationToSend);
             investigation.addNotification(notificationToSend);
-            notificationsService.updateAsync(notificationToSend);
+            notificationsToSend.add(notificationToSend);
         });
         repository.update(investigation);
+        notificationsToSend.forEach(notificationsService::updateAsync);
     }
 
     private void validate(BPN applicationBpn, InvestigationStatus status, Investigation investigation) {
