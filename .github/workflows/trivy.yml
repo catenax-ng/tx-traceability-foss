@@ -131,15 +131,6 @@ jobs:
       actions: read
       contents: read
       security-events: write
-  Publish-docker-image:
-    needs: ["Test-and-Sonar"]
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - name: Checkout repository
@@ -151,7 +142,7 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Build and push docker image
+      - name: Locally build docker image
         run: mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn --batch-mode -DskipTests=true install jib:dockerBuild -Dimage=${{ env.REGISTRY }}/${{ github.repository }}:trivy
 
       - name: Run Trivy vulnerability scanner
