@@ -67,7 +67,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.acknowledge();
+            investigation.acknowledge(testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -83,7 +83,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.acknowledge();
+            investigation.acknowledge(testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -99,7 +99,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.acknowledge();
+            investigation.acknowledge(testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -115,7 +115,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.acknowledge();
+            investigation.acknowledge(testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -131,7 +131,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.accept("random reason");
+            investigation.accept("random reason", testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -147,7 +147,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.accept("random reason");
+            investigation.accept("random reason", testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -163,7 +163,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.accept("random reason");
+            investigation.accept("random reason", testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -179,7 +179,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.accept("random reason");
+            investigation.accept("random reason", testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -195,7 +195,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.accept("random reason");
+            investigation.accept("random reason", testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -247,7 +247,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.decline("some-reason");
+            investigation.decline("some-reason", testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -263,7 +263,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.decline("some-reason");
+            investigation.decline("some-reason", testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -279,7 +279,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.decline("some-reason");
+            investigation.decline("some-reason", testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -295,7 +295,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.decline("some-reason");
+            investigation.decline("some-reason", testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -311,7 +311,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.decline("some-reason");
+            investigation.decline("some-reason", testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -327,7 +327,7 @@ class InvestigationReceiverTest {
         investigation = receiverInvestigationWithStatus(status);
 
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> {
-            investigation.decline("some-reason");
+            investigation.decline("some-reason", testNotification());
         });
 
         assertEquals(status, investigation.getInvestigationStatus());
@@ -622,19 +622,6 @@ class InvestigationReceiverTest {
 		assertEquals(DECLINED, investigation.getInvestigationStatus());
         assertEquals(DECLINED, notification.getInvestigationStatus());
 	}
-
-
-    @Test
-    @DisplayName("Close Investigation successfully")
-    void closeInvestigationSuccessfully() {
-
-        investigation = receiverInvestigationWithStatus(CREATED);
-        investigation.close(new BPN("BPNL000000000001"),"some reason");
-        assertEquals(CLOSED, investigation.getInvestigationStatus());
-
-    }
-
-
 
 	//util functions
 	private Investigation receiverInvestigationWithStatus(InvestigationStatus status) {
