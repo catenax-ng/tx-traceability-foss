@@ -125,7 +125,7 @@ jobs:
     defaults:
       run:
         working-directory: backend
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: always()
     needs: [prepare-env-backend]
     permissions:
       actions: read
