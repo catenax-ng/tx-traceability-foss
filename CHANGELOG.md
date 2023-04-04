@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 ### Changed
+- Updated org.springframework/spring-expression from 6.0.6 to 6.0.7
+- Updated net.minidev/json-smart from 2.4.8 to 2.4.10
 
 ## [3.1.0] - 2023-04-03
 
