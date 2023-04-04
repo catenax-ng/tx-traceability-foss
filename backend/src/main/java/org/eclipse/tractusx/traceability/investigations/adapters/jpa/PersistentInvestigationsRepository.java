@@ -195,7 +195,8 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
 
     private void handleNotificationCreate(InvestigationEntity investigationEntity, Notification notificationDomain, List<AssetEntity> assetEntities) {
         NotificationEntity notificationEntity = toNotificationEntity(investigationEntity, notificationDomain, assetEntities);
-        notificationRepository.save(notificationEntity);
+        NotificationEntity savedEntity = notificationRepository.save(notificationEntity);
+        logger.info("Successfully persisted notification entity {}", savedEntity);
     }
 
     private boolean notificationExists(InvestigationEntity investigationEntity, String notificationId) {
@@ -269,6 +270,7 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
         }
 
         return new NotificationEntity(
+                notification.getId(),
                 investigationEntity,
                 notification.getSenderBpnNumber(),
                 notification.getSenderManufacturerName(),
