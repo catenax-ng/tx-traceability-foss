@@ -47,6 +47,7 @@ export interface TreeStructure {
 
 export interface TreeData {
   id: string;
+  parentId: string;
   treeId?: string;
   r?: number;
   defaultZoom?: number;

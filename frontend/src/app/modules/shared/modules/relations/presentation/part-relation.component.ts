@@ -136,15 +136,24 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private initTree(): void {
-    const treeConfig: TreeData = {
-      id: this.htmlId,
+    const treeConfigRight: TreeData = {
+      id: this.htmlId + TreeDirection.RIGHT,
+      parentId: this.htmlId,
       openDetails: this.isStandalone ? this.openDetails.bind(this) : _ => null,
       defaultZoom: this.isStandalone ? 1 : 0.7,
       updateChildren: this.updateChildren.bind(this),
     };
 
-    this.treeRight = new Tree(treeConfig);
-    this.treeLeft = new Tree(treeConfig);
+    const treeConfigLeft: TreeData = {
+      id: this.htmlId + TreeDirection.LEFT,
+      parentId: this.htmlId,
+      openDetails: this.isStandalone ? this.openDetails.bind(this) : _ => null,
+      defaultZoom: this.isStandalone ? 1 : 0.7,
+      updateChildren: this.updateChildren.bind(this),
+    };
+
+    this.treeRight = new Tree(treeConfigRight);
+    this.treeLeft = new Tree(treeConfigLeft);
 
     if (!this.showMiniMap) {
       return;
