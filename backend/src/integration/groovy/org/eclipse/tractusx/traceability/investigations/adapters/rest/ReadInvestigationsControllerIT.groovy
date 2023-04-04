@@ -103,11 +103,11 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
 
 		and:
 			storedNotifications(
-				new NotificationEntity(firstInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
-				new NotificationEntity(secondInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
-				new NotificationEntity(thirdInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
-				new NotificationEntity(fourthInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
-				new NotificationEntity(fifthInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null)
+				new NotificationEntity("1", firstInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
+				new NotificationEntity("2", secondInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
+				new NotificationEntity("3", thirdInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
+				new NotificationEntity("4", fourthInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
+				new NotificationEntity("5", fifthInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null)
 			)
 
 		expect:
@@ -169,6 +169,7 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
 			(101..200).each { it ->
 				storedNotification(
 					new NotificationEntity(
+                            "1",
 						new InvestigationEntity([], testBpn, InvestigationStatus.RECEIVED, InvestigationSide.RECEIVER, "", "", now),
 						senderBPN,
                         senderName,
@@ -222,11 +223,11 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
 
 		and:
 			storedNotifications(
-				new NotificationEntity(firstInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
-				new NotificationEntity(secondInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
-				new NotificationEntity(thirdInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
-				new NotificationEntity(fourthInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
-				new NotificationEntity(fifthInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null)
+				new NotificationEntity("1", firstInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
+				new NotificationEntity("2", secondInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
+				new NotificationEntity("3", thirdInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
+				new NotificationEntity("4", fourthInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null),
+				new NotificationEntity("5", fifthInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null)
 			)
 
 		expect:
@@ -275,7 +276,7 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
 			InvestigationEntity investigationEntity = new InvestigationEntity([], testBpn, "1", InvestigationStatus.RECEIVED, InvestigationSide.SENDER, Instant.now())
 
 		and:
-			storedNotification(new NotificationEntity(investigationEntity, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null))
+			storedNotification(new NotificationEntity("1", investigationEntity, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null))
 
 		and:
 			Long investigationId = investigationEntity.getId()

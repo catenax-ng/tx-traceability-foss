@@ -70,6 +70,7 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
         given:
         defaultAssetsStored()
         NotificationEntity notification = new NotificationEntity(
+"1",
                 null,
                 "senderBpnNumber",
                 "senderManufacturerName",
