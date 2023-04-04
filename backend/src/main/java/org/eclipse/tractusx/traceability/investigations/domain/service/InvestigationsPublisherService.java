@@ -172,7 +172,7 @@ public class InvestigationsPublisherService {
 
         logger.info("::updateInvestigationPublisher::allLatestNotificationForEdcNotificationId {}", allLatestNotificationForEdcNotificationId);
         allLatestNotificationForEdcNotificationId.forEach(notification -> {
-            Notification notificationToSend = notification.copyAndSwitchSenderAndReceiver();
+            Notification notificationToSend = notification.copyAndSwitchSenderAndReceiver(applicationBpn);
             switch (status) {
                 case ACKNOWLEDGED -> investigation.acknowledge(notificationToSend);
                 case ACCEPTED -> investigation.accept(reason, notificationToSend);
@@ -182,10 +182,9 @@ public class InvestigationsPublisherService {
             }
             logger.info("::updateInvestigationPublisher::notificationToSend {}", notificationToSend);
             investigation.addNotification(notificationToSend);
-            repository.update(investigation);
             notificationsService.updateAsync(notificationToSend);
         });
-
+        repository.update(investigation);
     }
 
     private void validate(BPN applicationBpn, InvestigationStatus status, Investigation investigation) {

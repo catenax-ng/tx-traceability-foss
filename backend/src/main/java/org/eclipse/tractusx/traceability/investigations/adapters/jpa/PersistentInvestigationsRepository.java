@@ -88,6 +88,12 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
         InvestigationEntity investigationEntity = investigationRepository.findById(investigation.getId().value())
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Investigation with id %s not found!", investigation.getId().value())));
 
+        investigationEntity.setStatus(investigation.getInvestigationStatus());
+        investigationEntity.setUpdated(clock.instant());
+        investigationEntity.setCloseReason(investigation.getCloseReason());
+        investigationEntity.setAcceptReason(investigation.getAcceptReason());
+        investigationEntity.setDeclineReason(investigation.getDeclineReason());
+
         handleNotificationUpdate(investigationEntity, investigation);
         investigationRepository.save(investigationEntity);
 
@@ -167,11 +173,6 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
     }
 
     private void handleNotificationUpdate(InvestigationEntity investigationEntity, Investigation investigation) {
-        investigationEntity.setStatus(investigation.getInvestigationStatus());
-        investigationEntity.setUpdated(clock.instant());
-        investigationEntity.setCloseReason(investigation.getCloseReason());
-        investigationEntity.setAcceptReason(investigation.getAcceptReason());
-        investigationEntity.setDeclineReason(investigation.getDeclineReason());
 
         List<NotificationEntity> notificationEntities = new ArrayList<>(investigationEntity.getNotifications());
         Map<String, NotificationEntity> notificationEntityMap = notificationEntities.stream().collect(Collectors.toMap(NotificationEntity::getId, notificationEntity -> notificationEntity));
