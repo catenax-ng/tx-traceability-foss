@@ -19,8 +19,10 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.query;
+package org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.transfer;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,32 +31,39 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class CriterionTest {
+class DataAddressTest {
 
-    private static final String LEFT = "abc";
-    private static final String OP_EQUALS = "=";
-    private static final String RIGHT = "xyz";
+    public static final String type = "type";
+    public static final String property = "property";
+    public static final String keyName = "keyName";
+    private static final Map<String, String> properties = new HashMap<>();
 
-    private Criterion criterion;
+    private DataAddress dataAddress;
 
     @BeforeEach
     void setUp() {
-        criterion = new Criterion(CriterionTest.LEFT, CriterionTest.OP_EQUALS, CriterionTest.RIGHT);
+        properties.put(property, property);
+        properties.put(keyName, keyName);
+        dataAddress = DataAddress.Builder.newInstance()
+                .type(type)
+                .property(property, property)
+                .properties(properties)
+                .build();
     }
 
     @Test
-    void getOperandLeft() {
-        assertEquals(CriterionTest.LEFT, criterion.getOperandLeft());
+    void getType() {
+        assertEquals(type, dataAddress.getType());
     }
 
     @Test
-    void getOperator() {
-        assertEquals(CriterionTest.OP_EQUALS, criterion.getOperator());
+    void getProperty() {
+        assertEquals(property, dataAddress.getProperty(property));
     }
 
     @Test
-    void getOperandRight() {
-        assertEquals(CriterionTest.RIGHT, criterion.getOperandRight());
+    void getKeyName() {
+        assertEquals(keyName, dataAddress.getKeyName());
     }
 
 }
