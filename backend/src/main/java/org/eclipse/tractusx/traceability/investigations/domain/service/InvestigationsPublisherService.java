@@ -182,9 +182,10 @@ public class InvestigationsPublisherService {
             }
             logger.info("::updateInvestigationPublisher::notificationToSend {}", notificationToSend);
             investigation.addNotification(notificationToSend);
+            repository.update(investigation);
             notificationsService.updateAsync(notificationToSend);
         });
-        repository.update(investigation);
+
     }
 
     private void validate(BPN applicationBpn, InvestigationStatus status, Investigation investigation) {
