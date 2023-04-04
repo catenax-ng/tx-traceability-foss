@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 - Some unit tests for better code quality
--
+
 ### Changed
 - Fixed edc notification flow bug
 - Updated org.springframework/spring-expression from 6.0.6 to 6.0.7
