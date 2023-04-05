@@ -474,7 +474,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- plugin>
+            <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>${spotbugs-plugin.version}</version>
@@ -500,7 +500,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin -->
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
