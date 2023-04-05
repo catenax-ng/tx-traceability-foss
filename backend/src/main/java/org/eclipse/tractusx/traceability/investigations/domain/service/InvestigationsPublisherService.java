@@ -152,7 +152,7 @@ public class InvestigationsPublisherService {
         investigation.send(applicationBpn);
         repository.update(investigation);
         // For each asset within investigation a notification was created before
-        investigation.getNotifications().forEach(notificationsService::updateAsync);
+        investigation.getNotifications().forEach(notificationsService::createAsync);
     }
 
     /**

@@ -78,7 +78,7 @@ public class InvestigationsEDCFacade {
 			notification.setEdcUrl(receiverEdcUrl);
 
 			logger.info(":::: Find Notification contract method[startEDCTransfer] senderEdcUrl :{}, receiverEdcUrl:{}", senderEdcUrl, receiverEdcUrl);
-			Optional<ContractOffer> contractOffer = edcService.findNotificationContractOffer(
+			Optional<ContractOffer> contractOffer = edcService.findNotificationContractOfferReceive(
 				senderEdcUrl,
 				receiverEdcUrl + edcProperties.getIdsPath(),
 				header
@@ -148,6 +148,84 @@ public class InvestigationsEDCFacade {
 			Thread.currentThread().interrupt();
 		}
 	}
+
+    public void updateEDCTransfer(Notification notification, String receiverEdcUrl, String senderEdcUrl) {
+        Map<String, String> header = new HashMap<>();
+        header.put("x-api-key", edcProperties.getApiAuthKey());
+        try {
+            notification.setEdcUrl(receiverEdcUrl);
+
+            logger.info(":::: Find Notification contract method[startEDCTransfer] senderEdcUrl :{}, receiverEdcUrl:{}", senderEdcUrl, receiverEdcUrl);
+            Optional<ContractOffer> contractOffer = edcService.findNotificationContractOfferUpdate(
+                    senderEdcUrl,
+                    receiverEdcUrl + edcProperties.getIdsPath(),
+                    header
+            );
+
+            if (contractOffer.isEmpty()) {
+                logger.info("No Notification contractOffer found");
+                throw new BadRequestException("No notification contract offer found.");
+            }
+
+            logger.info(":::: Initialize Contract Negotiation method[startEDCTransfer] senderEdcUrl :{}, receiverEdcUrl:{}", senderEdcUrl, receiverEdcUrl);
+            String agreementId = edcService.initializeContractNegotiation(
+                    receiverEdcUrl,
+                    contractOffer.get().getAsset().getId(),
+                    contractOffer.get().getId(),
+                    contractOffer.get().getPolicy(),
+                    senderEdcUrl,
+                    header
+            );
+
+            endpointDataReferenceCache.storeAgreementId(agreementId);
+            logger.info(":::: Contract Agreed method[startEDCTransfer] agreementId :{}", agreementId);
+
+            if (StringUtils.hasLength(agreementId)) {
+                notification.setContractAgreementId(agreementId);
+            }
+
+            EndpointDataReference dataReference = endpointDataReferenceCache.get(agreementId);
+            boolean validDataReference = dataReference != null && InMemoryEndpointDataReferenceCache.endpointDataRefTokenExpired(dataReference);
+            if (!validDataReference) {
+                logger.info(":::: Invalid Data Reference :::::");
+                if (dataReference != null) {
+                    endpointDataReferenceCache.remove(agreementId);
+                }
+
+                logger.info(":::: initialize Transfer process with http Proxy :::::");
+                // Initiate transfer process
+                edcService.initiateHttpProxyTransferProcess(agreementId, contractOffer.get().getAsset().getId(),
+                        senderEdcUrl,
+                        receiverEdcUrl + edcProperties.getIdsPath(),
+                        header
+                );
+                dataReference = getDataReference(agreementId);
+            }
+
+            EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(senderEdcUrl, notification);
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            String body = objectMapper.writeValueAsString(edcNotification);
+            HttpUrl url = httpCallService.getUrl(dataReference.getEndpoint(), null, null);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader(dataReference.getAuthKey(), dataReference.getAuthCode())
+                    .addHeader("Content-Type", Constants.JSON.type())
+                    .post(RequestBody.create(body, Constants.JSON))
+                    .build();
+
+            logger.info(":::: Send notification Data  body :{}, dataReferenceEndpoint :{}", body, dataReference.getEndpoint());
+            httpCallService.sendRequest(request);
+
+            logger.info(":::: EDC Data Transfer Completed :::::");
+        } catch (IOException e) {
+            logger.error("EDC Data Transfer fail", e);
+
+            throw new BadRequestException("EDC Data Transfer fail");
+        } catch (InterruptedException e) {
+            logger.error("Exception", e);
+            Thread.currentThread().interrupt();
+        }
+    }
 
 	private EndpointDataReference getDataReference(String agreementId) throws InterruptedException {
 		EndpointDataReference dataReference = null;

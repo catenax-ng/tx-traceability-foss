@@ -65,7 +65,7 @@ public class EdcService {
 	/**
 	 * Rest call to get all contract offer and filter notification type contract
 	 */
-	public Optional<ContractOffer> findNotificationContractOffer(
+	public Optional<ContractOffer> findNotificationContractOfferUpdate(
 		String consumerEdcDataManagementUrl,
 		String providerConnectorControlPlaneIDSUrl,
 		Map<String, String> header
@@ -81,6 +81,22 @@ public class EdcService {
 			.filter(it -> isPropertyQualityInvestigationType(it.getAsset()) && isPropertyUpdateNotificationMethod(it.getAsset())).findAny();
 	}
 
+    public Optional<ContractOffer> findNotificationContractOfferReceive(
+            String consumerEdcDataManagementUrl,
+            String providerConnectorControlPlaneIDSUrl,
+            Map<String, String> header
+    ) throws IOException {
+        Catalog catalog = httpCallService.getCatalogFromProvider(consumerEdcDataManagementUrl, providerConnectorControlPlaneIDSUrl, header);
+        if (catalog.getContractOffers().isEmpty()) {
+            logger.error("No contract found");
+            throw new BadRequestException("Provider has no contract offers for us. Catalog is empty.");
+        }
+        logger.info(":::: Find Notification contract method[findNotificationContractOffer] total catalog ::{}", catalog.getContractOffers().size());
+
+        return catalog.getContractOffers().stream()
+                .filter(it -> isPropertyQualityInvestigationType(it.getAsset()) && isPropertyReceiveNotificationMethod(it.getAsset())).findAny();
+    }
+
 	private boolean isPropertyQualityInvestigationType(Asset asset) {
 
 		String formatted = String.format(":::: Asset %s has value %s", Constants.ASSET_KEY_NOTIFICATION_TYPE, asset.getPropertyNotificationType());
@@ -95,7 +111,15 @@ public class EdcService {
 
 	}
 
-	/**
+    private boolean isPropertyReceiveNotificationMethod(Asset asset) {
+        String formatted = String.format(":::: Asset isPropertyReceiveNotificationMethod %s has value %s", "asset:prop:notificationmethod", asset.getPropertyNotificationMethod());
+        logger.info(formatted);
+        return Constants.ASSET_VALUE_NOTIFICATION_METHOD_RECEIVE.equals(asset.getPropertyNotificationMethod());
+
+    }
+
+
+    /**
 	 * Prepare for contract negotiation. it will wait for while till API return agreementId
 	 */
 	public String initializeContractNegotiation(String providerConnectorUrl, String assetId, String offerId, Policy policy, String consumerEdcUrl,

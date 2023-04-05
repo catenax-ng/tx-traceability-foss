@@ -57,8 +57,22 @@ public class NotificationsService {
 
 		for (String receiverEdcUrl : receiverEdcUrls) {
             logger.info("::updateAsync::notificationToSend {}", notification);
-			edcFacade.startEDCTransfer(notification, receiverEdcUrl, senderEdcUrl);
+			edcFacade.updateEDCTransfer(notification, receiverEdcUrl, senderEdcUrl);
 			repository.update(notification);
 		}
 	}
+
+    @Async(value = AssetsAsyncConfig.UPDATE_NOTIFICATION_EXECUTOR)
+    public void createAsync(Notification notification) {
+        logger.info("::createAsync::notification {}", notification);
+        String senderEdcUrl = edcUrlProvider.getSenderUrl();
+
+        List<String> receiverEdcUrls = edcUrlProvider.getEdcUrls(notification.getReceiverBpnNumber());
+
+        for (String receiverEdcUrl : receiverEdcUrls) {
+            logger.info("::createAsync::notificationToSend {}", notification);
+            edcFacade.startEDCTransfer(notification, receiverEdcUrl, senderEdcUrl);
+            repository.update(notification);
+        }
+    }
 }
