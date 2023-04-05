@@ -152,7 +152,8 @@ public class InvestigationsPublisherService {
         investigation.send(applicationBpn);
         repository.update(investigation);
         // For each asset within investigation a notification was created before
-        investigation.getNotifications().forEach(notificationsService::updateAsync);
+        final boolean isInitialNotification = true;
+        investigation.getNotifications().forEach(notification -> notificationsService.asyncNotificationExecutor(notification, isInitialNotification));
     }
 
     /**
@@ -185,7 +186,8 @@ public class InvestigationsPublisherService {
             notificationsToSend.add(notificationToSend);
         });
         repository.update(investigation);
-        notificationsToSend.forEach(notificationsService::updateAsync);
+        final boolean isInitialNotification = false;
+        notificationsToSend.forEach(notification -> notificationsService.asyncNotificationExecutor(notification, isInitialNotification));
     }
 
     private void validate(BPN applicationBpn, InvestigationStatus status, Investigation investigation) {

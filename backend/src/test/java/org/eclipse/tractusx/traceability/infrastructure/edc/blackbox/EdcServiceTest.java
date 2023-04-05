@@ -59,7 +59,7 @@ class EdcServiceTest {
 		when(httpCallService.getCatalogFromProvider(CONSUMER_EDC_DATA_MANAGEMENT_URL, PROVIDER_CONNECTOR_CONTROL_PLANE_IDS_URL, header)).thenReturn(catalog);
 
 		// when
-		Optional<ContractOffer> contractOfferResult = edcService.findNotificationContractOffer(CONSUMER_EDC_DATA_MANAGEMENT_URL, PROVIDER_CONNECTOR_CONTROL_PLANE_IDS_URL, header);
+		Optional<ContractOffer> contractOfferResult = edcService.findNotificationContractOffer(CONSUMER_EDC_DATA_MANAGEMENT_URL, PROVIDER_CONNECTOR_CONTROL_PLANE_IDS_URL, header, false);
 
 		// then
 		assertTrue(contractOfferResult.isPresent());
@@ -88,7 +88,7 @@ class EdcServiceTest {
 		when(httpCallService.getCatalogFromProvider(CONSUMER_EDC_DATA_MANAGEMENT_URL, PROVIDER_CONNECTOR_CONTROL_PLANE_IDS_URL, header)).thenReturn(catalog);
 
 		// when
-		Optional<ContractOffer> contractOfferResult = edcService.findNotificationContractOffer(CONSUMER_EDC_DATA_MANAGEMENT_URL, PROVIDER_CONNECTOR_CONTROL_PLANE_IDS_URL, header);
+		Optional<ContractOffer> contractOfferResult = edcService.findNotificationContractOffer(CONSUMER_EDC_DATA_MANAGEMENT_URL, PROVIDER_CONNECTOR_CONTROL_PLANE_IDS_URL, header, false);
 
 		// then
 		assertTrue(contractOfferResult.isEmpty());

@@ -73,7 +73,7 @@ class InvestigationsReceiverServiceTest {
 		when(mockInvestigationMapper.toInvestigation(any(BPN.class), anyString(), any(Notification.class))).thenReturn(investigationTestData);
 
 		// When
-		service.handleNotificationReceiverCallback(edcNotification);
+		service.handleNotificationReceive(edcNotification);
 		// Then
 		Mockito.verify(mockRepository).save(investigationTestData);
 	}

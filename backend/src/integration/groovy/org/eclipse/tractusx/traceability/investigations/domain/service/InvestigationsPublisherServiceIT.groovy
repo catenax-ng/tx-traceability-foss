@@ -73,7 +73,7 @@ class InvestigationsPublisherServiceIT extends IntegrationSpecification implemen
 			)
 
 		when:
-			investigationsReceiverService.handleNotificationReceiverCallback(notification)
+			investigationsReceiverService.handleNotificationReceive(notification)
 
 		then:
 			assertInvestigationsSize(1)
