@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Updated the Notification Publisher to request initial notifications to the /receive endpoint and updates to the related /update endpoint
 - Updated cypress-io/github-action from 5.6.0 to 5.6.1
 - Updated peaceiris/actions-gh-pages from 3.9.2 to 3.9.3
+- Upgraded base image from sha256@2b33ef284e6dc43a61903cef6d36dbce13414a9e5444e2c96cdd5e35123f9903 to: sha256@19eaf41f3b8c2ac2f609ac8103f9246a6a6d46716cdbe49103fdb116e55ff0cc
 
 ## [3.1.1] - 2023-04-04
 
