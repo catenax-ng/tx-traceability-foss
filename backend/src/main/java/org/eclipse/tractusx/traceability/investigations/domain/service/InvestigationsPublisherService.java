@@ -102,6 +102,7 @@ public class InvestigationsPublisherService {
 
     private Notification createNotification(BPN applicationBpn, String description, Instant targetDate, Severity severity, Map.Entry<String, List<Asset>> asset, InvestigationStatus investigationStatus) {
         final String notificationId = UUID.randomUUID().toString();
+        final String messageId = UUID.randomUUID().toString();
         return new Notification(
                 notificationId,
                 null,
@@ -118,7 +119,8 @@ public class InvestigationsPublisherService {
                 severity,
                 notificationId,
                 null,
-                null
+                null,
+                messageId
         );
     }
 

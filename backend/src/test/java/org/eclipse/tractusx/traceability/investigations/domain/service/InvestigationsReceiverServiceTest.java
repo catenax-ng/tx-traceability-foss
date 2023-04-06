@@ -61,7 +61,8 @@ class InvestigationsReceiverServiceTest {
                 Severity.MINOR,
                 "123",
                 null,
-                null
+                null,
+                "messageId"
         );
 
 		Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.RECEIVED, InvestigationStatus.RECEIVED, "recipientBPN");

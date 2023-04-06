@@ -80,7 +80,8 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
                 Instant.parse("2022-03-01T12:00:00Z"),
                 Severity.CRITICAL,
                 "cda2d956-fa91-4a75-bb4a-8e5ba39b268a",
-                null
+                null,
+                "messageId"
         )
 
         InvestigationEntity investigation = new InvestigationEntity(

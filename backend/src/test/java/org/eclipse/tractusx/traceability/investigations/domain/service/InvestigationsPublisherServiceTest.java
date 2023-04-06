@@ -141,7 +141,8 @@ class InvestigationsPublisherServiceTest {
                 Severity.MINOR,
                 "123",
                 LocalDateTime.now(),
-                null
+                null,
+                "messageId"
         );
 
         Notification notification2 = new Notification(
@@ -160,7 +161,8 @@ class InvestigationsPublisherServiceTest {
                 Severity.MINOR,
                 "123",
                 LocalDateTime.now().plusSeconds(10),
-                null
+                null,
+                "messageId"
         );
         List<Notification> notifications = new ArrayList<>();
         notifications.add(notification);
@@ -205,7 +207,8 @@ class InvestigationsPublisherServiceTest {
                 Severity.MINOR,
                 "123",
                 LocalDateTime.now(),
-                null
+                null,
+                "messageId"
         );
 
         Notification notification2 = new Notification(
@@ -224,7 +227,8 @@ class InvestigationsPublisherServiceTest {
                 Severity.MINOR,
                 "123",
                 LocalDateTime.now().plusSeconds(10),
-                null
+                null,
+                "messageId"
         );
         List<Notification> notifications = new ArrayList<>();
         notifications.add(notification);
@@ -269,7 +273,8 @@ class InvestigationsPublisherServiceTest {
                 Severity.MINOR,
                 "123",
                 LocalDateTime.now(),
-                null
+                null,
+                "messageId"
         );
 
         Notification notification2 = new Notification(
@@ -288,7 +293,8 @@ class InvestigationsPublisherServiceTest {
                 Severity.MINOR,
                 "123",
                 LocalDateTime.now().plusSeconds(10),
-                null
+                null,
+                "messageId"
         );
         List<Notification> notifications = new ArrayList<>();
         notifications.add(notification);
@@ -333,7 +339,8 @@ class InvestigationsPublisherServiceTest {
                 Severity.MINOR,
                 "123",
                 LocalDateTime.now(),
-                null
+                null,
+                "messageId"
         );
 
         Notification notification2 = new Notification(
@@ -352,7 +359,8 @@ class InvestigationsPublisherServiceTest {
                 Severity.MINOR,
                 "123",
                 LocalDateTime.now().plusSeconds(10),
-                null
+                null,
+                "messageId"
         );
         List<Notification> notifications = new ArrayList<>();
         notifications.add(notification);
@@ -397,7 +405,8 @@ class InvestigationsPublisherServiceTest {
                 Severity.MINOR,
                 "123",
                 null,
-                null
+                null,
+                "messageId"
         );
 
         List<Notification> notifications = new ArrayList<>();

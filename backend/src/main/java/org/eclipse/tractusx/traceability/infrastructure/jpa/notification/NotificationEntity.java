@@ -23,6 +23,7 @@ package org.eclipse.tractusx.traceability.infrastructure.jpa.notification;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -34,6 +35,7 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asse
 import org.eclipse.tractusx.traceability.infrastructure.jpa.investigation.InvestigationEntity;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -73,6 +75,7 @@ public class NotificationEntity {
     private LocalDateTime created;
     private LocalDateTime updated;
     private InvestigationStatus status;
+    private String messageId;
 
     public NotificationEntity() {
     }
@@ -88,7 +91,8 @@ public class NotificationEntity {
                               Instant targetDate,
                               Severity severity,
                               String edcNotificationId,
-                              InvestigationStatus status) {
+                              InvestigationStatus status,
+                              String messageId) {
         this.id = id;
         this.investigation = investigation;
         this.senderBpnNumber = senderBpnNumber;
@@ -102,6 +106,7 @@ public class NotificationEntity {
         this.edcNotificationId = edcNotificationId;
         this.created = LocalDateTime.now();
         this.status = status;
+        this.messageId = messageId;
     }
 
     @PreUpdate
@@ -235,5 +240,13 @@ public class NotificationEntity {
 
     public void setStatus(InvestigationStatus status) {
         this.status = status;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
+
+    public String getMessageId() {
+        return messageId;
     }
 }

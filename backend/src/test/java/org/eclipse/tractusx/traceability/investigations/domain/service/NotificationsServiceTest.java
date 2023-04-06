@@ -63,6 +63,7 @@ class NotificationsServiceTest {
                 Severity.MINOR,
                 null,
                 null,
+                null,
                 null
 		);
 

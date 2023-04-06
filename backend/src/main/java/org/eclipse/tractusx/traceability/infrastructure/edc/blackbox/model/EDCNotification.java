@@ -71,6 +71,9 @@ public record EDCNotification(@Valid
     }
 
     @JsonIgnore
+    public String getMessageId() { return header.messageId(); }
+
+    @JsonIgnore
     public String getRelatedNotificationId() {
         return header.relatedNotificationId();
     }
@@ -95,6 +98,7 @@ public record EDCNotification(@Valid
         return InvestigationStatus.fromValue(investigationStatus)
                 .orElseThrow(() -> new IllegalArgumentException("%s not supported investigation status".formatted(investigationStatus)));
     }
+
     @JsonIgnore
     public Instant getTargetDate() {
         if (header.targetDate() != null && !StringUtils.isBlank(header.targetDate())) {

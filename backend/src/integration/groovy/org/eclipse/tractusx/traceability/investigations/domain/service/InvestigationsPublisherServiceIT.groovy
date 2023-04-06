@@ -68,7 +68,8 @@ class InvestigationsPublisherServiceIT extends IntegrationSpecification implemen
 					Severity.MINOR,
                         "some-id",
                         null,
-                        null
+                        null,
+                        "messageid"
 				)
 			)
 
