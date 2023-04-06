@@ -47,7 +47,6 @@ public class NotificationMapper {
      */
     public Notification toNotification(EDCNotification edcNotification) {
         String notificationId = UUID.randomUUID().toString();
-        String messageId = UUID.randomUUID().toString();
         return new Notification(
                 notificationId,
                 edcNotification.getNotificationId(),
@@ -65,7 +64,7 @@ public class NotificationMapper {
                 edcNotification.getNotificationId(),
                 null,
                 null,
-                messageId
+                edcNotification.getMessageId()
         );
     }
 

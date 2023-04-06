@@ -48,12 +48,8 @@ public class Notification {
     private String edcNotificationId;
     private LocalDateTime created;
     private LocalDateTime updated;
-
     private Instant targetDate;
-
     private Severity severity;
-
-
     private String messageId;
 
     public Notification(String id,
@@ -232,7 +228,6 @@ public class Notification {
     // Important - receiver and sender will be saved in switched order
     public Notification copyAndSwitchSenderAndReceiver(BPN applicationBpn) {
         final String notificationId = UUID.randomUUID().toString();
-        final String messageId = UUID.randomUUID().toString();
         String receiver = receiverBpnNumber;
         String sender = senderBpnNumber;
         String receiverManufactureName = receiverManufacturerName;
@@ -262,7 +257,7 @@ public class Notification {
                 edcNotificationId,
                 created,
                 updated,
-                messageId
+                UUID.randomUUID().toString()
         );
     }
 
