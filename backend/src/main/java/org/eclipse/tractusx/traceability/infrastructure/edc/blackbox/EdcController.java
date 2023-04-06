@@ -57,26 +57,16 @@ public class EdcController {
 	@PostMapping("/qualitynotifications/receive")
 	public void qualityNotificationReceive(final @ValidEDCNotification @Valid @RequestBody EDCNotification edcNotification) {
 		logger.info("EdcController [qualityNotificationReceive] notificationId:{}", edcNotification);
-        validateIsQualityInvestigation(edcNotification);
 		investigationsReceiverService.handleNotificationReceive(edcNotification);
 	}
 
 	/**
-	 * Receiver API call for EDC Transfer
+	 * Update API call for EDC Transfer
 	 */
 	@PostMapping("/qualitynotifications/update")
 	public void qualityNotificationUpdate(final @ValidEDCNotification @Valid @RequestBody EDCNotification edcNotification) {
 		logger.info("EdcController [qualityNotificationUpdate] notificationId:{}", edcNotification);
-        validateIsQualityInvestigation(edcNotification);
 		investigationsReceiverService.handleNotificationUpdate(edcNotification);
 	}
-
-
-    private void validateIsQualityInvestigation(EDCNotification edcNotification) {
-        NotificationType notificationType = edcNotification.convertNotificationType();
-        if (!notificationType.equals(NotificationType.QMINVESTIGATION)) {
-            throw new InvestigationIllegalUpdate("Received %s classified edc notification which is not an investigation".formatted(notificationType));
-        }
-    }
 }
 
