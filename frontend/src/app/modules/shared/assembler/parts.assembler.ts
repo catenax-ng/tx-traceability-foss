@@ -54,6 +54,7 @@ export class PartsAssembler {
       qualityType: part.qualityType || QualityType.Ok,
       productionDate: new CalendarDateModel(part.manufacturingDate),
       children: part.childDescriptions.map(child => child.id),
+      parents: part.parentDescriptions?.map(parent => parent.id),
       shouldHighlight: part.underInvestigation || false,
       van: part.van || '--',
     };

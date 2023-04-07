@@ -27,20 +27,37 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class RelationComponentState {
   private readonly _openElements$: State<OpenElements> = new State<OpenElements>({});
+  private readonly _openElementsUpstream$: State<OpenElements> = new State<OpenElements>({});
 
   public get openElements$(): Observable<OpenElements> {
     return this._openElements$.observable;
+  }
+
+  public get openElementsUpstream$(): Observable<OpenElements> {
+    return this._openElementsUpstream$.observable;
   }
 
   public get openElements() {
     return this._openElements$.snapshot;
   }
 
+  public get openElementsUpstream() {
+    return this._openElementsUpstream$.snapshot;
+  }
+
   public set openElements(data: OpenElements) {
     this._openElements$.update(data);
   }
 
+  public set openElementsUpstream(data: OpenElements) {
+    this._openElementsUpstream$.update(data);
+  }
+
   public resetOpenElements(): void {
     this._openElements$.reset();
+  }
+
+  public resetOpenElementsUpstream(): void {
+    this._openElementsUpstream$.reset();
   }
 }

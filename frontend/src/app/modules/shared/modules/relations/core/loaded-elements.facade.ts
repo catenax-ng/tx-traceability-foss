@@ -22,19 +22,30 @@
 import { Injectable } from '@angular/core';
 import { LoadedElementsState } from '@shared/modules/relations/core/loaded-elements.state';
 import { RelationsAssembler } from '@shared/modules/relations/core/relations.assembler';
-import { LoadedElements, TreeElement } from '@shared/modules/relations/model/relations.model';
+import { LoadedElements, TreeDirection, TreeElement } from '@shared/modules/relations/model/relations.model';
 import { Observable } from 'rxjs';
 
 @Injectable()
 export class LoadedElementsFacade {
-  constructor(private readonly loadedElementsState: LoadedElementsState) {}
+  constructor(
+    private readonly loadedElementsState: LoadedElementsState,
+    private readonly loadedElementsStateUpstream: LoadedElementsState,
+  ) {}
 
   public get loadedElements(): LoadedElements {
     return this.loadedElementsState.loadedElements;
   }
 
+  public get loadedElementsUpstream(): LoadedElements {
+    return this.loadedElementsStateUpstream.loadedElements;
+  }
+
   public get loadedElements$(): Observable<LoadedElements> {
     return this.loadedElementsState.loadedElements$;
+  }
+
+  public get loadedElementsUpstream$(): Observable<LoadedElements> {
+    return this.loadedElementsStateUpstream.loadedElements$;
   }
 
   public addLoadedElement(element: TreeElement): void {

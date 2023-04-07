@@ -71,6 +71,7 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly partDetailsFacade: PartDetailsFacade,
     private readonly relationsFacade: RelationsFacade,
     private readonly loadedElementsFacade: LoadedElementsFacade,
+    private readonly loadedElementsFacadeUpstream: LoadedElementsFacade,
     private readonly route: ActivatedRoute,
     private readonly ngZone: NgZone,
     staticIdService: StaticIdService,
@@ -114,7 +115,7 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(
         tap(_ => this.relationsFacade.resetRelationState()),
         filter(({ data }) => !!data),
-        map(({ data }) => RelationsAssembler.assemblePartForRelation(data)),
+        map(({ data }) => RelationsAssembler.assemblePartForRelation(data, null, false)),
       )
       .subscribe({
         next: rootPart => {
@@ -127,38 +128,73 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
     const openElementsSubscription = combined
       .pipe(
         debounceTime(100),
-        tap(([openElements]) => this.renderTreeWithOpenElements(openElements)),
+        tap(([openElements]) => this.renderTreeWithOpenElements(openElements, TreeDirection.RIGHT)),
       )
       .subscribe();
 
     this.subscriptions.add(selectSubscription);
     this.subscriptions.add(openElementsSubscription);
+
+    // TODO: need to pass different data set - use the same just for testing now
+    //////////////////
+    // LEFT
+    /////////////////////
+
+    const selectSubscriptionUpstream = this.rootPart$
+      .pipe(
+        tap(_ => this.relationsFacade.resetRelationStateUpstream()),
+        filter(({ data }) => !!data),
+        map(({ data }) => RelationsAssembler.assemblePartForRelation(data, null, true)),
+      )
+      .subscribe({
+        next: rootPart => {
+          this.loadedElementsFacadeUpstream.addLoadedElement(rootPart);
+          this.relationsFacade.openElementWithChildrenUpstream(rootPart);
+        },
+      });
+
+    const combinedUpstream = combineLatest([
+      this.relationsFacade.openElementsUpstream$,
+      this.loadedElementsFacadeUpstream.loadedElementsUpstream$,
+    ]);
+    const openElementsSubscriptionUpstream = combinedUpstream
+      .pipe(
+        debounceTime(100),
+        tap(([openElements]) => this.renderTreeWithOpenElements(openElements, TreeDirection.LEFT)),
+      )
+      .subscribe();
+
+    this.subscriptions.add(selectSubscriptionUpstream);
+    this.subscriptions.add(openElementsSubscriptionUpstream);
   }
 
-  private initTree(): void {
-    const treeConfigRight: TreeData = {
-      id: this.htmlId + TreeDirection.RIGHT,
-      parentId: this.htmlId,
-      openDetails: this.isStandalone ? this.openDetails.bind(this) : _ => null,
-      defaultZoom: this.isStandalone ? 1 : 0.7,
-      updateChildren: this.updateChildren.bind(this),
-    };
+  private initTree(direction: TreeDirection): void {
+    if (direction === TreeDirection.RIGHT) {
+      const treeConfigRight: TreeData = {
+        id: this.htmlId + TreeDirection.RIGHT,
+        parentId: this.htmlId,
+        openDetails: this.isStandalone ? this.openDetails.bind(this) : _ => null,
+        defaultZoom: this.isStandalone ? 1 : 0.7,
+        updateChildren: this.updateChildren.bind(this),
+      };
+      this.treeRight = new Tree(treeConfigRight);
+    } else if (direction === TreeDirection.LEFT) {
+      const treeConfigLeft: TreeData = {
+        id: this.htmlId + TreeDirection.LEFT,
+        parentId: this.htmlId,
+        openDetails: this.isStandalone ? this.openDetails.bind(this) : _ => null,
+        defaultZoom: this.isStandalone ? 1 : 0.7,
+        updateChildren: this.updateChildrenUpstream.bind(this),
+      };
 
-    const treeConfigLeft: TreeData = {
-      id: this.htmlId + TreeDirection.LEFT,
-      parentId: this.htmlId,
-      openDetails: this.isStandalone ? this.openDetails.bind(this) : _ => null,
-      defaultZoom: this.isStandalone ? 1 : 0.7,
-      updateChildren: this.updateChildren.bind(this),
-    };
-
-    this.treeRight = new Tree(treeConfigRight);
-    this.treeLeft = new Tree(treeConfigLeft);
+      this.treeLeft = new Tree(treeConfigLeft);
+    }
 
     if (!this.showMiniMap) {
       return;
     }
 
+    // TODO: fix minimap
     this.minimap = new Minimap(this.treeRight);
     // this.minimap = new Minimap(this.treeLeft);
   }
@@ -173,30 +209,51 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  private updateChildrenUpstream({ id }: TreeElement): void {
+    // as d3.js handles rendering of relations, we can get some performance boost by avoiding
+    // all impure pipe computations as side effects for this operation
+    this.ngZone.runOutsideAngular(() => {
+      !this.relationsFacade.isElementOpenUpstream(id)
+        ? this.relationsFacade.openElementByIdUpstream(id)
+        : this.relationsFacade.closeElementByIdUpstream(id);
+    });
+  }
+
   private openDetails({ id }: TreeElement): void {
     this.subscriptions.add(this.partDetailsFacade.setPartFromTree(id).subscribe());
   }
 
-  private renderTreeWithOpenElements(openElements: OpenElements): void {
-    const treeData = this.relationsFacade.formatOpenElementsToTreeData(openElements);
+  private renderTreeWithOpenElements(openElements: OpenElements, treeDirection: TreeDirection): void {
+    let treeData;
+    if (treeDirection === TreeDirection.RIGHT) {
+      treeData = this.relationsFacade.formatOpenElementsToTreeData(openElements);
+    } else if (treeDirection === TreeDirection.LEFT) {
+      treeData = this.relationsFacade.formatOpenElementsToTreeDataUpstream(openElements);
+    }
+
     if (!treeData || !treeData.id) {
       return;
     }
 
-    if (!this.treeRight || !this.treeLeft) {
-      this.initTree();
+    // TODO: refactor
+    if (!this.treeRight) {
+      this.initTree(TreeDirection.RIGHT);
+    } else if (!this.treeLeft) {
+      this.initTree(TreeDirection.LEFT);
     }
 
-    this.treeData = treeData;
-    this.renderTree(treeData);
+    // this.treeData = treeData;
+    this.renderTree(treeData, treeDirection);
   }
 
-  private renderTree(treeData: TreeStructure): void {
-    this.treeRight.renderTree(treeData, TreeDirection.RIGHT);
-    // TODO: need to pass different data set - use the same just for testing now
-    this.treeLeft.renderTree(treeData, TreeDirection.LEFT);
+  private renderTree(treeData: TreeStructure, treeDirection: TreeDirection): void {
+    if (treeDirection === TreeDirection.RIGHT) {
+      this.treeRight.renderTree(treeData, treeDirection);
+    } else if (treeDirection === TreeDirection.LEFT) {
+      this.treeLeft.renderTree(treeData, treeDirection);
+    }
     // TODO:  fix minimap
-    // this.renderMinimap(treeData);
+    // this.renderMinimap(treeData, treeDirection);
   }
 
   private renderMinimap(treeData: TreeStructure): void {

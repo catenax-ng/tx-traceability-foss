@@ -42,6 +42,10 @@ export const mockBmwAssets = [
       { id: 'urn:uuid:0535d7a7-0fca-43a1-885d-2faa81c35097', idShort: '--' },
       { id: 'urn:uuid:79571804-2e89-452a-a80a-ebff6d94c891', idShort: '--' },
     ],
+    parentDescriptions: [
+      { id: 'urn:uuid:047fbe05-5845-4db3-97b0-731412f0d34f', idShort: '--' },
+      { id: 'urn:uuid:ea35cbd9-8a60-410f-9b5e-f5bffeb5a621', idShort: '--' },
+    ],
     qualityType: 'Ok',
     van: null,
   },

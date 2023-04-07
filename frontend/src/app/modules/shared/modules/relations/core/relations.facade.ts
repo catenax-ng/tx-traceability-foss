@@ -41,6 +41,7 @@ export class RelationsFacade {
     private readonly partsService: PartsService,
     private readonly loadedElementsFacade: LoadedElementsFacade,
     private readonly relationComponentState: RelationComponentState,
+    private readonly relationComponentStateUpstream: RelationComponentState, // TODO: do we need another instance relationComponentStateUpstream?
   ) {
     this.requestPartDetailsQueueSubscription = this.initRequestPartDetailQueue().subscribe();
   }
@@ -49,8 +50,16 @@ export class RelationsFacade {
     return this.relationComponentState.openElements$.pipe(debounceTime(100));
   }
 
+  public get openElementsUpstream$(): Observable<OpenElements> {
+    return this.relationComponentStateUpstream.openElementsUpstream$.pipe(debounceTime(100));
+  }
+
   public get openElements(): OpenElements {
     return this.relationComponentState.openElements;
+  }
+
+  public get openElementsUpstream(): OpenElements {
+    return this.relationComponentStateUpstream.openElementsUpstream;
   }
 
   // This is used to add an element with its children to the opened list
@@ -68,6 +77,20 @@ export class RelationsFacade {
     this.loadChildrenInformation(children).subscribe();
   }
 
+  public openElementWithChildrenUpstream({ id, children }: TreeElement): void {
+    const emptyChildren: OpenElements = {};
+    const childElements =
+      children?.reduce((p: OpenElements, c: string) => ({ ...p, [c]: null }), emptyChildren) || emptyChildren;
+
+    this.relationComponentState.openElementsUpstream = {
+      ...this.relationComponentState.openElementsUpstream,
+      [id]: children,
+      ...childElements,
+    };
+
+    this.loadChildrenInformation(children).subscribe();
+  }
+
   // This is only to update already opened elements.
   public updateOpenElement({ id, children }: TreeElement): void {
     if (this.openElements[id] === undefined) {
@@ -78,12 +101,50 @@ export class RelationsFacade {
     this.loadChildrenInformation(children).subscribe();
   }
 
+  public updateOpenElementUpstream({ id, children }: TreeElement): void {
+    if (this.openElementsUpstream[id] === undefined) {
+      return;
+    }
+
+    this.relationComponentState.openElementsUpstream = {
+      ...this.relationComponentState.openElementsUpstream,
+      [id]: children,
+    };
+    this.loadChildrenInformation(children).subscribe();
+  }
+
   public deleteOpenElement(id: string): void {
     this.relationComponentState.openElements = this._deleteOpenElement(id, this.relationComponentState.openElements);
   }
 
+  public deleteOpenElementUpstream(id: string): void {
+    this.relationComponentState.openElementsUpstream = this._deleteOpenElement(
+      id,
+      this.relationComponentState.openElementsUpstream,
+    );
+  }
+
   public formatOpenElementsToTreeData(openElements: OpenElements): TreeStructure {
     const loadedData = this.loadedElementsFacade.loadedElements;
+    const keyList = Object.keys(openElements).reverse();
+    const mappedData: Record<string, TreeStructure> = {};
+
+    return keyList.reduce((p, key) => {
+      const structure = RelationsAssembler.elementToTreeStructure(loadedData[key]);
+      if (!structure) {
+        return p;
+      }
+
+      structure.relations = structure.children?.length > 0 ? structure.children : null;
+      structure.children = openElements[key]?.map(id => mappedData[id] || null).filter(child => !!child) || null;
+
+      mappedData[key] = structure;
+      return structure;
+    }, {} as TreeStructure);
+  }
+
+  public formatOpenElementsToTreeDataUpstream(openElements: OpenElements): TreeStructure {
+    const loadedData = this.loadedElementsFacade.loadedElementsUpstream;
     const keyList = Object.keys(openElements).reverse();
     const mappedData: Record<string, TreeStructure> = {};
 
@@ -111,8 +172,25 @@ export class RelationsFacade {
     return currentElement.some(childId => Object.keys(this.openElements).includes(childId));
   }
 
+  public isElementOpenUpstream(id: string): boolean {
+    const currentElement = this.openElementsUpstream[id];
+    if (!currentElement) {
+      return false;
+    }
+
+    // Checks if the children, of the current element, are open
+    return currentElement.some(childId => Object.keys(this.openElementsUpstream).includes(childId));
+  }
+
   public resetRelationState(): void {
     this.relationComponentState.resetOpenElements();
+
+    // Not resetting already loaded data keep the requests to a minimum.
+    // this.relationsState.resetLoadedElements();
+  }
+
+  public resetRelationStateUpstream(): void {
+    this.relationComponentStateUpstream.resetOpenElementsUpstream();
 
     // Not resetting already loaded data keep the requests to a minimum.
     // this.relationsState.resetLoadedElements();
@@ -123,9 +201,19 @@ export class RelationsFacade {
     this.openElementWithChildren(elementToOpen);
   }
 
+  public openElementByIdUpstream(elementId: string): void {
+    const elementToOpen = this.loadedElementsFacade.loadedElementsUpstream[elementId];
+    this.openElementWithChildrenUpstream(elementToOpen);
+  }
+
   public closeElementById(elementId: string): void {
     const elementToClose = this.loadedElementsFacade.loadedElements[elementId];
     elementToClose.children.forEach(childId => this.deleteOpenElement(childId));
+  }
+
+  public closeElementByIdUpstream(elementId: string): void {
+    const elementToClose = this.loadedElementsFacade.loadedElementsUpstream[elementId];
+    elementToClose.children.forEach(childId => this.deleteOpenElementUpstream(childId));
   }
 
   public getRootPart(id: string): Observable<View<Part>> {
@@ -163,6 +251,24 @@ export class RelationsFacade {
     return this.requestPartDetailsStream.asObservable();
   }
 
+  private loadChildrenInformationUpstream(children: string[]): Observable<TreeElement[]> {
+    if (!children) {
+      return of(null).pipe(first());
+    }
+
+    const getLoadedElement = (id: string) => this.loadedElementsFacade.loadedElementsUpstream$[id];
+    const isNoChildLoading = children.every(id => getLoadedElement(id) && getLoadedElement(id)?.state != 'loading');
+
+    if (isNoChildLoading) {
+      const mappedChildren = children.map(childId => this.loadedElementsFacade.loadedElementsUpstream$[childId]);
+      this.addLoadedElements(mappedChildren);
+      return of(mappedChildren).pipe(first());
+    }
+
+    this.requestPartDetailsQueue.next(children);
+    return this.requestPartDetailsStream.asObservable();
+  }
+
   private initRequestPartDetailQueue(): Observable<TreeElement[]> {
     let children;
     return this.requestPartDetailsQueue.pipe(
@@ -186,6 +292,14 @@ export class RelationsFacade {
     elements.forEach(element => {
       this.loadedElementsFacade.addLoadedElement(element);
       this.updateOpenElement(element);
+    });
+  }
+
+  // TODO: addLoadedElementsUpstream
+  private addLoadedElementsUpstream(elements: TreeElement[]): void {
+    elements.forEach(element => {
+      this.loadedElementsFacade.addLoadedElement(element);
+      this.updateOpenElementUpstream(element);
     });
   }
 }
