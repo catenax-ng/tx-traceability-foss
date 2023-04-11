@@ -46,7 +46,7 @@ public class EdcContractDefinitionService {
 
 	private static final String ASSET_ID_OPERAND = "asset:prop:id";
 	private static final String EQUALITY_OPERATOR = "=";
-	private static final String CONTRACT_DEFINITIONS_PATH = "/data/contractdefinitions";
+	private static final String CONTRACT_DEFINITIONS_PATH = "/api/v1/management/contractdefinitions";
 
 	private final RestTemplate restTemplate;
 
