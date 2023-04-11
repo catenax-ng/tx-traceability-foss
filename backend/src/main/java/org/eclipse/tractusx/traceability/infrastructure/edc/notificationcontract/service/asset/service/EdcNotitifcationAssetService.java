@@ -118,7 +118,7 @@ public class EdcNotitifcationAssetService {
 			return notificationAssetId;
 		}
 
-		if (responseCode.value() == 204) {
+		if (responseCode.value() == 200) {
 			return notificationAssetId;
 		}
 
