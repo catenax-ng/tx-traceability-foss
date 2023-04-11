@@ -87,7 +87,7 @@ public class EdcContractDefinitionService {
 			throw new CreateEdcContractDefinitionException("Asset contract definition already exists in the EDC");
 		}
 
-		if (responseCode.value() == 204) {
+		if (responseCode.value() == 200) {
 			return contractPolicyId;
 		}
 
