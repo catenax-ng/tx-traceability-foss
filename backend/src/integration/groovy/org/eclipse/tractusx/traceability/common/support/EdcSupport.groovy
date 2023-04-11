@@ -43,7 +43,7 @@ trait EdcSupport implements RestitoProvider {
 			post("/api/v1/management/assets"),
 			EDC_API_KEY_HEADER
 		).then(
-			status(HttpStatus.NO_CONTENT_204)
+			status(HttpStatus.OK_200)
 		)
 	}
 
