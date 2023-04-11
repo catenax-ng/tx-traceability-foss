@@ -89,7 +89,7 @@ public class EdcPolicyDefinitionService {
             throw new CreateEdcPolicyDefinitionException("Notification asset policy definition already exists in the EDC");
         }
 
-        if (responseCode.value() == 204) {
+        if (responseCode.value() == 200) {
             return accessPolicyId;
         }
 
