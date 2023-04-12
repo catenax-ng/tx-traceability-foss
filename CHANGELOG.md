@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased - x.x.x]
 
 ### Added
+-  Created BPN - BPN - EDC configuration page with mappings for notification flow
 
 ### Changed
 - Refactored messageId of a notification to have own uuid instead of reusing notificationId
@@ -17,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Upgraded base image from sha256@2b33ef284e6dc43a61903cef6d36dbce13414a9e5444e2c96cdd5e35123f9903 to: sha256@c26a727c4883eb73d32351be8bacb3e70f390c2c94f078dc493495ed93c60c2f
 - Fixed parts not being marked as under investigation
 - Adapt notification receiver side to accept severity by real name instead of enum constant
+- Improved admin page navigation (as a left side menu)
 
 ## [3.1.1] - 2023-04-04
 
