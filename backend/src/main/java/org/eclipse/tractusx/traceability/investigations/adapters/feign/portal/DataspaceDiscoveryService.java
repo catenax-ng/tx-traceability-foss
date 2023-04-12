@@ -25,14 +25,12 @@ import org.eclipse.tractusx.traceability.infrastructure.edc.properties.EdcProper
 import org.eclipse.tractusx.traceability.investigations.domain.ports.EDCUrlProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Service
 public class DataspaceDiscoveryService implements EDCUrlProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(DataspaceDiscoveryService.class);
