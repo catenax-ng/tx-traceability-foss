@@ -72,7 +72,8 @@ export class Tree {
   public renderTree(data: TreeStructure, direction: TreeDirection): TreeSvg {
     const root = d3.hierarchy(data);
 
-    let svg = d3.select(`#${this.parentId}-svg`) as TreeSvg;
+    // TODO: createMainSvg returns --camera element, not svg in fact
+    let svg = d3.select(`#${this.parentId}--camera`) as TreeSvg;
     if (svg.empty()) svg = this.creatMainSvg();
 
     d3.tree().nodeSize([this.r * 3, 250])(root);
@@ -118,8 +119,8 @@ export class Tree {
 
     const cameraBody = svg
       .append('g')
-      .attr('id', this.id + '--camera')
-      .attr('data-testid', this.id + '--camera');
+      .attr('id', this.parentId + '--camera')
+      .attr('data-testid', this.parentId + '--camera');
 
     this.zoom = d3.zoom().scaleExtent(this.zoomConfig);
     this.zoom.on('zoom', ({ transform }) => {

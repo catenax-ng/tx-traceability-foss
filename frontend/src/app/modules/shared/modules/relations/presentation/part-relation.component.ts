@@ -65,21 +65,17 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
   private treeRight: Tree;
   private treeLeft: Tree;
   private minimap: Minimap;
-  private treeData: TreeStructure;
 
   constructor(
     private readonly partDetailsFacade: PartDetailsFacade,
     private readonly relationsFacade: RelationsFacade,
     private readonly loadedElementsFacade: LoadedElementsFacade,
-    private readonly loadedElementsFacadeUpstream: LoadedElementsFacade,
     private readonly route: ActivatedRoute,
     private readonly ngZone: NgZone,
     staticIdService: StaticIdService,
   ) {
     this.rootPart$ = this._rootPart$.observable;
     this.htmlId = staticIdService.generateId(this.htmlIdBase);
-    // TODO: remove
-    console.dir(this.htmlId);
   }
 
   public ngOnInit(): void {
@@ -135,7 +131,6 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.add(selectSubscription);
     this.subscriptions.add(openElementsSubscription);
 
-    // TODO: need to pass different data set - use the same just for testing now
     //////////////////
     // LEFT
     /////////////////////
@@ -148,14 +143,14 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
       )
       .subscribe({
         next: rootPart => {
-          this.loadedElementsFacadeUpstream.addLoadedElement(rootPart);
+          this.loadedElementsFacade.addLoadedElementUpstream(rootPart);
           this.relationsFacade.openElementWithChildrenUpstream(rootPart);
         },
       });
 
     const combinedUpstream = combineLatest([
       this.relationsFacade.openElementsUpstream$,
-      this.loadedElementsFacadeUpstream.loadedElementsUpstream$,
+      this.loadedElementsFacade.loadedElementsUpstream$,
     ]);
     const openElementsSubscriptionUpstream = combinedUpstream
       .pipe(
@@ -224,6 +219,10 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private renderTreeWithOpenElements(openElements: OpenElements, treeDirection: TreeDirection): void {
+    if (!openElements) {
+      return;
+    }
+
     let treeData;
     if (treeDirection === TreeDirection.RIGHT) {
       treeData = this.relationsFacade.formatOpenElementsToTreeData(openElements);
@@ -247,9 +246,10 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private renderTree(treeData: TreeStructure, treeDirection: TreeDirection): void {
-    if (treeDirection === TreeDirection.RIGHT) {
+    console.dir(treeData);
+    if (treeDirection === TreeDirection.RIGHT && this.treeRight) {
       this.treeRight.renderTree(treeData, treeDirection);
-    } else if (treeDirection === TreeDirection.LEFT) {
+    } else if (treeDirection === TreeDirection.LEFT && this.treeLeft) {
       this.treeLeft.renderTree(treeData, treeDirection);
     }
     // TODO:  fix minimap

@@ -24,6 +24,28 @@ import { otherPartsAssets } from '../otherParts-mock/otherParts.model';
 
 export const mockBmwAssets = [
   {
+    id: 'urn:uuid:3583f9fc-8b82-4e4f-9b4a-e0e323dcd9d1',
+    idShort: '--',
+    batchId: '--',
+    nameAtManufacturer: 'Transmission',
+    manufacturerPartId: '1O222E8-43',
+    partInstanceId: '1O222E8-43',
+    manufacturerId: 'BPNL00000003B2OM',
+    manufacturerName: 'OEM A',
+    nameAtCustomer: 'Transmission',
+    customerPartId: '1O222E8-43',
+    manufacturingDate: '2022-02-04T13:48:54Z',
+    manufacturingCountry: 'JAM',
+    specificAssetIds: {},
+    childDescriptions: [
+      { id: 'urn:uuid:926457b6-a3f3-4c11-b631-a76be2949bc3', idShort: '--' },
+      { id: 'urn:uuid:5701ec49-826c-4849-a28d-efb14350884e', idShort: '--' },
+      { id: 'urn:uuid:c3bf2039-f835-42e3-8874-227e928fc6cb', idShort: '--' },
+    ],
+    parentDescriptions: [{ id: 'urn:uuid:55c376ed-e39d-4525-96e6-71f3def7ae41', idShort: '--' }],
+    qualityType: 'Ok',
+  },
+  {
     id: 'urn:uuid:55c376ed-e39d-4525-96e6-71f3def7ae41',
     idShort: '--',
     batchId: '--',
@@ -38,14 +60,7 @@ export const mockBmwAssets = [
     manufacturingCountry: 'LBR',
     specificAssetIds: {},
     underInvestigation: true,
-    childDescriptions: [
-      { id: 'urn:uuid:0535d7a7-0fca-43a1-885d-2faa81c35097', idShort: '--' },
-      { id: 'urn:uuid:79571804-2e89-452a-a80a-ebff6d94c891', idShort: '--' },
-    ],
-    parentDescriptions: [
-      { id: 'urn:uuid:047fbe05-5845-4db3-97b0-731412f0d34f', idShort: '--' },
-      { id: 'urn:uuid:ea35cbd9-8a60-410f-9b5e-f5bffeb5a621', idShort: '--' },
-    ],
+    childDescriptions: [],
     qualityType: 'Ok',
     van: null,
   },

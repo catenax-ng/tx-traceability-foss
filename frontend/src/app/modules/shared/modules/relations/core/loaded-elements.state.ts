@@ -27,6 +27,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class LoadedElementsState {
   private readonly _loadedElements$: State<LoadedElements> = new State<LoadedElements>({});
+  private readonly _loadedElementsUpstream$: State<LoadedElements> = new State<LoadedElements>({});
 
   public get loadedElements(): LoadedElements {
     return this._loadedElements$.snapshot;
@@ -42,5 +43,21 @@ export class LoadedElementsState {
 
   public resetLoadedElements(): void {
     this._loadedElements$.reset();
+  }
+
+  public get loadedElementsUpstream(): LoadedElements {
+    return this._loadedElementsUpstream$.snapshot;
+  }
+
+  public get loadedElementsUpstream$(): Observable<LoadedElements> {
+    return this._loadedElementsUpstream$.observable;
+  }
+
+  public set loadedElementsUpstream(data: LoadedElements) {
+    this._loadedElementsUpstream$.update(data);
+  }
+
+  public resetLoadedElementsUpstream(): void {
+    this._loadedElementsUpstream$.reset();
   }
 }

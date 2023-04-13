@@ -24,17 +24,15 @@ import { TreeElement, TreeStructure } from '@shared/modules/relations/model/rela
 
 export class RelationsAssembler {
   public static assemblePartForRelation(part: Part, idFallback?: string, fromParents?: boolean): TreeElement {
-    // TODO: switch mapping children / parents
     const { id, name = idFallback, serialNumber, qualityType } = part || {};
 
     let children;
+    // TODO: needs refactoring?
     if (fromParents === true && part.parents) {
       children = part.parents || {};
     } else {
       children = part.children;
     }
-    console.dir(children);
-    console.dir(part.parents);
     const mapQualityTypeToState = (type: QualityType) => (type === QualityType.Ok ? 'done' : type || 'error');
     const loadingOrErrorStatus = id ? 'loading' : 'error';
     const mappedOrFallbackStatus = mapQualityTypeToState(qualityType) || 'done';

@@ -36,14 +36,15 @@ export class RelationsFacade {
   private readonly requestPartDetailsQueue = new Subject<string[]>();
   private readonly requestPartDetailsStream = new Subject<TreeElement[]>();
   private requestPartDetailsQueueSubscription: Subscription;
+  private requestPartDetailsQueueSubscriptionUpstream: Subscription;
 
   constructor(
     private readonly partsService: PartsService,
     private readonly loadedElementsFacade: LoadedElementsFacade,
     private readonly relationComponentState: RelationComponentState,
-    private readonly relationComponentStateUpstream: RelationComponentState, // TODO: do we need another instance relationComponentStateUpstream?
   ) {
     this.requestPartDetailsQueueSubscription = this.initRequestPartDetailQueue().subscribe();
+    this.requestPartDetailsQueueSubscriptionUpstream = this.initRequestPartDetailQueueUpstream().subscribe();
   }
 
   public get openElements$(): Observable<OpenElements> {
@@ -51,7 +52,7 @@ export class RelationsFacade {
   }
 
   public get openElementsUpstream$(): Observable<OpenElements> {
-    return this.relationComponentStateUpstream.openElementsUpstream$.pipe(debounceTime(100));
+    return this.relationComponentState.openElementsUpstream$.pipe(debounceTime(100));
   }
 
   public get openElements(): OpenElements {
@@ -59,7 +60,7 @@ export class RelationsFacade {
   }
 
   public get openElementsUpstream(): OpenElements {
-    return this.relationComponentStateUpstream.openElementsUpstream;
+    return this.relationComponentState.openElementsUpstream;
   }
 
   // This is used to add an element with its children to the opened list
@@ -88,7 +89,7 @@ export class RelationsFacade {
       ...childElements,
     };
 
-    this.loadChildrenInformation(children).subscribe();
+    this.loadChildrenInformationUpstream(children).subscribe();
   }
 
   // This is only to update already opened elements.
@@ -110,7 +111,7 @@ export class RelationsFacade {
       ...this.relationComponentState.openElementsUpstream,
       [id]: children,
     };
-    this.loadChildrenInformation(children).subscribe();
+    this.loadChildrenInformationUpstream(children).subscribe();
   }
 
   public deleteOpenElement(id: string): void {
@@ -190,10 +191,10 @@ export class RelationsFacade {
   }
 
   public resetRelationStateUpstream(): void {
-    this.relationComponentStateUpstream.resetOpenElementsUpstream();
+    this.relationComponentState.resetOpenElementsUpstream();
 
     // Not resetting already loaded data keep the requests to a minimum.
-    // this.relationsState.resetLoadedElements();
+    // this.relationsState.resetLoadedElementsUpstream();
   }
 
   public openElementById(elementId: string): void {
@@ -261,7 +262,7 @@ export class RelationsFacade {
 
     if (isNoChildLoading) {
       const mappedChildren = children.map(childId => this.loadedElementsFacade.loadedElementsUpstream$[childId]);
-      this.addLoadedElements(mappedChildren);
+      this.addLoadedElementsUpstream(mappedChildren);
       return of(mappedChildren).pipe(first());
     }
 
@@ -288,6 +289,25 @@ export class RelationsFacade {
     );
   }
 
+  private initRequestPartDetailQueueUpstream(): Observable<TreeElement[]> {
+    let children;
+    return this.requestPartDetailsQueue.pipe(
+      bufferTime(500),
+      filter(childList => !!childList.length),
+      switchMap(childList => {
+        children = childList.reduce((p, c) => [...p, ...c], []);
+        return this.partsService.getPartDetailOfIds(children);
+      }),
+      catchError(_ => of(children.map(id => ({ id, children: [] } as Part)))),
+      map(childrenData =>
+        children.map(id => childrenData.find(data => data.id === id) || ({ id, children: [] } as Part)),
+      ),
+      map(childrenData => childrenData.map(child => RelationsAssembler.assemblePartForRelation(child))),
+      tap(childrenData => this.addLoadedElementsUpstream(childrenData)),
+      tap(childrenData => this.requestPartDetailsStream.next(childrenData)),
+    );
+  }
+
   private addLoadedElements(elements: TreeElement[]): void {
     elements.forEach(element => {
       this.loadedElementsFacade.addLoadedElement(element);
@@ -295,10 +315,9 @@ export class RelationsFacade {
     });
   }
 
-  // TODO: addLoadedElementsUpstream
   private addLoadedElementsUpstream(elements: TreeElement[]): void {
     elements.forEach(element => {
-      this.loadedElementsFacade.addLoadedElement(element);
+      this.loadedElementsFacade.addLoadedElementUpstream(element);
       this.updateOpenElementUpstream(element);
     });
   }

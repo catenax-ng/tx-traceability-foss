@@ -27,17 +27,14 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class LoadedElementsFacade {
-  constructor(
-    private readonly loadedElementsState: LoadedElementsState,
-    private readonly loadedElementsStateUpstream: LoadedElementsState,
-  ) {}
+  constructor(private readonly loadedElementsState: LoadedElementsState) {}
 
   public get loadedElements(): LoadedElements {
     return this.loadedElementsState.loadedElements;
   }
 
   public get loadedElementsUpstream(): LoadedElements {
-    return this.loadedElementsStateUpstream.loadedElements;
+    return this.loadedElementsState.loadedElementsUpstream;
   }
 
   public get loadedElements$(): Observable<LoadedElements> {
@@ -45,7 +42,7 @@ export class LoadedElementsFacade {
   }
 
   public get loadedElementsUpstream$(): Observable<LoadedElements> {
-    return this.loadedElementsStateUpstream.loadedElements$;
+    return this.loadedElementsState.loadedElementsUpstream$;
   }
 
   public addLoadedElement(element: TreeElement): void {
@@ -57,6 +54,23 @@ export class LoadedElementsFacade {
 
     this.loadedElementsState.loadedElements = {
       ...this.loadedElementsState.loadedElements,
+      [id]: element,
+      ...loadingChildren,
+    };
+  }
+
+  public addLoadedElementUpstream(element: TreeElement): void {
+    const { id, children } = element;
+
+    const loadingChildren = children?.reduce((p: LoadedElements, childId: string) => {
+      return {
+        ...p,
+        [childId]: this.loadedElementsUpstream[childId] || RelationsAssembler.createLoadingElement(childId),
+      };
+    }, {} as LoadedElements);
+
+    this.loadedElementsState.loadedElementsUpstream = {
+      ...this.loadedElementsState.loadedElementsUpstream,
       [id]: element,
       ...loadingChildren,
     };
