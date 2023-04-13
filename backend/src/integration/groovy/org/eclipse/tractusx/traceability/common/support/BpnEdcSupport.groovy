@@ -21,26 +21,17 @@
 
 package org.eclipse.tractusx.traceability.common.support
 
-import org.springframework.test.jdbc.JdbcTestUtils
+import org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc.BpnEdcEntity
 
-trait DatabaseSupport implements DatabaseProvider {
+trait BpnEdcSupport implements BpnEdcRepositoryProvider {
 
-	private static final List<String> TABLES = [
-		"asset_child_descriptors",
-		"assets_investigations",
-		"assets_notifications",
-		"asset",
-		"shell_descriptor",
-		"bpn_storage",
-		"notification",
-		"investigation",
-		"registry_lookup_metrics",
-        "bpn_edc_mappings"
-	]
-
-	void clearAllTables() {
-		TABLES.each {
-			JdbcTestUtils.deleteFromTables(jdbcTemplate(), it)
-		}
+	void assertCreatedMappingSize(int size) {
+		List<BpnEdcEntity> bpnEdcUrlMappings = bpnEdcRepository().findAll()
+		assert bpnEdcUrlMappings.size() == size
 	}
+
+	void assertBpnEdcUrlMappings(Closure closure) {
+        bpnEdcRepository().findAll().each closure
+	}
+
 }

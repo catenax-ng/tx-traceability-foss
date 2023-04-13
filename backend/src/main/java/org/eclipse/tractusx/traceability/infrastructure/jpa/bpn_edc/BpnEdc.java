@@ -19,28 +19,29 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.common.support
+package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
-import org.springframework.test.jdbc.JdbcTestUtils
+import io.swagger.annotations.ApiModelProperty;
 
-trait DatabaseSupport implements DatabaseProvider {
+public final class BpnEdc {
 
-	private static final List<String> TABLES = [
-		"asset_child_descriptors",
-		"assets_investigations",
-		"assets_notifications",
-		"asset",
-		"shell_descriptor",
-		"bpn_storage",
-		"notification",
-		"investigation",
-		"registry_lookup_metrics",
-        "bpn_edc_mappings"
-	]
+    @ApiModelProperty(example = "BPNL00000003CSGV")
+    private final String bpn;
 
-	void clearAllTables() {
-		TABLES.each {
-			JdbcTestUtils.deleteFromTables(jdbcTemplate(), it)
-		}
-	}
+    @ApiModelProperty(example = "https://trace-x-test-edc.dev.demo.catena-x.net/a1")
+    private final String url;
+
+    public BpnEdc(String bpn, String url) {
+        this.bpn = bpn;
+        this.url = url;
+    }
+
+    public String getBpn() {
+        return bpn;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
 }

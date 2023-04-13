@@ -19,28 +19,22 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.common.support
+package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
-import org.springframework.test.jdbc.JdbcTestUtils
+import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.Size;
 
-trait DatabaseSupport implements DatabaseProvider {
+import java.util.List;
 
-	private static final List<String> TABLES = [
-		"asset_child_descriptors",
-		"assets_investigations",
-		"assets_notifications",
-		"asset",
-		"shell_descriptor",
-		"bpn_storage",
-		"notification",
-		"investigation",
-		"registry_lookup_metrics",
-        "bpn_edc_mappings"
-	]
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public record BpnEdcRecord(
+    @Size(min = 15, max = 255, message = "BPN should have at least 15 characters and at most 255 characters")
+    @ApiModelProperty(example = "The BPN")
+    String bpn,
 
-	void clearAllTables() {
-		TABLES.each {
-			JdbcTestUtils.deleteFromTables(jdbcTemplate(), it)
-		}
-	}
+    @Size(min = 1, max = 100, message = "Specify at least 1 and at most 100 EDC URLs")
+    @ApiModelProperty(example = "[\"https://trace-x-test-edc.dev.demo.catena-x.net/a2\"]")
+    List<String> urls
+) {
 }

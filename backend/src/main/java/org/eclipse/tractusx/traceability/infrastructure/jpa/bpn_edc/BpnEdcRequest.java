@@ -19,28 +19,16 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.common.support
+package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
-import org.springframework.test.jdbc.JdbcTestUtils
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-trait DatabaseSupport implements DatabaseProvider {
+import java.util.List;
 
-	private static final List<String> TABLES = [
-		"asset_child_descriptors",
-		"assets_investigations",
-		"assets_notifications",
-		"asset",
-		"shell_descriptor",
-		"bpn_storage",
-		"notification",
-		"investigation",
-		"registry_lookup_metrics",
-        "bpn_edc_mappings"
-	]
+public record BpnEdcRequest(
+    @NotNull(message = "BPN must be present") String bpn,
+    @Size(min = 1, max = 100, message = "At least one EDC URL must be present") List<String> urls
 
-	void clearAllTables() {
-		TABLES.each {
-			JdbcTestUtils.deleteFromTables(jdbcTemplate(), it)
-		}
-	}
+) {
 }

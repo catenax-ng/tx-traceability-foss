@@ -34,6 +34,7 @@ import org.eclipse.tractusx.traceability.common.config.RestitoConfig
 import org.eclipse.tractusx.traceability.common.mapper.InvestigationMapper
 import org.eclipse.tractusx.traceability.common.mapper.NotificationMapper
 import org.eclipse.tractusx.traceability.common.support.*
+import org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc.BpnEdcRepository
 import org.eclipse.tractusx.traceability.infrastructure.jpa.investigation.JpaInvestigationRepository
 import org.eclipse.tractusx.traceability.infrastructure.jpa.notification.JpaNotificationRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -54,7 +55,7 @@ import spock.util.concurrent.PollingConditions
 @Testcontainers
 abstract class IntegrationSpecification extends Specification
 	implements OAuth2Support, OAuth2ApiSupport, DatabaseSupport, AssetRepositoryProvider, ShellDescriptorStoreProvider,
-		BpnRepositoryProvider, InvestigationsRepositoryProvider, NotificationsRepositoryProvider {
+		BpnRepositoryProvider, InvestigationsRepositoryProvider, NotificationsRepositoryProvider, BpnEdcRepositoryProvider {
 
 	@Autowired
 	private AssetRepository assetRepository
@@ -67,6 +68,9 @@ abstract class IntegrationSpecification extends Specification
 
 	@Autowired
 	private BpnRepository bpnRepository
+
+    @Autowired
+    private BpnEdcRepository bpnEdcRepository
 
 	@Autowired
 	private JpaInvestigationRepository jpaInvestigationRepository
@@ -111,6 +115,11 @@ abstract class IntegrationSpecification extends Specification
 	BpnRepository bpnRepository() {
 		return bpnRepository
 	}
+
+    @Override
+    BpnEdcRepository bpnEdcRepository() {
+        return bpnEdcRepository
+    }
 
 	@Override
 	JpaInvestigationRepository jpaInvestigationRepository() {
