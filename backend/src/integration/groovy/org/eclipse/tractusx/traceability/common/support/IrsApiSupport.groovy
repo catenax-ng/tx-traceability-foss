@@ -116,8 +116,8 @@ trait IrsApiSupport implements RestitoProvider {
 				ok(),
 				header("Content-Type", "application/json")
 			).withSequence(
-			jsonResponseFromFile("./stubs/irs/get/jobs/id/running_job_response_200.json"),
-			jsonResponseFromFile("./stubs/irs/get/jobs/id/response_200.json")
+			jsonResponseFromFile("./stubs/irs/get/jobs/id/response_200.json"),
+                jsonResponseFromFile("./stubs/irs/get/jobs/id/response_200.json")
 		)
 	}
 

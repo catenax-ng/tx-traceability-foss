@@ -21,7 +21,6 @@
 
 package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.rest
 
-
 import io.restassured.http.ContentType
 import org.eclipse.tractusx.traceability.IntegrationSpecification
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset
@@ -29,11 +28,8 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.ir
 import org.eclipse.tractusx.traceability.common.support.AssetsSupport
 import org.eclipse.tractusx.traceability.common.support.BpnSupport
 import org.eclipse.tractusx.traceability.common.support.IrsApiSupport
-import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.EdcNotificationContractService
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus
 import org.hamcrest.Matchers
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import spock.util.concurrent.PollingConditions
 
 import static io.restassured.RestAssured.given
@@ -120,7 +116,9 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
     def "should synchronize assets using retry"() {
         given:
         oauth2ApiReturnsTechnicalUserToken()
+        and:
         irsApiTriggerJob()
+        and:
         irsApiReturnsJobInRunningAndCompleted()
 
         when:
@@ -141,7 +139,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
 
         then:
         eventually {
-            assertAssetsSize(12)
+            assertAssetsSize(14)
         }
 
         and:
