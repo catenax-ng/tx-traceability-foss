@@ -18,56 +18,13 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-
 package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Arrays;
-import java.util.List;
-
-public record StartJobRequest(
-        List<String> aspects,
-        String globalAssetId,
-        boolean collectAspects,
-        BomLifecycle bomLifecycle,
-        boolean lookupBPNs,
-        int depth,
-        Direction direction
-) {
-    public static StartJobRequest buildJobRequest(String globalAssetId, Direction direction) {
-        return new StartJobRequest(Aspect.allAspects(), globalAssetId, true, BomLifecycle.AS_BUILT, true, DEFAULT_DEPTH, direction);
-    }
-
-    public static final int DEFAULT_DEPTH = 2;
+public enum Direction {
+    @JsonProperty("downward")
+    DOWNWARD,
+    @JsonProperty("upward")
+    UPWARD
 }
-
-
-enum Aspect {
-    BATCH("Batch"),
-    SERIAL_PART_TYPIZATION("SerialPartTypization");
-
-    private final String aspectName;
-
-    Aspect(String aspectName) {
-        this.aspectName = aspectName;
-    }
-
-    public String getAspectName() {
-        return aspectName;
-    }
-
-    public static List<String> allAspects() {
-        return Arrays.stream(Aspect.values())
-                .map(Aspect::getAspectName)
-                .toList();
-    }
-}
-
-enum BomLifecycle {
-    @JsonProperty("asBuilt")
-    AS_BUILT,
-    @JsonProperty("asPlanned")
-    AS_PLANNED
-}
-

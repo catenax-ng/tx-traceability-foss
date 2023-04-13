@@ -21,6 +21,7 @@
 
 package org.eclipse.tractusx.traceability.common.support
 
+import com.xebialabs.restito.builder.verify.VerifySequenced
 import org.glassfish.grizzly.http.util.HttpStatus
 import org.springframework.http.HttpHeaders
 
@@ -146,6 +147,12 @@ trait IrsApiSupport implements RestitoProvider {
 			post("/irs/jobs")
 		)
 	}
+
+    void verifyIrsApiTriggerJobCalledTimes(int times) {
+        verifyHttp(stubServer()).times(times,
+                post("/irs/jobs")
+        )
+    }
 
 	void verifyIrsApiTriggerJobNotCalled() {
 		verifyHttp(stubServer()).never(

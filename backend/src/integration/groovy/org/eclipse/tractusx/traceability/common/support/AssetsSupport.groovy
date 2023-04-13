@@ -21,15 +21,19 @@
 
 package org.eclipse.tractusx.traceability.common.support
 
+import net.bytebuddy.build.BuildLogger
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.AssetsConverter
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.AssetEntity
 import org.eclipse.tractusx.traceability.infrastructure.jpa.investigation.InvestigationEntity
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationSide
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.time.Instant
 
 trait AssetsSupport implements AssetRepositoryProvider, InvestigationsRepositoryProvider {
+    private static final Logger logger = LoggerFactory.getLogger(AssetsSupport.class);
 
 	void defaultAssetsStored() {
 		assetRepository().saveAll(assetsConverter().readAndConvertAssets())
@@ -72,6 +76,7 @@ trait AssetsSupport implements AssetRepositoryProvider, InvestigationsRepository
     }
 
 	void assertAssetsSize(int size) {
+        logger.info("Assetsize: " + assetRepository().countAssets());
 		assert assetRepository().countAssets() == size
 	}
 

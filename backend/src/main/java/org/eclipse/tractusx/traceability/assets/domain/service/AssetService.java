@@ -25,12 +25,14 @@ import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 import org.eclipse.tractusx.traceability.assets.domain.ports.AssetRepository;
 import org.eclipse.tractusx.traceability.assets.domain.ports.IrsRepository;
+import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Direction;
 import org.eclipse.tractusx.traceability.assets.infrastructure.config.async.AssetsAsyncConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -62,11 +64,13 @@ public class AssetService {
 		logger.info("Synchronizing assets for globalAssetId: {}", globalAssetId);
 
 		try {
-			List<Asset> assets = irsRepository.findAssets(globalAssetId);
-
-			logger.info("Assets synchronization for globalAssetId: {} is done. Found {} assets. Saving them in the repository.", globalAssetId, assets.size());
-
-			assetRepository.saveAll(assets);
+			List<Asset> downwardAssets = irsRepository.findAssets(globalAssetId, Direction.DOWNWARD);
+            List<Asset> upwardAssets = irsRepository.findAssets(globalAssetId, Direction.UPWARD);
+            List<Asset> combinedAssetList = new ArrayList<>(upwardAssets);
+            combinedAssetList.addAll(downwardAssets);
+			logger.info("Assets synchronization for globalAssetId: {} is done. Found {} downwardAssets. Saving them in the repository.", globalAssetId, downwardAssets.size());
+            logger.info("Assets synchronization for globalAssetId: {} is done. Found {} upwardAssets. Saving them in the repository.", globalAssetId, upwardAssets.size());
+			assetRepository.saveAll(combinedAssetList);
 
 			logger.info("Assets for globalAssetId {} successfully saved.", globalAssetId);
 		} catch (Exception e) {

@@ -21,6 +21,7 @@
 
 package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.rest
 
+
 import io.restassured.http.ContentType
 import org.eclipse.tractusx.traceability.IntegrationSpecification
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset
@@ -28,244 +29,239 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.ir
 import org.eclipse.tractusx.traceability.common.support.AssetsSupport
 import org.eclipse.tractusx.traceability.common.support.BpnSupport
 import org.eclipse.tractusx.traceability.common.support.IrsApiSupport
+import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.EdcNotificationContractService
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus
 import org.hamcrest.Matchers
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spock.util.concurrent.PollingConditions
 
 import static io.restassured.RestAssured.given
-import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN
-import static org.eclipse.tractusx.traceability.common.security.JwtRole.SUPERVISOR
-import static org.eclipse.tractusx.traceability.common.security.JwtRole.USER
-import static org.hamcrest.Matchers.equalTo
-import static org.hamcrest.Matchers.everyItem
-import static org.hamcrest.Matchers.not
+import static org.eclipse.tractusx.traceability.common.security.JwtRole.*
+import static org.hamcrest.Matchers.*
 
 class AssetsControllerIT extends IntegrationSpecification implements IrsApiSupport, AssetsSupport, BpnSupport {
 
-	def "should synchronize assets"() {
-		given:
-			oauth2ApiReturnsTechnicalUserToken()
-			irsApiTriggerJob()
-			irsApiReturnsJobDetails()
+    def "should synchronize assets"() {
+        given:
+        oauth2ApiReturnsTechnicalUserToken()
+        irsApiTriggerJob()
+        irsApiReturnsJobDetails()
 
-		when:
-			given()
-				.contentType(ContentType.JSON)
-				.body(
-					asJson(
-						[
-							globalAssetIds: ["urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"]
-						]
-					)
-				)
-				.header(jwtAuthorization(ADMIN))
-				.when()
-				.post("/api/assets/sync")
-				.then()
-				.statusCode(200)
+        when:
+        given()
+                .contentType(ContentType.JSON)
+                .body(
+                        asJson(
+                                [
+                                        globalAssetIds: ["urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"]
+                                ]
+                        )
+                )
+                .header(jwtAuthorization(ADMIN))
+                .when()
+                .post("/api/assets/sync")
+                .then()
+                .statusCode(200)
 
-		then:
-			eventually {
-				assertAssetsSize(14)
-				assertHasRequiredIdentifiers()
-				assertHasChildCount("urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb", 5)
-			}
+        then:
+        eventually {
+            assertAssetsSize(14)
+            assertHasRequiredIdentifiers()
+            assertHasChildCount("urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb", 5)
+        }
 
-		and:
-			verifyOAuth2ApiCalledOnceForTechnicalUserToken()
-			verifyIrsApiTriggerJobCalledOnce()
-	}
+        and:
+        verifyOAuth2ApiCalledOnceForTechnicalUserToken()
+        verifyIrsApiTriggerJobCalledTimes(2)
+    }
 
-	def "should use cached BPNs when empty list is returned"() {
-		given:
-			oauth2ApiReturnsTechnicalUserToken()
-			irsApiTriggerJob()
-			irsApiReturnsJobDetailsWithNoBPNs()
+    def "should use cached BPNs when empty list is returned"() {
+        given:
+        oauth2ApiReturnsTechnicalUserToken()
+        irsApiTriggerJob()
+        irsApiReturnsJobDetailsWithNoBPNs()
 
-		and:
-			cachedBpnsForDefaultAssets()
+        and:
+        cachedBpnsForDefaultAssets()
 
-		when:
-			given()
-				.contentType(ContentType.JSON)
-				.body(
-					asJson(
-						[
-							globalAssetIds: ["urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"]
-						]
-					)
-				)
-				.header(jwtAuthorization(ADMIN))
-				.when()
-				.post("/api/assets/sync")
-				.then()
-				.statusCode(200)
+        when:
+        given()
+                .contentType(ContentType.JSON)
+                .body(
+                        asJson(
+                                [
+                                        globalAssetIds: ["urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"]
+                                ]
+                        )
+                )
+                .header(jwtAuthorization(ADMIN))
+                .when()
+                .post("/api/assets/sync")
+                .then()
+                .statusCode(200)
 
-		then:
-			eventually {
-				List<Asset> assets = assetRepository().getAssets().findAll { asset ->
-					asset.manufacturerId != AssetsConverter.EMPTY_TEXT
-				}
-				assets.size() == 13
-				assets.each { asset ->
-					assert asset.manufacturerName != AssetsConverter.EMPTY_TEXT
-				}
-			}
+        then:
+        eventually {
+            List<Asset> assets = assetRepository().getAssets().findAll { asset ->
+                asset.manufacturerId != AssetsConverter.EMPTY_TEXT
+            }
+            assets.size() == 13
+            assets.each { asset ->
+                assert asset.manufacturerName != AssetsConverter.EMPTY_TEXT
+            }
+        }
 
-		and:
-			verifyOAuth2ApiCalledOnceForTechnicalUserToken()
-			verifyIrsApiTriggerJobCalledOnce()
-	}
+        and:
+        verifyOAuth2ApiCalledOnceForTechnicalUserToken()
+        verifyIrsApiTriggerJobCalledTimes(2)
+    }
 
-	def "should synchronize assets using retry"() {
-		given:
-			oauth2ApiReturnsTechnicalUserToken()
+    def "should synchronize assets using retry"() {
+        given:
+        oauth2ApiReturnsTechnicalUserToken()
+        irsApiTriggerJob()
+        irsApiReturnsJobInRunningAndCompleted()
 
-		and:
-			irsApiTriggerJob()
+        when:
+        given()
+                .contentType(ContentType.JSON)
+                .body(
+                        asJson(
+                                [
+                                        globalAssetIds: ["urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"]
+                                ]
+                        )
+                )
+                .header(jwtAuthorization(ADMIN))
+                .when()
+                .post("/api/assets/sync")
+                .then()
+                .statusCode(200)
 
-		and:
-			irsApiReturnsJobInRunningAndCompleted()
+        then:
+        eventually {
+            assertAssetsSize(12)
+        }
 
-		when:
-			given()
-				.contentType(ContentType.JSON)
-				.body(
-					asJson(
-						[
-							globalAssetIds: ["urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"]
-						]
-					)
-				)
-				.header(jwtAuthorization(ADMIN))
-				.when()
-				.post("/api/assets/sync")
-				.then()
-				.statusCode(200)
+        and:
+        verifyOAuth2ApiCalledOnceForTechnicalUserToken()
+        verifyIrsApiTriggerJobCalledTimes(2)
+    }
 
-		then:
-			eventually {
-				assertAssetsSize(14)
-			}
+    def "should not synchronize assets when irs failed to trigger job"() {
+        given:
+        oauth2ApiReturnsTechnicalUserToken()
+        irsApiTriggerJobFailed()
 
-		and:
-			verifyOAuth2ApiCalledOnceForTechnicalUserToken()
-			verifyIrsApiTriggerJobCalledOnce()
-	}
+        when:
+        given()
+                .contentType(ContentType.JSON)
+                .body(
+                        asJson(
+                                [
+                                        globalAssetIds: ["urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"]
+                                ]
+                        )
+                )
+                .header(jwtAuthorization(ADMIN))
+                .when()
+                .post("/api/assets/sync")
+                .then()
+                .statusCode(200)
 
-	def "should not synchronize assets when irs failed to trigger job"() {
-		given:
-			oauth2ApiReturnsTechnicalUserToken()
-			irsApiTriggerJobFailed()
+        then:
+        new PollingConditions(timeout: 10, initialDelay: 3).eventually {
+            assertNoAssetsStored()
+        }
 
-		when:
-			given()
-				.contentType(ContentType.JSON)
-				.body(
-					asJson(
-						[
-							globalAssetIds: ["urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"]
-						]
-					)
-				)
-				.header(jwtAuthorization(ADMIN))
-				.when()
-				.post("/api/assets/sync")
-				.then()
-				.statusCode(200)
+        and:
+        verifyOAuth2ApiCalledOnceForTechnicalUserToken()
+        verifyIrsApiTriggerJobCalledOnce()
+        verifyIrsJobDetailsApiNotCalled()
+    }
 
-		then:
-			new PollingConditions(timeout: 10, initialDelay: 3).eventually {
-				assertNoAssetsStored()
-			}
+    def "should not synchronize assets when irs failed to return job details"() {
+        given:
+        oauth2ApiReturnsTechnicalUserToken()
+        irsApiTriggerJob()
 
-		and:
-			verifyOAuth2ApiCalledOnceForTechnicalUserToken()
-			verifyIrsApiTriggerJobCalledOnce()
-			verifyIrsJobDetailsApiNotCalled()
-	}
+        and:
+        irsJobDetailsApiFailed()
 
-	def "should not synchronize assets when irs failed to return job details"() {
-		given:
-			oauth2ApiReturnsTechnicalUserToken()
-			irsApiTriggerJob()
+        when:
+        given()
+                .contentType(ContentType.JSON)
+                .body(
+                        asJson(
+                                [
+                                        globalAssetIds: ["urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"]
+                                ]
+                        )
+                )
+                .header(jwtAuthorization(ADMIN))
+                .when()
+                .post("/api/assets/sync")
+                .then()
+                .statusCode(200)
 
-		and:
-			irsJobDetailsApiFailed()
+        then:
+        eventually {
+            assertNoAssetsStored()
+        }
 
-		when:
-			given()
-				.contentType(ContentType.JSON)
-				.body(
-					asJson(
-						[
-							globalAssetIds: ["urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"]
-						]
-					)
-				)
-				.header(jwtAuthorization(ADMIN))
-				.when()
-				.post("/api/assets/sync")
-				.then()
-				.statusCode(200)
+        and:
+        verifyOAuth2ApiCalledOnceForTechnicalUserToken()
+        verifyIrsApiTriggerJobCalledOnce()
+    }
 
-		then:
-			eventually {
-				assertNoAssetsStored()
-			}
+    def "should not synchronize assets when irs keeps returning job in running state"() {
+        given:
+        oauth2ApiReturnsTechnicalUserToken()
+        irsApiTriggerJob()
 
-		and:
-			verifyOAuth2ApiCalledOnceForTechnicalUserToken()
-			verifyIrsApiTriggerJobCalledOnce()
-	}
+        and:
+        irsApiReturnsJobInRunningState()
 
-	def "should not synchronize assets when irs keeps returning job in running state"() {
-		given:
-			oauth2ApiReturnsTechnicalUserToken()
-			irsApiTriggerJob()
+        when:
+        given()
+                .contentType(ContentType.JSON)
+                .body(
+                        asJson(
+                                [
+                                        globalAssetIds: ["urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"]
+                                ]
+                        )
+                )
+                .header(jwtAuthorization(ADMIN))
+                .when()
+                .post("/api/assets/sync")
+                .then()
+                .statusCode(200)
 
-		and:
-			irsApiReturnsJobInRunningState()
+        then:
+        eventually {
+            assertNoAssetsStored()
+        }
 
-		when:
-			given()
-				.contentType(ContentType.JSON)
-				.body(
-					asJson(
-						[
-							globalAssetIds: ["urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"]
-						]
-					)
-				)
-				.header(jwtAuthorization(ADMIN))
-				.when()
-				.post("/api/assets/sync")
-				.then()
-				.statusCode(200)
+        and:
+        verifyOAuth2ApiCalledOnceForTechnicalUserToken()
+        verifyIrsApiTriggerJobCalledOnce()
+    }
 
-		then:
-			eventually {
-				assertNoAssetsStored()
-			}
+    def "should return assets for authenticated user with role"() {
+        given:
+        defaultAssetsStored()
 
-		and:
-			verifyOAuth2ApiCalledOnceForTechnicalUserToken()
-			verifyIrsApiTriggerJobCalledOnce()
-	}
-
-	def "should return assets for authenticated user with role"() {
-		given:
-			defaultAssetsStored()
-
-		expect:
-			given()
-				.header(jwtAuthorization(ADMIN))
-				.contentType(ContentType.JSON)
-				.when()
-				.get("/api/assets/urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb")
-				.then()
-				.statusCode(200)
-	}
+        expect:
+        given()
+                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/assets/urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb")
+                .then()
+                .statusCode(200)
+    }
 
     def "should return asset without under investigation mark"() {
         given:
@@ -297,266 +293,266 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .body("underInvestigation", equalTo(true))
     }
 
-	def "should return assets with manufacturer name"() {
-		given:
-			cachedBpnsForDefaultAssets()
+    def "should return assets with manufacturer name"() {
+        given:
+        cachedBpnsForDefaultAssets()
 
-		and:
-			defaultAssetsStored()
+        and:
+        defaultAssetsStored()
 
-		expect:
-			given()
-				.header(jwtAuthorization(ADMIN))
-				.contentType(ContentType.JSON)
-				.when()
-				.get("/api/assets")
-				.then()
-				.statusCode(200)
-				.body("content.manufacturerName", everyItem(not(equalTo(AssetsConverter.EMPTY_TEXT))))
-	}
+        expect:
+        given()
+                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/assets")
+                .then()
+                .statusCode(200)
+                .body("content.manufacturerName", everyItem(not(equalTo(AssetsConverter.EMPTY_TEXT))))
+    }
 
-	def "should return supplier assets"() {
-		given:
-			defaultAssetsStored()
+    def "should return supplier assets"() {
+        given:
+        defaultAssetsStored()
 
-		expect:
-			given()
-				.header(jwtAuthorization(ADMIN))
-				.contentType(ContentType.JSON)
-				.when()
-				.get("/api/assets/supplier")
-				.then()
-				.statusCode(200)
-				.body("totalItems", equalTo(12))
-	}
+        expect:
+        given()
+                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/assets/supplier")
+                .then()
+                .statusCode(200)
+                .body("totalItems", equalTo(12))
+    }
 
-	def "should return own assets"() {
-		given:
-			defaultAssetsStored()
+    def "should return own assets"() {
+        given:
+        defaultAssetsStored()
 
-		expect:
-			given()
-				.header(jwtAuthorization(ADMIN))
-				.contentType(ContentType.JSON)
-				.when()
-				.get("/api/assets/my")
-				.then()
-				.statusCode(200)
-				.body("totalItems", equalTo(1))
-	}
+        expect:
+        given()
+                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/assets/my")
+                .then()
+                .statusCode(200)
+                .body("totalItems", equalTo(1))
+    }
 
-	def "should return assets country map"() {
-		expect:
-			given()
-				.header(jwtAuthorization(role))
-				.contentType(ContentType.JSON)
-				.when()
-				.get("/api/assets/countries")
-				.then()
-				.statusCode(200)
+    def "should return assets country map"() {
+        expect:
+        given()
+                .header(jwtAuthorization(role))
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/assets/countries")
+                .then()
+                .statusCode(200)
 
-		where:
-			role << [USER, ADMIN, SUPERVISOR]
-	}
+        where:
+        role << [USER, ADMIN, SUPERVISOR]
+    }
 
-	def "should not return assets country map when user is not authenticated"() {
-		expect:
-			given()
-				.contentType(ContentType.JSON)
-				.when()
-				.get("/api/assets/countries")
-				.then()
-				.statusCode(401)
-	}
+    def "should not return assets country map when user is not authenticated"() {
+        expect:
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/assets/countries")
+                .then()
+                .statusCode(401)
+    }
 
-	def "should not return assets when user is not authenticated"() {
-		expect:
-			given()
-				.contentType(ContentType.JSON)
-				.when()
-				.get("/api/assets/1234")
-				.then()
-				.statusCode(401)
-	}
+    def "should not return assets when user is not authenticated"() {
+        expect:
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/assets/1234")
+                .then()
+                .statusCode(401)
+    }
 
-	def "should get children asset"() {
-		given:
-			defaultAssetsStored()
+    def "should get children asset"() {
+        given:
+        defaultAssetsStored()
 
-		expect:
-			given()
-				.header(jwtAuthorization(ADMIN))
-				.contentType(ContentType.JSON)
-				.when()
-				.get("/api/assets/urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb/children/urn:uuid:587cfb38-7149-4f06-b1e0-0e9b6e98be2a")
-				.then()
-				.statusCode(200)
-				.body("id", Matchers.is("urn:uuid:587cfb38-7149-4f06-b1e0-0e9b6e98be2a"))
-	}
+        expect:
+        given()
+                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/assets/urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb/children/urn:uuid:587cfb38-7149-4f06-b1e0-0e9b6e98be2a")
+                .then()
+                .statusCode(200)
+                .body("id", Matchers.is("urn:uuid:587cfb38-7149-4f06-b1e0-0e9b6e98be2a"))
+    }
 
-	def "should return 404 when children asset is not found"() {
-		given:
-			defaultAssetsStored()
+    def "should return 404 when children asset is not found"() {
+        given:
+        defaultAssetsStored()
 
-		expect:
-			given()
-				.header(jwtAuthorization(ADMIN))
-				.contentType(ContentType.JSON)
-				.when()
-				.get("/api/assets/urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb/children/unknown")
-				.then()
-				.statusCode(404)
-	}
+        expect:
+        given()
+                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/assets/urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb/children/unknown")
+                .then()
+                .statusCode(404)
+    }
 
-	def "should get a page of assets"() {
-		given:
-			defaultAssetsStored()
+    def "should get a page of assets"() {
+        given:
+        defaultAssetsStored()
 
-		expect:
-			given()
-				.header(jwtAuthorization(ADMIN))
-				.contentType(ContentType.JSON)
-				.param("page", "2")
-				.param("size", "2")
-				.when()
-				.get("/api/assets")
-				.then()
-				.statusCode(200)
-				.body("page", Matchers.is(2))
-				.body("pageSize", Matchers.is(2))
-	}
+        expect:
+        given()
+                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .param("page", "2")
+                .param("size", "2")
+                .when()
+                .get("/api/assets")
+                .then()
+                .statusCode(200)
+                .body("page", Matchers.is(2))
+                .body("pageSize", Matchers.is(2))
+    }
 
-	def "should not update quality type for not existing asset"() {
-		expect:
-			given()
-				.header(jwtAuthorization(ADMIN))
-				.contentType(ContentType.JSON)
-				.body(asJson(
-					[
-						qualityType: 'Critical'
-					]
-				))
-				.when()
-				.patch("/api/assets/1234")
-				.then()
-				.statusCode(404)
-				.body("message", equalTo("Asset with id 1234 was not found."))
-	}
+    def "should not update quality type for not existing asset"() {
+        expect:
+        given()
+                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .body(asJson(
+                        [
+                                qualityType: 'Critical'
+                        ]
+                ))
+                .when()
+                .patch("/api/assets/1234")
+                .then()
+                .statusCode(404)
+                .body("message", equalTo("Asset with id 1234 was not found."))
+    }
 
-	def "should not update quality type with invalid request body"() {
-		expect:
-			given()
-				.header(jwtAuthorization(ADMIN))
-				.contentType(ContentType.JSON)
-				.body(asJson(requestBody))
-				.when()
-				.patch("/api/assets/1234")
-				.then()
-				.statusCode(400)
-				.body("message", equalTo(errorMessage))
+    def "should not update quality type with invalid request body"() {
+        expect:
+        given()
+                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .body(asJson(requestBody))
+                .when()
+                .patch("/api/assets/1234")
+                .then()
+                .statusCode(400)
+                .body("message", equalTo(errorMessage))
 
-		where:
-			requestBody                                | errorMessage
-			[qualityType: 'NOT_EXISTING_QUALITY_TYPE'] | "Failed to deserialize request body."
-			[qualityType: 'CRITICAL']                  | "Failed to deserialize request body."
-			[qualityType: '']                          | "Failed to deserialize request body."
-			[qualityType: ' ']                         | "Failed to deserialize request body."
-			[qualityType: null]                        | "qualityType must be present"
-	}
+        where:
+        requestBody                                | errorMessage
+        [qualityType: 'NOT_EXISTING_QUALITY_TYPE'] | "Failed to deserialize request body."
+        [qualityType: 'CRITICAL']                  | "Failed to deserialize request body."
+        [qualityType: '']                          | "Failed to deserialize request body."
+        [qualityType: ' ']                         | "Failed to deserialize request body."
+        [qualityType: null]                        | "qualityType must be present"
+    }
 
-	def "should update quality type for existing asset"() {
-		given:
-			defaultAssetsStored()
+    def "should update quality type for existing asset"() {
+        given:
+        defaultAssetsStored()
 
-		and:
-			def existingAssetId = "urn:uuid:1ae94880-e6b0-4bf3-ab74-8148b63c0640"
+        and:
+        def existingAssetId = "urn:uuid:1ae94880-e6b0-4bf3-ab74-8148b63c0640"
 
-		expect:
-			given()
-				.header(jwtAuthorization(ADMIN))
-				.contentType(ContentType.JSON)
-				.when()
-				.get("/api/assets/$existingAssetId")
-				.then()
-				.statusCode(200)
-				.body("qualityType", equalTo("Ok"))
+        expect:
+        given()
+                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/assets/$existingAssetId")
+                .then()
+                .statusCode(200)
+                .body("qualityType", equalTo("Ok"))
 
-		and:
-			given()
-				.header(jwtAuthorization(ADMIN))
-				.contentType(ContentType.JSON)
-				.body(asJson(
-					[
-						qualityType: 'Critical'
-					]
-				))
-				.when()
-				.patch("/api/assets/$existingAssetId")
-				.then()
-				.statusCode(200)
-				.body("qualityType", equalTo("Critical"))
+        and:
+        given()
+                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .body(asJson(
+                        [
+                                qualityType: 'Critical'
+                        ]
+                ))
+                .when()
+                .patch("/api/assets/$existingAssetId")
+                .then()
+                .statusCode(200)
+                .body("qualityType", equalTo("Critical"))
 
-		and:
-			given()
-				.header(jwtAuthorization(ADMIN))
-				.contentType(ContentType.JSON)
-				.when()
-				.get("/api/assets/$existingAssetId")
-				.then()
-				.statusCode(200)
-				.body("qualityType", equalTo("Critical"))
-	}
+        and:
+        given()
+                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/assets/$existingAssetId")
+                .then()
+                .statusCode(200)
+                .body("qualityType", equalTo("Critical"))
+    }
 
-	def "should not return assets detail information when user is not authenticated"() {
-		given:
-			cachedBpnsForDefaultAssets()
+    def "should not return assets detail information when user is not authenticated"() {
+        given:
+        cachedBpnsForDefaultAssets()
 
-		and:
-			defaultAssetsStored()
+        and:
+        defaultAssetsStored()
 
-		expect:
-			given()
-				.contentType(ContentType.JSON)
-				.body(
-					asJson(
-						[
-							assetIds: ["1234"]
-						]
-					)
-				)
-				.when()
-				.post("/api/assets/detail-information")
-				.then()
-				.statusCode(401)
-	}
+        expect:
+        given()
+                .contentType(ContentType.JSON)
+                .body(
+                        asJson(
+                                [
+                                        assetIds: ["1234"]
+                                ]
+                        )
+                )
+                .when()
+                .post("/api/assets/detail-information")
+                .then()
+                .statusCode(401)
+    }
 
-	def "should return assets detail information"() {
-		given:
-			cachedBpnsForDefaultAssets()
+    def "should return assets detail information"() {
+        given:
+        cachedBpnsForDefaultAssets()
 
-		and:
-			defaultAssetsStored()
+        and:
+        defaultAssetsStored()
 
-		expect:
-			given()
-				.contentType(ContentType.JSON)
-				.body(
-					asJson(
-						[
-							assetIds: [
-								"urn:uuid:fe99da3d-b0de-4e80-81da-882aebcca978",
-								"urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb",
-								"urn:uuid:0ce83951-bc18-4e8f-892d-48bad4eb67ef"
-							]
-						]
-					)
-				)
-				.header(jwtAuthorization(ADMIN))
-				.when()
-				.post("/api/assets/detail-information")
-				.then()
-				.statusCode(200)
-				.body("", Matchers.hasSize(3))
-	}
+        expect:
+        given()
+                .contentType(ContentType.JSON)
+                .body(
+                        asJson(
+                                [
+                                        assetIds: [
+                                                "urn:uuid:fe99da3d-b0de-4e80-81da-882aebcca978",
+                                                "urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb",
+                                                "urn:uuid:0ce83951-bc18-4e8f-892d-48bad4eb67ef"
+                                        ]
+                                ]
+                        )
+                )
+                .header(jwtAuthorization(ADMIN))
+                .when()
+                .post("/api/assets/detail-information")
+                .then()
+                .statusCode(200)
+                .body("", Matchers.hasSize(3))
+    }
 
 }
