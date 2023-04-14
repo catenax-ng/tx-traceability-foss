@@ -36,7 +36,7 @@ public record StartJobRequest(
         Direction direction
 ) {
     public static StartJobRequest buildJobRequest(String globalAssetId, Direction direction) {
-        return new StartJobRequest(Aspect.allAspects(), globalAssetId, true, BomLifecycle.AS_BUILT, true, DEFAULT_DEPTH, direction);
+        return new StartJobRequest(Aspect.defaultAspects(), globalAssetId, true, BomLifecycle.AS_BUILT, true, DEFAULT_DEPTH, direction);
     }
 
     public static final int DEFAULT_DEPTH = 2;
@@ -45,7 +45,8 @@ public record StartJobRequest(
 
 enum Aspect {
     BATCH("Batch"),
-    SERIAL_PART_TYPIZATION("SerialPartTypization");
+    SERIAL_PART_TYPIZATION("SerialPartTypization"),
+    ASSEMBLY_PART_RELATIONSHIP("AssemblyPartRelationship");
 
     private final String aspectName;
 
@@ -55,6 +56,10 @@ enum Aspect {
 
     public String getAspectName() {
         return aspectName;
+    }
+
+    public static List<String> defaultAspects() {
+        return List.of(BATCH.getAspectName(), SERIAL_PART_TYPIZATION.getAspectName());
     }
 
     public static List<String> allAspects() {

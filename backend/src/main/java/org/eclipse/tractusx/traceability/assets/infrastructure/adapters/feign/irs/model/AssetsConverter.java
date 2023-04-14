@@ -33,6 +33,7 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -44,147 +45,181 @@ import java.util.stream.Collectors;
 @Component
 public class AssetsConverter {
 
-	public static final String EMPTY_TEXT = "--";
+    public static final String EMPTY_TEXT = "--";
 
-	private BpnRepository bpnRepository;
+    private BpnRepository bpnRepository;
 
-	private final ObjectMapper mapper = new ObjectMapper()
-		.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE, true)
-		.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    private final ObjectMapper mapper = new ObjectMapper()
+            .configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE, true)
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-	public AssetsConverter(BpnRepository bpnRepository) {
-		this.bpnRepository = bpnRepository;
-	}
+    private static final String SINGLE_LEVEL_USAGE_AS_BUILT = "SingleLevelUsageAsBuilt";
+    private static final String ASSEMBLY_PART_RELATIONSHIP = "AssemblyPartRelationship";
 
-	public List<Asset> readAndConvertAssets() {
-		try {
-			InputStream file = AssetsConverter.class.getResourceAsStream("/data/irs_assets_v2.json");
-			JobResponse response = mapper.readValue(file, JobResponse.class);
+    public AssetsConverter(BpnRepository bpnRepository) {
+        this.bpnRepository = bpnRepository;
+    }
 
-			return convertAssets(response);
-		} catch (IOException e) {
-			return Collections.emptyList();
-		}
-	}
+    public List<Asset> readAndConvertAssets() {
+        try {
+            InputStream file = AssetsConverter.class.getResourceAsStream("/data/irs_assets_v2.json");
+            JobResponse response = mapper.readValue(file, JobResponse.class);
 
-	public List<Asset> convertAssets(List<ShellDescriptor> items) {
-		return items.stream()
-			.map(this::toAsset)
-			.toList();
-	}
+            return convertAssets(response);
+        } catch (IOException e) {
+            return Collections.emptyList();
+        }
+    }
 
-	public List<Asset> convertAssets(JobResponse response)  {
-		List<SerialPartTypization> parts = response.serialPartTypizations();
-		Map<String, String> shortIds = response.shells().stream()
-			.collect(Collectors.toMap(Shell::identification, Shell::idShort));
-		Set<String> supplierParts = response.relationships().stream()
-			.map(Relationship::childCatenaXId)
-			.collect(Collectors.toSet());
-		Map<String, List<Relationship>> relationships = response.relationships().stream()
-			.collect(Collectors.groupingBy(Relationship::catenaXId));
+    public List<Asset> convertAssets(List<ShellDescriptor> items) {
+        return items.stream()
+                .map(this::toAsset)
+                .toList();
+    }
 
-			return parts.stream()
-				.map(part -> new Asset(
-					part.catenaXId(),
-					defaultValue(shortIds.get(part.catenaXId())),
-					defaultValue(part.partTypeInformation().nameAtManufacturer()),
-					defaultValue(part.partTypeInformation().manufacturerPartId()),
-					partInstanceId(part),
-					manufacturerId(part),
-					batchId(part),
-					manufacturerName(part),
-					defaultValue(part.partTypeInformation().nameAtCustomer()),
-					defaultValue(part.partTypeInformation().customerPartId()),
-					manufacturingDate(part),
-					manufacturingCountry(part),
-					supplierParts.contains(part.catenaXId()),
-					getChildParts(relationships, shortIds, part.catenaXId()),
-					false,
-					QualityType.OK,
-					van(part)
-				)).toList();
-	}
+    public List<Asset> convertAssets(JobResponse response) {
+        List<SerialPartTypization> parts = response.serialPartTypizations();
 
-	private Asset toAsset(ShellDescriptor shellDescriptor) {
-		String manufacturerId = shellDescriptor.manufacturerId();
-		String manufacturerName = bpnRepository.findManufacturerName(manufacturerId).orElse(EMPTY_TEXT);
-		return new Asset(
-			shellDescriptor.globalAssetId(),
-			shellDescriptor.idShort(),
-			shellDescriptor.idShort(),
-			defaultValue(shellDescriptor.manufacturerPartId()),
-			defaultValue(shellDescriptor.partInstanceId()),
-			defaultValue(manufacturerId),
-			defaultValue(shellDescriptor.batchId()),
-			manufacturerName,
-			shellDescriptor.idShort(),
-			shellDescriptor.manufacturerPartId(),
-			null,
-			EMPTY_TEXT,
-			false,
-			Collections.emptyList(),
-			false,
-			QualityType.OK,
-			EMPTY_TEXT
-		);
-	}
+        // "idShort": "Taillight front_BPNL00000003AYRE_NO-577666297086581459258590",
+        //	"identification": "urn:uuid:858951f5-fb9c-4ec2-93be-e49fcc2c9361",
+        Map<String, String> shortIds = response.shells().stream()
+                .collect(Collectors.toMap(Shell::identification, Shell::idShort));
 
-	private String manufacturerName(SerialPartTypization part) {
-		String manufacturerId = manufacturerId(part);
+        Set<String> assemblyPartRelationshipParts = response.relationships().stream().filter(relationship -> ASSEMBLY_PART_RELATIONSHIP.equals(relationship.aspect().getAspectName()))
+                .map(Relationship::childCatenaXId)
+                .collect(Collectors.toSet());
 
-		return bpnRepository.findManufacturerName(manufacturerId).orElse(EMPTY_TEXT);
-	}
+        Set<String> singleLevelUsageAsBuiltParts= response.relationships().stream().filter(relationship -> SINGLE_LEVEL_USAGE_AS_BUILT.equals(relationship.aspect().getAspectName()))
+                .map(Relationship::childCatenaXId)
+                .collect(Collectors.toSet());
 
-	private String manufacturerId(SerialPartTypization part) {
-		return part.getLocalId(LocalIdType.MANUFACTURER_ID)
-			.orElse(EMPTY_TEXT);
-	}
+        Map<String, List<Relationship>> relationships = response.relationships().stream()
+                .collect(Collectors.groupingBy(Relationship::catenaXId));
 
-	private String batchId(SerialPartTypization part) {
-		return part.getLocalId(LocalIdType.BATCH_ID)
-			.orElse(EMPTY_TEXT);
-	}
+        List<Asset> assetList = new ArrayList<>();
+        return parts.stream()
+                .map(part -> new Asset(
+                        part.catenaXId(),
+                        defaultValue(shortIds.get(part.catenaXId())),
+                        defaultValue(part.partTypeInformation().nameAtManufacturer()),
+                        defaultValue(part.partTypeInformation().manufacturerPartId()),
+                        partInstanceId(part),
+                        manufacturerId(part),
+                        batchId(part),
+                        manufacturerName(part),
+                        defaultValue(part.partTypeInformation().nameAtCustomer()),
+                        defaultValue(part.partTypeInformation().customerPartId()),
+                        manufacturingDate(part),
+                        manufacturingCountry(part),
+                        getPartOwner(assemblyPartRelationshipParts, singleLevelUsageAsBuiltParts, part.catenaXId()),
+                        getChildParts(relationships, shortIds, part.catenaXId()),
+                        getParentParts(relationships, shortIds, part.catenaXId())
+                        false,
+                        QualityType.OK,
+                        van(part)
+                )).toList();
+    }
 
-	private String partInstanceId(SerialPartTypization part) {
-		return part.getLocalId(LocalIdType.PART_INSTANCE_ID)
-			.orElse(EMPTY_TEXT);
-	}
+    private Asset toAsset(ShellDescriptor shellDescriptor) {
+        String manufacturerId = shellDescriptor.manufacturerId();
+        String manufacturerName = bpnRepository.findManufacturerName(manufacturerId).orElse(EMPTY_TEXT);
+        return new Asset(
+                shellDescriptor.globalAssetId(),
+                shellDescriptor.idShort(),
+                shellDescriptor.idShort(),
+                defaultValue(shellDescriptor.manufacturerPartId()),
+                defaultValue(shellDescriptor.partInstanceId()),
+                defaultValue(manufacturerId),
+                defaultValue(shellDescriptor.batchId()),
+                manufacturerName,
+                shellDescriptor.idShort(),
+                shellDescriptor.manufacturerPartId(),
+                null,
+                EMPTY_TEXT,
+                false,
+                Collections.emptyList(),
+                false,
+                QualityType.OK,
+                EMPTY_TEXT
+        );
+    }
 
-	private String manufacturingCountry(SerialPartTypization part) {
-		if (part.manufacturingInformation() == null) {
-			return EMPTY_TEXT;
-		}
-		return part.manufacturingInformation().country();
-	}
+    private PartOwner getPartOwner(Set<String> supplierParts, Set<String> customerParts, String catenaXId){
+        if (supplierParts.stream().anyMatch(catenaXId::equals)){
+            return PartOwner.SUPPLIER;
+        }
+        if (customerParts.stream().anyMatch(catenaXId::equals)){
+            return PartOwner.CUSTOMER;
+        }
+        return PartOwner.OWN;
+    }
 
-	private Instant manufacturingDate(SerialPartTypization part) {
-		if (part.manufacturingInformation() == null) {
-			return null;
-		}
 
-		return Optional.ofNullable(part.manufacturingInformation().date())
-			.map(Date::toInstant)
-			.orElse(null);
-	}
 
-	private String defaultValue(String value) {
-		if (!StringUtils.hasText(value)) {
-			return EMPTY_TEXT;
-		}
-		return value;
-	}
+    private String manufacturerName(SerialPartTypization part) {
+        String manufacturerId = manufacturerId(part);
 
-	private List<Asset.ChildDescriptions> getChildParts(Map<String, List<Relationship>> relationships, Map<String, String> shortIds, String catenaXId) {
-		return Optional.ofNullable(relationships.get(catenaXId))
-			.orElse(Collections.emptyList())
-			.stream()
-			.map(child -> new Asset.ChildDescriptions(child.childCatenaXId(), shortIds.get(child.childCatenaXId())))
-			.toList();
-	}
+        return bpnRepository.findManufacturerName(manufacturerId).orElse(EMPTY_TEXT);
+    }
 
-	private String van(SerialPartTypization part) {
-		return part.getLocalId(LocalIdType.VAN)
-			.orElse(EMPTY_TEXT);
-	}
+    private String manufacturerId(SerialPartTypization part) {
+        return part.getLocalId(LocalIdType.MANUFACTURER_ID)
+                .orElse(EMPTY_TEXT);
+    }
+
+    private String batchId(SerialPartTypization part) {
+        return part.getLocalId(LocalIdType.BATCH_ID)
+                .orElse(EMPTY_TEXT);
+    }
+
+    private String partInstanceId(SerialPartTypization part) {
+        return part.getLocalId(LocalIdType.PART_INSTANCE_ID)
+                .orElse(EMPTY_TEXT);
+    }
+
+    private String manufacturingCountry(SerialPartTypization part) {
+        if (part.manufacturingInformation() == null) {
+            return EMPTY_TEXT;
+        }
+        return part.manufacturingInformation().country();
+    }
+
+    private Instant manufacturingDate(SerialPartTypization part) {
+        if (part.manufacturingInformation() == null) {
+            return null;
+        }
+
+        return Optional.ofNullable(part.manufacturingInformation().date())
+                .map(Date::toInstant)
+                .orElse(null);
+    }
+
+    private String defaultValue(String value) {
+        if (!StringUtils.hasText(value)) {
+            return EMPTY_TEXT;
+        }
+        return value;
+    }
+
+    private List<Asset.ChildDescriptions> getChildParts(Map<String, List<Relationship>> relationships, Map<String, String> shortIds, String catenaXId) {
+        return Optional.ofNullable(relationships.get(catenaXId))
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(child -> new Asset.ChildDescriptions(child.childCatenaXId(), shortIds.get(child.childCatenaXId())))
+                .toList();
+    }
+
+    private List<Asset.ChildDescriptions> getParentParts(Map<String, List<Relationship>> relationships, Map<String, String> shortIds, String catenaXId) {
+        return Optional.ofNullable(relationships.get(catenaXId))
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(child -> new Asset.ChildDescriptions(child.childCatenaXId(), shortIds.get(child.childCatenaXId())))
+                .toList();
+    }
+
+    private String van(SerialPartTypization part) {
+        return part.getLocalId(LocalIdType.VAN)
+                .orElse(EMPTY_TEXT);
+    }
 
 }

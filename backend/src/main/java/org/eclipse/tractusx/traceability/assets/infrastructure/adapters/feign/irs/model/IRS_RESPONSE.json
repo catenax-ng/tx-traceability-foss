@@ -1,0 +1,50 @@
+{
+  "urn:bamm:io.catenax.serial_part_typization:1.1.0#SerialPartTypization": [
+    {
+      "localIdentifiers": [
+        {
+          "value": "BPNL00000003AYRE",
+          "key": "manufacturerId"
+        },
+        {
+          "value": "XW-63",
+          "key": "manufacturerPartId"
+        },
+        {
+          "value": "OMAPUHRUUEFIUYLEE",
+          "key": "partInstanceId"
+        },
+        {
+          "value": "OMAPUHRUUEFIUYLEE",
+          "key": "van"
+        }
+      ],
+      "manufacturingInformation": {
+        "date": "2013-10-09T17:39:34.000Z",
+        "country": "DEU"
+      },
+      "catenaXId": "urn:uuid:d3c0bf85-d44f-47c5-990d-fec8a36065c6",
+      "partTypeInformation": {
+        "manufacturerPartId": "XW-63",
+        "classification": "product",
+        "nameAtManufacturer": "Vehicle Combustion"
+      }
+    }
+  ],
+  "urn:bamm:io.catenax.single_level_usage_as_built:1.0.1#SingleLevelUsageAsBuilt": [
+    {
+      "parentParts": [
+        {
+          "parentCatenaXId": "urn:uuid:d3c0bf85-d44f-47c5-990d-fec8a36065c6",
+          "quantity": {
+            "quantityNumber": 1,
+            "measurementUnit": "unit:piece"
+          },
+          "createdOn": "2022-02-03T14:48:54.709Z",
+          "lastModifiedOn": "2022-02-03T14:48:54.709Z"
+        }
+      ],
+      "catenaXId": "urn:uuid:c4cd2818-b616-4a28-b327-7e7e449fbdae"
+    }
+  ]
+}

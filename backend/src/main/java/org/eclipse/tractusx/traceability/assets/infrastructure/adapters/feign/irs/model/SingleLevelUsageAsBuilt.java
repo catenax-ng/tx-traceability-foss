@@ -18,14 +18,37 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+
 package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model;
 
-record Relationship(String catenaXId, LinkedItem linkedItem, Aspect aspect) {
-	String childCatenaXId() {
-		return linkedItem.childCatenaXId();
-	}
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+record SingleLevelUsageAsBuilt(
+        String catenaXId,
+        List<ParentPart> parentParts
+) {
+    SingleLevelUsageAsBuilt(String catenaXId, List<ParentPart> parentParts) {
+        this.catenaXId = catenaXId;
+        this.parentParts = Objects.requireNonNullElse(parentParts, Collections.emptyList());
+    }
 }
 
-record LinkedItem(
-	String childCatenaXId
-) {}
+record Quantity(
+        Double quantityNumber,
+        String measurementUnit
+) {
+}
+
+record ParentPart(
+        String parentCatenaXId,
+        Quantity quantity,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss", timezone = "CET") Date createdOn,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss", timezone = "CET") Date lastModifiedOn
+) {
+}
+

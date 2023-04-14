@@ -80,9 +80,7 @@ public class AssetService {
 
 	public Asset updateQualityType(String assetId, QualityType qualityType) {
 		Asset foundAsset = assetRepository.getAssetById(assetId);
-
 		foundAsset.updateQualityType(qualityType);
-
 		return assetRepository.save(foundAsset);
 	}
 
