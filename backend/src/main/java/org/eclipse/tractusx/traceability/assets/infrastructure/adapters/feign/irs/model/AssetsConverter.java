@@ -33,13 +33,11 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -47,7 +45,7 @@ public class AssetsConverter {
 
     public static final String EMPTY_TEXT = "--";
 
-    private BpnRepository bpnRepository;
+    private final BpnRepository bpnRepository;
 
     private final ObjectMapper mapper = new ObjectMapper()
             .configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE, true)
@@ -78,26 +76,22 @@ public class AssetsConverter {
     }
 
     public List<Asset> convertAssets(JobResponse response) {
-        List<SerialPartTypization> parts = response.serialPartTypizations();
-
+        List<SerialPartTypization> allParts = response.serialPartTypizations();
         // "idShort": "Taillight front_BPNL00000003AYRE_NO-577666297086581459258590",
         //	"identification": "urn:uuid:858951f5-fb9c-4ec2-93be-e49fcc2c9361",
         Map<String, String> shortIds = response.shells().stream()
                 .collect(Collectors.toMap(Shell::identification, Shell::idShort));
 
-        Set<String> assemblyPartRelationshipParts = response.relationships().stream().filter(relationship -> ASSEMBLY_PART_RELATIONSHIP.equals(relationship.aspect().getAspectName()))
-                .map(Relationship::childCatenaXId)
-                .collect(Collectors.toSet());
+        Map<String, List<Relationship>> supplierPartsMap = response.relationships().stream()
+                .filter(relationship -> ASSEMBLY_PART_RELATIONSHIP.equals(relationship.aspectType().getAspectName()))
+                .collect(Collectors.groupingBy(Relationship::childCatenaXId, Collectors.toList()));
 
-        Set<String> singleLevelUsageAsBuiltParts= response.relationships().stream().filter(relationship -> SINGLE_LEVEL_USAGE_AS_BUILT.equals(relationship.aspect().getAspectName()))
-                .map(Relationship::childCatenaXId)
-                .collect(Collectors.toSet());
 
-        Map<String, List<Relationship>> relationships = response.relationships().stream()
-                .collect(Collectors.groupingBy(Relationship::catenaXId));
+        Map<String, List<Relationship>> customerPartsMap = response.relationships().stream()
+                .filter(relationship -> SINGLE_LEVEL_USAGE_AS_BUILT.equals(relationship.aspectType().getAspectName()))
+                .collect(Collectors.groupingBy(Relationship::childCatenaXId, Collectors.toList()));
 
-        List<Asset> assetList = new ArrayList<>();
-        return parts.stream()
+        return allParts.stream()
                 .map(part -> new Asset(
                         part.catenaXId(),
                         defaultValue(shortIds.get(part.catenaXId())),
@@ -111,9 +105,9 @@ public class AssetsConverter {
                         defaultValue(part.partTypeInformation().customerPartId()),
                         manufacturingDate(part),
                         manufacturingCountry(part),
-                        getPartOwner(assemblyPartRelationshipParts, singleLevelUsageAsBuiltParts, part.catenaXId()),
-                        getChildParts(relationships, shortIds, part.catenaXId()),
-                        getParentParts(relationships, shortIds, part.catenaXId())
+                        getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId()),
+                        getPartsFromRelationships(supplierPartsMap, shortIds, part.catenaXId()),
+                        getPartsFromRelationships(customerPartsMap, shortIds, part.catenaXId()),
                         false,
                         QualityType.OK,
                         van(part)
@@ -136,7 +130,8 @@ public class AssetsConverter {
                 shellDescriptor.manufacturerPartId(),
                 null,
                 EMPTY_TEXT,
-                false,
+                Owner.OWN,
+                Collections.emptyList(),
                 Collections.emptyList(),
                 false,
                 QualityType.OK,
@@ -144,16 +139,16 @@ public class AssetsConverter {
         );
     }
 
-    private PartOwner getPartOwner(Set<String> supplierParts, Set<String> customerParts, String catenaXId){
-        if (supplierParts.stream().anyMatch(catenaXId::equals)){
-            return PartOwner.SUPPLIER;
-        }
-        if (customerParts.stream().anyMatch(catenaXId::equals)){
-            return PartOwner.CUSTOMER;
-        }
-        return PartOwner.OWN;
-    }
+    private Owner getPartOwner(Map<String, List<Relationship>> supplierParts, Map<String, List<Relationship>> customerParts, String catenaXId) {
 
+        if (supplierParts.containsKey(catenaXId)) {
+            return Owner.SUPPLIER;
+        }
+        if (customerParts.containsKey(catenaXId)) {
+            return Owner.CUSTOMER;
+        }
+        return Owner.OWN;
+    }
 
 
     private String manufacturerName(SerialPartTypization part) {
@@ -201,19 +196,11 @@ public class AssetsConverter {
         return value;
     }
 
-    private List<Asset.ChildDescriptions> getChildParts(Map<String, List<Relationship>> relationships, Map<String, String> shortIds, String catenaXId) {
+    private List<Asset.Descriptions> getPartsFromRelationships(Map<String, List<Relationship>> relationships, Map<String, String> shortIds, String catenaXId) {
         return Optional.ofNullable(relationships.get(catenaXId))
                 .orElse(Collections.emptyList())
                 .stream()
-                .map(child -> new Asset.ChildDescriptions(child.childCatenaXId(), shortIds.get(child.childCatenaXId())))
-                .toList();
-    }
-
-    private List<Asset.ChildDescriptions> getParentParts(Map<String, List<Relationship>> relationships, Map<String, String> shortIds, String catenaXId) {
-        return Optional.ofNullable(relationships.get(catenaXId))
-                .orElse(Collections.emptyList())
-                .stream()
-                .map(child -> new Asset.ChildDescriptions(child.childCatenaXId(), shortIds.get(child.childCatenaXId())))
+                .map(child -> new Asset.Descriptions(child.childCatenaXId(), shortIds.get(child.childCatenaXId())))
                 .toList();
     }
 

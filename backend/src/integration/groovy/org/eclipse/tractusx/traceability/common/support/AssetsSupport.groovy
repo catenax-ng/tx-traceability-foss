@@ -53,9 +53,12 @@ trait AssetsSupport implements AssetRepositoryProvider, InvestigationsRepository
                     asset.getCustomerPartId(),
                     asset.getManufacturingDate(),
                     asset.getManufacturingCountry(),
-                    asset.isSupplierPart(),
+                    asset.getOwner(),
                     asset.getChildDescriptions().stream()
                             .map(child -> new AssetEntity.ChildDescription(child.id(), child.idShort()))
+                            .toList(),
+                    asset.getParentDescriptions().stream()
+                            .map(parent -> new AssetEntity.ParentDescription(parent.id(), parent.idShort()))
                             .toList(),
                     asset.getQualityType(),
                     asset.getVan()

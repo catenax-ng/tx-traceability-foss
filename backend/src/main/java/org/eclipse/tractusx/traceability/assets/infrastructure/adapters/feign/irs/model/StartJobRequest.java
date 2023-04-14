@@ -22,6 +22,7 @@
 package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -54,6 +55,7 @@ enum Aspect {
         this.aspectName = aspectName;
     }
 
+    @JsonValue
     public String getAspectName() {
         return aspectName;
     }

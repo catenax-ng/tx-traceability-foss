@@ -27,6 +27,7 @@ import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 import org.eclipse.tractusx.traceability.assets.domain.ports.AssetRepository;
 import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
+import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Owner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,76 +35,79 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AssetFacadeTest {
 
-	@InjectMocks
-	private AssetFacade assetFacade;
+    @InjectMocks
+    private AssetFacade assetFacade;
 
-	@Mock
-	AssetService assetService;
+    @Mock
+    AssetService assetService;
 
-	@Mock
-	private AssetRepository assetRepository;
+    @Mock
+    private AssetRepository assetRepository;
 
-	@Test
-	@DisplayName("get AssetsCountryMap")
-	void testGetAssetsCountryMap() {
+    @Test
+    @DisplayName("get AssetsCountryMap")
+    void testGetAssetsCountryMap() {
 
-		// given
-		List<Asset> assets = Arrays.asList(
-			newAsset("DEU"),
-			newAsset("DEU"),
-			newAsset("DEU"),
-			newAsset("POL"),
-			newAsset("POL"),
-			newAsset("ITA"),
-			newAsset("FRA")
-		);
-
-
-		Map<String,Long> assetMap = new HashMap<>();
+        // given
+        List<Asset> assets = Arrays.asList(
+                newAsset("DEU"),
+                newAsset("DEU"),
+                newAsset("DEU"),
+                newAsset("POL"),
+                newAsset("POL"),
+                newAsset("ITA"),
+                newAsset("FRA")
+        );
 
 
-		for(Asset asset : assets) {
-			assetMap.put(asset.getManufacturingCountry(),0L);
-		}
+        Map<String, Long> assetMap = new HashMap<>();
 
 
-		when(assetService.getAssetsCountryMap()).thenReturn(getCountryCodesWithCountOfOccurrence(assets));
+        for (Asset asset : assets) {
+            assetMap.put(asset.getManufacturingCountry(), 0L);
+        }
 
-		// when
-		Map<String, Long> countryMap = assetFacade.getAssetsCountryMap();
 
-		// then
-		assertEquals(3, countryMap.get("DEU"));
-		assertEquals(2, countryMap.get("POL"));
-		assertEquals(1, countryMap.get("ITA"));
-		assertEquals(1, countryMap.get("FRA"));
-	}
+        when(assetService.getAssetsCountryMap()).thenReturn(getCountryCodesWithCountOfOccurrence(assets));
 
-	// util functions
-	private Asset newAsset(String country) {
-		return new Asset(
-			null, null, null, null, null, null, null, null, null, null, null,
-			country, true, null, false, QualityType.OK, null
-		);
-	}
+        // when
+        Map<String, Long> countryMap = assetFacade.getAssetsCountryMap();
 
-	private Map<String,Long> getCountryCodesWithCountOfOccurrence(List<Asset> assets) {
+        // then
+        assertEquals(3, countryMap.get("DEU"));
+        assertEquals(2, countryMap.get("POL"));
+        assertEquals(1, countryMap.get("ITA"));
+        assertEquals(1, countryMap.get("FRA"));
+    }
 
-		Map<String, Long> occurrences = new HashMap<>();
+    // util functions
+    private Asset newAsset(String country) {
+        return new Asset(
+                null, null, null, null, null, null, null, null, null, null, null,
+                country, Owner.OWN, null, null, false, QualityType.OK, null
+        );
+    }
 
-		for(Asset asset : assets) {
-			String countryCode = asset.getManufacturingCountry();
+    private Map<String, Long> getCountryCodesWithCountOfOccurrence(List<Asset> assets) {
+
+        Map<String, Long> occurrences = new HashMap<>();
+
+        for (Asset asset : assets) {
+            String countryCode = asset.getManufacturingCountry();
             occurrences.merge(countryCode, 1L, Long::sum);
-		}
+        }
 
-		return occurrences;
-	}
+        return occurrences;
+    }
 }
