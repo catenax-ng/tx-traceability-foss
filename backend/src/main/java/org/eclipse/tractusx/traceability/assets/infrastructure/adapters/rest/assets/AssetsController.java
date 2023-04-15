@@ -28,9 +28,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.ws.rs.QueryParam;
 import org.eclipse.tractusx.traceability.assets.application.AssetFacade;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.ports.AssetRepository;
+import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Owner;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -76,11 +78,17 @@ public class AssetsController {
 		@ApiResponse(responseCode = "401", description = "Authorization failed."),
 		@ApiResponse(responseCode = "403", description = "Forbidden.")})
 	@GetMapping("")
-	public PageResult<Asset> assets(Pageable pageable) {
-		return assetRepository.getAssets(pageable);
+	public PageResult<Asset> assets(Pageable pageable, @QueryParam("owner") Owner owner) {
+		return assetRepository.getAssets(pageable, owner);
 	}
 
-
+    /**
+     * Get supplier assets by pagination
+     * @param pageable pageable
+     * @deprecated This has been deprecated. Please use: GET /assets
+     * @return PageResult<Asset>
+     */
+    @Deprecated
 	@Operation(operationId = "supplierAssets",
 		summary = "Get supplier assets by pagination",
 		tags = {"Assets"},
@@ -91,9 +99,16 @@ public class AssetsController {
 		@ApiResponse(responseCode = "403", description = "Forbidden.")})
 	@GetMapping("/supplier")
 	public PageResult<Asset> supplierAssets(Pageable pageable) {
-		return assetRepository.getSupplierAssets(pageable);
+		return assetRepository.getAssets(pageable, Owner.SUPPLIER);
 	}
 
+    /**
+     * Get own assets by pagination
+     * @param pageable pageable
+     * @deprecated This has been deprecated. Please use: GET /assets
+     * @return PageResult<Asset>
+     */
+    @Deprecated
 	@Operation(operationId = "ownAssets",
 		summary = "Get own assets by pagination",
 		tags = {"Assets"},
@@ -104,7 +119,7 @@ public class AssetsController {
 		@ApiResponse(responseCode = "403", description = "Forbidden.")})
 	@GetMapping("/my")
 	public PageResult<Asset> ownAssets(Pageable pageable) {
-		return assetRepository.getOwnAssets(pageable);
+		return assetRepository.getAssets(pageable, Owner.OWN);
 	}
 
 	@Operation(operationId = "assetsCountryMap",

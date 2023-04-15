@@ -66,18 +66,11 @@ public class PersistentAssetsRepository implements AssetRepository {
     }
 
     @Override
-    public PageResult<Asset> getAssets(Pageable pageable) {
+    public PageResult<Asset> getAssets(Pageable pageable, Owner owner) {
+        if (owner != null) {
+            return new PageResult<>(assetsRepository.findByOwner(pageable, owner), this::toAsset);
+        }
         return new PageResult<>(assetsRepository.findAll(pageable), this::toAsset);
-    }
-
-    @Override
-    public PageResult<Asset> getSupplierAssets(Pageable pageable) {
-        return new PageResult<>(assetsRepository.findByOwner(pageable, Owner.SUPPLIER), this::toAsset);
-    }
-
-    @Override
-    public PageResult<Asset> getOwnAssets(Pageable pageable) {
-        return new PageResult<>(assetsRepository.findByOwner(pageable, Owner.OWN), this::toAsset);
     }
 
     @Override

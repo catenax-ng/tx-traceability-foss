@@ -309,6 +309,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .body("content.manufacturerName", everyItem(not(equalTo(AssetsConverter.EMPTY_TEXT))))
     }
 
+    // Deprecated please remove once controller has been removed
     def "should return supplier assets"() {
         given:
         defaultAssetsStored()
@@ -324,6 +325,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .body("totalItems", equalTo(12))
     }
 
+    // Deprecated please remove once controller has been removed
     def "should return own assets"() {
         given:
         defaultAssetsStored()
@@ -337,6 +339,27 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .then()
                 .statusCode(200)
                 .body("totalItems", equalTo(1))
+    }
+
+    def "should return assets by owner filtering"() {
+        given:
+        defaultAssetsStored()
+
+        expect:
+        given()
+                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .queryParam("owner", ownerValue)
+                .when()
+                .get("/api/assets", )
+                .then()
+                .statusCode(200)
+                .body("totalItems", equalTo(totalItemsValue))
+        where:
+        ownerValue  || totalItemsValue
+        "OWN"       || 1
+        "CUSTOMER"  || 0
+        "SUPPLIER"  || 12
     }
 
     def "should return assets country map"() {
