@@ -21,10 +21,12 @@
 
 package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.rest
 
+import com.jayway.jsonpath.TypeRef
 import io.restassured.http.ContentType
 import org.eclipse.tractusx.traceability.IntegrationSpecification
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.AssetsConverter
+import org.eclipse.tractusx.traceability.common.model.PageResult
 import org.eclipse.tractusx.traceability.common.support.AssetsSupport
 import org.eclipse.tractusx.traceability.common.support.BpnSupport
 import org.eclipse.tractusx.traceability.common.support.IrsApiSupport
@@ -341,6 +343,39 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .body("totalItems", equalTo(1))
     }
 
+    def "should return all assets"() {
+        given:
+        defaultAssetsStored()
+
+        expect:
+        given()
+                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/assets", )
+                .then()
+                .statusCode(200)
+                .body("totalItems", equalTo(13))
+                .body("content[0]", hasEntry("id", "urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"))
+                .body("content[0]", hasEntry("idShort", "vehicle_hybrid.asm"))
+                .body("content[0]", hasEntry("nameAtManufacturer", "Vehicle Hybrid"))
+                .body("content[0]", hasEntry("manufacturerPartId", "--"))
+                .body("content[0]", hasEntry("partInstanceId", "--"))
+                .body("content[0]", hasEntry("manufacturerId", "--"))
+                .body("content[0]", hasEntry("batchId", "--"))
+                .body("content[0]", hasEntry("manufacturerName", "--"))
+                .body("content[0]", hasEntry("nameAtCustomer", "--"))
+                .body("content[0]", hasEntry("customerPartId", "--"))
+                .body("content[0]", hasEntry("manufacturingDate", "2014-11-18T08:23:55Z"))
+                .body("content[0]", hasEntry("manufacturingCountry", "DEU"))
+                .body("content[0]", hasEntry("owner", "OWN"))
+                .body("content[0]", hasEntry("underInvestigation",false))
+                .body("content[0]", hasEntry("qualityType", "Ok"))
+                .body("content[0]", hasEntry("van", "--"))
+
+
+    }
+
     def "should return assets by owner filtering"() {
         given:
         defaultAssetsStored()
@@ -355,6 +390,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .then()
                 .statusCode(200)
                 .body("totalItems", equalTo(totalItemsValue))
+
         where:
         ownerValue  || totalItemsValue
         "OWN"       || 1
