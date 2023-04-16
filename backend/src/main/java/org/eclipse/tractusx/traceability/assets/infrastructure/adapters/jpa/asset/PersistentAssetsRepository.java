@@ -137,7 +137,7 @@ public class PersistentAssetsRepository implements AssetRepository {
         );
     }
 
-    private Asset toAsset(AssetEntity entity) {
+    public Asset toAsset(AssetEntity entity) {
         return new Asset(
                 entity.getId(), entity.getIdShort(),
                 entity.getNameAtManufacturer(),

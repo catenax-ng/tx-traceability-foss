@@ -120,6 +120,10 @@ public class AssetEntity {
         this.childDescriptors = specificAssetIds;
     }
 
+    public void setParentDescriptors(List<ParentDescription> specificAssetIds) {
+        this.parentDescriptors = specificAssetIds;
+    }
+
     public String getIdShort() {
         return idShort;
     }
