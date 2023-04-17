@@ -51,6 +51,7 @@ export class RelationsFacade {
     return this.relationComponentState.openElements$.pipe(debounceTime(100));
   }
 
+  // TODO: to refactoring
   public get openElementsUpstream$(): Observable<OpenElements> {
     return this.relationComponentState.openElementsUpstream$.pipe(debounceTime(100));
   }
@@ -59,6 +60,7 @@ export class RelationsFacade {
     return this.relationComponentState.openElements;
   }
 
+  // TODO: to refactoring
   public get openElementsUpstream(): OpenElements {
     return this.relationComponentState.openElementsUpstream;
   }
@@ -78,6 +80,7 @@ export class RelationsFacade {
     this.loadChildrenInformation(children).subscribe();
   }
 
+  // TODO: to refactoring
   public openElementWithChildrenUpstream({ id, children }: TreeElement): void {
     const emptyChildren: OpenElements = {};
     const childElements =
@@ -102,6 +105,7 @@ export class RelationsFacade {
     this.loadChildrenInformation(children).subscribe();
   }
 
+  // TODO: to refactoring
   public updateOpenElementUpstream({ id, children }: TreeElement): void {
     if (this.openElementsUpstream[id] === undefined) {
       return;
@@ -118,6 +122,7 @@ export class RelationsFacade {
     this.relationComponentState.openElements = this._deleteOpenElement(id, this.relationComponentState.openElements);
   }
 
+  // TODO: to refactoring
   public deleteOpenElementUpstream(id: string): void {
     this.relationComponentState.openElementsUpstream = this._deleteOpenElement(
       id,
@@ -144,6 +149,7 @@ export class RelationsFacade {
     }, {} as TreeStructure);
   }
 
+  // TODO: to refactoring
   public formatOpenElementsToTreeDataUpstream(openElements: OpenElements): TreeStructure {
     const loadedData = this.loadedElementsFacade.loadedElementsUpstream;
     const keyList = Object.keys(openElements).reverse();
@@ -173,6 +179,7 @@ export class RelationsFacade {
     return currentElement.some(childId => Object.keys(this.openElements).includes(childId));
   }
 
+  // TODO: to refactoring
   public isElementOpenUpstream(id: string): boolean {
     const currentElement = this.openElementsUpstream[id];
     if (!currentElement) {
@@ -190,6 +197,7 @@ export class RelationsFacade {
     // this.relationsState.resetLoadedElements();
   }
 
+  // TODO: to refactoring
   public resetRelationStateUpstream(): void {
     this.relationComponentState.resetOpenElementsUpstream();
 
@@ -202,6 +210,7 @@ export class RelationsFacade {
     this.openElementWithChildren(elementToOpen);
   }
 
+  // TODO: to refactoring
   public openElementByIdUpstream(elementId: string): void {
     const elementToOpen = this.loadedElementsFacade.loadedElementsUpstream[elementId];
     this.openElementWithChildrenUpstream(elementToOpen);
@@ -212,6 +221,7 @@ export class RelationsFacade {
     elementToClose.children.forEach(childId => this.deleteOpenElement(childId));
   }
 
+  // TODO: to refactoring
   public closeElementByIdUpstream(elementId: string): void {
     const elementToClose = this.loadedElementsFacade.loadedElementsUpstream[elementId];
     elementToClose.children.forEach(childId => this.deleteOpenElementUpstream(childId));
@@ -252,6 +262,7 @@ export class RelationsFacade {
     return this.requestPartDetailsStream.asObservable();
   }
 
+  // TODO: to refactoring
   private loadChildrenInformationUpstream(children: string[]): Observable<TreeElement[]> {
     if (!children) {
       return of(null).pipe(first());
@@ -289,6 +300,7 @@ export class RelationsFacade {
     );
   }
 
+  // TODO: to refactoring
   private initRequestPartDetailQueueUpstream(): Observable<TreeElement[]> {
     let children;
     return this.requestPartDetailsQueue.pipe(
@@ -315,6 +327,7 @@ export class RelationsFacade {
     });
   }
 
+  // TODO: to refactoring
   private addLoadedElementsUpstream(elements: TreeElement[]): void {
     elements.forEach(element => {
       this.loadedElementsFacade.addLoadedElementUpstream(element);

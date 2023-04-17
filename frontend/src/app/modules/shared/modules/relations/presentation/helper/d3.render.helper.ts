@@ -50,7 +50,7 @@ export class D3RenderHelper {
       paths = svg
         .append('g')
         .attr('id', `${id}--paths`)
-        .attr('data-testid', 'tree--element__path')
+        .attr('data-testid', `${id}--paths`)
         .classed('tree--element__path', true);
     }
 
@@ -369,7 +369,7 @@ export class D3RenderHelper {
     let nodes = d3.select(`#${id}--nodes`);
 
     if (nodes.empty()) {
-      nodes = svg.append('g').attr('id', `${id}--nodes`);
+      nodes = svg.append('g').attr('id', `${id}--nodes`).attr('data-testid', `${id}--nodes`);
     }
 
     nodes

@@ -107,6 +107,7 @@ export const MOCK_part_1 = {
     { id: MOCK_part_2.id, idShort: MOCK_part_2.idShort },
     { id: MOCK_part_3.id, idShort: MOCK_part_3.idShort },
   ],
+  parentDescriptions: [{ id: MOCK_part_4.id, idShort: MOCK_part_4.idShort }],
 };
 
 export const mockAssets: PartsResponse = {

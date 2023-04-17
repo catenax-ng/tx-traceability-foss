@@ -166,8 +166,8 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
   private initTree(direction: TreeDirection): void {
     if (direction === TreeDirection.RIGHT) {
       const treeConfigRight: TreeData = {
-        id: this.htmlId + TreeDirection.RIGHT,
-        parentId: this.htmlId,
+        id: this.htmlId + '--' + TreeDirection.RIGHT,
+        mainId: this.htmlId,
         openDetails: this.isStandalone ? this.openDetails.bind(this) : _ => null,
         defaultZoom: this.isStandalone ? 1 : 0.7,
         updateChildren: this.updateChildren.bind(this),
@@ -175,8 +175,8 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
       this.treeRight = new Tree(treeConfigRight);
     } else if (direction === TreeDirection.LEFT) {
       const treeConfigLeft: TreeData = {
-        id: this.htmlId + TreeDirection.LEFT,
-        parentId: this.htmlId,
+        id: this.htmlId + '--' + TreeDirection.LEFT,
+        mainId: this.htmlId,
         openDetails: this.isStandalone ? this.openDetails.bind(this) : _ => null,
         defaultZoom: this.isStandalone ? 1 : 0.7,
         updateChildren: this.updateChildrenUpstream.bind(this),
@@ -234,14 +234,13 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    // TODO: refactor
+    // TODO: to refactoring?
     if (!this.treeRight) {
       this.initTree(TreeDirection.RIGHT);
     } else if (!this.treeLeft) {
       this.initTree(TreeDirection.LEFT);
     }
 
-    // this.treeData = treeData;
     this.renderTree(treeData, treeDirection);
   }
 

@@ -33,6 +33,7 @@ export class LoadedElementsFacade {
     return this.loadedElementsState.loadedElements;
   }
 
+  // TODO: to refactoring
   public get loadedElementsUpstream(): LoadedElements {
     return this.loadedElementsState.loadedElementsUpstream;
   }
@@ -41,6 +42,7 @@ export class LoadedElementsFacade {
     return this.loadedElementsState.loadedElements$;
   }
 
+  // TODO: to refactoring
   public get loadedElementsUpstream$(): Observable<LoadedElements> {
     return this.loadedElementsState.loadedElementsUpstream$;
   }
@@ -59,6 +61,7 @@ export class LoadedElementsFacade {
     };
   }
 
+  // TODO: to refactoring
   public addLoadedElementUpstream(element: TreeElement): void {
     const { id, children } = element;
 

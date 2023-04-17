@@ -30,7 +30,7 @@ export class Tree {
   public static readonly CENTERING_MARGIN = 0.1;
   public readonly mainElement: TreeSvg;
   public readonly id: string;
-  public readonly parentId: string;
+  public readonly mainId: string;
   public readonly r: number;
 
   private readonly defaultZoom: number;
@@ -52,10 +52,8 @@ export class Tree {
 
   constructor(treeData: TreeData) {
     this.id = treeData.id;
-    this.parentId = treeData.parentId;
-    console.dir(this.id);
-    console.dir(this.parentId);
-    this.mainElement = d3.select(`#${this.parentId}`);
+    this.mainId = treeData.mainId;
+    this.mainElement = d3.select(`#${this.mainId}`);
 
     this.width = HelperD3.calculateWidth(this.mainElement);
     this.height = HelperD3.calculateHeight(this.mainElement);
@@ -73,7 +71,7 @@ export class Tree {
     const root = d3.hierarchy(data);
 
     // TODO: createMainSvg returns --camera element, not svg in fact
-    let svg = d3.select(`#${this.parentId}--camera`) as TreeSvg;
+    let svg = d3.select(`#${this.mainId}--camera`) as TreeSvg;
     if (svg.empty()) svg = this.creatMainSvg();
 
     d3.tree().nodeSize([this.r * 3, 250])(root);
@@ -91,7 +89,7 @@ export class Tree {
     if (newScale < min || newScale > max) return;
 
     const newTransform = new ZoomTransform(newScale, x, y);
-    d3.select(`#${this.parentId}-svg`).call(this.zoom.transform as any, newTransform);
+    d3.select(`#${this.mainId}-svg`).call(this.zoom.transform as any, newTransform);
   }
 
   public set minimapConnector(connector: MinimapConnector) {
@@ -104,13 +102,14 @@ export class Tree {
 
   public changeViewPosition(transform: ZoomTransform): void {
     this.nextMinimapUpdate = Date.now() + 500;
-    d3.select(`#${this.parentId}-svg`).call(this.zoom.transform as any, transform);
+    d3.select(`#${this.mainId}-svg`).call(this.zoom.transform as any, transform);
   }
 
   private creatMainSvg(): TreeSvg {
     const svg = this.mainElement
       .append('svg')
-      .attr('id', this.parentId + '-svg')
+      .attr('id', this.mainId + '-svg')
+      .attr('data-testid', this.mainId + '-svg')
       .attr('viewBox', [-this.width / 3, -this.height / 2, this.width, this.height])
       .attr('width', this.width)
       .attr('height', this.height)
@@ -119,8 +118,8 @@ export class Tree {
 
     const cameraBody = svg
       .append('g')
-      .attr('id', this.parentId + '--camera')
-      .attr('data-testid', this.parentId + '--camera');
+      .attr('id', this.mainId + '--camera')
+      .attr('data-testid', this.mainId + '--camera');
 
     this.zoom = d3.zoom().scaleExtent(this.zoomConfig);
     this.zoom.on('zoom', ({ transform }) => {
@@ -140,7 +139,7 @@ export class Tree {
       this.width = width;
       this.height = height;
 
-      d3.select(`#${this.parentId}-svg`).attr('width', this.width).attr('height', this.height);
+      d3.select(`#${this.mainId}-svg`).attr('width', this.width).attr('height', this.height);
     };
     HelperD3.initResizeListener(this.mainElement, onResize);
   }
