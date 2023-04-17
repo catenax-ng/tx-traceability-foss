@@ -20,7 +20,6 @@
  ********************************************************************************/
 package org.eclipse.tractusx.traceability.infrastructure.edc.blackbox;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -69,7 +68,8 @@ public class EdcService {
 	public Optional<ContractOffer> findNotificationContractOffer(
 		String consumerEdcDataManagementUrl,
 		String providerConnectorControlPlaneIDSUrl,
-		Map<String, String> header
+		Map<String, String> header,
+        boolean isInitialNotification
 	) throws IOException {
 		Catalog catalog = httpCallService.getCatalogFromProvider(consumerEdcDataManagementUrl, providerConnectorControlPlaneIDSUrl, header);
 		if (catalog.getContractOffers().isEmpty()) {
@@ -78,8 +78,13 @@ public class EdcService {
 		}
 		logger.info(":::: Find Notification contract method[findNotificationContractOffer] total catalog ::{}", catalog.getContractOffers().size());
 
-		return catalog.getContractOffers().stream()
-			.filter(it -> isPropertyQualityInvestigationType(it.getAsset()) && isPropertyUpdateNotificationMethod(it.getAsset())).findAny();
+        if (isInitialNotification){
+            return catalog.getContractOffers().stream()
+                    .filter(it -> isPropertyQualityInvestigationType(it.getAsset()) && isPropertyReceiveNotificationMethod(it.getAsset())).findAny();
+        } else {
+            return catalog.getContractOffers().stream()
+                    .filter(it -> isPropertyQualityInvestigationType(it.getAsset()) && isPropertyUpdateNotificationMethod(it.getAsset())).findAny();
+        }
 	}
 
 	private boolean isPropertyQualityInvestigationType(Asset asset) {
@@ -93,8 +98,13 @@ public class EdcService {
 		String formatted = String.format(":::: Asset isPropertyUpdateNotificationMethod %s has value %s", "asset:prop:notificationmethod", asset.getPropertyNotificationMethod());
 		logger.info(formatted);
 		return Constants.ASSET_VALUE_NOTIFICATION_METHOD_UPDATE.equals(asset.getPropertyNotificationMethod());
-
 	}
+
+    private boolean isPropertyReceiveNotificationMethod(Asset asset) {
+        String formatted = String.format(":::: Asset isPropertyReceiveNotificationMethod %s has value %s", "asset:prop:notificationmethod", asset.getPropertyNotificationMethod());
+        logger.info(formatted);
+        return Constants.ASSET_VALUE_NOTIFICATION_METHOD_RECEIVE.equals(asset.getPropertyNotificationMethod());
+    }
 
 	/**
 	 * Prepare for contract negotiation. it will wait for while till API return agreementId

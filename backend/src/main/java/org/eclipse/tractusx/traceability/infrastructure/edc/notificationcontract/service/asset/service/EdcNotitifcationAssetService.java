@@ -33,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -41,7 +40,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.util.UUID;
 
 import static org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.configuration.EdcRestTemplateConfiguration.EDC_REST_TEMPLATE;
@@ -56,7 +54,7 @@ public class EdcNotitifcationAssetService {
 	private static final String DEFAULT_METHOD = "POST";
 	private static final String DEFAULT_DATA_ADDRESS_PROPERTY_TYPE = "HttpData";
 	private static final String TRACE_FOSS_QUALITY_NOTIFICATIONS_URL_TEMPLATE = "/api/qualitynotifications/%s";
-	private static final String EDC_CREATE_ASSET_PATH = "/data/assets";
+	private static final String EDC_CREATE_ASSET_PATH = "/api/v1/management/assets";
 
 	private final TraceabilityProperties traceabilityProperties;
 	private final RestTemplate restTemplate;
@@ -120,7 +118,7 @@ public class EdcNotitifcationAssetService {
 			return notificationAssetId;
 		}
 
-		if (responseCode.value() == 204) {
+		if (responseCode.value() == 200) {
 			return notificationAssetId;
 		}
 

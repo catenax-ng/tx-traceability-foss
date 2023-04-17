@@ -19,31 +19,37 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.common.properties;
+package org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.transfer;
 
-import java.time.Duration;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-public class CacheProperties {
+import static org.junit.jupiter.api.Assertions.*;
 
-	private final String name;
-	private final int maximumSize;
-	private final Duration expireAfterWrite;
+@ExtendWith(MockitoExtension.class)
+class TransferTypeTest {
 
-	public CacheProperties(String name, int maximumSize, Duration expireAfterWrite) {
-		this.name = name;
-		this.maximumSize = maximumSize;
-		this.expireAfterWrite = expireAfterWrite;
-	}
+    private static final String contentType = "contentType";
 
-	public String getName() {
-		return name;
-	}
+    private TransferType transferType;
 
-	public int getMaximumSize() {
-		return maximumSize;
-	}
+    @BeforeEach
+    void setUp() {
+        transferType = TransferType.Builder.transferType()
+            .contentType(contentType)
+            .isFinite(true)
+            .build();
+    }
 
-	public Duration getExpireAfterWrite() {
-		return expireAfterWrite;
-	}
+    @Test
+    void getContentType() {
+        assertEquals(contentType, transferType.getContentType());
+    }
+
+    @Test
+    void isFinite() {
+        assertTrue(transferType.isFinite());
+    }
 }

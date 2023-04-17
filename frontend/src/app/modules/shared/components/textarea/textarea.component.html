@@ -37,7 +37,7 @@ SPDX-License-Identifier: Apache-2.0
     <mat-hint align="end" *ngIf="!!maxLength && !!minLength">{{
       'input.minMaxLengthHint' | i18n : { current: control?.value?.length || 0, max: maxLength, min: minLength }
     }}</mat-hint>
-    <mat-hint align="end" *ngIf="!maxLength && !minLength">{{
+    <mat-hint align="end" *ngIf="!maxLength && !!minLength">{{
       'input.minLengthHint' | i18n : { current: control?.value?.length || 0, min: minLength }
     }}</mat-hint>
     <mat-hint align="end" *ngIf="!!maxLength && !minLength">{{

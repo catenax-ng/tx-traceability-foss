@@ -37,15 +37,16 @@ public class EDCNotificationFactory {
             targetDate = notification.getTargetDate().toString();
         }
         EDCNotificationHeader header = new EDCNotificationHeader(
-                notification.getId(),
+                notification.getEdcNotificationId(),
                 notification.getSenderBpnNumber(),
                 senderEDC,
                 notification.getReceiverBpnNumber(),
                 NotificationType.QMINVESTIGATION.getValue(),
-                notification.getSeverity() != null ? notification.getSeverity().name() : Severity.MINOR.name(),
+                notification.getSeverity() != null ? notification.getSeverity().getRealName() : Severity.MINOR.getRealName(),
                 notification.getNotificationReferenceId(),
                 notification.getInvestigationStatus().name(),
-                targetDate
+                targetDate,
+                notification.getMessageId()
         );
 
         EDCNotificationContent content = new EDCNotificationContent(

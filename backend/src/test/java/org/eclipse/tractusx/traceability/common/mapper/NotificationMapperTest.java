@@ -24,7 +24,6 @@ import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotificationContent;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotificationHeader;
-import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
 import org.eclipse.tractusx.traceability.testdata.NotificationTestDataFactory;
 import org.junit.jupiter.api.Test;
@@ -53,7 +52,7 @@ class NotificationMapperTest {
 	void testToReceiverNotification() {
         EDCNotificationHeader header = new EDCNotificationHeader("id123",
 			"senderBPN", "senderAddress", "recipientBPN", "classification",
-			"MINOR", "relatedNotificationId", "ACKNOWLEDGED", "2022-03-01T12:00:00Z");
+			"MINOR", "relatedNotificationId", "ACKNOWLEDGED", "2022-03-01T12:00:00Z", "id123");
 		EDCNotificationContent content = new EDCNotificationContent("information", List.of("partId"));
 		EDCNotification edcNotification = new EDCNotification(header, content);
 
@@ -63,7 +62,7 @@ class NotificationMapperTest {
         when(bpnRepository.findManufacturerName(eq(expectedNotification.getReceiverBpnNumber()))).thenReturn(Optional.of(expectedNotification.getReceiverManufacturerName()));
 
 
-		Notification actualNotification = notificationMapper.toReceiverNotification(edcNotification, InvestigationStatus.ACKNOWLEDGED);
+		Notification actualNotification = notificationMapper.toNotification(edcNotification);
 		assertNotNull(actualNotification.getId());
 		assertEquals(expectedNotification.getNotificationReferenceId(), actualNotification.getNotificationReferenceId());
 		assertEquals(expectedNotification.getSenderBpnNumber(), actualNotification.getSenderBpnNumber());

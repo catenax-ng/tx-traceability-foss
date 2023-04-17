@@ -6,19 +6,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased - x.x.x]
 
-### Added
+### Wip
+- Created BPN - BPN - EDC configuration page with mappings for notification flow
+  - Added in FE with `wip` flag 
 
 ### Changed
-- Updated deck.gl/core from 8.8.25 to 8.9.2
-- Updated angular/language-service from 15.1.5 to 15.2.2
-- Updated veracode action from 0.2.4 to 0.2.5
-- Updated trivy-action to use version instead of sha and set to 0.9.2
-- Updated cypress action from 5.0.7 to 5.6.0
+- Refactored messageId of a notification to have own uuid instead of reusing notificationId
+- Changed receive / update edc callbacks to match one seperate method for each process
+- Updated the Notification Publisher to request initial notifications to the /receive endpoint and updates to the related /update endpoint
+- Updated cypress-io/github-action from 5.6.0 to 5.6.1
+- Updated peaceiris/actions-gh-pages from 3.9.2 to 3.9.3
+- Upgraded base image from sha256@2b33ef284e6dc43a61903cef6d36dbce13414a9e5444e2c96cdd5e35123f9903 to: sha256@c26a727c4883eb73d32351be8bacb3e70f390c2c94f078dc493495ed93c60c2f
+- Fixed parts not being marked as under investigation
+- Adapt notification receiver side to accept severity by real name instead of enum constant
+- Improved admin page navigation (as a left side menu)
+- Combined results of discovery service and fallback mock service to provide bpn url mappings
+- Updated EDC Provider to 0.3.0 version
 
+## [3.1.1] - 2023-04-04
+
+### Added
+- Some unit tests for better code quality
+
+### Changed
+- Fixed edc notification flow bug
+- Updated org.springframework/spring-expression from 6.0.6 to 6.0.7
+- Updated net.minidev/json-smart from 2.4.8 to 2.4.10
+- Updated documentation of application
 
 ## [3.1.0] - 2023-04-03
 
 ### Added
+- Added persistent history of EDC Notifications
 - Added validation for UpdateInvestigationRequest, reason for (decline, accepted, close)
 - Added Title to sections that might be cut of with three dots (...)
 - Added documentation regarding base docker image and prepared for future QG updates
@@ -28,6 +47,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added information about the specific base image used by our docker images
 
 ### Changed
+- Validation logic of edc notification flow
 - Restructured helm charts to an parent helm chart which includes frontend and backend
 - Updated database fields within Investigation table (accept_reason, decline_reason, close_reason)
 - Used same shadow for other parts table than we use for my parts table
@@ -45,6 +65,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Upgraded all environments to use most recent release of irs including edc charts 0.3.0
 - Removed unnecessary properties on irs charts
 - Removed catena specific value files
+- Updated deck.gl/core from 8.8.25 to 8.9.2
+- Updated angular/language-service from 15.1.5 to 15.2.2
+- Updated veracode action from 0.2.4 to 0.2.5
+- Updated trivy-action to use version instead of sha and set to 0.9.2
+- Updated cypress action from 5.0.7 to 5.6.0
 
 ## [3.0.0] - 2023-03-21
 

@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -59,14 +60,18 @@ class NotificationsServiceTest {
                 null,
                 null,
                 Instant.now(),
-                Severity.MINOR
+                Severity.MINOR,
+                null,
+                null,
+                null,
+                null
 		);
 
 		// when
-		notificationsService.updateAsync(notification);
+		notificationsService.asyncNotificationExecutor(notification, false);
 
 		// then
-		verify(edcFacade).startEDCTransfer(any(Notification.class), eq(edcReceiverUrl), eq(edcSenderUrl));
+		verify(edcFacade).startEDCTransfer(any(Notification.class), eq(edcReceiverUrl), eq(edcSenderUrl), anyBoolean());
 	//	verify(repository).update(any(Notification.class));
 	}
 }

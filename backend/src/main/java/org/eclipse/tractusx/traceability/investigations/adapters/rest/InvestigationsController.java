@@ -26,6 +26,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.eclipse.tractusx.traceability.common.config.FeatureFlags;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
@@ -35,6 +36,7 @@ import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.Star
 import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.StartInvestigationResponse;
 import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.UpdateInvestigationRequest;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationId;
+import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
 import org.eclipse.tractusx.traceability.investigations.domain.service.InvestigationsPublisherService;
 import org.eclipse.tractusx.traceability.investigations.domain.service.InvestigationsReadService;
@@ -52,7 +54,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
 import java.lang.invoke.MethodHandles;
 
 import static org.eclipse.tractusx.traceability.investigations.adapters.rest.validation.UpdateInvestigationValidator.validate;
@@ -106,7 +107,7 @@ public class InvestigationsController {
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("/created")
     public PageResult<InvestigationData> getCreatedInvestigations(Pageable pageable) {
-        logger.info(API_LOG_START + "/created with params: {}", pageable);
+        logger.info(API_LOG_START + "/created");
         return investigationsReadService.getCreatedInvestigations(pageable);
     }
 
@@ -120,7 +121,7 @@ public class InvestigationsController {
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("/received")
     public PageResult<InvestigationData> getReceivedInvestigations(Pageable pageable) {
-        logger.info(API_LOG_START + "/received with params: {}", pageable);
+        logger.info(API_LOG_START + "/received");
         return investigationsReadService.getReceivedInvestigations(pageable);
     }
 
@@ -150,7 +151,7 @@ public class InvestigationsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void approveInvestigation(@PathVariable Long investigationId) {
         logger.info(API_LOG_START + "/{}/approve", investigationId);
-        investigationsPublisherService.sendInvestigation(traceabilityProperties.getBpn(), investigationId);
+        investigationsPublisherService.approveInvestigation(traceabilityProperties.getBpn(), investigationId);
     }
 
     @Operation(operationId = "cancelInvestigation",
@@ -181,7 +182,7 @@ public class InvestigationsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void closeInvestigation(@PathVariable Long investigationId, @Valid @RequestBody CloseInvestigationRequest closeInvestigationRequest) {
         logger.info(API_LOG_START + "/{}/close with params {}", investigationId, closeInvestigationRequest);
-        investigationsPublisherService.closeInvestigation(traceabilityProperties.getBpn(), investigationId, closeInvestigationRequest.reason());
+        investigationsPublisherService.updateInvestigationPublisher(traceabilityProperties.getBpn(), investigationId, InvestigationStatus.CLOSED, closeInvestigationRequest.reason());
     }
 
     @Operation(operationId = "updateInvestigation",

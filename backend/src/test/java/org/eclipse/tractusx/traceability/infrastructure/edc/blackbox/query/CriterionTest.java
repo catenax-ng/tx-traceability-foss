@@ -19,28 +19,42 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.adapters.rest.validation;
+package org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.query;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-import java.util.List;
-import java.util.stream.Stream;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-public class EnumValidatorImpl implements ConstraintValidator<EnumValidator, CharSequence> {
-    private List<String> acceptedValues;
+import static org.junit.jupiter.api.Assertions.*;
 
-    @Override
-    public void initialize(final EnumValidator annotation) {
-        acceptedValues =
-                Stream.of(annotation.enumClass().getEnumConstants()).map(Enum::name).toList();
+@ExtendWith(MockitoExtension.class)
+class CriterionTest {
+
+    private static final String LEFT = "abc";
+    private static final String OP_EQUALS = "=";
+    private static final String RIGHT = "xyz";
+
+    private Criterion criterion;
+
+    @BeforeEach
+    void setUp() {
+        criterion = new Criterion(CriterionTest.LEFT, CriterionTest.OP_EQUALS, CriterionTest.RIGHT);
     }
 
-    @Override
-    public boolean isValid(final CharSequence value, final ConstraintValidatorContext context) {
-        // This should be validated by NotNull
-        if (value == null) {
-            return true;
-        }
-        return acceptedValues.contains(value.toString());
+    @Test
+    void getOperandLeft() {
+        assertEquals(CriterionTest.LEFT, criterion.getOperandLeft());
     }
+
+    @Test
+    void getOperator() {
+        assertEquals(CriterionTest.OP_EQUALS, criterion.getOperator());
+    }
+
+    @Test
+    void getOperandRight() {
+        assertEquals(CriterionTest.RIGHT, criterion.getOperandRight());
+    }
+
 }
