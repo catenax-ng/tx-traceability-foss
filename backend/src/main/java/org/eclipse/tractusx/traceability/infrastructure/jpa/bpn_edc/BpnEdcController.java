@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @Tag(name = "BpnEdc")
-@RequestMapping(path = "/bpnedc", produces = "application/json", consumes = "application/json")
+@RequestMapping(path = "/bpn-config", produces = "application/json", consumes = "application/json")
 public class BpnEdcController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BpnEdcController.class);
@@ -73,8 +73,7 @@ public class BpnEdcController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void createBpnEdcUrlMappings(@Valid @RequestBody BpnEdcRequest request) {
-        LOGGER.info("----------POST------------");
-        service.createBpnEdcUrlMappings(request.bpn(), request.urls());
+        service.createBpnEdcUrlMapping(request.bpn(), request.url());
     }
 
     @Operation(operationId = "deleteBpnEdcUrlMappings",
@@ -85,11 +84,10 @@ public class BpnEdcController {
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Deleted."),
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
-    @DeleteMapping("")
+    @DeleteMapping("/{bpn}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBpnEdcUrlMappings(@Valid @RequestBody BpnEdcRequest request) {
-        LOGGER.info("----------DELETE------------");
-        service.deleteBpnEdcUrlMappings(request.bpn(), request.urls());
+    public void deleteBpnEdcUrlMapping(@PathVariable String bpn) {
+        service.deleteBpnEdcUrlMapping(bpn);
     }
 
 }

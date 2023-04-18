@@ -28,7 +28,7 @@ import java.util.List;
 
 public record BpnEdcRequest(
     @NotNull(message = "BPN must be present") String bpn,
-    @Size(min = 1, max = 100, message = "At least one EDC URL must be present") List<String> urls
+    @NotNull(message = "A valid URL must be present") String url
 
 ) {
 }

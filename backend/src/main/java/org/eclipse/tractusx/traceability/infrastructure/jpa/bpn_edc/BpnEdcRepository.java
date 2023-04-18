@@ -30,12 +30,12 @@ public interface BpnEdcRepository {
 
     PageResult<BpnEdc> findAll(Pageable pageable);
 
-    Optional<BpnEdcEntity> findById(BpnEdcId id);
+    Optional<BpnEdcEntity> findById(String bpn);
 
     BpnEdc save(BpnEdcEntity entity);
 
     PageResult<BpnEdc> getBpnEdcMappings(Pageable pageable);
 
-    void deleteById(BpnEdcId id);
+    void deleteById(String bpn);
 
 }

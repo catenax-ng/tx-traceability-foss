@@ -41,20 +41,14 @@ public class BpnEdcService {
         return bpnEdcRepository.getBpnEdcMappings(pageable);
     }
 
-    public void createBpnEdcUrlMappings(String bpn, List<String> urls) {
-        for(String url : urls) {
-            BpnEdcId bpnEdcId = new BpnEdcId(bpn, url);
-            if(bpnEdcRepository.findById(bpnEdcId).isEmpty()) {
-                bpnEdcRepository.save(new BpnEdcEntity(bpnEdcId));
-            }
+    public void createBpnEdcUrlMapping(String bpn, String url) {
+        if(bpnEdcRepository.findById(bpn).isEmpty()) {
+            bpnEdcRepository.save(new BpnEdcEntity(bpn, url));
         }
     }
 
-    public void deleteBpnEdcUrlMappings(String bpn, List<String> urls) {
-        for(String url : urls) {
-            BpnEdcId bpnEdcId = new BpnEdcId(bpn, url);
-            bpnEdcRepository.deleteById(bpnEdcId);
-        }
+    public void deleteBpnEdcUrlMapping(String bpn) {
+        bpnEdcRepository.deleteById(bpn);
     }
 
 }

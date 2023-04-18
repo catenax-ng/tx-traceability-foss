@@ -42,8 +42,8 @@ public class PersistentBpnEdcRepository implements BpnEdcRepository {
     }
 
     @Override
-    public Optional<BpnEdcEntity> findById(BpnEdcId id) {
-        Optional<BpnEdcEntity> rv = jpaBpnEdcRepository.findById(id);
+    public Optional<BpnEdcEntity> findById(String bpn) {
+        Optional<BpnEdcEntity> rv = jpaBpnEdcRepository.findById(bpn);
         return rv;
     }
 
@@ -53,8 +53,8 @@ public class PersistentBpnEdcRepository implements BpnEdcRepository {
     }
 
     @Override
-    public void deleteById(BpnEdcId id) {
-        jpaBpnEdcRepository.deleteById(id);
+    public void deleteById(String bpn) {
+        jpaBpnEdcRepository.deleteById(bpn);
     }
 
     @Override

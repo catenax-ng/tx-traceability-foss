@@ -25,22 +25,14 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "bpn_edc_mappings")
-@IdClass(BpnEdcId.class)
 public class BpnEdcEntity {
 
     @Id
     private String bpn;
 
-    @Id
-    @Column(name = "edc_url")
     private String url;
 
     public BpnEdcEntity() {
-    }
-
-    public BpnEdcEntity(BpnEdcId id) {
-        this.bpn = id.getBpn();
-        this.url = id.getUrl();
     }
 
     public BpnEdcEntity(String bpn, String url) {

@@ -40,13 +40,13 @@ class BpnEdcControllerIT extends IntegrationSpecification implements BpnReposito
                         asJson(
                                 [
                                         bpn    : "BPNL00000003CSGV",
-                                        urls   : ["http://localhost:12345/abc", "http://localhost:12345/def"]
+                                        url   : "http://localhost:12345/abc"
                                 ]
                         )
                 )
                 .header(jwtAuthorization(ADMIN))
                 .when()
-                    .post("/api/bpnedc")
+                    .post("/api/bpn-config")
                 .then()
                     .statusCode(204)
         then:
@@ -54,10 +54,10 @@ class BpnEdcControllerIT extends IntegrationSpecification implements BpnReposito
                 .header(jwtAuthorization(ADMIN))
                 .contentType(ContentType.JSON)
                 .when()
-                    .get("/api/bpnedc")
+                    .get("/api/bpn-config")
                 .then()
                     .statusCode(200)
-                    .body("content", Matchers.hasSize(2))
+                    .body("content", Matchers.hasSize(1))
     }
 
     def "should delete one BPN EDC URL mapping"() {
@@ -68,29 +68,21 @@ class BpnEdcControllerIT extends IntegrationSpecification implements BpnReposito
                         asJson(
                                 [
                                         bpn    : "BPNL00000003CSGV",
-                                        urls   : ["http://localhost:12345/abc", "http://localhost:12345/def"]
+                                        url   : "http://localhost:12345/abc"
                                 ]
                         )
                 )
                 .header(jwtAuthorization(ADMIN))
                 .when()
-                .post("/api/bpnedc")
+                .post("/api/bpn-config")
                 .then()
                 .statusCode(204)
         then:
         given()
                 .contentType(ContentType.JSON)
-                .body(
-                        asJson(
-                                [
-                                        bpn    : "BPNL00000003CSGV",
-                                        urls   : ["http://localhost:12345/def"]
-                                ]
-                        )
-                )
                 .header(jwtAuthorization(ADMIN))
                 .when()
-                .delete("/api/bpnedc")
+                .delete("/api/bpn-config/BPNL00000003CSGV")
                 .then()
                 .statusCode(204)
         expect:
@@ -98,11 +90,10 @@ class BpnEdcControllerIT extends IntegrationSpecification implements BpnReposito
                 .header(jwtAuthorization(ADMIN))
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/bpnedc")
+                .get("/api/bpn-config")
                 .then()
                 .statusCode(200)
-                .body("content", Matchers.hasSize(1))
-                .body("content[0].url", Matchers.equalTo("http://localhost:12345/abc"))
+                .body("content", Matchers.hasSize(0))
     }
 
 }
