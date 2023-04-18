@@ -41,6 +41,6 @@ jobs:
         with:
           appname: 'Traceability-Foss-Backend'
           createprofile: false
-          filepath: "./backend/target/traceability-app-*.jar"
+          filepath: "./tx-backend/target/traceability-app-*.jar"
           vid: '${{ secrets.VERACODE_API_ID || secrets.ORG_VERACODE_API_ID }}'
           vkey: '${{ secrets.VERACODE_API_KEY || secrets.ORG_VERACODE_API_KEY }}'

@@ -80,7 +80,7 @@ jobs:
         uses: checkmarx/kics-github-action@master
         with:
           # Scanning directory .
-          path: "./backend"
+          path: "./tx-backend"
 
           exclude_paths: "backend/openapi/traceability-foss-backend.json,infrastructure/,backend/src/main/resources/swagger.yml"
           # Fail on HIGH severity results

@@ -11,7 +11,7 @@
     <description>Root module containing other modules.</description>
 
     <modules>
-        <module>backend/cucumber-tests</module>
+        <module>cucumber-tests</module>
         <module>backend</module>
         <module>tx-parent-spring-boot</module>
         <module>tx-models</module>
