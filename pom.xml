@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.tractusx.traceability</groupId>
     <artifactId>tx-root</artifactId>
-    <version>${revision}</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Trace-X Root</name>
@@ -14,6 +14,7 @@
         <module>backend/cucumber-tests</module>
         <module>backend</module>
         <module>tx-parent-spring-boot</module>
+        <module>tx-models</module>
     </modules>
 
     <properties>
