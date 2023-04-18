@@ -88,47 +88,6 @@ public class AssetsController {
         return assetRepository.getAssets(pageable, owner);
     }
 
-    /**
-     * Get supplier assets by pagination
-     *
-     * @param pageable pageable
-     * @return PageResult<Asset>
-     * @deprecated This has been deprecated. Please use: GET /assets
-     */
-    @Deprecated(since = "04/23", forRemoval = true)
-    @Operation(operationId = "supplierAssets",
-            summary = "Get supplier assets by pagination",
-            tags = {"Assets"},
-            description = "The endpoint returns a paged result of supplier assets.",
-            security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found"),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
-    @GetMapping("/supplier")
-    public PageResult<Asset> supplierAssets(Pageable pageable) {
-        return assetRepository.getAssets(pageable, Owner.SUPPLIER);
-    }
-
-    /**
-     * Get own assets by pagination
-     *
-     * @param pageable pageable
-     * @return PageResult<Asset>
-     * @deprecated This has been deprecated. Please use: GET /assets
-     */
-    @Deprecated(since = "04/23", forRemoval = true)
-    @Operation(operationId = "ownAssets",
-            summary = "Get own assets by pagination",
-            tags = {"Assets"},
-            description = "The endpoint returns a paged result of own assets.",
-            security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found"),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
-    @GetMapping("/my")
-    public PageResult<Asset> ownAssets(Pageable pageable) {
-        return assetRepository.getAssets(pageable, Owner.OWN);
-    }
 
     @Operation(operationId = "assetsCountryMap",
             summary = "Get map of assets",
