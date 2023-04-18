@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend
+        working-directory: tx-backend
     permissions:
       actions: read
       contents: read
@@ -82,7 +82,7 @@ jobs:
           # Scanning directory .
           path: "./tx-backend"
 
-          exclude_paths: "backend/openapi/traceability-foss-backend.json,infrastructure/,backend/src/main/resources/swagger.yml"
+          exclude_paths: "tx-backend/openapi/traceability-foss-backend.json,infrastructure/,backend/src/main/resources/swagger.yml"
           # Fail on HIGH severity results
           fail_on: high
           # Disable secrets detection - we use GitGuardian
