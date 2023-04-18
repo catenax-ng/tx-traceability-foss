@@ -7,7 +7,7 @@
     <artifactId>traceability-foss-backend-cucumber-tests</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>Trace-X Cucumber</name>
+    <name>TX Cucumber</name>
 
     <properties>
         <java.version>17</java.version>
