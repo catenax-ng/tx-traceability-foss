@@ -23,24 +23,21 @@ package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.apache.commons.validator.routines.UrlValidator;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class ValidUrlParameterValidator implements ConstraintValidator<ValidUrlParameter, String> {
 
     @Override
     public boolean isValid(String url, ConstraintValidatorContext context) {
         try {
-            return isValidURL(url);
-        } catch (MalformedURLException e) {
+            new URL(url).toURI();
+            return true;
+        } catch (MalformedURLException | URISyntaxException e) {
             return false;
         }
-    }
-
-    private boolean isValidURL(String url) throws MalformedURLException {
-        UrlValidator validator = new UrlValidator();
-        return validator.isValid(url);
     }
 
 }
