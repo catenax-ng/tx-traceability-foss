@@ -66,7 +66,7 @@ jobs:
           KEYCLOAK_CLIENT_SECRET: #${{ secrets.KEYCLOAK_OAUTH2_CLIENT_SECRET }}
         working-directory: tx-cucumber-tests
         run: |
-          unzip -o features.zip -d src/test/resources/features
+          unzip -o features.zip -d tx-cucumber-tests/src/test/resources/features
           mvn --batch-mode clean install  -D"cucumber.filter.tags"="not @Ignore and not @INTEGRATION_TEST"
 
       - name: Submit results to Xray
