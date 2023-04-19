@@ -176,8 +176,8 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
         }
 
         and:
-        verifyOAuth2ApiCalledOnceForTechnicalUserToken()
-        verifyIrsApiTriggerJobCalledOnce()
+        verifyOAuth2ApiCalledTimesForTechnicalUserToken(1)
+        verifyIrsApiTriggerJobCalledTimes(1)
         verifyIrsJobDetailsApiNotCalled()
     }
 

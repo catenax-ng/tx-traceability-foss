@@ -25,6 +25,7 @@ import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 import org.eclipse.tractusx.traceability.assets.domain.ports.AssetRepository;
 import org.eclipse.tractusx.traceability.assets.domain.ports.IrsRepository;
+import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Aspect;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Direction;
 import org.eclipse.tractusx.traceability.assets.infrastructure.config.async.AssetsAsyncConfig;
 import org.slf4j.Logger;
@@ -64,8 +65,8 @@ public class AssetService {
 		logger.info("Synchronizing assets for globalAssetId: {}", globalAssetId);
 
 		try {
-			List<Asset> downwardAssets = irsRepository.findAssets(globalAssetId, Direction.DOWNWARD);
-            List<Asset> upwardAssets = irsRepository.findAssets(globalAssetId, Direction.UPWARD);
+			List<Asset> downwardAssets = irsRepository.findAssets(globalAssetId, Direction.DOWNWARD, Aspect.downwardAspects());
+            List<Asset> upwardAssets = irsRepository.findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects());
             List<Asset> combinedAssetList = new ArrayList<>(upwardAssets);
             combinedAssetList.addAll(downwardAssets);
 			logger.info("Assets synchronization for globalAssetId: {} is done. Found {} downwardAssets. Saving them in the repository.", globalAssetId, downwardAssets.size());

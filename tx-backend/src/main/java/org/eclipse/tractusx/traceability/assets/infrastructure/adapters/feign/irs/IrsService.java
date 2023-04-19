@@ -24,6 +24,7 @@ package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.i
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
 import org.eclipse.tractusx.traceability.assets.domain.ports.IrsRepository;
+import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Aspect;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.AssetsConverter;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Direction;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.JobResponse;
@@ -53,8 +54,8 @@ public class IrsService implements IrsRepository {
     }
 
     @Override
-    public List<Asset> findAssets(String globalAssetId, Direction direction) {
-        StartJobResponse startJobResponse = irsClient.registerJob(StartJobRequest.buildJobRequest(globalAssetId, direction));
+    public List<Asset> findAssets(String globalAssetId, Direction direction, List<String> aspects) {
+        StartJobResponse startJobResponse = irsClient.registerJob(StartJobRequest.buildJobRequest(globalAssetId, direction, aspects));
         JobResponse jobResponse = irsClient.getJobDetails(startJobResponse.id());
 
         JobStatus jobStatus = jobResponse.jobStatus();

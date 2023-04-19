@@ -24,7 +24,6 @@ package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.i
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import java.util.Arrays;
 import java.util.List;
 
 public record StartJobRequest(
@@ -36,40 +35,13 @@ public record StartJobRequest(
         int depth,
         Direction direction
 ) {
-    public static StartJobRequest buildJobRequest(String globalAssetId, Direction direction) {
-        return new StartJobRequest(Aspect.defaultAspects(), globalAssetId, true, BomLifecycle.AS_BUILT, true, DEFAULT_DEPTH, direction);
+    public static StartJobRequest buildJobRequest(String globalAssetId, Direction direction, List<String> aspects) {
+        return new StartJobRequest(aspects, globalAssetId, true, BomLifecycle.AS_BUILT, true, DEFAULT_DEPTH, direction);
     }
 
     public static final int DEFAULT_DEPTH = 2;
 }
 
-
-enum Aspect {
-    BATCH("Batch"),
-    SERIAL_PART_TYPIZATION("SerialPartTypization"),
-    ASSEMBLY_PART_RELATIONSHIP("AssemblyPartRelationship");
-
-    private final String aspectName;
-
-    Aspect(String aspectName) {
-        this.aspectName = aspectName;
-    }
-
-    @JsonValue
-    public String getAspectName() {
-        return aspectName;
-    }
-
-    public static List<String> defaultAspects() {
-        return List.of(BATCH.getAspectName(), SERIAL_PART_TYPIZATION.getAspectName());
-    }
-
-    public static List<String> allAspects() {
-        return Arrays.stream(Aspect.values())
-                .map(Aspect::getAspectName)
-                .toList();
-    }
-}
 
 enum BomLifecycle {
     @JsonProperty("asBuilt")

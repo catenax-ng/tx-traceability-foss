@@ -1,6 +1,4 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
- * Copyright (c) 2022, 2023 ZF Friedrichshafen AG
  * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -19,21 +17,35 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.domain.ports;
+package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model;
 
-import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
-import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Direction;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.List;
 
-public interface IrsRepository {
-    /**
-     * Finds a list of assets with the given global asset ID and direction.
-     *
-     * @param globalAssetId the global asset ID to search for
-     * @param direction     the direction of the search
-     * @param aspects the list of aspects
-     * @return a list of assets that match the given global asset ID and direction, or an empty list if no assets are found
-     */
-    List<Asset> findAssets(String globalAssetId, Direction direction, List<String> aspects);
+public enum Aspect {
+    BATCH("Batch"),
+    SERIAL_PART_TYPIZATION("SerialPartTypization"),
+    ASSEMBLY_PART_RELATIONSHIP("AssemblyPartRelationship"),
+    SINGLE_LEVEL_USAGE_AS_BUILT("SingleLevelUsageAsBuilt");
+
+
+    private final String aspectName;
+
+    Aspect(String aspectName) {
+        this.aspectName = aspectName;
+    }
+
+    @JsonValue
+    public String getAspectName() {
+        return aspectName;
+    }
+
+    public static List<String> downwardAspects() {
+        return List.of(BATCH.getAspectName(), SERIAL_PART_TYPIZATION.getAspectName());
+    }
+
+    public static List<String> upwardAspects() {
+        return List.of(BATCH.getAspectName(), SERIAL_PART_TYPIZATION.getAspectName(), SINGLE_LEVEL_USAGE_AS_BUILT.getAspectName());
+    }
 }

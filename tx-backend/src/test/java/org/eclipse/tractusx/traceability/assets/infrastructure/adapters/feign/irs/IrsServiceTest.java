@@ -2,6 +2,7 @@ package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.i
 
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
+import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Aspect;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.AssetsConverter;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Direction;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.JobResponse;
@@ -61,7 +62,7 @@ class IrsServiceTest {
         when(assetsConverter.convertAssets(jobResponse)).thenReturn(expectedAssets);
 
         // When
-        List<Asset> result = irsService.findAssets("1", direction);
+        List<Asset> result = irsService.findAssets("1", direction, Aspect.downwardAspects());
 
         // Then
         assertThat(result).isEqualTo(expectedAssets);
@@ -91,7 +92,7 @@ class IrsServiceTest {
         when(jobResponse.isCompleted()).thenReturn(false);
 
         // When
-        List<Asset> result = irsService.findAssets("1", direction);
+        List<Asset> result = irsService.findAssets("1", direction, Aspect.downwardAspects());
 
         // Then
         assertThat(result).isEqualTo(Collections.EMPTY_LIST);
