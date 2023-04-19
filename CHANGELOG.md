@@ -5,10 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased - x.x.x]
+### Added
+- Added tx-root pom for maven multi module project
+- Added tx-parent-spring-boot for using spring boot dependencies
+- Added tx-models
 
-### Wip
+### Changed
+- Updated spring-boot:core from 6.0.6 to 6.0.8 for cve-2023-20863
+- backend directory and module to tx-backend
+- backend/cucumber-tests directory to tx-cucumber-tests
+- docs directory to tx-docs
+
+### Removed
+- Removed usage of add-license-header script in FE hook
+
+## [3.2.0] - 2023-04-17
+
+### Added
 - Created BPN - BPN - EDC configuration page with mappings for notification flow
-  - Added in FE with `wip` flag 
 
 ### Changed
 - Refactored messageId of a notification to have own uuid instead of reusing notificationId
