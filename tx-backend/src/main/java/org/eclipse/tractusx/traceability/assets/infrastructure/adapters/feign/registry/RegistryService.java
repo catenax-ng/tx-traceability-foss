@@ -88,7 +88,7 @@ public class RegistryService {
 		this.clock = clock;
 	}
 
-	public List<ShellDescriptor> findAssets() {
+	public List<ShellDescriptor> findShellDescriptors() {
 		RegistryLookupMetric registryLookupMetric = RegistryLookupMetric.start(clock);
 
 		logger.info("Fetching all shell descriptor IDs for BPN {}.", bpn);

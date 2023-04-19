@@ -47,7 +47,7 @@ public class RegistryFacade {
 	}
 
 	public List<ShellDescriptor> updateShellDescriptors() {
-		List<ShellDescriptor> descriptors = registryService.findAssets();
+		List<ShellDescriptor> descriptors = registryService.findShellDescriptors();
 		return shellDescriptiorsService.update(descriptors);
 	}
 
