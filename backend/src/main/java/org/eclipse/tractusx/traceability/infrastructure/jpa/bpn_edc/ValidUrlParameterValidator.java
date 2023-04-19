@@ -1,4 +1,6 @@
 /********************************************************************************
+ * Copyright (c) 2022, 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
+ * Copyright (c) 2022, 2023 ZF Friedrichshafen AG
  * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -19,27 +21,26 @@
 
 package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
-import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import org.apache.commons.validator.routines.UrlValidator;
 
-public final class BpnEdc {
+import java.net.MalformedURLException;
 
-    @ApiModelProperty(example = "BPNL00000003CSGV")
-    private final String bpn;
+public class ValidUrlParameterValidator implements ConstraintValidator<ValidUrlParameter, String> {
 
-    @ApiModelProperty(example = "https://trace-x-test-edc.dev.demo.catena-x.net/a1")
-    private final String url;
-
-    public BpnEdc(String bpn, String url) {
-        this.bpn = bpn;
-        this.url = url;
+    @Override
+    public boolean isValid(String url, ConstraintValidatorContext context) {
+        try {
+            return isValidURL(url);
+        } catch (MalformedURLException e) {
+            return false;
+        }
     }
 
-    public String getBpn() {
-        return bpn;
-    }
-
-    public String getUrl() {
-        return url;
+    private boolean isValidURL(String url) throws MalformedURLException {
+        UrlValidator validator = new UrlValidator();
+        return validator.isValid(url);
     }
 
 }

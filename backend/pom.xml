@@ -37,6 +37,7 @@
         <spring-boot-maven-plugin.version>3.0.2</spring-boot-maven-plugin.version>
         <surefire-plugin.version>3.0.0-M9</surefire-plugin.version>
         <apache-groovy.version>4.0.10</apache-groovy.version>
+        <apache-commons-validator.version>1.7</apache-commons-validator.version>
 
         <!-- versions for 3rd party dependecies -->
         <nimbus-jose-jwt.version>9.31</nimbus-jose-jwt.version>
@@ -325,6 +326,12 @@
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
             <version>${apache-groovy.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>${apache-commons-validator.version}</version>
         </dependency>
 
         <!-- test dependencies spring boot managed -->

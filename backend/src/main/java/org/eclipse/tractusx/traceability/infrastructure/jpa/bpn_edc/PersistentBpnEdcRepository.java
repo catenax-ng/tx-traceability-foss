@@ -1,6 +1,4 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
- * Copyright (c) 2022, 2023 ZF Friedrichshafen AG
  * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -43,8 +41,7 @@ public class PersistentBpnEdcRepository implements BpnEdcRepository {
 
     @Override
     public Optional<BpnEdcEntity> findById(String bpn) {
-        Optional<BpnEdcEntity> rv = jpaBpnEdcRepository.findById(bpn);
-        return rv;
+        return jpaBpnEdcRepository.findById(bpn);
     }
 
     @Override

@@ -1,6 +1,4 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
- * Copyright (c) 2022, 2023 ZF Friedrichshafen AG
  * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -33,15 +31,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.lang.invoke.MethodHandles;
+import java.net.URL;
 
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @Tag(name = "BpnEdc")
 @RequestMapping(path = "/bpn-config", produces = "application/json", consumes = "application/json")
+@Validated
 public class BpnEdcController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BpnEdcController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final BpnEdcService service;
 
@@ -72,7 +75,7 @@ public class BpnEdcController {
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @PostMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void createBpnEdcUrlMappings(@Valid @RequestBody BpnEdcRequest request) {
+    public void createBpnEdcUrlMappings(@ValidUrlParameter @RequestBody BpnEdcRequest request) {
         service.createBpnEdcUrlMapping(request.bpn(), request.url());
     }
 
@@ -88,6 +91,15 @@ public class BpnEdcController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBpnEdcUrlMapping(@PathVariable String bpn) {
         service.deleteBpnEdcUrlMapping(bpn);
+    }
+
+    public static boolean validateUrl(String url) {
+        try {
+            new URL(url).toURI();
+        } catch (Exception ex) {
+            LOGGER.error(ex.getLocalizedMessage());
+        }
+        return true;
     }
 
 }
