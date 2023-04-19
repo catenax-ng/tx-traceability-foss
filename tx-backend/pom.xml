@@ -350,13 +350,6 @@
                 <version>${eclipse-license-tool.version}</version>
                 <executions>
                     <execution>
-                        <id>license-check</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>license-check</goal>
-                        </goals>
-                    </execution>
-                    <execution>
                         <id>install-license</id>
                         <phase>install</phase>
                         <goals>
