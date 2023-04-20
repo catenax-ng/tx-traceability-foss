@@ -1,0 +1,67 @@
+name: Lint and Test Charts
+
+on:
+  pull_request:
+    paths:
+      - 'charts/**'
+  workflow_dispatch:
+
+env:
+  REGISTRY: kind-registry:5000
+  JAVA_VERSION: 17
+  TAG: testing
+  APP_NAME: traceability-foss
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Kubernetes KinD Cluster
+      - uses: container-tools/kind-action@v2
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '${{ env.JAVA_VERSION }}'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build & Push docker image ${{ env.REGISTRY }}/${{ env.APP_NAME}}:${{ env.TAG }}
+        run: mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn --batch-mode -DskipTests=true install jib:build -Dimage=${{ env.REGISTRY }}/${{ github.repository }}:${{ env.COMMIT_SHA }}
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.9.3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          check-latest: true
+
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@v2.4.0
+
+      - name: Run chart-testing (list-changed)
+        id: list-changed
+        run: |
+          changed=$(ct list-changed --target-branch ${{ github.event.repository.default_branch }})
+          if [[ -n "$changed" ]]; then
+             echo "::set-output name=changed::true"
+          fi
+
+      - name: Run chart-testing (lint)
+        run: |
+          ct lint --excluded-charts=edc-consumer --validate-maintainers=false --check-version-increment=false --target-branch ${{ github.event.repository.default_branch }}
+
+      - name: Run chart-testing (install)
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm repo add irs-helm https://eclipse-tractusx.github.io/item-relationship-service
+          helm repo add irs-edc-consumer https://eclipse-tractusx.github.io/item-relationship-service
+          helm repo add postgresql https://charts.bitnami.com/bitnami
+          ct install --charts charts/traceability-foss
+        if: steps.list-changed.outputs.changed == 'true'
