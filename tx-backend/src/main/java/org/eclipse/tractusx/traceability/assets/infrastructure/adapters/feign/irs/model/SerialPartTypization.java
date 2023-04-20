@@ -70,9 +70,9 @@ record LocalId(
 ) {}
 
 enum LocalIdType {
-	@JsonProperty("ManufacturerID") MANUFACTURER_ID,
-	@JsonProperty("PartInstanceID") PART_INSTANCE_ID,
-	@JsonProperty("BatchID") BATCH_ID,
+	@JsonProperty("manufacturerId") MANUFACTURER_ID,
+	@JsonProperty("partInstanceId") PART_INSTANCE_ID,
+	@JsonProperty("batchId") BATCH_ID,
 	@JsonEnumDefaultValue UNKNOWN,
-	@JsonProperty("VAN") VAN,
+	@JsonProperty("van") VAN,
 }

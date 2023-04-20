@@ -108,7 +108,7 @@ public class AssetsConverter {
                         defaultValue(part.partTypeInformation().customerPartId()),
                         manufacturingDate(part),
                         manufacturingCountry(part),
-                        getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId(), part.partTypeInformation().manufacturerPartId()),
+                        getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId(), part.getLocalId(LocalIdType.MANUFACTURER_ID)),
                         getPartsFromRelationships(supplierPartsMap, shortIds, part.catenaXId()),
                         getPartsFromRelationships(customerPartsMap, shortIds, part.catenaXId()),
                         false,
@@ -142,9 +142,9 @@ public class AssetsConverter {
         );
     }
 
-    private Owner getPartOwner(Map<String, List<Relationship>> supplierParts, Map<String, List<Relationship>> customerParts, String catenaXId, String manufacturerId) {
+    private Owner getPartOwner(Map<String, List<Relationship>> supplierParts, Map<String, List<Relationship>> customerParts, String catenaXId, Optional<String> manufacturerId) {
 
-        if (traceabilityProperties.getBpn().value().equals(manufacturerId)) {
+        if (manufacturerId.isPresent() && traceabilityProperties.getBpn().value().equals(manufacturerId.get())) {
             return Owner.OWN;
         }
 
@@ -207,7 +207,7 @@ public class AssetsConverter {
         return Optional.ofNullable(relationships.get(catenaXId))
                 .orElse(Collections.emptyList())
                 .stream()
-                .map(child -> new Asset.Descriptions(child.childCatenaXId(), shortIds.get(child.childCatenaXId())))
+                .map(child -> new Asset.Descriptions(child.catenaXId(), shortIds.get(child.catenaXId())))
                 .toList();
     }
 
