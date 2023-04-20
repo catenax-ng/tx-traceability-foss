@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY: kind-registry:5000
+  REGISTRY: http://kind-registry:5000
   JAVA_VERSION: 17
   TAG: testing
   APP_NAME: traceability-foss
