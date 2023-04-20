@@ -76,6 +76,7 @@ public class BpnEdcController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void createBpnEdcUrlMappings(@ValidUrlParameter @RequestBody BpnEdcRequest request) {
+        LOGGER.info("BpnEdcController [createBpnEdcUrlMappings] BPN:{} URL:{}", request.bpn(), request.url());
         service.createBpnEdcUrlMapping(request.bpn(), request.url());
     }
 
@@ -90,16 +91,8 @@ public class BpnEdcController {
     @DeleteMapping("/{bpn}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBpnEdcUrlMapping(@PathVariable String bpn) {
+        LOGGER.info("BpnEdcController [deleteBpnEdcUrlMapping] BPN:{}", bpn);
         service.deleteBpnEdcUrlMapping(bpn);
-    }
-
-    public static boolean validateUrl(String url) {
-        try {
-            new URL(url).toURI();
-        } catch (Exception ex) {
-            LOGGER.error(ex.getLocalizedMessage());
-        }
-        return true;
     }
 
 }

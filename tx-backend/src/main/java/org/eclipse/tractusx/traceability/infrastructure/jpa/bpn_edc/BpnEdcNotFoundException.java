@@ -1,4 +1,6 @@
 /********************************************************************************
+ * Copyright (c) 2022, 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
+ * Copyright (c) 2022, 2023 ZF Friedrichshafen AG
  * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -19,33 +21,10 @@
 
 package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
-import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
+public class BpnEdcNotFoundException extends RuntimeException {
 
-import java.util.List;
-
-@Component
-public class BpnEdcService {
-
-    private final BpnEdcRepository bpnEdcRepository;
-
-    public BpnEdcService(BpnEdcRepository bpnEdcRepository) {
-        this.bpnEdcRepository = bpnEdcRepository;
-    }
-
-    public PageResult<BpnEdc> getBpnEdcMappings(Pageable pageable) {
-        return bpnEdcRepository.getBpnEdcMappings(pageable);
-    }
-
-    public void createBpnEdcUrlMapping(String bpn, String url) {
-        if(bpnEdcRepository.findById(bpn) == null) {
-            bpnEdcRepository.save(new BpnEdcEntity(bpn, url));
-        }
-    }
-
-    public void deleteBpnEdcUrlMapping(String bpn) {
-        bpnEdcRepository.deleteById(bpn);
+    public BpnEdcNotFoundException(String message) {
+        super(message);
     }
 
 }

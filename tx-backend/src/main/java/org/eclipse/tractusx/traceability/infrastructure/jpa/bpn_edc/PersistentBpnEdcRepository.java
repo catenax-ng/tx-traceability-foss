@@ -19,6 +19,7 @@
 
 package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
+import org.eclipse.tractusx.traceability.assets.domain.model.AssetNotFoundException;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -40,8 +41,11 @@ public class PersistentBpnEdcRepository implements BpnEdcRepository {
     }
 
     @Override
-    public Optional<BpnEdcEntity> findById(String bpn) {
-        return jpaBpnEdcRepository.findById(bpn);
+    public BpnEdc findById(String bpn) {
+        return jpaBpnEdcRepository.findById(bpn)
+                .map(this::toBpnEdc)
+                .orElseThrow(() -> new BpnEdcNotFoundException("EDC URL mapping with BPN %s was not found."
+                        .formatted(bpn)));
     }
 
     @Override
@@ -55,9 +59,8 @@ public class PersistentBpnEdcRepository implements BpnEdcRepository {
     }
 
     @Override
-    public BpnEdc save(BpnEdcEntity entity) {
+    public void save(BpnEdcEntity entity) {
         jpaBpnEdcRepository.save(entity);
-        return new BpnEdc(entity.getBpn(), entity.getUrl());
     }
 
     private BpnEdcEntity toEntity(BpnEdc bpnEdc) {

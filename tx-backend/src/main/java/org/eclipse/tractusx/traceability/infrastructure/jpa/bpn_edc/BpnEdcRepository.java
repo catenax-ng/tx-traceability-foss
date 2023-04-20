@@ -30,9 +30,9 @@ public interface BpnEdcRepository {
 
     PageResult<BpnEdc> findAll(Pageable pageable);
 
-    Optional<BpnEdcEntity> findById(String bpn);
+    BpnEdc findById(String bpn);
 
-    BpnEdc save(BpnEdcEntity entity);
+    void save(BpnEdcEntity entity);
 
     PageResult<BpnEdc> getBpnEdcMappings(Pageable pageable);
 
