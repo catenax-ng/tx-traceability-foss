@@ -27,6 +27,7 @@ import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 import org.eclipse.tractusx.traceability.assets.domain.model.ShellDescriptor;
 import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
+import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -47,6 +48,8 @@ public class AssetsConverter {
 
     private final BpnRepository bpnRepository;
 
+    private final TraceabilityProperties traceabilityProperties;
+
     private final ObjectMapper mapper = new ObjectMapper()
             .configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE, true)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -54,8 +57,9 @@ public class AssetsConverter {
     private static final String SINGLE_LEVEL_USAGE_AS_BUILT = "SingleLevelUsageAsBuilt";
     private static final String ASSEMBLY_PART_RELATIONSHIP = "AssemblyPartRelationship";
 
-    public AssetsConverter(BpnRepository bpnRepository) {
+    public AssetsConverter(BpnRepository bpnRepository, TraceabilityProperties traceabilityProperties) {
         this.bpnRepository = bpnRepository;
+        this.traceabilityProperties = traceabilityProperties;
     }
 
     public List<Asset> readAndConvertAssets() {
@@ -77,8 +81,7 @@ public class AssetsConverter {
 
     public List<Asset> convertAssets(JobResponse response) {
         List<SerialPartTypization> allParts = response.serialPartTypizations();
-        // "idShort": "Taillight front_BPNL00000003AYRE_NO-577666297086581459258590",
-        //	"identification": "urn:uuid:858951f5-fb9c-4ec2-93be-e49fcc2c9361",
+
         Map<String, String> shortIds = response.shells().stream()
                 .collect(Collectors.toMap(Shell::identification, Shell::idShort));
 
@@ -105,7 +108,7 @@ public class AssetsConverter {
                         defaultValue(part.partTypeInformation().customerPartId()),
                         manufacturingDate(part),
                         manufacturingCountry(part),
-                        getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId()),
+                        getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId(), part.partTypeInformation().manufacturerPartId()),
                         getPartsFromRelationships(supplierPartsMap, shortIds, part.catenaXId()),
                         getPartsFromRelationships(customerPartsMap, shortIds, part.catenaXId()),
                         false,
@@ -139,7 +142,11 @@ public class AssetsConverter {
         );
     }
 
-    private Owner getPartOwner(Map<String, List<Relationship>> supplierParts, Map<String, List<Relationship>> customerParts, String catenaXId) {
+    private Owner getPartOwner(Map<String, List<Relationship>> supplierParts, Map<String, List<Relationship>> customerParts, String catenaXId, String manufacturerId) {
+
+        if (traceabilityProperties.getBpn().value().equals(manufacturerId)) {
+            return Owner.OWN;
+        }
 
         if (supplierParts.containsKey(catenaXId)) {
             return Owner.SUPPLIER;
