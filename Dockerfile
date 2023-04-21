@@ -26,6 +26,8 @@ ARG BUILD_TARGET=traceability-foss-backend
 WORKDIR /build
 
 
+COPY pom.xml .
+
 COPY tx-backend tx-backend
 
 # the --mount option requires BuildKit.
@@ -33,7 +35,7 @@ RUN --mount=type=cache,target=/root/.m2 mvn -B clean package -pl :$BUILD_TARGET 
 
 
 # Copy the jar and build image
-FROM eclipse-temurin:17-jre-alpine AS traceability-foss-backend
+FROM eclipse-temurin:17-jre-alpine AS traceability-app
 
 RUN apk upgrade --no-cache libssl3 libcrypto3
 
@@ -42,7 +44,7 @@ ARG GID=1000
 
 WORKDIR /app
 
-COPY --chmod=755 --from=maven /build/tx-backend/target/traceability-foss-backend-*-exec.jar app.jar
+COPY --chmod=755 --from=maven /build/tx-backend/target/traceability-app-*-exec.jar app.jar
 
 USER ${UID}:${GID}
 
