@@ -51,7 +51,7 @@ public class AssetsConverter {
     private final TraceabilityProperties traceabilityProperties;
 
     private final ObjectMapper mapper = new ObjectMapper()
-            .configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE, true)
+            .configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE, false)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     private static final String SINGLE_LEVEL_USAGE_AS_BUILT = "SingleLevelUsageAsBuilt";
@@ -108,7 +108,7 @@ public class AssetsConverter {
                         defaultValue(part.partTypeInformation().customerPartId()),
                         manufacturingDate(part),
                         manufacturingCountry(part),
-                        getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId(), part.getLocalId(LocalIdType.MANUFACTURER_ID)),
+                        getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId(), part.getLocalId(LocalIdKey.MANUFACTURER_ID)),
                         getPartsFromRelationships(supplierPartsMap, shortIds, part.catenaXId()),
                         getPartsFromRelationships(customerPartsMap, shortIds, part.catenaXId()),
                         false,
@@ -165,17 +165,22 @@ public class AssetsConverter {
     }
 
     private String manufacturerId(SerialPartTypization part) {
-        return part.getLocalId(LocalIdType.MANUFACTURER_ID)
+        return part.getLocalId(LocalIdKey.MANUFACTURER_ID)
+                .orElse(EMPTY_TEXT);
+    }
+
+    private String manufacturerPartId(SerialPartTypization part) {
+        return part.getLocalId(LocalIdKey.MANUFACTURER_PART_ID)
                 .orElse(EMPTY_TEXT);
     }
 
     private String batchId(SerialPartTypization part) {
-        return part.getLocalId(LocalIdType.BATCH_ID)
+        return part.getLocalId(LocalIdKey.BATCH_ID)
                 .orElse(EMPTY_TEXT);
     }
 
     private String partInstanceId(SerialPartTypization part) {
-        return part.getLocalId(LocalIdType.PART_INSTANCE_ID)
+        return part.getLocalId(LocalIdKey.PART_INSTANCE_ID)
                 .orElse(EMPTY_TEXT);
     }
 
@@ -212,7 +217,7 @@ public class AssetsConverter {
     }
 
     private String van(SerialPartTypization part) {
-        return part.getLocalId(LocalIdType.VAN)
+        return part.getLocalId(LocalIdKey.VAN)
                 .orElse(EMPTY_TEXT);
     }
 
