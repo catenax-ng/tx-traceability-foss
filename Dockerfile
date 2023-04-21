@@ -1,8 +1,3 @@
-# Copyright (c) 2021,2022,2023
-#       2022: ZF Friedrichshafen AG
-#       2022: ISTOS GmbH
-#       2022,2023: Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
-#       2022,2023: BOSCH AG
 # Copyright (c) 2021,2022,2023 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
@@ -21,7 +16,7 @@
 
 # Dependencies
 FROM maven:3-openjdk-17-slim AS maven
-ARG BUILD_TARGET=traceability-foss-backend
+ARG BUILD_TARGET=traceability-foss
 
 WORKDIR /build
 
