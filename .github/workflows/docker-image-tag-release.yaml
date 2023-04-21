@@ -68,7 +68,7 @@ jobs:
       - name: Build Image
         uses: docker/build-push-action@v3
         with:
-          context: backend
+          context: tx-backend/
           push: true
           tags: kind-registry:5000/app-dashboard:testing
 
