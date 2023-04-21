@@ -97,9 +97,6 @@ public class AssetService {
                         asset.setParentDescriptions(parentAsset.getParentDescriptions());
                     }
                 });
-
-
-
             }
         }
 
