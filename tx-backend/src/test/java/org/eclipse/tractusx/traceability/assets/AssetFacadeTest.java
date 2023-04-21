@@ -50,7 +50,7 @@ class AssetFacadeTest {
     private AssetFacade assetFacade;
 
     @Mock
-    AssetService assetService;
+    private AssetService assetService;
 
     @Mock
     private AssetRepository assetRepository;
@@ -69,15 +69,6 @@ class AssetFacadeTest {
                 newAsset("ITA"),
                 newAsset("FRA")
         );
-
-
-        Map<String, Long> assetMap = new HashMap<>();
-
-
-        for (Asset asset : assets) {
-            assetMap.put(asset.getManufacturingCountry(), 0L);
-        }
-
 
         when(assetService.getAssetsCountryMap()).thenReturn(getCountryCodesWithCountOfOccurrence(assets));
 

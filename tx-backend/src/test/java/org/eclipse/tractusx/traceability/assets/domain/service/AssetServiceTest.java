@@ -117,12 +117,9 @@ class AssetServiceTest {
     }
 
     private Asset provideTestAsset(List<Asset.Descriptions> childDescriptions, List<Asset.Descriptions> parentDescriptions) {
-
-
         String id = "urn:uuid:ceb6b964-5779-49c1-b5e9-0ee70528fcbd";
         String idShort = "--";
         String nameAtManufacturer = "1";
-        String nameAtManufacturer2 = "2";
         String manufacturerPartId = "33740332-54";
         String partInstanceId = "NO-297452866581906730261974";
         String manufacturerId = "BPNL00000003CSGV";
@@ -135,7 +132,6 @@ class AssetServiceTest {
         Owner owner = Owner.CUSTOMER;
         QualityType qualityType = QualityType.OK;
         String van = "--";
-
         return new Asset(id, idShort, nameAtManufacturer, manufacturerPartId, partInstanceId, manufacturerId, batchId, manufacturerName, nameAtCustomer, customerPartId, manufacturingDate, manufacturingCountry, owner, childDescriptions, parentDescriptions, false, qualityType, van);
 
     }

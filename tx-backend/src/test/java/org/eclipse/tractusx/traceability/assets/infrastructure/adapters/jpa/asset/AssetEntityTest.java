@@ -34,8 +34,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class AssetEntityTest {
 
-
-
     @Test
     void testAssetIsNotUnderInvestigationWhenThereIsNoInvestigations() {
         // given
