@@ -26,8 +26,6 @@ ARG BUILD_TARGET=traceability-foss-backend
 WORKDIR /build
 
 
-COPY pom.xml .
-
 COPY tx-backend tx-backend
 
 # the --mount option requires BuildKit.
