@@ -26,7 +26,7 @@ env:
   REGISTRY: kind-registry:5000
   JAVA_VERSION: 17
   TAG: testing
-  APP_NAME: traceability-foss
+  APP_NAME: traceability-app
 
 jobs:
   lint-test:
