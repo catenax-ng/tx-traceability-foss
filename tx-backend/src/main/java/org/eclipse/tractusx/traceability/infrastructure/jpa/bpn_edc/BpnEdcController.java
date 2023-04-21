@@ -40,7 +40,7 @@ import java.net.URL;
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @Tag(name = "BpnEdc")
-@RequestMapping(path = "/bpn-config", produces = "application/json", consumes = "application/json")
+@RequestMapping(path = "/bpn-config")
 @Validated
 public class BpnEdcController {
 
@@ -75,7 +75,7 @@ public class BpnEdcController {
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @PostMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void createBpnEdcUrlMappings(@ValidUrlParameter @RequestBody BpnEdcRequest request) {
+    public void createBpnEdcUrlMapping(@ValidUrlParameter @RequestBody BpnEdcRequest request) {
         LOGGER.info("BpnEdcController [createBpnEdcUrlMappings] BPN:{} URL:{}", request.bpn(), request.url());
         service.createBpnEdcUrlMapping(request.bpn(), request.url());
     }
