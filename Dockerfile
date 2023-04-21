@@ -26,7 +26,7 @@ COPY pom.xml .
 COPY tx-parent-spring-boot tx-parent-spring-boot
 COPY tx-cucumber-tests tx-cucumber-tests
 COPY tx-models tx-models
-COPY tx-docs tx-docs
+COPY docs docs
 COPY tx-backend tx-backend
 
 # the --mount option requires BuildKit.
