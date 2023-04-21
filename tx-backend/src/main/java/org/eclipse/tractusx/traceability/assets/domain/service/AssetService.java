@@ -34,10 +34,15 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
 
 @Component
 public class AssetService {
@@ -75,11 +80,21 @@ public class AssetService {
         }
     }
 
+    /**
+     * Combines the list of downward assets with the list of upward assets by merging the parent descriptions of
+     * matching child assets into the corresponding downward assets. If an upward asset has no matching downward asset,
+     * it is added to the result list as is.
+     *
+     * @param downwardAssets the list of downward assets to be combined with the upward assets
+     * @param upwardAssets   the list of upward assets to be combined with the downward assets
+     * @return a new list of {@link Asset} objects that contains the combined assets with merged parent descriptions
+     */
     public List<Asset> combineAssetsAndMergeParentDescriptionIntoDownwardAssets(List<Asset> downwardAssets, List<Asset> upwardAssets) {
-        Map<String, Asset> downwardAssetsMap = downwardAssets.stream()
+
+        Map<String, Asset> downwardAssetsMap = emptyIfNull(downwardAssets).stream()
                 .collect(Collectors.toMap(Asset::getId, Function.identity()));
 
-        return upwardAssets.stream()
+        return emptyIfNull(upwardAssets).stream()
                 .map(parentAsset -> {
                     Asset matchingChildAsset = downwardAssetsMap.get(parentAsset.getId());
                     if (matchingChildAsset == null) {
