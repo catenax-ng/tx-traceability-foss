@@ -26,6 +26,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Owner;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 
 public final class Asset {
@@ -168,6 +169,10 @@ public final class Asset {
 
     public List<Descriptions> getParentDescriptions() {
         return parentDescriptions;
+    }
+
+    public void setParentDescriptions(List<Descriptions> descriptions) {
+        this.parentDescriptions = Collections.unmodifiableList(descriptions);
     }
 
 	public QualityType getQualityType() {

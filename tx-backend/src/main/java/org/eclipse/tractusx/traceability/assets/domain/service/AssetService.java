@@ -34,6 +34,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,18 +68,50 @@ public class AssetService {
 		try {
 			List<Asset> downwardAssets = irsRepository.findAssets(globalAssetId, Direction.DOWNWARD, Aspect.downwardAspects());
             List<Asset> upwardAssets = irsRepository.findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects());
-            List<Asset> combinedAssetList = new ArrayList<>(upwardAssets);
-            combinedAssetList.addAll(downwardAssets);
-            combinedAssetList.forEach(asset -> logger.info("combinedAssetList {}", asset));
-			logger.info("Assets synchronization for globalAssetId: {} is done. Found {} downwardAssets. Saving them in the repository.", globalAssetId, downwardAssets.size());
-            logger.info("Assets synchronization for globalAssetId: {} is done. Found {} upwardAssets. Saving them in the repository.", globalAssetId, upwardAssets.size());
-			assetRepository.saveAll(combinedAssetList);
+            List<Asset> combinedAssetList = mergeParentDescriptionsIntoDownWardAssetList(downwardAssets, upwardAssets);
+            assetRepository.saveAll(combinedAssetList);
 
-			logger.info("Assets for globalAssetId {} successfully saved.", globalAssetId);
+			logger.info("Assets {} for globalAssetId {} successfully saved.",combinedAssetList, globalAssetId);
 		} catch (Exception e) {
 			logger.warn("Exception during assets synchronization for globalAssetId: {}. Message: {}.", globalAssetId, e.getMessage(), e);
 		}
 	}
+
+    public List<Asset> mergeParentDescriptionsIntoDownWardAssetList(List<Asset> downwardAssets, List<Asset> upwardAssets) {
+        List<Asset> combinedAssetList = new ArrayList<>(downwardAssets);
+
+        Map<String, Asset> downwardAssetsMap = new HashMap<>();
+        for (Asset asset : downwardAssets) {
+            downwardAssetsMap.put(asset.getId(), asset);
+        }
+
+        for (Asset parentAsset : upwardAssets) {
+            Asset matchingChildAsset = downwardAssetsMap.get(parentAsset.getId());
+            if (assetIsNull(matchingChildAsset)){
+                logger.info("Parent has no matching child asset, simply add it");
+                combinedAssetList.add(parentAsset);
+            } else{
+                combinedAssetList.forEach(asset -> {
+                    if (asset.getId().equals(matchingChildAsset.getId())){
+                        logger.info("Parent has matching child asset, update parentDescription of asset with id {}", asset.getId());
+                        asset.setParentDescriptions(parentAsset.getParentDescriptions());
+                    }
+                });
+
+
+
+            }
+        }
+
+        combinedAssetList.forEach(asset -> logger.info("combinedAssetList {}", asset));
+        logger.info("Found {} downwardAssets. Saving them in the repository.", downwardAssets);
+        logger.info("Found {} upwardAssets. Saving them in the repository.", upwardAssets);
+        return combinedAssetList;
+    }
+
+    private boolean assetIsNull(Asset asset){
+        return asset == null;
+    }
 
 	public Asset updateQualityType(String assetId, QualityType qualityType) {
 		Asset foundAsset = assetRepository.getAssetById(assetId);
