@@ -16,7 +16,7 @@
 
 # Dependencies
 FROM maven:3-openjdk-17-slim AS maven
-ARG BUILD_TARGET=traceability-app
+ARG BUILD_TARGET=traceability-foss
 
 WORKDIR /build
 
