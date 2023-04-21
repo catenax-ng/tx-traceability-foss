@@ -112,7 +112,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
 
         and:
         verifyOAuth2ApiCalledOnceForTechnicalUserToken()
-        verifyIrsApiTriggerJobCalledTimes(1)
+        verifyIrsApiTriggerJobCalledTimes(2)
     }
 
     def "should synchronize assets using retry"() {
