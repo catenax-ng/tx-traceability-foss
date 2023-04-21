@@ -9,7 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added tx-root pom for maven multi module project
 - Added tx-parent-spring-boot for using spring boot dependencies
 - Added tx-models
+- Added possibility to configure realm in FE
 - Added license headers to helm chart files
+- Added possibility to create an alert within my parts page, marked with WIP
 - Added additional irs request on irs-service to also include SingleLevelUsageAsBuilt param
 - Added owner column to asset table
 
