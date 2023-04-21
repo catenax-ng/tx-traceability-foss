@@ -29,3 +29,5 @@ record Relationship(String catenaXId, LinkedItem linkedItem, Aspect aspectType) 
 record LinkedItem(
 	String childCatenaXId
 ) {}
+
+

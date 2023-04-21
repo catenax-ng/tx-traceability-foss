@@ -27,7 +27,10 @@ import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 import org.eclipse.tractusx.traceability.assets.domain.model.ShellDescriptor;
 import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
+import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -43,7 +46,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class AssetsConverter {
-
+    private static final Logger logger = LoggerFactory.getLogger(AssetsConverter.class);
     public static final String EMPTY_TEXT = "--";
 
     private final BpnRepository bpnRepository;
@@ -88,11 +91,13 @@ public class AssetsConverter {
         Map<String, List<Relationship>> supplierPartsMap = response.relationships().stream()
                 .filter(relationship -> ASSEMBLY_PART_RELATIONSHIP.equals(relationship.aspectType().getAspectName()))
                 .collect(Collectors.groupingBy(Relationship::childCatenaXId, Collectors.toList()));
+        logger.info("SupplierPartsMap: {}", supplierPartsMap);
+
 
         Map<String, List<Relationship>> customerPartsMap = response.relationships().stream()
                 .filter(relationship -> SINGLE_LEVEL_USAGE_AS_BUILT.equals(relationship.aspectType().getAspectName()))
                 .collect(Collectors.groupingBy(Relationship::childCatenaXId, Collectors.toList()));
-
+        logger.info("customerPartsMap: {}", customerPartsMap);
         return allParts.stream()
                 .map(part -> new Asset(
                         part.catenaXId(),
@@ -144,15 +149,19 @@ public class AssetsConverter {
     private Owner getPartOwner(Map<String, List<Relationship>> supplierParts, Map<String, List<Relationship>> customerParts, String catenaXId, Optional<String> manufacturerId) {
 
         if (manufacturerId.isPresent() && traceabilityProperties.getBpn().value().equals(manufacturerId.get())) {
+            logger.info("OWNER: BPN MATCH: {}", catenaXId);
             return Owner.OWN;
         }
 
         if (supplierParts.containsKey(catenaXId)) {
+            logger.info("OWNER: supplierParts.containsKey(catenaXId): {}", catenaXId);
             return Owner.SUPPLIER;
         }
         if (customerParts.containsKey(catenaXId)) {
+            logger.info("OWNER: customerParts.containsKey(catenaXId): {}", catenaXId);
             return Owner.CUSTOMER;
         }
+        logger.info("OWNER: customerParts.containsKey(catenaXId): {}", catenaXId);
         return Owner.OWN;
     }
 
@@ -208,6 +217,7 @@ public class AssetsConverter {
     }
 
     private List<Asset.Descriptions> getPartsFromRelationships(Map<String, List<Relationship>> relationships, Map<String, String> shortIds, String catenaXId) {
+       logger.info("getPartsFromRelationships: catenaXiD {} with relationships {} and shortIds {}", catenaXId, relationships, shortIds);
         return Optional.ofNullable(relationships.get(catenaXId))
                 .orElse(Collections.emptyList())
                 .stream()
