@@ -28,6 +28,7 @@ WORKDIR /build
 
 COPY pom.xml .
 
+COPY tx-parent-spring-boot tx-parent-spring-boot
 COPY tx-backend tx-backend
 
 # the --mount option requires BuildKit.
