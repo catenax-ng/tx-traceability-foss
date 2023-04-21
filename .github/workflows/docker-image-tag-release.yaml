@@ -26,19 +26,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Login to Docker Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push ${{ env.REGISTRY }}/${{ github.repository }}-frontend:${{ env.TAG_NAME }} and :latest
-        uses: docker/build-push-action@v4
+      - name: Build Image
+        uses: docker/build-push-action@v3
         with:
           context: frontend
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.repository }}-frontend:${{ env.TAG_NAME }}, ${{ env.REGISTRY }}/${{ github.repository }}-frontend:latest
+          tags: kind-registry:5000/app-dashboard:testing
+
 
   Release-docker-image-backend:
     runs-on: ubuntu-latest
@@ -71,8 +65,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build & push docker image ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.TAG_NAME }}
-        run: mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn --batch-mode -DskipTests=true install jib:build -Dimage=${{ env.REGISTRY }}/${{ github.repository }}:${{ env.TAG_NAME }}
+      - name: Build Image
+        uses: docker/build-push-action@v3
+        with:
+          context: backend
+          push: true
+          tags: kind-registry:5000/app-dashboard:testing
 
       - name: Tag docker image ${{ env.REGISTRY }}/${{ github.repository }}:latest
         run: docker tag ${{ env.REGISTRY }}/${{ github.repository }}:${{ env.TAG_NAME }} ${{ env.REGISTRY }}/${{ github.repository }}:latest

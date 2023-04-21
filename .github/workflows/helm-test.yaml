@@ -31,8 +31,12 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Build & Push docker image ${{ env.REGISTRY }}/${{ env.APP_NAME}}:${{ env.TAG }}
-        run: mvn -f tx-backend/pom.xml -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn --batch-mode -DskipTests=true install jib:build   -Dimage=${{ env.REGISTRY }}/${{ env.APP_NAME }}:${{ env.TAG }} -Djib.sendCredentialsOverHttp=true
+      - name: Build Image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: kind-registry:5000/app-dashboard:testing
 
       - name: Set up Helm
         uses: azure/setup-helm@v3
