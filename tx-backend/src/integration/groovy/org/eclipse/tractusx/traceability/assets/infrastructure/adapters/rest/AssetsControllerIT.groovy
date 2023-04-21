@@ -112,7 +112,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
 
         and:
         verifyOAuth2ApiCalledOnceForTechnicalUserToken()
-        verifyIrsApiTriggerJobCalledTimes(2)
+        verifyIrsApiTriggerJobCalledTimes(1)
     }
 
     def "should synchronize assets using retry"() {
@@ -325,7 +325,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .get("/api/assets")
                 .then()
                 .statusCode(200)
-                .body("totalItems", equalTo(12))
+                .body("totalItems", equalTo(10))
     }
 
     // Deprecated please remove once controller has been removed
@@ -342,7 +342,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .get("/api/assets")
                 .then()
                 .statusCode(200)
-                .body("totalItems", equalTo(1))
+                .body("totalItems", equalTo(3))
     }
 
     def "should return all assets"() {
@@ -362,8 +362,8 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .body("content[0]", hasEntry("idShort", "vehicle_hybrid.asm"))
                 .body("content[0]", hasEntry("nameAtManufacturer", "Vehicle Hybrid"))
                 .body("content[0]", hasEntry("manufacturerPartId", "--"))
-                .body("content[0]", hasEntry("partInstanceId", "--"))
-                .body("content[0]", hasEntry("manufacturerId", "--"))
+                .body("content[0]", hasEntry("partInstanceId", "OMA-TGFAYUHXFLHHUQQMPLTE"))
+                .body("content[0]", hasEntry("manufacturerId", "BPNL00000003AYRE"))
                 .body("content[0]", hasEntry("batchId", "--"))
                 .body("content[0]", hasEntry("manufacturerName", "--"))
                 .body("content[0]", hasEntry("nameAtCustomer", "--"))
@@ -373,8 +373,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .body("content[0]", hasEntry("owner", "OWN"))
                 .body("content[0]", hasEntry("underInvestigation",false))
                 .body("content[0]", hasEntry("qualityType", "Ok"))
-                .body("content[0]", hasEntry("van", "--"))
-
+                .body("content[0]", hasEntry("van", "OMA-TGFAYUHXFLHHUQQMPLTE"))
 
     }
 
@@ -395,9 +394,9 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
 
         where:
         ownerValue  || totalItemsValue
-        "OWN"       || 1
+        "OWN"       || 3
         "CUSTOMER"  || 0
-        "SUPPLIER"  || 12
+        "SUPPLIER"  || 10
     }
 
     def "should return assets country map"() {

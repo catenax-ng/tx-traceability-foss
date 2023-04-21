@@ -45,5 +45,5 @@ public interface AssetRepository {
 
     long countAssets();
 
-	long countMyAssets();
+    long countAssetsByOwner(Owner owner);
 }
