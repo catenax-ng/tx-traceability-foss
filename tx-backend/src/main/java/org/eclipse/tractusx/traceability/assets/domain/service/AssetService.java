@@ -68,6 +68,7 @@ public class AssetService {
 			List<Asset> downwardAssets = irsRepository.findAssets(globalAssetId, Direction.DOWNWARD, Aspect.downwardAspects());
             List<Asset> upwardAssets = irsRepository.findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects());
             List<Asset> combinedAssetList = new ArrayList<>(upwardAssets);
+            combinedAssetList.forEach(asset -> logger.info("combinedAssetList {}", asset));
             combinedAssetList.addAll(downwardAssets);
 			logger.info("Assets synchronization for globalAssetId: {} is done. Found {} downwardAssets. Saving them in the repository.", globalAssetId, downwardAssets.size());
             logger.info("Assets synchronization for globalAssetId: {} is done. Found {} upwardAssets. Saving them in the repository.", globalAssetId, upwardAssets.size());

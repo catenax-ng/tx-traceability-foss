@@ -89,7 +89,6 @@ public class AssetsConverter {
                 .filter(relationship -> ASSEMBLY_PART_RELATIONSHIP.equals(relationship.aspectType().getAspectName()))
                 .collect(Collectors.groupingBy(Relationship::childCatenaXId, Collectors.toList()));
 
-
         Map<String, List<Relationship>> customerPartsMap = response.relationships().stream()
                 .filter(relationship -> SINGLE_LEVEL_USAGE_AS_BUILT.equals(relationship.aspectType().getAspectName()))
                 .collect(Collectors.groupingBy(Relationship::childCatenaXId, Collectors.toList()));

@@ -42,7 +42,7 @@ public enum Aspect {
     }
 
     public static List<String> downwardAspects() {
-        return List.of(BATCH.getAspectName(), SERIAL_PART_TYPIZATION.getAspectName());
+        return List.of(BATCH.getAspectName(), SERIAL_PART_TYPIZATION.getAspectName(), ASSEMBLY_PART_RELATIONSHIP.getAspectName());
     }
 
     public static List<String> upwardAspects() {

@@ -186,4 +186,29 @@ public final class Asset {
 	public String getVan() {
 		return van;
 	}
+
+
+    @Override
+    public String toString() {
+        return "Asset{" +
+                "id='" + id + '\'' +
+                ", idShort='" + idShort + '\'' +
+                ", nameAtManufacturer='" + nameAtManufacturer + '\'' +
+                ", manufacturerPartId='" + manufacturerPartId + '\'' +
+                ", partInstanceId='" + partInstanceId + '\'' +
+                ", manufacturerId='" + manufacturerId + '\'' +
+                ", batchId='" + batchId + '\'' +
+                ", manufacturerName='" + manufacturerName + '\'' +
+                ", nameAtCustomer='" + nameAtCustomer + '\'' +
+                ", customerPartId='" + customerPartId + '\'' +
+                ", manufacturingDate=" + manufacturingDate +
+                ", manufacturingCountry='" + manufacturingCountry + '\'' +
+                ", owner=" + owner +
+                ", childDescriptions=" + childDescriptions +
+                ", parentDescriptions=" + parentDescriptions +
+                ", underInvestigation=" + underInvestigation +
+                ", qualityType=" + qualityType +
+                ", van='" + van + '\'' +
+                '}';
+    }
 }
