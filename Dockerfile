@@ -25,9 +25,7 @@ ARG BUILD_TARGET=traceability-foss-backend
 
 WORKDIR /build
 
-COPY ci ci
-COPY api api
-COPY .mvn .mvn
+
 COPY pom.xml .
 
 COPY tx-backend tx-backend
