@@ -12,4 +12,11 @@ FROM public.asset
          JOIN asset_parent_descriptors
               ON asset.id = asset_parent_descriptors.id;
 
+## Clean up data consumption process relevant things:
+
+delete FROM public.asset_child_descriptors;
+delete FROM public.asset_parent_descriptors;
+delete FROM public.asset;
+delete FROM public.shell_descriptor;
+
 

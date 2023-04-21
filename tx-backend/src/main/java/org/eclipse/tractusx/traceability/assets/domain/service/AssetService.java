@@ -34,94 +34,76 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
 public class AssetService {
-	private static final Logger logger = LoggerFactory.getLogger(AssetService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AssetService.class);
 
-	private final AssetRepository assetRepository;
-	private final IrsRepository irsRepository;
+    private final AssetRepository assetRepository;
+    private final IrsRepository irsRepository;
 
-	public AssetService(AssetRepository assetRepository, IrsRepository irsRepository) {
-		this.assetRepository = assetRepository;
-		this.irsRepository = irsRepository;
-	}
+    public AssetService(AssetRepository assetRepository, IrsRepository irsRepository) {
+        this.assetRepository = assetRepository;
+        this.irsRepository = irsRepository;
+    }
 
-	public void synchronizeAssets(List<String> globalAssetIds) {
-		for (String globalAssetId : globalAssetIds) {
-			try {
-				synchronizeAssets(globalAssetId);
-			} catch (Exception e) {
-				logger.warn("Cannot fetch assets for id: {}. Error: {}", globalAssetId, e.getMessage());
-			}
-		}
-	}
-
-	@Async(value = AssetsAsyncConfig.SYNCHRONIZE_ASSETS_EXECUTOR)
-	public void synchronizeAssets(String globalAssetId) {
-		logger.info("Synchronizing assets for globalAssetId: {}", globalAssetId);
-
-		try {
-			List<Asset> downwardAssets = irsRepository.findAssets(globalAssetId, Direction.DOWNWARD, Aspect.downwardAspects());
-            List<Asset> upwardAssets = irsRepository.findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects());
-            List<Asset> combinedAssetList = mergeParentDescriptionsIntoDownWardAssetList(downwardAssets, upwardAssets);
-            assetRepository.saveAll(combinedAssetList);
-
-			logger.info("Assets {} for globalAssetId {} successfully saved.",combinedAssetList, globalAssetId);
-		} catch (Exception e) {
-			logger.warn("Exception during assets synchronization for globalAssetId: {}. Message: {}.", globalAssetId, e.getMessage(), e);
-		}
-	}
-
-    public List<Asset> mergeParentDescriptionsIntoDownWardAssetList(List<Asset> downwardAssets, List<Asset> upwardAssets) {
-        List<Asset> combinedAssetList = new ArrayList<>(downwardAssets);
-
-        Map<String, Asset> downwardAssetsMap = new HashMap<>();
-        for (Asset asset : downwardAssets) {
-            downwardAssetsMap.put(asset.getId(), asset);
-        }
-
-        for (Asset parentAsset : upwardAssets) {
-            Asset matchingChildAsset = downwardAssetsMap.get(parentAsset.getId());
-            if (assetIsNull(matchingChildAsset)){
-                logger.info("Parent has no matching child asset, simply add it");
-                combinedAssetList.add(parentAsset);
-            } else{
-                combinedAssetList.forEach(asset -> {
-                    if (asset.getId().equals(matchingChildAsset.getId())){
-                        logger.info("Parent has matching child asset, update parentDescription of asset with id {}", asset.getId());
-                        asset.setParentDescriptions(parentAsset.getParentDescriptions());
-                    }
-                });
+    public void synchronizeAssets(List<String> globalAssetIds) {
+        for (String globalAssetId : globalAssetIds) {
+            try {
+                synchronizeAssets(globalAssetId);
+            } catch (Exception e) {
+                logger.warn("Cannot fetch assets for id: {}. Error: {}", globalAssetId, e.getMessage());
             }
         }
-
-        combinedAssetList.forEach(asset -> logger.info("combinedAssetList {}", asset));
-        logger.info("Found {} downwardAssets. Saving them in the repository.", downwardAssets);
-        logger.info("Found {} upwardAssets. Saving them in the repository.", upwardAssets);
-        return combinedAssetList;
     }
 
-    private boolean assetIsNull(Asset asset){
-        return asset == null;
+    @Async(value = AssetsAsyncConfig.SYNCHRONIZE_ASSETS_EXECUTOR)
+    public void synchronizeAssets(String globalAssetId) {
+        logger.info("Synchronizing assets for globalAssetId: {}", globalAssetId);
+        try {
+            List<Asset> downwardAssets = irsRepository.findAssets(globalAssetId, Direction.DOWNWARD, Aspect.downwardAspects());
+            List<Asset> upwardAssets = irsRepository.findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects());
+            List<Asset> combinedAssetList = combineAssetsAndMergeParentDescriptionIntoDownwardAssets(downwardAssets, upwardAssets);
+            assetRepository.saveAll(combinedAssetList);
+            logger.info("Assets {} for globalAssetId {} successfully saved.", combinedAssetList, globalAssetId);
+        } catch (Exception e) {
+            logger.warn("Exception during assets synchronization for globalAssetId: {}. Message: {}.", globalAssetId, e.getMessage(), e);
+        }
     }
 
-	public Asset updateQualityType(String assetId, QualityType qualityType) {
-		Asset foundAsset = assetRepository.getAssetById(assetId);
-		foundAsset.updateQualityType(qualityType);
-		return assetRepository.save(foundAsset);
-	}
+    public List<Asset> combineAssetsAndMergeParentDescriptionIntoDownwardAssets(List<Asset> downwardAssets, List<Asset> upwardAssets) {
+        Map<String, Asset> downwardAssetsMap = downwardAssets.stream()
+                .collect(Collectors.toMap(Asset::getId, Function.identity()));
 
-	public Map<String, Long> getAssetsCountryMap() {
-		return assetRepository.getAssets().stream()
-			.collect(Collectors.groupingBy(Asset::getManufacturingCountry, Collectors.counting()));
-	}
+        return upwardAssets.stream()
+                .map(parentAsset -> {
+                    Asset matchingChildAsset = downwardAssetsMap.get(parentAsset.getId());
+                    if (matchingChildAsset == null) {
+                        return parentAsset;
+                    } else {
+                        matchingChildAsset.setParentDescriptions(parentAsset.getParentDescriptions());
+                        return matchingChildAsset;
+                    }
+                })
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
 
-	public void saveAssets(List<Asset> assets) {
-		assetRepository.saveAll(assets);
-	}
+    public Asset updateQualityType(String assetId, QualityType qualityType) {
+        Asset foundAsset = assetRepository.getAssetById(assetId);
+        foundAsset.updateQualityType(qualityType);
+        return assetRepository.save(foundAsset);
+    }
+
+    public Map<String, Long> getAssetsCountryMap() {
+        return assetRepository.getAssets().stream()
+                .collect(Collectors.groupingBy(Asset::getManufacturingCountry, Collectors.counting()));
+    }
+
+    public void saveAssets(List<Asset> assets) {
+        assetRepository.saveAll(assets);
+    }
 }
