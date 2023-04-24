@@ -19,32 +19,36 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { DashboardModule } from '@page/dashboard/dashboard.module';
-import { MapComponent } from '@page/dashboard/presentation/map/map.component';
-import { renderComponent } from '@tests/test-render.utils';
+package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model;
 
-describe('Map', () => {
-  const renderMap = mapData =>
-    renderComponent(MapComponent, {
-      declarations: [MapComponent],
-      imports: [DashboardModule],
-      componentProperties: {
-        mapData,
-      },
-    });
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-  it('should render map', async () => {
-    const { fixture } = await renderMap([]);
-    expect(fixture.componentInstance.map).toBeDefined();
-  });
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
-  /*it('should handle zoom', async () => {
-    const { fixture } = await renderMap([]);
+record SingleLevelUsageAsBuilt(
+        String catenaXId,
+        List<ParentPart> parentParts
+) {
+    SingleLevelUsageAsBuilt(String catenaXId, List<ParentPart> parentParts) {
+        this.catenaXId = catenaXId;
+        this.parentParts = Objects.requireNonNullElse(parentParts, Collections.emptyList());
+    }
+}
 
-    // TODO: find a way to use spyOn inside MapComponent
-    // spyOn(fixture.componentInstance.map, 'resize');
-    // spyOn(fixture.componentInstance.map, 'addLayer');
-    // expect(fixture.componentInstance.map.resize).toHaveBeenCalled();
-    // expect(fixture.componentInstance.map.addLayer).toHaveBeenCalled();
-  });*/
-});
+record Quantity(
+        Double quantityNumber,
+        String measurementUnit
+) {
+}
+
+record ParentPart(
+        String parentCatenaXId,
+        Quantity quantity,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss", timezone = "CET") Date createdOn,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm:ss", timezone = "CET") Date lastModifiedOn
+) {
+}
+

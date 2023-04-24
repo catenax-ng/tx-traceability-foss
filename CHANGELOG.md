@@ -9,15 +9,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added tx-root pom for maven multi module project
 - Added tx-parent-spring-boot for using spring boot dependencies
 - Added tx-models
+- Added possibility to configure realm in FE
+- Added license headers to helm chart files
+- Added possibility to create an alert within my parts page, marked with WIP
+- Added additional irs request on irs-service to also include SingleLevelUsageAsBuilt param
+- Added owner column to asset table
 
 ### Changed
 - Updated spring-boot:core from 6.0.6 to 6.0.8 for cve-2023-20863
 - backend directory and module to tx-backend
 - backend/cucumber-tests directory to tx-cucumber-tests
-- docs directory to tx-docs
+- Updated mapping of assets
+- Alignment of user and groups between helmchart and application
+- Updated readme links
+- Container labelling refactored
 
 ### Removed
 - Removed usage of add-license-header script in FE hook
+- Removed usage of map and map component
+- Removed supplierPart boolean from asset
 
 ## [3.2.0] - 2023-04-17
 

@@ -19,21 +19,25 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-.map-container {
-  @apply w-full h-full relative;
-  min-height: 30rem;
-}
+import { Injectable } from '@angular/core';
+import { ApiService } from '@core/api/api.service';
+import { environment } from '@env';
+import type { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { NotificationCreateResponse } from '../model/notification.model';
+import { Severity } from '@shared/model/severity.model';
 
-.map-content {
-  @apply absolute w-full h-full top-0 bottom-0;
-}
+@Injectable({
+  providedIn: 'root',
+})
+export class AlertsService {
+  private readonly url = environment.apiUrl;
 
-.map-resize {
-  @apply bg-white rounded shadow flex flex-col items-center p-1 cursor-pointer absolute z-10 max-w-xs;
-  right: 9px;
-  bottom: 10px;
-}
+  constructor(private readonly apiService: ApiService) {}
 
-.auto {
-  height: auto;
+  public postAlert(partIds: string[], description: string, severity: Severity, bpn: string): Observable<string> {
+    const body = { partIds, description, severity, bpn };
+
+    return this.apiService.post<NotificationCreateResponse>(`${this.url}/alerts`, body).pipe(map(({ id }) => id));
+  }
 }
