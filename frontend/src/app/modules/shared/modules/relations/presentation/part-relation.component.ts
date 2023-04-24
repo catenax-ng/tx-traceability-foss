@@ -164,9 +164,11 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private initTree(direction: TreeDirection): void {
+    const id = this.htmlId + '--' + direction;
+
     if (direction === TreeDirection.RIGHT) {
       const treeConfigRight: TreeData = {
-        id: this.htmlId + '--' + TreeDirection.RIGHT,
+        id,
         mainId: this.htmlId,
         openDetails: this.isStandalone ? this.openDetails.bind(this) : _ => null,
         defaultZoom: this.isStandalone ? 1 : 0.7,
@@ -175,7 +177,7 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
       this.treeRight = new Tree(treeConfigRight);
     } else if (direction === TreeDirection.LEFT) {
       const treeConfigLeft: TreeData = {
-        id: this.htmlId + '--' + TreeDirection.LEFT,
+        id,
         mainId: this.htmlId,
         openDetails: this.isStandalone ? this.openDetails.bind(this) : _ => null,
         defaultZoom: this.isStandalone ? 1 : 0.7,
@@ -221,18 +223,12 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
   private renderTreeWithOpenElements(openElements: OpenElements, treeDirection: TreeDirection): void {
     if (!openElements) return;
 
-    let treeData;
-    if (treeDirection === TreeDirection.RIGHT) {
-      treeData = this.relationsFacade.formatOpenElementsToTreeData(TreeDirection.RIGHT, openElements);
-    } else if (treeDirection === TreeDirection.LEFT) {
-      treeData = this.relationsFacade.formatOpenElementsToTreeData(TreeDirection.LEFT, openElements);
-    }
+    const treeData = this.relationsFacade.formatOpenElementsToTreeData(treeDirection, openElements);
 
     if (!treeData || !treeData.id) {
       return;
     }
 
-    // TODO: to refactoring?
     if (!this.treeRight) {
       this.initTree(TreeDirection.RIGHT);
     } else if (!this.treeLeft) {
