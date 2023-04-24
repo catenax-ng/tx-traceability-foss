@@ -115,8 +115,8 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
       )
       .subscribe({
         next: rootPart => {
-          this.loadedElementsFacade.addLoadedElement(rootPart);
-          this.relationsFacade.openElementWithChildren(rootPart);
+          this.loadedElementsFacade.addLoadedElement(TreeDirection.RIGHT, rootPart);
+          this.relationsFacade.openElementWithChildren(TreeDirection.RIGHT, rootPart);
         },
       });
 
@@ -143,8 +143,8 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
       )
       .subscribe({
         next: rootPart => {
-          this.loadedElementsFacade.addLoadedElementUpstream(rootPart);
-          this.relationsFacade.openElementWithChildrenUpstream(rootPart);
+          this.loadedElementsFacade.addLoadedElement(TreeDirection.LEFT, rootPart);
+          this.relationsFacade.openElementWithChildren(TreeDirection.LEFT, rootPart);
         },
       });
 
@@ -198,9 +198,9 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
     // as d3.js handles rendering of relations, we can get some performance boost by avoiding
     // all impure pipe computations as side effects for this operation
     this.ngZone.runOutsideAngular(() => {
-      !this.relationsFacade.isElementOpen(id)
-        ? this.relationsFacade.openElementById(id)
-        : this.relationsFacade.closeElementById(id);
+      !this.relationsFacade.isElementOpen(TreeDirection.RIGHT, id)
+        ? this.relationsFacade.openElementById(TreeDirection.RIGHT, id)
+        : this.relationsFacade.closeElementById(TreeDirection.RIGHT, id);
     });
   }
 
@@ -208,9 +208,9 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
     // as d3.js handles rendering of relations, we can get some performance boost by avoiding
     // all impure pipe computations as side effects for this operation
     this.ngZone.runOutsideAngular(() => {
-      !this.relationsFacade.isElementOpenUpstream(id)
-        ? this.relationsFacade.openElementByIdUpstream(id)
-        : this.relationsFacade.closeElementByIdUpstream(id);
+      !this.relationsFacade.isElementOpen(TreeDirection.LEFT, id)
+        ? this.relationsFacade.openElementById(TreeDirection.LEFT, id)
+        : this.relationsFacade.closeElementById(TreeDirection.LEFT, id);
     });
   }
 
@@ -219,15 +219,13 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private renderTreeWithOpenElements(openElements: OpenElements, treeDirection: TreeDirection): void {
-    if (!openElements) {
-      return;
-    }
+    if (!openElements) return;
 
     let treeData;
     if (treeDirection === TreeDirection.RIGHT) {
-      treeData = this.relationsFacade.formatOpenElementsToTreeData(openElements);
+      treeData = this.relationsFacade.formatOpenElementsToTreeData(TreeDirection.RIGHT, openElements);
     } else if (treeDirection === TreeDirection.LEFT) {
-      treeData = this.relationsFacade.formatOpenElementsToTreeDataUpstream(openElements);
+      treeData = this.relationsFacade.formatOpenElementsToTreeData(TreeDirection.LEFT, openElements);
     }
 
     if (!treeData || !treeData.id) {
@@ -245,7 +243,6 @@ export class PartRelationComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private renderTree(treeData: TreeStructure, treeDirection: TreeDirection): void {
-    console.dir(treeData);
     if (treeDirection === TreeDirection.RIGHT && this.treeRight) {
       this.treeRight.renderTree(treeData, treeDirection);
     } else if (treeDirection === TreeDirection.LEFT && this.treeLeft) {

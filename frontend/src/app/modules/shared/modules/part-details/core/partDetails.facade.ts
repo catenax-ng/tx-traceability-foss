@@ -26,6 +26,7 @@ import { View } from '@shared/model/view.model';
 import { PartDetailsState } from '@shared/modules/part-details/core/partDetails.state';
 import { LoadedElementsFacade } from '@shared/modules/relations/core/loaded-elements.facade';
 import { RelationsAssembler } from '@shared/modules/relations/core/relations.assembler';
+import { TreeDirection } from '@shared/modules/relations/model/relations.model';
 import { PartsService } from '@shared/service/parts.service';
 import { cloneDeep as _cloneDeep } from 'lodash-es';
 import { Observable, of } from 'rxjs';
@@ -65,10 +66,11 @@ export class PartDetailsFacade {
     );
   }
 
+  // TODO: still need quality type?
   public updateQualityType(qualityType: QualityType): Observable<Part> {
     const part = { ...this.selectedPart, qualityType };
 
-    this.loadedElementsFacade.addLoadedElement(RelationsAssembler.assemblePartForRelation(part));
+    this.loadedElementsFacade.addLoadedElement(TreeDirection.RIGHT, RelationsAssembler.assemblePartForRelation(part));
 
     const { id } = part;
     const { data } = _cloneDeep(this.partsState.myParts);

@@ -33,7 +33,6 @@ export class LoadedElementsFacade {
     return this.loadedElementsState.loadedElements;
   }
 
-  // TODO: to refactoring
   public get loadedElementsUpstream(): LoadedElements {
     return this.loadedElementsState.loadedElementsUpstream;
   }
@@ -42,40 +41,32 @@ export class LoadedElementsFacade {
     return this.loadedElementsState.loadedElements$;
   }
 
-  // TODO: to refactoring
   public get loadedElementsUpstream$(): Observable<LoadedElements> {
     return this.loadedElementsState.loadedElementsUpstream$;
   }
 
-  public addLoadedElement(element: TreeElement): void {
+  public addLoadedElement(treeDirection: TreeDirection, element: TreeElement): void {
     const { id, children } = element;
 
+    const loadedElements = treeDirection === TreeDirection.RIGHT ? this.loadedElements : this.loadedElementsUpstream;
+
     const loadingChildren = children?.reduce((p: LoadedElements, childId: string) => {
-      return { ...p, [childId]: this.loadedElements[childId] || RelationsAssembler.createLoadingElement(childId) };
+      return { ...p, [childId]: loadedElements[childId] || RelationsAssembler.createLoadingElement(childId) };
     }, {} as LoadedElements);
 
-    this.loadedElementsState.loadedElements = {
-      ...this.loadedElementsState.loadedElements,
-      [id]: element,
-      ...loadingChildren,
-    };
-  }
-
-  // TODO: to refactoring
-  public addLoadedElementUpstream(element: TreeElement): void {
-    const { id, children } = element;
-
-    const loadingChildren = children?.reduce((p: LoadedElements, childId: string) => {
-      return {
-        ...p,
-        [childId]: this.loadedElementsUpstream[childId] || RelationsAssembler.createLoadingElement(childId),
+    // TODO: move logic to state?
+    if (treeDirection === TreeDirection.RIGHT) {
+      this.loadedElementsState.loadedElements = {
+        ...this.loadedElementsState.loadedElements,
+        [id]: element,
+        ...loadingChildren,
       };
-    }, {} as LoadedElements);
-
-    this.loadedElementsState.loadedElementsUpstream = {
-      ...this.loadedElementsState.loadedElementsUpstream,
-      [id]: element,
-      ...loadingChildren,
-    };
+    } else {
+      this.loadedElementsState.loadedElementsUpstream = {
+        ...this.loadedElementsState.loadedElementsUpstream,
+        [id]: element,
+        ...loadingChildren,
+      };
+    }
   }
 }

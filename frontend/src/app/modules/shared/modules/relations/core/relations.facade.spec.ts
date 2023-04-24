@@ -24,7 +24,7 @@ import { RelationComponentState } from '@shared/modules/relations/core/component
 import { LoadedElementsFacade } from '@shared/modules/relations/core/loaded-elements.facade';
 import { LoadedElementsState } from '@shared/modules/relations/core/loaded-elements.state';
 import { RelationsFacade } from '@shared/modules/relations/core/relations.facade';
-import { TreeElement, TreeStructure } from '@shared/modules/relations/model/relations.model';
+import { TreeDirection, TreeElement, TreeStructure } from '@shared/modules/relations/model/relations.model';
 import { PartsService } from '@shared/service/parts.service';
 import { waitFor } from '@testing-library/angular';
 import { firstValueFrom, of } from 'rxjs';
@@ -65,7 +65,7 @@ describe('Relations facade', () => {
         [MOCK_part_3.id]: childDescriptionsToChild(MOCK_part_3.childDescriptions),
       };
 
-      relationsFacade.openElementWithChildren(mockTreeElement);
+      relationsFacade.openElementWithChildren(TreeDirection.RIGHT, mockTreeElement);
       expect(await getOpenElements()).toEqual(expected);
     });
   });
@@ -76,7 +76,7 @@ describe('Relations facade', () => {
       const mockTreeElement = { id, children: childDescriptionsToChild(childDescriptions) } as TreeElement;
       const expected = {};
 
-      relationsFacade.updateOpenElement(mockTreeElement);
+      relationsFacade.updateOpenElement(TreeDirection.RIGHT, mockTreeElement);
       expect(await getOpenElements()).toEqual(expected);
     });
   });
@@ -88,8 +88,8 @@ describe('Relations facade', () => {
       const mockTreeElement = { id, children } as TreeElement;
       const expected = { MOCK_part_1: ['MOCK_part_2', 'MOCK_part_3'], MOCK_part_3: ['MOCK_part_5'] };
 
-      relationsFacade.openElementWithChildren(mockTreeElement);
-      relationsFacade.deleteOpenElement(children[0]);
+      relationsFacade.openElementWithChildren(TreeDirection.RIGHT, mockTreeElement);
+      relationsFacade.deleteOpenElement(TreeDirection.RIGHT, children[0]);
 
       expect(await getOpenElements()).toEqual(expected);
     });
@@ -103,11 +103,11 @@ describe('Relations facade', () => {
         [MOCK_part_3.id]: childDescriptionsToChild(MOCK_part_3.childDescriptions),
       };
 
-      relationsFacade.openElementWithChildren(mockTreeElement);
+      relationsFacade.openElementWithChildren(TreeDirection.RIGHT, mockTreeElement);
       const allOpenElements = await getOpenElements();
       await waitFor(() => expect(allOpenElements).toEqual(expected_all));
 
-      relationsFacade.deleteOpenElement(MOCK_part_2.id);
+      relationsFacade.deleteOpenElement(TreeDirection.RIGHT, MOCK_part_2.id);
 
       const expected_deleted = {
         [MOCK_part_1.id]: childDescriptionsToChild(MOCK_part_1.childDescriptions),
@@ -175,9 +175,9 @@ describe('Relations facade', () => {
       const { id, childDescriptions } = MOCK_part_1;
       const mockTreeElement = { id, children: childDescriptionsToChild(childDescriptions) } as TreeElement;
 
-      loadedElementsFacade.addLoadedElement(mockTreeElement);
-      relationsFacade.openElementWithChildren(mockTreeElement);
-      expect(relationsFacade.formatOpenElementsToTreeData(await getOpenElements())).toEqual(expected);
+      loadedElementsFacade.addLoadedElement(TreeDirection.RIGHT, mockTreeElement);
+      relationsFacade.openElementWithChildren(TreeDirection.RIGHT, mockTreeElement);
+      expect(relationsFacade.formatOpenElementsToTreeData(TreeDirection.RIGHT, await getOpenElements())).toEqual(expected);
     });
   });
 });
