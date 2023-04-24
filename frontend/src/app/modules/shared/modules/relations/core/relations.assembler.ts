@@ -26,13 +26,8 @@ export class RelationsAssembler {
   public static assemblePartForRelation(part: Part, idFallback?: string, fromParents?: boolean): TreeElement {
     const { id, name = idFallback, serialNumber, qualityType } = part || {};
 
-    let children;
-    // TODO: needs refactoring?
-    if (fromParents === true && part.parents) {
-      children = part.parents || {};
-    } else {
-      children = part.children;
-    }
+    const children = fromParents ? part.parents : part.children;
+
     const mapQualityTypeToState = (type: QualityType) => (type === QualityType.Ok ? 'done' : type || 'error');
     const loadingOrErrorStatus = id ? 'loading' : 'error';
     const mappedOrFallbackStatus = mapQualityTypeToState(qualityType) || 'done';
