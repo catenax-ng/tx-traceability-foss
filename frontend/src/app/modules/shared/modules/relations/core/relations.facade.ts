@@ -223,7 +223,7 @@ export class RelationsFacade {
         children.map(id => childrenData.find(data => data.id === id) || ({ id, children: [] } as Part)),
       ),
       map(childrenData => childrenData.map(child => RelationsAssembler.assemblePartForRelation(child))),
-      tap(childrenData => treeDirection === TreeDirection.RIGHT ? this.addLoadedElements(treeDirection, childrenData) : this.addLoadedElements(treeDirection, childrenData)),
+      tap(childrenData => this.addLoadedElements(treeDirection, childrenData)),
       tap(childrenData => this.requestPartDetailsStream.next(childrenData)),
     );
   }
