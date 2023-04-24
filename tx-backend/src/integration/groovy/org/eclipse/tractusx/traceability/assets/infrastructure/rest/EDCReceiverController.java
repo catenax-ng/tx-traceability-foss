@@ -68,7 +68,7 @@ public class EDCReceiverController {
 		this.endpointDataReferenceCache = endpointDataReferenceCache;
 	}
 
-	@GetMapping("/api/v1/management/catalog")
+	@PostMapping("/api/v1/management/catalog/request")
 	public Catalog getDataCatalog(@RequestParam String providerUrl) {
 		logger.info("Returning data catalog for provider {}", providerUrl);
 		return Catalog.Builder.newInstance()
