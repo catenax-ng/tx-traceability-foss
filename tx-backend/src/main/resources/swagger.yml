@@ -18,7 +18,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ################################################################################
-
+security:
+  - bearerAuth: []
 components:
   securitySchemes:
     bearerAuth:
@@ -33,12 +34,6 @@ components:
       bearerFormat: JWT
 
 swagger:
-  securityDefinitions:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-
   operations:
     api.assets:
       summary: "Returns all assets"
