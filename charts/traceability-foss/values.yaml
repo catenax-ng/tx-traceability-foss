@@ -263,8 +263,12 @@ backend:
     enabled: false
     className: ""
     annotations: {}
-    hosts: []
-    tls: []
+    hosts:
+      - "https://replace.me"
+    tls:
+      - hosts:
+          - "https://replace.me"
+        secretName: tls-secret
 
   healthCheck:
     enabled: true  # <healthCheck.enabled>
@@ -339,13 +343,70 @@ irs-helm:
 ###################################
 irs-edc-consumer:
   enabled: false  # <irs-edc-consumer.enabled>
+
+  edc-controlplane:
+    nameOverride: "tracex-consumer-controlplane"
+    fullnameOverride: "tracex-consumer-controlplane"
+
+    namespace: product-traceability-foss
+
+    image:
+      tag: "0.3.0"
+
+    ingresses:
+      - enabled: true
+        hostname: "https://replace.me"
+        annotations:
+          nginx.ingress.kubernetes.io/ssl-passthrough: "false"
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        endpoints:
+          - protocol
+          - management
+        className: "nginx"
+        tls:
+          - hosts:
+              - "https://replace.me"
+            secretName: tls-secret
+
+    resources:
+      limits:
+        cpu: 2
+        memory: 4Gi
+      requests:
+        cpu: 256m
+        memory: 2Gi
+
+    logging:
+      # -- EDC logging.properties configuring the [java.util.logging subsystem](https://docs.oracle.com/javase/7/docs/technotes/guides/logging/overview.html#a1.8)
+    edc:
+      postgresql:
+        password: ""
+      transfer:
+        proxy:
+          token:
+            verifier:
+              publickey:
+                alias: ""
+            signer:
+              privatekey:
+                alias: ""
+      api:
+        auth:
+          key: ""
+      controlplane:
+        url: "https://replace.me"
+      dataplane:
+        url: "https://replace.me"
+
   edc-dataplane:
     ingresses:
       - enabled: true
         hostname: "https://replace.me"
-        annotations: {}
+        annotations: { }
         className: ""
         tls:
           - hosts:
               - "https://replace.me"
             secretName: tls-secret
+
