@@ -1,4 +1,4 @@
-# Copyright (c) 2021,2022,2023 Contributors to the Eclipse Foundation
+# Copyright (c) 2023 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -52,7 +52,7 @@ COPY --chmod=755 --from=maven /build/tx-backend/target/traceability-app-*-exec.j
 
 USER ${UID}:${GID}
 
-ENTRYPOINT ["java", "-Djava.util.logging.config.file=./logging.properties", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
 
 HEALTHCHECK --interval=5m --timeout=3s \
   CMD curl -f http://localhost:4004/actuator/health || exit 1

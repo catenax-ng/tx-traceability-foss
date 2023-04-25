@@ -290,6 +290,8 @@ backend:
     providerUrl: ""  # <edc.providerUrl>
     dataplane:
       url: "https://replace.me"
+    controlplane:
+      url: "https://replace.me"
 
 #########################
 # PG Admin configuration     #
