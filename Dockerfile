@@ -16,22 +16,27 @@
 
 # Dependencies
 FROM maven:3-openjdk-17-slim AS maven
-ARG BUILD_TARGET=traceability-foss
+ARG BUILD_TARGET=tx-backend
 
+# Create Working Directory
 WORKDIR /build
 
-
+# Copy to Working Directory
 COPY pom.xml .
-
 COPY tx-parent-spring-boot tx-parent-spring-boot
 COPY tx-cucumber-tests tx-cucumber-tests
 COPY tx-models tx-models
 COPY docs docs
 COPY tx-backend tx-backend
 
-# the --mount option requires BuildKit.
-RUN --mount=type=cache,target=/root/.m2 mvn -B clean package -pl :$BUILD_TARGET -am -DskipTests
 
+# the --mount option requires BuildKit.
+# --mount=type=cache,target=/root/.m2 -> mounts cache volume to the .m2 directorym in container
+# -B Batch Mode
+# -pl specify project to build
+# :Variable specifies an artifact ID of project to build
+# -am build all dependencies of a project
+RUN --mount=type=cache,target=/root/.m2 mvn -B clean package -pl :$BUILD_TARGET -am -DskipTests
 
 # Copy the jar and build image
 FROM eclipse-temurin:17-jre-alpine AS traceability-app
