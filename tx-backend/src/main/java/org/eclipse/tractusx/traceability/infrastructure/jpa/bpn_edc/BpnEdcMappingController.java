@@ -37,21 +37,21 @@ import java.lang.invoke.MethodHandles;
 
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
-@Tag(name = "BpnEdc")
+@Tag(name = "BpnEdcMapping")
 @RequestMapping(path = "/bpn-config")
-public class BpnEdcController {
+public class BpnEdcMappingController {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final BpnEdcMappingService service;
 
-    public BpnEdcController(BpnEdcMappingService service) {
+    public BpnEdcMappingController(BpnEdcMappingService service) {
         this.service = service;
     }
 
     @Operation(operationId = "getBpnEdcs",
             summary = "Get BPN EDC URL mappings by pagination",
-            tags = {"BpnEdc"},
+            tags = {"BpnEdcMapping"},
             description = "The endpoint returns a paged result of BPN EDC URL mappings.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found"),
@@ -64,7 +64,7 @@ public class BpnEdcController {
 
     @Operation(operationId = "createBpnEdcUrlMappings",
             summary = "Creates BPN EDC URL mappings",
-            tags = {"BpnEdc"},
+            tags = {"BpnEdcMapping"},
             description = "The endpoint creates BPN EDC URL mappings",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Created."),
@@ -79,7 +79,7 @@ public class BpnEdcController {
 
     @Operation(operationId = "deleteBpnEdcUrlMappings",
             summary = "Deletes BPN EDC URL mappings",
-            tags = {"BpnEdc"},
+            tags = {"BpnEdcMapping"},
             description = "The endpoint deletes BPN EDC URL mappings",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Deleted."),
