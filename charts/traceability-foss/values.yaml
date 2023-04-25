@@ -288,6 +288,8 @@ backend:
   edc:
     apiKey: ""  # <edc.apiKey>
     providerUrl: ""  # <edc.providerUrl>
+    dataplane:
+      url: "https://replace.me"
 
 #########################
 # PG Admin configuration     #
