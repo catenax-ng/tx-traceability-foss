@@ -21,6 +21,11 @@
 security:
   - bearerAuth: []
 components:
+  securityDefinitions:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   securitySchemes:
     bearerAuth:
       type: http
@@ -34,6 +39,11 @@ components:
       bearerFormat: JWT
 
 swagger:
+  securityDefinitions:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   securitySchemes:
     type: http
     scheme: bearer
