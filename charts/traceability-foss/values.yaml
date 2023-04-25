@@ -403,10 +403,9 @@ irs-edc-consumer:
     ingresses:
       - enabled: true
         hostname: "https://replace.me"
-        annotations: { }
+        annotations: {}
         className: ""
         tls:
           - hosts:
               - "https://replace.me"
             secretName: tls-secret
-
