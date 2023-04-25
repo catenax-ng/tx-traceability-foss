@@ -64,39 +64,26 @@ class BpnEdcMappingMappingControllerIT extends IntegrationSpecification implemen
     }
 
     def "should delete one BPN EDC URL mapping"() {
+        defaultBpnEdcMappingStored()
         when:
-        given()
+             given()
                 .contentType(ContentType.JSON)
-                .body(
-                        asJson(
-                                [
-                                        bpn    : "BPNL00000003CSGV",
-                                        url   : "http://localhost:12345/abc"
-                                ]
-                        )
-                )
                 .header(jwtAuthorization(ADMIN))
                 .when()
-                .post("/api/bpn-config")
+                .delete("/api/bpn-config/BPN123")
                 .then()
                 .statusCode(204)
         then:
-        given()
-                .contentType(ContentType.JSON)
-                .header(jwtAuthorization(ADMIN))
-                .when()
-                .delete("/api/bpn-config/BPNL00000003CSGV")
-                .then()
-                .statusCode(204)
-        expect:
-        given()
+            given()
                 .header(jwtAuthorization(ADMIN))
                 .contentType(ContentType.JSON)
                 .when()
                 .get("/api/bpn-config")
                 .then()
                 .statusCode(200)
-                .body("content", Matchers.hasSize(0))
+                .body("content", Matchers.hasSize(1))
+                .body("content[0].bpn", Matchers.equalTo("BPN456"))
+                .body("content[0].url", Matchers.equalTo("https://test456.de"))
     }
 
     def "should report a bad request due to missing required bpn"() {

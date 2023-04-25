@@ -46,6 +46,7 @@ public class BpnEdcMappingService {
     public void deleteBpnEdcMapping(String bpn) {
         if (bpnEdcMappingRepository.exists(bpn)) {
             bpnEdcMappingRepository.deleteById(bpn);
+            return;
         }
         throw new BpnEdcMappingNotFoundException("Could not find BPN EDC Mapping for BPN " + bpn);
     }
