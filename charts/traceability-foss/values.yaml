@@ -293,7 +293,6 @@ backend:
     controlplane:
       url: "https://replace.me"
 
-    # Values for consumer edc-dataplane.
     edc-dataplane:
       ingresses:
         - enabled: true
@@ -340,3 +339,13 @@ irs-helm:
 ###################################
 irs-edc-consumer:
   enabled: false  # <irs-edc-consumer.enabled>
+  edc-dataplane:
+    ingresses:
+      - enabled: true
+        hostname: "https://replace.me"
+        annotations: { }
+        className: ""
+        tls:
+          - hosts:
+              - "https://replace.me"
+            secretName: tls-secret
