@@ -89,8 +89,7 @@ export class Minimap {
 
     // First draw paths so paths are behind circles.
     D3RenderHelper.renderTreePaths(direction, svg, root, this.r, this.ids.minimap, true);
-    // TODO:  needs to adapt direction to the rest of minimap...
-    D3RenderHelper.renderMinimapNodes(svg, root, this.r, this.ids.minimap);
+    D3RenderHelper.renderMinimapNodes(direction, svg, root, this.r, this.ids.minimap);
     // Recalculate height after circles are drawn because of uneven distribution.
     this.setMapHeight();
 

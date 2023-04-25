@@ -41,7 +41,7 @@ export class D3RenderHelper {
     const link = d3
       .linkHorizontal<HierarchyCircularLink<TreeStructure>, HierarchyCircularNode<TreeStructure>>()
       .source(({ source }) => ({ ...source, y: source.y + offset } as HierarchyCircularNode<TreeStructure>))
-      .x(({ y }) => (direction === TreeDirection.LEFT ? -y : y))
+      .x(({ y }) => D3RenderHelper.modifyYByDirection(direction, y))
       .y(({ x }) => x);
 
     let paths = d3.select(`#${id}--paths`);
@@ -61,7 +61,7 @@ export class D3RenderHelper {
       .attr('d', (node: HierarchyCircularLink<TreeStructure>) => link(node));
   }
 
-  public static renderMinimapNodes(svg: TreeSvg, root: HierarchyNode<TreeStructure>, r: number, id: string): void {
+  public static renderMinimapNodes(direction: TreeDirection, svg: TreeSvg, root: HierarchyNode<TreeStructure>, r: number, id: string): void {
     function renderElements(dataNode: TreeNode) {
       const el = d3.select(this);
       const { x, y } = dataNode;
@@ -78,7 +78,7 @@ export class D3RenderHelper {
           .attr('class', ({ data }: TreeNode) => `tree--element__circle-${data.state}`);
       }
 
-      circleNode.attr('transform', () => `translate(-${y},${x})`);
+      circleNode.attr('transform', () => `translate(${D3RenderHelper.modifyYByDirection(direction, y)},${x})`);
     }
 
     D3RenderHelper.renderNodes(svg, root, r, id, renderElements);
@@ -140,11 +140,7 @@ export class D3RenderHelper {
         .text(() => HelperD3.shortenText(data.text || data.id));
     }
 
-    if (direction === TreeDirection.LEFT) {
-      circleNode.attr('transform', () => `translate(-${y},${x})`);
-    } else if (direction === TreeDirection.RIGHT) {
-      circleNode.attr('transform', () => `translate(${y},${x})`);
-    }
+    circleNode.attr('transform', () => `translate(${D3RenderHelper.modifyYByDirection(direction, y)},${x})`);
   }
 
   public static renderStatusBorder(
@@ -193,7 +189,7 @@ export class D3RenderHelper {
 
     statusBorder
       .attr('class', () => `tree--element__border tree--element__border-${data.state}`)
-      .attr('transform', () => (direction === TreeDirection.LEFT ? `translate(-${y},${x})` : `translate(${y},${x})`));
+      .attr('transform', () => `translate(${D3RenderHelper.modifyYByDirection(direction, y)},${x})`);
   }
 
   public static renderLoading(direction: TreeDirection, el: SVGSelection, dataNode: TreeNode, r: number, id: string) {
@@ -220,7 +216,7 @@ export class D3RenderHelper {
       .attr(id, `${id}--Loading`)
       .attr('data-testid', 'tree--element__border-loading')
       .classed('tree--element__border-loading', true)
-      .attr('transform', () => `translate(-${y},${x})`)
+      .attr('transform', () => `translate(${D3RenderHelper.modifyYByDirection(direction, y)},${x})`)
       .append('g');
 
     arcs.forEach((node, index) =>
@@ -286,11 +282,7 @@ export class D3RenderHelper {
     const { data, x, y } = dataNode;
 
     const circleRadius = 15;
-    el.attr('transform', () =>
-      direction === TreeDirection.LEFT
-        ? `translate(-${y + r + circleRadius + 5},${x})`
-        : `translate(${y + r + circleRadius + 5},${x})`,
-    )
+    el.attr('transform', () =>`translate(${D3RenderHelper.modifyYByDirection(direction, (y + r + circleRadius + 5))},${x})`)
       .on('click', () => callback(data))
       .attr('data-testid', 'tree--element__closing')
       .classed('tree--element__closing', true);
@@ -327,7 +319,7 @@ export class D3RenderHelper {
       .endAngle(({ data }) => (data.children?.length ? 0 : direction === TreeDirection.LEFT ? 1.7 : 0.7) * Math.PI);
 
     el.append('path')
-      .attr('transform', () => (direction === TreeDirection.LEFT ? `translate(-${y},${x})` : `translate(${y},${x})`))
+      .attr('transform', () => `translate(${D3RenderHelper.modifyYByDirection(direction, y)},${x})`)
       .attr('d', () => arc(dataNode))
       .attr('data-testid', 'tree--element__arrow')
       .classed('tree--element__arrow', true);
@@ -353,7 +345,7 @@ export class D3RenderHelper {
       .y0(r / 2);
 
     el.append('path')
-      .attr('transform', () => (direction === TreeDirection.LEFT ? `translate(-${y},${x})` : `translate(${y},${x})`))
+      .attr('transform', () => `translate(${D3RenderHelper.modifyYByDirection(direction, y)},${x})`)
       .attr('d', () => curveFunc(data.children?.length ? [] : arrow))
       .attr('data-testid', 'tree--element__arrow')
       .classed('tree--element__arrow', true);
@@ -380,5 +372,13 @@ export class D3RenderHelper {
         update => update.each(renderElements),
         exit => exit.remove(),
       );
+  }
+
+  private static modifyYByDirection(direction: TreeDirection, y: number) :number {
+    if (direction === TreeDirection.LEFT) {
+      return -1 * y;
+    }
+
+    return y;
   }
 }

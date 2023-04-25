@@ -169,7 +169,7 @@ describe('D3 Tree', () => {
     expect(nodesLeftList.length).toBe(2);
     expect(nodesLeftList.item(0).getElementsByTagName('a').length).toBe(3);
     // check first node in details
-    expect(nodesLeftList.item(0).getElementsByTagName('a').item(0).getAttribute('transform')).toBe('translate(-0,0)'); // TODO: should we fix to avoid -0? is is relevant?
+    expect(nodesLeftList.item(0).getElementsByTagName('a').item(0).getAttribute('transform')).toBe('translate(0,0)');
     expect(
       nodesLeftList.item(0).getElementsByTagName('a').item(0).getElementsByTagName('circle').item(0),
     ).toBeInTheDocument();
