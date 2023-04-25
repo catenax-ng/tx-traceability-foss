@@ -37,19 +37,17 @@ public class BpnEdcMappingService {
     }
 
     public void createBpnEdcMapping(String bpn, String url) {
-        BpnEdcMapping bpnEdcMapping = bpnEdcMappingRepository.findById(bpn);
-        if (bpnEdcMapping != null) {
+        if (bpnEdcMappingRepository.exists(bpn)) {
             throw new BpnEdcMappingException("BPN EDC Mapping for BPN: {} already exists.");
         }
         bpnEdcMappingRepository.save(new BpnEdcMappingEntity(bpn, url));
     }
 
     public void deleteBpnEdcMapping(String bpn) {
-        BpnEdcMapping bpnEdcMapping = bpnEdcMappingRepository.findById(bpn);
-        if (bpnEdcMapping == null) {
-            throw new BpnEdcMappingNotFoundException("Could not find BPN EDC Mapping for BPN " + bpn);
+        if (bpnEdcMappingRepository.exists(bpn)) {
+            bpnEdcMappingRepository.deleteById(bpn);
         }
-        bpnEdcMappingRepository.deleteById(bpn);
+        throw new BpnEdcMappingNotFoundException("Could not find BPN EDC Mapping for BPN " + bpn);
     }
 
 }

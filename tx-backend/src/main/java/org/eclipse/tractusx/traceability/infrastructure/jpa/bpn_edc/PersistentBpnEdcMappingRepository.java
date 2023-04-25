@@ -39,6 +39,10 @@ public class PersistentBpnEdcMappingRepository implements BpnEdcMappingRepositor
                 .orElseThrow(() -> new BpnEdcMappingNotFoundException("EDC URL mapping with BPN %s was not found."
                         .formatted(bpn)));
     }
+    @Override
+    public boolean exists(String bpn) {
+        return jpaBpnEdcRepository.findById(bpn).isPresent();
+    }
 
     @Override
     public PageResult<BpnEdcMapping> findAllPaged(Pageable pageable) {

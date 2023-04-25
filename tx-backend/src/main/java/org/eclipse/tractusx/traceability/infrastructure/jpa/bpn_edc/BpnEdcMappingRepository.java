@@ -26,6 +26,8 @@ public interface BpnEdcMappingRepository {
 
     BpnEdcMapping findById(String bpn);
 
+    boolean exists(String bpn);
+
     void save(BpnEdcMappingEntity entity);
 
     PageResult<BpnEdcMapping> findAllPaged(Pageable pageable);

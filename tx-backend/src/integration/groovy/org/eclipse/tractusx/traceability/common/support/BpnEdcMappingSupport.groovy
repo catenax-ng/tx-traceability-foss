@@ -21,7 +21,13 @@ package org.eclipse.tractusx.traceability.common.support
 
 import org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc.BpnEdcMappingEntity
 
-trait BpnEdcSupport implements BpnEdcRepositoryProvider {
+trait BpnEdcMappingSupport implements BpnEdcRepositoryProvider {
+
+    void defaultBpnEdcMappingStored(){
+        bpnEdcRepository().save(new BpnEdcMappingEntity("BPN123", "https://test123.de"));
+        bpnEdcRepository().save(new BpnEdcMappingEntity("BPN456", "https://test456.de"));
+
+    }
 
 	void assertCreatedMappingSize(int size) {
 		List<BpnEdcMappingEntity> bpnEdcUrlMappings = bpnEdcRepository().findAll()
@@ -31,5 +37,6 @@ trait BpnEdcSupport implements BpnEdcRepositoryProvider {
 	void assertBpnEdcUrlMappings(Closure closure) {
         bpnEdcRepository().findAll().each closure
 	}
+
 
 }

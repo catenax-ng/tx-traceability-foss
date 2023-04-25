@@ -22,6 +22,8 @@ package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc
 
 import io.restassured.http.ContentType
 import org.eclipse.tractusx.traceability.IntegrationSpecification
+import org.eclipse.tractusx.traceability.common.support.AssetsSupport
+import org.eclipse.tractusx.traceability.common.support.BpnEdcMappingSupport
 import org.eclipse.tractusx.traceability.common.support.BpnRepositoryProvider
 import org.hamcrest.Matchers
 
@@ -29,9 +31,9 @@ import static io.restassured.RestAssured.given
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.USER
 
-class BpnEdcMappingControllerIT extends IntegrationSpecification implements BpnRepositoryProvider {
+class BpnEdcMappingMappingControllerIT extends IntegrationSpecification implements BpnRepositoryProvider, AssetsSupport, BpnEdcMappingSupport{
 
-    def "should create two BPN EDC URL mappings"() {
+    def "should create BpnEdc mapping"() {
         when:
             given()
                 .contentType(ContentType.JSON)
