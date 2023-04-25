@@ -38,6 +38,8 @@ swagger:
     type: http
     scheme: bearer
     bearerFormat: JWT
+  security:
+    - bearerAuth: [ ]
   operations:
     api.assets:
       summary: "Returns all assets"
