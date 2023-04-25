@@ -84,7 +84,5 @@ jobs:
           helm repo add irs-helm https://eclipse-tractusx.github.io/item-relationship-service
           helm repo add irs-edc-consumer https://eclipse-tractusx.github.io/item-relationship-service
           helm repo add postgresql https://charts.bitnami.com/bitnami
-          helm repo add frontend file://$(pwd)/charts/frontend
-          helm repo add backend file://$(pwd)/charts/backend
-          ct install --charts charts/traceability-foss --chart-repos frontend=file://$(pwd)/charts/frontend,backend=file://$(pwd)/charts/backend
+          ct install --charts charts/traceability-foss
         if: steps.list-changed.outputs.changed == 'true'
