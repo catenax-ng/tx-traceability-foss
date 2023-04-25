@@ -19,7 +19,13 @@
 
 package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bpn_edc_mappings")
@@ -29,6 +35,9 @@ public class BpnEdcMappingEntity {
     private String bpn;
 
     private String url;
+
+    private LocalDateTime created;
+    private LocalDateTime updated;
 
     public BpnEdcMappingEntity() {
     }
@@ -53,5 +62,18 @@ public class BpnEdcMappingEntity {
     public void setUrl(String url) {
         this.url = url;
     }
+
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updated = LocalDateTime.now();
+    }
+
+
+    @PrePersist
+    public void preCreate() {
+        this.created = LocalDateTime.now();
+    }
+
 
 }
