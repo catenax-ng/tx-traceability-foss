@@ -355,7 +355,7 @@ irs-edc-consumer:
 
     ingresses:
       - enabled: true
-        hostname: "https://replace.me"
+        hostname: "replace-me"
         annotations:
           nginx.ingress.kubernetes.io/ssl-passthrough: "false"
           nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
@@ -366,7 +366,7 @@ irs-edc-consumer:
         className: "nginx"
         tls:
           - hosts:
-              - "https://replace.me"
+              - "replace.me"
             secretName: tls-secret
 
     resources:
