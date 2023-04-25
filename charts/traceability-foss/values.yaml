@@ -350,9 +350,6 @@ irs-edc-consumer:
 
     namespace: product-traceability-foss
 
-    image:
-      tag: "0.3.0"
-
     ingresses:
       - enabled: true
         hostname: "replace-me"
@@ -369,16 +366,6 @@ irs-edc-consumer:
               - "replace.me"
             secretName: tls-secret
 
-    resources:
-      limits:
-        cpu: 2
-        memory: 4Gi
-      requests:
-        cpu: 256m
-        memory: 2Gi
-
-    logging:
-      # -- EDC logging.properties configuring the [java.util.logging subsystem](https://docs.oracle.com/javase/7/docs/technotes/guides/logging/overview.html#a1.8)
     edc:
       postgresql:
         password: ""
