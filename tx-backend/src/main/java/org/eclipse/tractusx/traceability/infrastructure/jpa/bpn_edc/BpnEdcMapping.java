@@ -21,18 +21,8 @@ package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public final class BpnEdcMapping {
-
-    @ApiModelProperty(example = "BPNL00000003CSGV")
-    private final String bpn;
-
-    @ApiModelProperty(example = "https://trace-x-test-edc.dev.demo.catena-x.net/a1")
-    private final String url;
-
-    public BpnEdcMapping(String bpn, String url) {
-        this.bpn = bpn;
-        this.url = url;
-    }
+public record BpnEdcMapping(@ApiModelProperty(example = "BPNL00000003CSGV") String bpn,
+                            @ApiModelProperty(example = "https://trace-x-test-edc.dev.demo.catena-x.net/a1") String url) {
 
     public String getBpn() {
         return bpn;
