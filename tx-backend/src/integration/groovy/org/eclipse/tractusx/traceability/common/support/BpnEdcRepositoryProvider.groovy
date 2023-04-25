@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,8 +19,8 @@
 
 package org.eclipse.tractusx.traceability.common.support
 
-import org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc.BpnEdcRepository
+import org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc.BpnEdcMappingRepository
 
 interface BpnEdcRepositoryProvider {
-	BpnEdcRepository bpnEdcRepository()
+	BpnEdcMappingRepository bpnEdcRepository()
 }

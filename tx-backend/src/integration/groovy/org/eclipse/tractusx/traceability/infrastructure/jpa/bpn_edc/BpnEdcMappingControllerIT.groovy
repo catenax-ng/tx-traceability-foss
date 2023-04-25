@@ -29,7 +29,7 @@ import static io.restassured.RestAssured.given
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.USER
 
-class BpnEdcControllerIT extends IntegrationSpecification implements BpnRepositoryProvider {
+class BpnEdcMappingControllerIT extends IntegrationSpecification implements BpnRepositoryProvider {
 
     def "should create two BPN EDC URL mappings"() {
         when:
@@ -97,23 +97,25 @@ class BpnEdcControllerIT extends IntegrationSpecification implements BpnReposito
                 .body("content", Matchers.hasSize(0))
     }
 
-    def "should report a bad request"() {
+    def "should report a bad request due to missing required bpn"() {
         expect:
         given()
                 .contentType(ContentType.JSON)
                 .body(
                         asJson(
-                                {}
+                                [
+                                        url: "https://test.de"
+                                ]
                         )
                 )
                 .header(jwtAuthorization(ADMIN))
                 .when()
                 .post("/api/bpn-config")
                 .then()
-                .statusCode(500)
+                .statusCode(400)
     }
 
-    def "should report an unauthorized request"() {
+    def "should report an forbidden request"() {
         expect:
         given()
                 .contentType(ContentType.JSON)

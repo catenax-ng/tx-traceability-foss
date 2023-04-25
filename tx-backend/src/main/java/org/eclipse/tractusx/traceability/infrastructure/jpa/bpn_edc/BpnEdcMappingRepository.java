@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,20 +19,17 @@
 
 package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.Size;
+import org.eclipse.tractusx.traceability.common.model.PageResult;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+public interface BpnEdcMappingRepository {
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public record BpnEdcRecord(
-    @Size(min = 15, max = 255, message = "BPN should have at least 15 characters and at most 255 characters")
-    @ApiModelProperty(example = "The BPN")
-    String bpn,
+    BpnEdcMapping findById(String bpn);
 
-    @Size(min = 1, max = 100, message = "Specify at least 1 and at most 100 EDC URLs")
-    @ApiModelProperty(example = "[\"https://trace-x-test-edc.dev.demo.catena-x.net/a2\"]")
-    List<String> urls
-) {
+    void save(BpnEdcMappingEntity entity);
+
+    PageResult<BpnEdcMapping> findAllPaged(Pageable pageable);
+
+    void deleteById(String bpn);
+
 }

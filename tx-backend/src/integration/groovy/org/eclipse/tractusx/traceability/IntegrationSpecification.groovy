@@ -31,10 +31,8 @@ import org.eclipse.tractusx.traceability.common.config.ApplicationProfiles
 import org.eclipse.tractusx.traceability.common.config.PostgreSQLConfig
 import org.eclipse.tractusx.traceability.common.config.RestAssuredConfig
 import org.eclipse.tractusx.traceability.common.config.RestitoConfig
-import org.eclipse.tractusx.traceability.common.mapper.InvestigationMapper
-import org.eclipse.tractusx.traceability.common.mapper.NotificationMapper
 import org.eclipse.tractusx.traceability.common.support.*
-import org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc.BpnEdcRepository
+import org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc.BpnEdcMappingRepository
 import org.eclipse.tractusx.traceability.infrastructure.jpa.investigation.JpaInvestigationRepository
 import org.eclipse.tractusx.traceability.infrastructure.jpa.notification.JpaNotificationRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -70,7 +68,7 @@ abstract class IntegrationSpecification extends Specification
 	private BpnRepository bpnRepository
 
     @Autowired
-    private BpnEdcRepository bpnEdcRepository
+    private BpnEdcMappingRepository bpnEdcRepository
 
 	@Autowired
 	private JpaInvestigationRepository jpaInvestigationRepository
@@ -117,7 +115,7 @@ abstract class IntegrationSpecification extends Specification
 	}
 
     @Override
-    BpnEdcRepository bpnEdcRepository() {
+    BpnEdcMappingRepository bpnEdcRepository() {
         return bpnEdcRepository
     }
 

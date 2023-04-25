@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,37 +19,29 @@
 
 package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
-import org.eclipse.tractusx.traceability.assets.domain.model.AssetNotFoundException;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
-public class PersistentBpnEdcRepository implements BpnEdcRepository {
+public class PersistentBpnEdcMappingRepository implements BpnEdcMappingRepository {
 
     private final JpaBpnEdcRepository jpaBpnEdcRepository;
 
-    public PersistentBpnEdcRepository(JpaBpnEdcRepository jpaBpnEdcRepository) {
+    public PersistentBpnEdcMappingRepository(JpaBpnEdcRepository jpaBpnEdcRepository) {
         this.jpaBpnEdcRepository = jpaBpnEdcRepository;
     }
 
     @Override
-    public PageResult<BpnEdc> findAll(Pageable pageable) {
-        return new PageResult<>(jpaBpnEdcRepository.findAll(pageable), this::toBpnEdc);
-    }
-
-    @Override
-    public BpnEdc findById(String bpn) {
+    public BpnEdcMapping findById(String bpn) {
         return jpaBpnEdcRepository.findById(bpn)
                 .map(this::toBpnEdc)
-                .orElseThrow(() -> new BpnEdcNotFoundException("EDC URL mapping with BPN %s was not found."
+                .orElseThrow(() -> new BpnEdcMappingNotFoundException("EDC URL mapping with BPN %s was not found."
                         .formatted(bpn)));
     }
 
     @Override
-    public PageResult<BpnEdc> getBpnEdcMappings(Pageable pageable) {
+    public PageResult<BpnEdcMapping> findAllPaged(Pageable pageable) {
         return new PageResult<>(jpaBpnEdcRepository.findAll(pageable), this::toBpnEdc);
     }
 
@@ -59,19 +51,12 @@ public class PersistentBpnEdcRepository implements BpnEdcRepository {
     }
 
     @Override
-    public void save(BpnEdcEntity entity) {
+    public void save(BpnEdcMappingEntity entity) {
         jpaBpnEdcRepository.save(entity);
     }
 
-    private BpnEdcEntity toEntity(BpnEdc bpnEdc) {
-        return new BpnEdcEntity(
-            bpnEdc.getBpn(),
-            bpnEdc.getUrl()
-        );
-    }
-
-    private BpnEdc toBpnEdc(BpnEdcEntity entity) {
-        return new BpnEdc(
+    private BpnEdcMapping toBpnEdc(BpnEdcMappingEntity entity) {
+        return new BpnEdcMapping(
             entity.getBpn(),
             entity.getUrl()
         );

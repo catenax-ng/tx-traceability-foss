@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -20,20 +20,27 @@
 package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
 import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
+import org.eclipse.tractusx.traceability.investigations.adapters.rest.validation.SeverityValidatorImpl;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+@Target({ElementType.FIELD, ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = ValidUrlParameterValidator.class)
-@Target({ TYPE_USE })
-@Retention(RUNTIME)
 @Documented
 public @interface ValidUrlParameter {
 
     String message() default "The URL must contain the protocol and a valid domain name.";
 
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

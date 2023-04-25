@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,9 +19,9 @@
 
 package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
-public class BpnEdcNotFoundException extends RuntimeException {
+public class BpnEdcMappingException extends RuntimeException {
 
-    public BpnEdcNotFoundException(String message) {
+    public BpnEdcMappingException(String message) {
         super(message);
     }
 

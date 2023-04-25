@@ -25,6 +25,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.tractusx.traceability.assets.domain.model.AssetNotFoundException;
 import org.eclipse.tractusx.traceability.assets.infrastructure.config.openapi.TechnicalUserAuthorizationException;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.controller.model.CreateNotificationContractException;
+import org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc.BpnEdcMappingException;
+import org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc.BpnEdcMappingNotFoundException;
 import org.eclipse.tractusx.traceability.investigations.adapters.rest.validation.UpdateInvestigationValidationException;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationNotFoundException;
@@ -99,6 +101,20 @@ public class ErrorHandlingConfig implements AuthenticationFailureHandler {
     ResponseEntity<ErrorResponse> handleInvestigationStatusTransitionNotAllowed(InvestigationStatusTransitionNotAllowed exception) {
         logger.warn("handleInvestigationStatusTransitionNotAllowed", exception);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(exception.getMessage()));
+    }
+
+    @ExceptionHandler(BpnEdcMappingException.class)
+    ResponseEntity<ErrorResponse> handleBpnEdcMappingException(BpnEdcMappingException exception) {
+        logger.warn("BpnEdcMappingException", exception);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(exception.getMessage()));
+    }
+
+    @ExceptionHandler(BpnEdcMappingNotFoundException.class)
+    ResponseEntity<ErrorResponse> handleBpnEdcMappingNotFoundException(BpnEdcMappingNotFoundException exception) {
+        logger.warn("handleBpnEdcMappingNotFoundException", exception);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(exception.getMessage()));
     }
 

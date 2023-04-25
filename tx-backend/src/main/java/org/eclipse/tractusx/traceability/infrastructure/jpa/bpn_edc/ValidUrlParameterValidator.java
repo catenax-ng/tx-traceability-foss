@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -21,6 +21,8 @@ package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.tractusx.traceability.investigations.adapters.rest.validation.ValidSeverity;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -29,7 +31,18 @@ import java.net.URL;
 public class ValidUrlParameterValidator implements ConstraintValidator<ValidUrlParameter, String> {
 
     @Override
+    public void initialize(ValidUrlParameter constraintAnnotation) {
+        // nothing to do
+    }
+
+    @Override
     public boolean isValid(String url, ConstraintValidatorContext context) {
+
+        // do not validate notNull
+        if (StringUtils.isBlank(url)){
+            return true;
+        }
+
         try {
             new URL(url).toURI();
             return true;

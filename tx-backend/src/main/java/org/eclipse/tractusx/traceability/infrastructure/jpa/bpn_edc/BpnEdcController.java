@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -31,24 +31,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.invoke.MethodHandles;
-import java.net.URL;
 
 @RestController
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @Tag(name = "BpnEdc")
 @RequestMapping(path = "/bpn-config")
-@Validated
 public class BpnEdcController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private final BpnEdcService service;
+    private final BpnEdcMappingService service;
 
-    public BpnEdcController(BpnEdcService service) {
+    public BpnEdcController(BpnEdcMappingService service) {
         this.service = service;
     }
 
@@ -61,7 +58,7 @@ public class BpnEdcController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("")
-    public PageResult<BpnEdc> getBpnEdcs(Pageable pageable) {
+    public PageResult<BpnEdcMapping> getBpnEdcs(Pageable pageable) {
         return service.getBpnEdcMappings(pageable);
     }
 
@@ -75,9 +72,9 @@ public class BpnEdcController {
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @PostMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void createBpnEdcUrlMapping(@ValidUrlParameter @RequestBody BpnEdcRequest request) {
-        LOGGER.info("BpnEdcController [createBpnEdcUrlMappings] BPN:{} URL:{}", request.bpn(), request.url());
-        service.createBpnEdcUrlMapping(request.bpn(), request.url());
+    public void createBpnEdcUrlMapping(@RequestBody @Valid BpnEdcMappingRequest request) {
+        logger.info("BpnEdcController [createBpnEdcUrlMappings]");
+        service.createBpnEdcMapping(request.bpn(), request.url());
     }
 
     @Operation(operationId = "deleteBpnEdcUrlMappings",
@@ -91,8 +88,8 @@ public class BpnEdcController {
     @DeleteMapping("/{bpn}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBpnEdcUrlMapping(@PathVariable String bpn) {
-        LOGGER.info("BpnEdcController [deleteBpnEdcUrlMapping] BPN:{}", bpn);
-        service.deleteBpnEdcUrlMapping(bpn);
+        logger.info("BpnEdcController [deleteBpnEdcUrlMapping]");
+        service.deleteBpnEdcMapping(bpn);
     }
 
 }

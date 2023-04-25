@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,21 +19,10 @@
 
 package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
-import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.springframework.data.domain.Pageable;
+public class BpnEdcMappingNotFoundException extends RuntimeException {
 
-import java.util.Optional;
-
-public interface BpnEdcRepository {
-
-    PageResult<BpnEdc> findAll(Pageable pageable);
-
-    BpnEdc findById(String bpn);
-
-    void save(BpnEdcEntity entity);
-
-    PageResult<BpnEdc> getBpnEdcMappings(Pageable pageable);
-
-    void deleteById(String bpn);
+    public BpnEdcMappingNotFoundException(String message) {
+        super(message);
+    }
 
 }

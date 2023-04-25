@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,33 +19,39 @@
 
 package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
-import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
+import jakarta.persistence.*;
 
-import java.util.List;
+@Entity
+@Table(name = "bpn_edc_mappings")
+public class BpnEdcMappingEntity {
 
-@Component
-public class BpnEdcService {
+    @Id
+    private String bpn;
 
-    private final BpnEdcRepository bpnEdcRepository;
+    private String url;
 
-    public BpnEdcService(BpnEdcRepository bpnEdcRepository) {
-        this.bpnEdcRepository = bpnEdcRepository;
+    public BpnEdcMappingEntity() {
     }
 
-    public PageResult<BpnEdc> getBpnEdcMappings(Pageable pageable) {
-        return bpnEdcRepository.getBpnEdcMappings(pageable);
+    public BpnEdcMappingEntity(String bpn, String url) {
+        this.bpn = bpn;
+        this.url = url;
     }
 
-    public void createBpnEdcUrlMapping(String bpn, String url) {
-        if(bpnEdcRepository.findById(bpn) == null) {
-            bpnEdcRepository.save(new BpnEdcEntity(bpn, url));
-        }
+    public String getBpn() {
+        return bpn;
     }
 
-    public void deleteBpnEdcUrlMapping(String bpn) {
-        bpnEdcRepository.deleteById(bpn);
+    public void setBpn(String bpn) {
+        this.bpn = bpn;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
 }

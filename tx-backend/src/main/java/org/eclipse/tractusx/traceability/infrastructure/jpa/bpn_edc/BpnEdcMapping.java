@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,14 +19,27 @@
 
 package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import io.swagger.annotations.ApiModelProperty;
 
-import java.util.List;
+public final class BpnEdcMapping {
 
-public record BpnEdcRequest(
-    @NotNull(message = "BPN must be present") String bpn,
-    @NotNull(message = "A valid URL must be present") String url
+    @ApiModelProperty(example = "BPNL00000003CSGV")
+    private final String bpn;
 
-) {
+    @ApiModelProperty(example = "https://trace-x-test-edc.dev.demo.catena-x.net/a1")
+    private final String url;
+
+    public BpnEdcMapping(String bpn, String url) {
+        this.bpn = bpn;
+        this.url = url;
+    }
+
+    public String getBpn() {
+        return bpn;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
 }

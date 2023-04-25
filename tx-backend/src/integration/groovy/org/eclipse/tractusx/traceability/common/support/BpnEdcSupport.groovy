@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,12 +19,12 @@
 
 package org.eclipse.tractusx.traceability.common.support
 
-import org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc.BpnEdcEntity
+import org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc.BpnEdcMappingEntity
 
 trait BpnEdcSupport implements BpnEdcRepositoryProvider {
 
 	void assertCreatedMappingSize(int size) {
-		List<BpnEdcEntity> bpnEdcUrlMappings = bpnEdcRepository().findAll()
+		List<BpnEdcMappingEntity> bpnEdcUrlMappings = bpnEdcRepository().findAll()
 		assert bpnEdcUrlMappings.size() == size
 	}
 
