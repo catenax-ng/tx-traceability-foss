@@ -34,6 +34,10 @@ components:
       bearerFormat: JWT
 
 swagger:
+  securitySchemes:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
   operations:
     api.assets:
       summary: "Returns all assets"
