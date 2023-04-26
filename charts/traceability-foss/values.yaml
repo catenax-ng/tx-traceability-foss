@@ -328,7 +328,7 @@ pgadmin4:
 # Postgres configuration     #
 #########################
 postgresql:
-  enabled: false
+  enabled: true
 
   nameOverride: "tracex-backend-postgresql"
   fullnameOverride: "tracex-backend-postgresql"
