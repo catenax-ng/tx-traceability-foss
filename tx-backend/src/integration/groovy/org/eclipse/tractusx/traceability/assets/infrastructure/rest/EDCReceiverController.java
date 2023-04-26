@@ -36,6 +36,7 @@ import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.notificatio
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.offer.ContractOffer;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.Policy;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.transfer.TransferRequestDto;
+import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.catalog.model.CatalogRequestDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -68,9 +69,35 @@ public class EDCReceiverController {
 		this.endpointDataReferenceCache = endpointDataReferenceCache;
 	}
 
+    /**
+     This method is deprecated and scheduled for removal.
+     EDC has been upgraded and set some requests to deprecated. Due to the fact that our API partners still use deprecated APIs we need to support them until they have removed them (IRS).
+     @deprecated This method is deprecated and will be removed soon. Please use the updated version of this API.
+     @since 04/23
+     @param providerUrl The URL of the provider.
+     @return A Catalog object that contains information about the contract offers and policies.
+     */
+    @Deprecated(forRemoval = true, since = "04/23")
+    @GetMapping("/api/v1/management/catalog")
+    public Catalog getDataCatalogDeprecated(@RequestParam String providerUrl) {
+        logger.warn("DEPRECATED METHOD: Returning data catalog for provider {}", providerUrl);
+        return Catalog.Builder.newInstance()
+                .id("contract-id")
+                .contractOffers(List.of(ContractOffer.Builder.newInstance()
+                        .id("contract-id")
+                        .asset(Asset.Builder.newInstance()
+                                .id("asset-id")
+                                .property(Constants.ASSET_KEY_NOTIFICATION_TYPE, Constants.ASSET_VALUE_QUALITY_INVESTIGATION)
+                                .build()
+                        ).policy(Policy.Builder.newInstance()
+                                .build()
+                        ).build())
+                ).build();
+    }
+
 	@PostMapping("/api/v1/management/catalog/request")
-	public Catalog getDataCatalog(@RequestParam String providerUrl) {
-		logger.info("Returning data catalog for provider {}", providerUrl);
+	public Catalog getDataCatalog(@RequestBody CatalogRequestDTO catalogRequestDTO) {
+		logger.info("Returning data catalog for provider {}", catalogRequestDTO.providerUrl());
 		return Catalog.Builder.newInstance()
 			.id("contract-id")
 			.contractOffers(List.of(ContractOffer.Builder.newInstance()
