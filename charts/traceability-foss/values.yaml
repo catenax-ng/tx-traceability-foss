@@ -40,7 +40,6 @@ frontend:
 
   image:
     repository: ghcr.io/catenax-ng/tx-traceability-foss
-    tag: ""
     pullPolicy: Always
 
 
