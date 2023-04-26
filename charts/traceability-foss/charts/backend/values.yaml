@@ -22,6 +22,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/catenax-ng/tx-traceability-foss
+  tag: "65d193135dd0b4b4fb96b0fb3b8bfb307532ab59"
   pullPolicy: Always
 
 ##
