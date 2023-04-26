@@ -31,11 +31,6 @@ env:
 jobs:
   lint-test:
     runs-on: ubuntu-latest
-    services:  # TODO test with this configuration
-      registry:
-        image: registry:2
-        ports:
-          - 5000:5000
     steps:
       - name: Checkout
         uses: actions/checkout@v3
