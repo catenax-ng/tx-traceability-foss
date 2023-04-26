@@ -37,6 +37,7 @@ export interface MinimapIds {
   closing: string;
   icon: string;
   main: string;
+  direction: string;
   minimap: string;
   viewport: string;
   viewportContainer: string;

@@ -33,6 +33,7 @@ export interface TreeElement {
 
   state?: State;
   children?: string[];
+  parents?: string[];
 }
 
 export interface TreeStructure {
@@ -52,7 +53,7 @@ export interface TreeData {
   r?: number;
   defaultZoom?: number;
   openDetails?: (data: TreeStructure) => void;
-  updateChildren?: (data: TreeStructure) => void;
+  updateChildren?: (data: TreeStructure, direction: TreeDirection) => void;
 }
 
 export enum TreeDirection {

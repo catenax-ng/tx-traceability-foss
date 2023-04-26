@@ -26,11 +26,10 @@ import { View } from '@shared/model/view.model';
 import { PartDetailsState } from '@shared/modules/part-details/core/partDetails.state';
 import { LoadedElementsFacade } from '@shared/modules/relations/core/loaded-elements.facade';
 import { RelationsAssembler } from '@shared/modules/relations/core/relations.assembler';
-import { TreeDirection } from '@shared/modules/relations/model/relations.model';
 import { PartsService } from '@shared/service/parts.service';
 import { cloneDeep as _cloneDeep } from 'lodash-es';
 import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { SortDirection } from '../../../../../mocks/services/pagination.helper';
 
 @Injectable()
@@ -66,11 +65,18 @@ export class PartDetailsFacade {
     );
   }
 
+  public getRootPart(id: string): Observable<View<Part>> {
+    return this.partsService.getPart(id).pipe(
+      map((part: Part) => ({ data: part })),
+      catchError((error: Error) => of({ error })),
+    );
+  }
+
   // TODO: still need quality type?
   public updateQualityType(qualityType: QualityType): Observable<Part> {
     const part = { ...this.selectedPart, qualityType };
 
-    this.loadedElementsFacade.addLoadedElement(TreeDirection.RIGHT, RelationsAssembler.assemblePartForRelation(part));
+    this.loadedElementsFacade.addLoadedElement(RelationsAssembler.assemblePartForRelation(part));
 
     const { id } = part;
     const { data } = _cloneDeep(this.partsState.myParts);

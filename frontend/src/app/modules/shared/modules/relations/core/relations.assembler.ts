@@ -23,26 +23,25 @@ import { Part, QualityType } from '@page/parts/model/parts.model';
 import { TreeElement, TreeStructure } from '@shared/modules/relations/model/relations.model';
 
 export class RelationsAssembler {
-  public static assemblePartForRelation(part: Part, idFallback?: string, fromParents?: boolean): TreeElement {
-    const { id, name = idFallback, serialNumber, qualityType } = part || {};
-
-    const children = fromParents ? part.parents : part.children;
+  public static assemblePartForRelation(part: Part, idFallback?: string): TreeElement {
+    const { id, name: text = idFallback, serialNumber, qualityType, children, parents } = part || {};
 
     const mapQualityTypeToState = (type: QualityType) => (type === QualityType.Ok ? 'done' : type || 'error');
     const loadingOrErrorStatus = id ? 'loading' : 'error';
     const mappedOrFallbackStatus = mapQualityTypeToState(qualityType) || 'done';
-
     const state = !!children ? mappedOrFallbackStatus : loadingOrErrorStatus;
-    return { id: id || idFallback, text: name, title: `${name || '--'} | ${serialNumber || id}`, state, children };
+
+    const title = `${text || '--'} | ${serialNumber || id}`;
+
+    return { id: id || idFallback, text, title, state, children, parents };
   }
 
-  public static elementToTreeStructure(element: TreeElement): TreeStructure {
-    if (!element) {
-      return null;
-    }
+  public static elementToTreeStructure(element: TreeElement, isParentDirection = false): TreeStructure {
+    if (!element) return null;
+    const nodes = isParentDirection ? element.parents : element.children;
 
-    const children: TreeStructure[] = element.children
-      ? element.children.map(childId => ({
+    const children: TreeStructure[] = nodes
+      ? nodes.map(childId => ({
           id: childId,
           title: childId,
           state: 'loading',

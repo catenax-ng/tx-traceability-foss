@@ -22,7 +22,7 @@
 import { Injectable } from '@angular/core';
 import { LoadedElementsState } from '@shared/modules/relations/core/loaded-elements.state';
 import { RelationsAssembler } from '@shared/modules/relations/core/relations.assembler';
-import { LoadedElements, TreeDirection, TreeElement } from '@shared/modules/relations/model/relations.model';
+import { LoadedElements, TreeElement } from '@shared/modules/relations/model/relations.model';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -33,40 +33,21 @@ export class LoadedElementsFacade {
     return this.loadedElementsState.loadedElements;
   }
 
-  public get loadedElementsUpstream(): LoadedElements {
-    return this.loadedElementsState.loadedElementsUpstream;
-  }
-
   public get loadedElements$(): Observable<LoadedElements> {
     return this.loadedElementsState.loadedElements$;
   }
 
-  public get loadedElementsUpstream$(): Observable<LoadedElements> {
-    return this.loadedElementsState.loadedElementsUpstream$;
-  }
-
-  public addLoadedElement(treeDirection: TreeDirection, element: TreeElement): void {
+  public addLoadedElement(element: TreeElement): void {
     const { id, children } = element;
 
-    const loadedElements = treeDirection === TreeDirection.RIGHT ? this.loadedElements : this.loadedElementsUpstream;
-
     const loadingChildren = children?.reduce((p: LoadedElements, childId: string) => {
-      return { ...p, [childId]: loadedElements[childId] || RelationsAssembler.createLoadingElement(childId) };
+      return { ...p, [childId]: this.loadedElements[childId] || RelationsAssembler.createLoadingElement(childId) };
     }, {} as LoadedElements);
 
-    // TODO: move logic to state?
-    if (treeDirection === TreeDirection.RIGHT) {
-      this.loadedElementsState.loadedElements = {
-        ...this.loadedElementsState.loadedElements,
-        [id]: element,
-        ...loadingChildren,
-      };
-    } else {
-      this.loadedElementsState.loadedElementsUpstream = {
-        ...this.loadedElementsState.loadedElementsUpstream,
-        [id]: element,
-        ...loadingChildren,
-      };
-    }
+    this.loadedElementsState.loadedElements = {
+      ...this.loadedElementsState.loadedElements,
+      [id]: element,
+      ...loadingChildren,
+    };
   }
 }

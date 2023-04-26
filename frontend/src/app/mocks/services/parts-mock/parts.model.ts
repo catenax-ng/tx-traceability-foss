@@ -60,6 +60,7 @@ export const mockBmwAssets = [
     manufacturingCountry: 'LBR',
     specificAssetIds: {},
     underInvestigation: true,
+    parentDescriptions: [],
     childDescriptions: [],
     qualityType: 'Ok',
     van: null,
@@ -78,6 +79,7 @@ export const mockBmwAssets = [
     manufacturingDate: '2017-03-26T20:41:42Z',
     manufacturingCountry: 'GUY',
     specificAssetIds: {},
+    parentDescriptions: [],
     childDescriptions: [
       { id: 'urn:uuid:047fbe05-5845-4db3-97b0-731412f0d34f', idShort: '--' },
       { id: 'urn:uuid:ea35cbd9-8a60-410f-9b5e-f5bffeb5a621', idShort: '--' },
@@ -99,6 +101,7 @@ export const mockBmwAssets = [
     manufacturingDate: '2017-01-26T07:38:24Z',
     manufacturingCountry: 'ESP',
     specificAssetIds: {},
+    parentDescriptions: [],
     childDescriptions: [
       { id: 'urn:uuid:e3718167-d20d-41ea-b95b-e42bf45e9fe0', idShort: '--' },
       { id: 'urn:uuid:a75283ca-1761-42c4-9eb4-6aefd15e45d9', idShort: '--' },
@@ -120,6 +123,7 @@ export const mockBmwAssets = [
     manufacturingDate: '2019-12-18T10:07:22Z',
     manufacturingCountry: 'CHL',
     specificAssetIds: {},
+    parentDescriptions: [],
     childDescriptions: [
       { id: 'urn:uuid:45916acb-c1d2-463a-8e04-0e3590544c91', idShort: '--' },
       { id: 'urn:uuid:9ec81c8e-aafb-4813-9325-3ee163dc8153', idShort: '--' },
@@ -174,6 +178,7 @@ export const mockBmwAssets = [
     manufacturingDate: '2012-12-20T19:07:03Z',
     manufacturingCountry: 'MLI',
     specificAssetIds: {},
+    parentDescriptions: [],
     childDescriptions: [
       { id: 'urn:uuid:a49be0bf-fc54-441a-87c6-e2da6490d37a', idShort: '--' },
       { id: 'urn:uuid:09ffa07e-2579-4873-a118-81107397f8bf', idShort: '--' },
@@ -228,6 +233,7 @@ export const mockBmwAssets = [
     manufacturingDate: '2019-11-18T14:15:21Z',
     manufacturingCountry: 'DEU',
     specificAssetIds: {},
+    parentDescriptions: [],
     childDescriptions: [
       { id: 'urn:uuid:14a57c2a-4a57-4216-b898-4484d0c808a7', idShort: '--' },
       { id: 'urn:uuid:f9496bd3-53be-4ad6-99f1-904379782a44', idShort: '--' },
@@ -282,6 +288,7 @@ export const mockBmwAssets = [
     manufacturingDate: '2019-01-08T00:10:37Z',
     manufacturingCountry: 'TON',
     specificAssetIds: {},
+    parentDescriptions: [],
     childDescriptions: [
       { id: 'urn:uuid:3f3a1389-4f13-4c54-8780-a49ad61d2a48', idShort: '--' },
       { id: 'urn:uuid:6d64f6ef-123f-4c73-9748-b7e56a5ba72e', idShort: '--' },
@@ -303,6 +310,7 @@ export const mockBmwAssets = [
     manufacturingDate: '2014-06-12T07:37:00Z',
     manufacturingCountry: 'AND',
     specificAssetIds: {},
+    parentDescriptions: [],
     childDescriptions: [
       { id: 'urn:uuid:3583f9fc-8b82-4e4f-9b4a-e0e323dcd9d1', idShort: '--' },
       { id: 'urn:uuid:506f573a-ace2-45a6-bd0b-b1b93e3eca67', idShort: '--' },
@@ -324,6 +332,7 @@ export const mockBmwAssets = [
     manufacturingDate: '2015-01-16T07:52:02Z',
     manufacturingCountry: 'QAT',
     specificAssetIds: {},
+    parentDescriptions: [],
     childDescriptions: [
       { id: 'urn:uuid:9444e515-b294-4ec3-b075-710cc2a2594f', idShort: '--' },
       { id: 'urn:uuid:1fcc151a-4e54-465c-936b-9c80d604f4f2', idShort: '--' },
@@ -345,6 +354,7 @@ export const mockBmwAssets = [
     manufacturingDate: '2019-11-27T10:53:12Z',
     manufacturingCountry: 'KWT',
     specificAssetIds: {},
+    parentDescriptions: [],
     childDescriptions: [
       { id: 'urn:uuid:9dc1b6fb-94e7-4911-9e39-abf06c4941d2', idShort: '--' },
       { id: 'urn:uuid:d17bbf68-6cb7-4045-b3ae-67f41403d098', idShort: '--' },
@@ -368,6 +378,7 @@ const MockEmptyPart: PartResponse = {
   manufacturingDate: '2000-01-01T00:00:00Z',
   manufacturingCountry: 'NoName',
   specificAssetIds: {},
+  parentDescriptions: [],
   childDescriptions: [],
   qualityType: QualityType.Ok,
   van: null,

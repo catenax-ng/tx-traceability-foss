@@ -61,10 +61,17 @@ export class D3RenderHelper {
       .attr('d', (node: HierarchyCircularLink<TreeStructure>) => link(node));
   }
 
-  public static renderMinimapNodes(direction: TreeDirection, svg: TreeSvg, root: HierarchyNode<TreeStructure>, r: number, id: string): void {
+  public static renderMinimapNodes(
+    direction: TreeDirection,
+    svg: TreeSvg,
+    root: HierarchyNode<TreeStructure>,
+    r: number,
+    id: string,
+  ): void {
     function renderElements(dataNode: TreeNode) {
       const el = d3.select(this);
       const { x, y } = dataNode;
+      if (x === undefined || y === undefined) return;
 
       let circleNode = el.select(`#${id}--Circle`);
 
@@ -90,7 +97,7 @@ export class D3RenderHelper {
     root: HierarchyNode<TreeStructure>,
     r: number,
     id: string,
-    updateChildren: (data: TreeStructure) => void,
+    updateChildren: (data: TreeStructure, direction: TreeDirection) => void,
     openDetails: (data: TreeStructure) => void,
   ): void {
     function renderElements(dataNode: TreeNode) {
@@ -254,7 +261,7 @@ export class D3RenderHelper {
     dataNode: TreeNode,
     r: number,
     id: string,
-    callback: (data) => void,
+    callback: (data, direction) => void,
   ) {
     const { data } = dataNode;
 
@@ -277,13 +284,16 @@ export class D3RenderHelper {
     el: SVGSelection,
     dataNode: TreeNode,
     r: number,
-    callback: (data) => void,
+    callback: (data, direction) => void,
   ) {
     const { data, x, y } = dataNode;
 
     const circleRadius = 15;
-    el.attr('transform', () =>`translate(${D3RenderHelper.modifyYByDirection(direction, (y + r + circleRadius + 5))},${x})`)
-      .on('click', () => callback(data))
+    el.attr(
+      'transform',
+      () => `translate(${D3RenderHelper.modifyYByDirection(direction, y + r + circleRadius + 5)},${x})`,
+    )
+      .on('click', () => callback(data, direction))
       .attr('data-testid', 'tree--element__closing')
       .classed('tree--element__closing', true);
 
@@ -304,12 +314,12 @@ export class D3RenderHelper {
     el: SVGSelection,
     dataNode: TreeNode,
     r: number,
-    callback: (data) => void,
+    callback: (data, direction) => void,
   ) {
     const { data, x, y } = dataNode;
     el.attr('data-testid', 'tree--element__arrow-container')
       .classed('tree--element__arrow-container', true)
-      .on('click', () => callback(data));
+      .on('click', () => callback(data, direction));
 
     const arc = d3
       .arc<HierarchyNode<TreeStructure>>()
@@ -374,7 +384,7 @@ export class D3RenderHelper {
       );
   }
 
-  private static modifyYByDirection(direction: TreeDirection, y: number) :number {
+  private static modifyYByDirection(direction: TreeDirection, y: number): number {
     if (direction === TreeDirection.LEFT) {
       return -1 * y;
     }

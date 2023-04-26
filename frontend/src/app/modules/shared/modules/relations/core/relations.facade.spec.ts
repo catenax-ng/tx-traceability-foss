@@ -175,9 +175,11 @@ describe('Relations facade', () => {
       const { id, childDescriptions } = MOCK_part_1;
       const mockTreeElement = { id, children: childDescriptionsToChild(childDescriptions) } as TreeElement;
 
-      loadedElementsFacade.addLoadedElement(TreeDirection.RIGHT, mockTreeElement);
+      loadedElementsFacade.addLoadedElement(mockTreeElement);
       relationsFacade.openElementWithChildren(TreeDirection.RIGHT, mockTreeElement);
-      expect(relationsFacade.formatOpenElementsToTreeData(TreeDirection.RIGHT, await getOpenElements())).toEqual(expected);
+      expect(relationsFacade.formatOpenElementsToTreeData(TreeDirection.RIGHT, await getOpenElements())).toEqual(
+        expected,
+      );
     });
   });
 });

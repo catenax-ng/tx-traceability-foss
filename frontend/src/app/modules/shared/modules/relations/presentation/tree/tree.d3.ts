@@ -82,6 +82,7 @@ export class Tree {
   }
 
   public changeSize(sizeChange: number): void {
+    if (!this.zoom) return;
     const { k, x, y } = this.currentZoom;
     const [min, max] = this.zoomConfig;
     const newScale = k - sizeChange;
