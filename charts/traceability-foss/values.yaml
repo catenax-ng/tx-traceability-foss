@@ -156,6 +156,7 @@ backend:
 
   image:
     repository: ghcr.io/catenax-ng/tx-traceability-foss
+    tag: ""
     pullPolicy: Always
 
   ##
@@ -356,6 +357,9 @@ irs-edc-consumer:
 
     namespace: product-traceability-foss
 
+    image:
+      tag: ""
+
     ingresses:
       - enabled: true
         hostname: "replace-me"
@@ -401,6 +405,17 @@ irs-edc-consumer:
         url: "https://example.com"
 
   edc-dataplane:
+    nameOverride: "tracex-consumer-dataplane"
+    fullnameOverride: "tracex-consumer-dataplane"
+
+    namespace: product-traceability-foss
+
+    securityContext:
+      readOnlyRootFilesystem: false
+
+    image:
+      tag: "0.3.0"
+
     ingresses:
       - enabled: true
         hostname: "https://replace.me"
@@ -410,3 +425,11 @@ irs-edc-consumer:
           - hosts:
               - "https://replace.me"
             secretName: tls-secret
+
+    resources:
+      limits:
+        cpu: 1
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 512Mi
