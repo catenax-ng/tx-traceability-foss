@@ -295,7 +295,7 @@ backend:
     dataplane:
       url: "https://replace.me"
     controlplane:
-      url: "https://replace.me"
+      url: "https://example.com"
 
     edc-dataplane:
       ingresses:
@@ -384,7 +384,7 @@ irs-edc-consumer:
       controlplane:
         url: "https://replace.me"
       dataplane:
-        url: "https://replace.me"
+        url: "https://example.com"
 
   edc-dataplane:
     ingresses:
