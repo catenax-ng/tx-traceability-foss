@@ -298,7 +298,6 @@ backend:
     edc-dataplane:
       ingresses:
         - enabled: false
-          hostname: "https://replace.me"
           annotations: {}
           className: ""
           tls:

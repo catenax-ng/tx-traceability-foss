@@ -80,6 +80,5 @@ jobs:
           helm repo add irs-edc-consumer https://eclipse-tractusx.github.io/item-relationship-service
           helm repo add postgresql https://charts.bitnami.com/bitnami
           helm repo add runix https://helm.runix.net
-          kubectl create namespace product-traceability-foss
           ct install --charts charts/traceability-foss
         if: steps.list-changed.outputs.changed == 'true'
