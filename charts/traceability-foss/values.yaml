@@ -270,7 +270,7 @@ backend:
         secretName: tls-secret
 
   healthCheck:
-    enabled: true  # <healthCheck.enabled>
+    enabled: false  # <healthCheck.enabled>
 
   traceability:
     bpn: "CHANGEME"  # <traceability.bpn>
@@ -298,7 +298,7 @@ backend:
 
     edc-dataplane:
       ingresses:
-        - enabled: true
+        - enabled: false
           hostname: "https://replace.me"
           annotations: {}
           className: ""
@@ -328,7 +328,7 @@ pgadmin4:
 # Postgres configuration     #
 #########################
 postgresql:
-  enabled: true
+  enabled: false
 
   nameOverride: "tracex-backend-postgresql"
   fullnameOverride: "tracex-backend-postgresql"
@@ -361,20 +361,8 @@ irs-edc-consumer:
       tag: ""
 
     ingresses:
-      - enabled: true
-        hostname: "replace-me"
-        annotations:
-          nginx.ingress.kubernetes.io/ssl-passthrough: "false"
-          nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        endpoints:
-          - protocol
-          - management
-        className: "nginx"
-        tls:
-          - hosts:
-              - "replace.me"
-            secretName: tls-secret
+      - enabled: false
+
 
     resources:
       limits:
@@ -417,14 +405,7 @@ irs-edc-consumer:
       tag: "0.3.0"
 
     ingresses:
-      - enabled: true
-        hostname: "https://replace.me"
-        annotations: {}
-        className: ""
-        tls:
-          - hosts:
-              - "https://replace.me"
-            secretName: tls-secret
+      - enabled: false
 
     resources:
       limits:
