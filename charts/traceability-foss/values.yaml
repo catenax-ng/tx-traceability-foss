@@ -156,7 +156,7 @@ backend:
   replicaCount: 1
 
   image:
-    repository: kind-registry:5000/traceability-app:testing  # ghcr.io/catenax-ng/tx-traceability-foss
+    repository: catenax-ng/tx-traceability-foss
     pullPolicy: Always
 
   ##
