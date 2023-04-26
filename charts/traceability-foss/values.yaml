@@ -188,8 +188,6 @@ backend:
 
   podAnnotations: {}
 
-  springprofile: dev  # will be set as dev
-
   nameOverride: "traceability-foss-backend"
   fullnameOverride: "traceability-foss-backend"
 
@@ -317,6 +315,14 @@ pgadmin4:
   ingress:
     enabled: false   # <pgadmin4.ingress.enabled>
 
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 256m
+      memory: 512Mi
+
 #########################
 # Postgres configuration     #
 #########################
@@ -365,6 +371,14 @@ irs-edc-consumer:
           - hosts:
               - "replace.me"
             secretName: tls-secret
+
+    resources:
+      limits:
+        cpu: 2
+        memory: 4Gi
+      requests:
+        cpu: 256m
+        memory: 2Gi
 
     edc:
       postgresql:
