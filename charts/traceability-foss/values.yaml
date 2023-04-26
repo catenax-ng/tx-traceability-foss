@@ -39,8 +39,9 @@ frontend:
   replicaCount: 1
 
   image:
-    repository: ghcr.io/catenax-ng/tx-traceability-foss
+    repository: kind-registry:5000/traceability-app:testing  # ghcr.io/catenax-ng/tx-traceability-foss
     pullPolicy: Always
+
 
   ##
   ## Image pull secret to create to obtain the container image
