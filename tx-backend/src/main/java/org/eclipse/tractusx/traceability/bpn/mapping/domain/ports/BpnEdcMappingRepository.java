@@ -24,15 +24,17 @@ import org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.jpa
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface BpnEdcMappingRepository {
 
     BpnEdcMapping findById(String bpn);
 
+    List<BpnEdcMapping> findAll();
+
     boolean exists(String bpn);
 
     void save(BpnEdcMappingEntity entity);
-
-    PageResult<BpnEdcMapping> findAllPaged(Pageable pageable);
 
     void deleteById(String bpn);
 

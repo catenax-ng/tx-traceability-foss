@@ -50,9 +50,8 @@ class BpnEdcMappingServiceTest {
     @Test
     @DisplayName("Test getBpnEdcMappings")
     void testGetBpnEdcMappings() {
-        PageRequest pageRequest = PageRequest.of(0, 10);
-        bpnEdcMappingService.getBpnEdcMappings(pageRequest);
-        verify(bpnEdcMappingRepositoryMock, times(1)).findAllPaged(pageRequest);
+        bpnEdcMappingService.findAllBpnEdcMappings();
+        verify(bpnEdcMappingRepositoryMock, times(1)).findAll();
     }
 
     @Test

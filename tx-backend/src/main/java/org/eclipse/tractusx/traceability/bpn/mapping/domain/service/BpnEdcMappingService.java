@@ -22,11 +22,11 @@ package org.eclipse.tractusx.traceability.bpn.mapping.domain.service;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMapping;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMappingException;
 import org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.jpa.BpnEdcMappingEntity;
-import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMappingNotFoundException;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.ports.BpnEdcMappingRepository;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class BpnEdcMappingService {
@@ -37,8 +37,8 @@ public class BpnEdcMappingService {
         this.bpnEdcMappingRepository = bpnEdcMappingRepository;
     }
 
-    public PageResult<BpnEdcMapping> getBpnEdcMappings(Pageable pageable) {
-        return bpnEdcMappingRepository.findAllPaged(pageable);
+    public List<BpnEdcMapping> findAllBpnEdcMappings() {
+        return bpnEdcMappingRepository.findAll();
     }
 
     public void createBpnEdcMapping(String bpn, String url) {

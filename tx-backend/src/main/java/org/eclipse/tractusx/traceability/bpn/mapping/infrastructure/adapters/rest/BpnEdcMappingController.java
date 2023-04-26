@@ -26,16 +26,15 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.service.BpnEdcMappingService;
-import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 
 @RestController
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERVISOR')")
@@ -52,16 +51,16 @@ public class BpnEdcMappingController {
     }
 
     @Operation(operationId = "getBpnEdcs",
-            summary = "Get BPN EDC URL mappings by pagination",
+            summary = "Get BPN EDC URL mappings",
             tags = {"BpnEdcMapping"},
-            description = "The endpoint returns a paged result of BPN EDC URL mappings.",
+            description = "The endpoint returns a result of BPN EDC URL mappings.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found"),
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("")
-    public PageResult<BpnEdcMapping> getBpnEdcs(Pageable pageable) {
-        return service.getBpnEdcMappings(pageable);
+    public List<BpnEdcMapping> getBpnEdcs() {
+        return service.findAllBpnEdcMappings();
     }
 
     @Operation(operationId = "createBpnEdcUrlMappings",

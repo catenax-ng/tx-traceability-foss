@@ -22,9 +22,9 @@ package org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.jp
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMapping;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMappingNotFoundException;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.ports.BpnEdcMappingRepository;
-import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class PersistentBpnEdcMappingRepository implements BpnEdcMappingRepository {
@@ -48,8 +48,8 @@ public class PersistentBpnEdcMappingRepository implements BpnEdcMappingRepositor
     }
 
     @Override
-    public PageResult<BpnEdcMapping> findAllPaged(Pageable pageable) {
-        return new PageResult<>(jpaBpnEdcRepository.findAll(pageable), this::toBpnEdc);
+    public List<BpnEdcMapping> findAll() {
+        return jpaBpnEdcRepository.findAll().stream().map(this::toBpnEdc).toList();
     }
 
     @Override
@@ -64,8 +64,8 @@ public class PersistentBpnEdcMappingRepository implements BpnEdcMappingRepositor
 
     private BpnEdcMapping toBpnEdc(BpnEdcMappingEntity entity) {
         return new BpnEdcMapping(
-            entity.getBpn(),
-            entity.getUrl()
+                entity.getBpn(),
+                entity.getUrl()
         );
     }
 
