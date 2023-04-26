@@ -156,7 +156,6 @@ backend:
 
   image:
     repository: ghcr.io/catenax-ng/tx-traceability-foss
-    tag: ""
     pullPolicy: Always
 
   ##
@@ -328,7 +327,7 @@ pgadmin4:
 # Postgres configuration     #
 #########################
 postgresql:
-  enabled: true
+  enabled: false
 
   nameOverride: "tracex-backend-postgresql"
   fullnameOverride: "tracex-backend-postgresql"
