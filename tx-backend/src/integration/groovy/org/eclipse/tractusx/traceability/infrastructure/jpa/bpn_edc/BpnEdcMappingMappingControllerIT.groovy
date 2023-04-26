@@ -58,9 +58,9 @@ class BpnEdcMappingMappingControllerIT extends IntegrationSpecification implemen
                     .get("/api/bpn-config")
                 .then()
                     .statusCode(200)
-                    .body("content", Matchers.hasSize(1))
-                    .body("content[0].bpn", Matchers.equalTo("BPNL00000003CSGV"))
-                    .body("content[0].url", Matchers.equalTo("http://localhost:12345/abc"))
+                    .body("", Matchers.hasSize(1))
+                    .body("[0].bpn", Matchers.equalTo("BPNL00000003CSGV"))
+                    .body("[0].url", Matchers.equalTo("http://localhost:12345/abc"))
     }
 
     def "should delete one BPN EDC URL mapping"() {
@@ -81,9 +81,9 @@ class BpnEdcMappingMappingControllerIT extends IntegrationSpecification implemen
                 .get("/api/bpn-config")
                 .then()
                 .statusCode(200)
-                .body("content", Matchers.hasSize(1))
-                .body("content[0].bpn", Matchers.equalTo("BPN456"))
-                .body("content[0].url", Matchers.equalTo("https://test456.de"))
+                .body("", Matchers.hasSize(1))
+                .body("[0].bpn", Matchers.equalTo("BPN456"))
+                .body("[0].url", Matchers.equalTo("https://test456.de"))
     }
 
     def "should report a bad request due to missing required bpn"() {
