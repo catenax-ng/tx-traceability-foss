@@ -47,8 +47,7 @@ frontend:
   ## Image pull secret to create to obtain the container image
   ## Note: 'imagePullSecret.dockerconfigjson' takes precedence if configured together with 'imagePullSecrets'
   ##
-  imagePullSecret:
-    dockerconfigjson: ""
+  imagePullSecrets: []
 
   ##
   ## Existing image pull secret to use to obtain the container image
@@ -156,7 +155,7 @@ backend:
   replicaCount: 1
 
   image:
-    repository: catenax-ng/tx-traceability-foss
+    repository: ghcr.io/catenax-ng/tx-traceability-foss
     pullPolicy: Always
 
   ##
