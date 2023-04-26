@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.bpnmapping.infrastructure.adapters.rest;
+package org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,9 +25,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.eclipse.tractusx.traceability.bpnmapping.domain.service.BpnEdcMappingService;
+import org.eclipse.tractusx.traceability.bpn.mapping.domain.service.BpnEdcMappingService;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.bpnmapping.domain.model.BpnEdcMapping;
+import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;

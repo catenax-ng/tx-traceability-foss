@@ -17,23 +17,12 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.bpnmapping.domain.ports;
+package org.eclipse.tractusx.traceability.bpn.mapping.domain.model;
 
-import org.eclipse.tractusx.traceability.bpnmapping.domain.model.BpnEdcMapping;
-import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.bpnmapping.infrastructure.adapters.jpa.BpnEdcMappingEntity;
-import org.springframework.data.domain.Pageable;
+public class BpnEdcMappingException extends RuntimeException {
 
-public interface BpnEdcMappingRepository {
-
-    BpnEdcMapping findById(String bpn);
-
-    boolean exists(String bpn);
-
-    void save(BpnEdcMappingEntity entity);
-
-    PageResult<BpnEdcMapping> findAllPaged(Pageable pageable);
-
-    void deleteById(String bpn);
+    public BpnEdcMappingException(String message) {
+        super(message);
+    }
 
 }

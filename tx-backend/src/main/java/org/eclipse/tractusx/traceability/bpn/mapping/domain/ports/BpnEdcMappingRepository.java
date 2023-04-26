@@ -17,26 +17,23 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.bpnmapping.infrastructure.adapters.rest;
+package org.eclipse.tractusx.traceability.bpn.mapping.domain.ports;
 
-import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
+import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMapping;
+import org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.jpa.BpnEdcMappingEntity;
+import org.eclipse.tractusx.traceability.common.model.PageResult;
+import org.springframework.data.domain.Pageable;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public interface BpnEdcMappingRepository {
 
-@Target({ElementType.FIELD, ElementType.PARAMETER})
-@Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ValidUrlParameterValidator.class)
-@Documented
-public @interface ValidUrlParameter {
+    BpnEdcMapping findById(String bpn);
 
-    String message() default "The URL must contain the protocol and a valid domain name.";
+    boolean exists(String bpn);
 
-    Class<?>[] groups() default {};
+    void save(BpnEdcMappingEntity entity);
 
-    Class<? extends Payload>[] payload() default {};
+    PageResult<BpnEdcMapping> findAllPaged(Pageable pageable);
+
+    void deleteById(String bpn);
+
 }

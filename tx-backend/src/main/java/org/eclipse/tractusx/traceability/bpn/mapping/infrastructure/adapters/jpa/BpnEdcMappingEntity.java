@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.bpnmapping.infrastructure.adapters.jpa;
+package org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.jpa;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
