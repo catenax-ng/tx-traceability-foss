@@ -30,7 +30,12 @@ import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.notificatio
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.notification.NegotiationInitiateRequestDto;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.notification.TransferId;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.offer.ContractOffer;
+import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.AtomicConstraint;
+import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.Expression;
+import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.LiteralExpression;
+import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.Permission;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.Policy;
+import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.Rule;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.transfer.DataAddress;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.transfer.TransferRequestDto;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.transfer.TransferType;
@@ -41,6 +46,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.*;
@@ -80,14 +87,75 @@ public class EdcService {
 
         if (isInitialNotification){
             return catalog.getContractOffers().stream()
-                    .filter(it -> isPropertyQualityInvestigationType(it.getAsset()) && isPropertyReceiveNotificationMethod(it.getAsset())).findAny();
+                    .filter(it -> isPropertyQualityInvestigationType(it.getAsset()) && isPropertyReceiveNotificationMethod(it.getAsset()))
+                    .filter(this::hasTracePolicyConstraint)
+                    .findAny();
         } else {
             return catalog.getContractOffers().stream()
-                    .filter(it -> isPropertyQualityInvestigationType(it.getAsset()) && isPropertyUpdateNotificationMethod(it.getAsset())).findAny();
+                    .filter(it -> isPropertyQualityInvestigationType(it.getAsset()) && isPropertyUpdateNotificationMethod(it.getAsset()))
+                    .filter(this::hasTracePolicyConstraint)
+                    .findAny();
         }
 	}
 
-	private boolean isPropertyQualityInvestigationType(Asset asset) {
+    private boolean hasTracePolicyConstraint(ContractOffer contractOffer) {
+        Policy policy = contractOffer.getPolicy();
+
+        if (policy == null) {
+            return false;
+        }
+
+        List<Permission> permissions = policy.getPermissions();
+
+        if (permissions == null || permissions.isEmpty()) {
+            return false;
+        }
+
+        List<AtomicConstraint> atomicConstraints = permissions.stream()
+                .map(Rule::getConstraints)
+                .flatMap(Collection::stream)
+                .filter(it -> it instanceof AtomicConstraint)
+                .map(constraint -> (AtomicConstraint) constraint)
+                .toList();
+
+        if (atomicConstraints.isEmpty()) {
+            return false;
+        }
+
+        return atomicConstraints.stream().anyMatch(this::hasTracePurposeConstraint);
+    }
+
+    private boolean hasTracePurposeConstraint(AtomicConstraint atomicConstraint) {
+        if (atomicConstraint == null) {
+            return false;
+        }
+
+        Expression leftExpression = atomicConstraint.getLeftExpression();
+        Expression rightExpression = atomicConstraint.getRightExpression();
+
+        if (leftExpression == null || rightExpression == null) {
+            return false;
+        }
+
+        if (!(leftExpression instanceof LiteralExpression) || !(rightExpression instanceof LiteralExpression)) {
+            return false;
+        }
+
+        LiteralExpression leftLiteralExpression = (LiteralExpression) atomicConstraint.getLeftExpression();
+        LiteralExpression rightLiteralExpression = (LiteralExpression) atomicConstraint.getRightExpression();
+
+        return matchesValue(leftLiteralExpression, "idsc:PURPOSE") && matchesValue(rightLiteralExpression, "ID 3.0 Trace");
+    }
+
+    private static boolean matchesValue(LiteralExpression literalExpression, String anObject) {
+        if (literalExpression.getValue() instanceof String literalExpressionValue) {
+            return literalExpressionValue.equals(anObject);
+        }
+
+        return false;
+    }
+
+    private boolean isPropertyQualityInvestigationType(Asset asset) {
 
 		String formatted = String.format(":::: Asset %s has value %s", Constants.ASSET_KEY_NOTIFICATION_TYPE, asset.getPropertyNotificationType());
 		logger.info(formatted);

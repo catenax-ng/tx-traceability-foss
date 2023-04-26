@@ -3,7 +3,7 @@ package org.eclipse.tractusx.traceability.infrastructure.edc.blackbox;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.asset.Asset;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.catalog.Catalog;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.offer.ContractOffer;
-import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.Policy;
+import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.*;
 import org.eclipse.tractusx.traceability.infrastructure.edc.properties.EdcProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,7 +54,15 @@ class EdcServiceTest {
 		properties.put(PROPERTY_NOTIFICATION_TYPE, "qualityinvestigation");
 		properties.put(PROPERTY_NOTIFICATION_METHOD, "receive");
 
-		Policy policy = Policy.Builder.newInstance().build();
+        Permission permission = Permission.Builder.newInstance()
+                .constraint(AtomicConstraint.Builder.newInstance()
+                        .leftExpression(new LiteralExpression("idsc:PURPOSE"))
+                        .rightExpression(new LiteralExpression("ID 3.0 Trace"))
+                        .operator(Operator.EQ)
+                        .build()
+                )
+                .build();
+        Policy policy = Policy.Builder.newInstance().permission(permission).build();
 		Asset asset = Builder.newInstance().properties(properties).build();
 		ContractOffer expectedContractOffer = ContractOffer.Builder.newInstance().id("123").policy(policy).asset(asset).build();
 		Catalog catalog = Catalog.Builder.newInstance().id("234").contractOffers(List.of(expectedContractOffer)).build();
@@ -84,7 +92,15 @@ class EdcServiceTest {
         properties.put(PROPERTY_NOTIFICATION_TYPE, "qualityinvestigation");
         properties.put(PROPERTY_NOTIFICATION_METHOD, "update");
 
-        Policy policy = Policy.Builder.newInstance().build();
+        Permission permission = Permission.Builder.newInstance()
+                .constraint(AtomicConstraint.Builder.newInstance()
+                        .leftExpression(new LiteralExpression("idsc:PURPOSE"))
+                        .rightExpression(new LiteralExpression("ID 3.0 Trace"))
+                        .operator(Operator.EQ)
+                        .build()
+                )
+                .build();
+        Policy policy = Policy.Builder.newInstance().permission(permission).build();
         Asset asset = Builder.newInstance().properties(properties).build();
         ContractOffer expectedContractOffer = ContractOffer.Builder.newInstance().id("123").policy(policy).asset(asset).build();
         Catalog catalog = Catalog.Builder.newInstance().id("234").contractOffers(List.of(expectedContractOffer)).build();
