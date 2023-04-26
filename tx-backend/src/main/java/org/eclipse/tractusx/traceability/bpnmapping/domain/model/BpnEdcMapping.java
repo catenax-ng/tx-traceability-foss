@@ -17,18 +17,19 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
+package org.eclipse.tractusx.traceability.bpnmapping.domain.model;
 
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.NotNull;
 
-public record BpnEdcMappingRequest(
-    @NotNull(message = "BPN must be present")
-    @ApiModelProperty(example = "BPNL00000003CSGV")
-    String bpn,
-    @ValidUrlParameter
-    @NotNull(message = "A valid URL must be present")
-    String url
+public record BpnEdcMapping(@ApiModelProperty(example = "BPNL00000003CSGV") String bpn,
+                            @ApiModelProperty(example = "https://trace-x-test-edc.dev.demo.catena-x.net/a1") String url) {
 
-) {
+    public String getBpn() {
+        return bpn;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
 }

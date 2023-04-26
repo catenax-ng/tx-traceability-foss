@@ -17,11 +17,18 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
+package org.eclipse.tractusx.traceability.bpnmapping.infrastructure.adapters.rest;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.NotNull;
 
-@Repository
-public interface JpaBpnEdcRepository extends JpaRepository<BpnEdcMappingEntity, String> {
+public record BpnEdcMappingRequest(
+    @NotNull(message = "BPN must be present")
+    @ApiModelProperty(example = "BPNL00000003CSGV")
+    String bpn,
+    @ValidUrlParameter
+    @NotNull(message = "A valid URL must be present")
+    String url
+
+) {
 }

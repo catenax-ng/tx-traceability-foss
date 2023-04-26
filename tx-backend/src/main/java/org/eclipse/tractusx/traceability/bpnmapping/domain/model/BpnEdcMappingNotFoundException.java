@@ -17,11 +17,11 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
+package org.eclipse.tractusx.traceability.bpnmapping.domain.model;
 
-public class BpnEdcMappingException extends RuntimeException {
+public class BpnEdcMappingNotFoundException extends RuntimeException {
 
-    public BpnEdcMappingException(String message) {
+    public BpnEdcMappingNotFoundException(String message) {
         super(message);
     }
 

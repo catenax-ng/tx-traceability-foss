@@ -17,9 +17,14 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
+package org.eclipse.tractusx.traceability.bpnmapping.domain.service;
 
 import org.eclipse.tractusx.traceability.common.model.PageResult;
+import org.eclipse.tractusx.traceability.bpnmapping.domain.model.BpnEdcMapping;
+import org.eclipse.tractusx.traceability.bpnmapping.infrastructure.adapters.jpa.BpnEdcMappingEntity;
+import org.eclipse.tractusx.traceability.bpnmapping.domain.model.BpnEdcMappingException;
+import org.eclipse.tractusx.traceability.bpnmapping.domain.model.BpnEdcMappingNotFoundException;
+import org.eclipse.tractusx.traceability.bpnmapping.domain.ports.BpnEdcMappingRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 

@@ -17,37 +17,26 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
+package org.eclipse.tractusx.traceability.bpnmapping.infrastructure.adapters.rest;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-import org.apache.commons.lang3.StringUtils;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class ValidUrlParameterValidator implements ConstraintValidator<ValidUrlParameter, String> {
+@Target({ElementType.FIELD, ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = ValidUrlParameterValidator.class)
+@Documented
+public @interface ValidUrlParameter {
 
-    @Override
-    public void initialize(ValidUrlParameter constraintAnnotation) {
-        // nothing to do
-    }
+    String message() default "The URL must contain the protocol and a valid domain name.";
 
-    @Override
-    public boolean isValid(String url, ConstraintValidatorContext context) {
+    Class<?>[] groups() default {};
 
-        // do not validate notNull
-        if (StringUtils.isBlank(url)) {
-            return true;
-        }
-
-        try {
-            new URL(url).toURI();
-            return true;
-        } catch (MalformedURLException | URISyntaxException e) {
-            return false;
-        }
-    }
-
+    Class<? extends Payload>[] payload() default {};
 }

@@ -19,7 +19,7 @@
 
 package org.eclipse.tractusx.traceability.common.support
 
-import org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc.BpnEdcMappingRepository
+import org.eclipse.tractusx.traceability.bpnmapping.domain.ports.BpnEdcMappingRepository
 
 interface BpnEdcRepositoryProvider {
 	BpnEdcMappingRepository bpnEdcRepository()

@@ -19,6 +19,11 @@
 
 package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
+import org.eclipse.tractusx.traceability.bpnmapping.domain.model.BpnEdcMappingNotFoundException;
+import org.eclipse.tractusx.traceability.bpnmapping.domain.ports.BpnEdcMappingRepository;
+import org.eclipse.tractusx.traceability.bpnmapping.infrastructure.adapters.jpa.BpnEdcMappingEntity;
+import org.eclipse.tractusx.traceability.bpnmapping.infrastructure.adapters.jpa.JpaBpnEdcRepository;
+import org.eclipse.tractusx.traceability.bpnmapping.infrastructure.adapters.jpa.PersistentBpnEdcMappingRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -17,26 +17,12 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
+package org.eclipse.tractusx.traceability.bpnmapping.domain.model;
 
-import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
+public class BpnEdcMappingException extends RuntimeException {
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+    public BpnEdcMappingException(String message) {
+        super(message);
+    }
 
-@Target({ElementType.FIELD, ElementType.PARAMETER})
-@Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ValidUrlParameterValidator.class)
-@Documented
-public @interface ValidUrlParameter {
-
-    String message() default "The URL must contain the protocol and a valid domain name.";
-
-    Class<?>[] groups() default {};
-
-    Class<? extends Payload>[] payload() default {};
 }
