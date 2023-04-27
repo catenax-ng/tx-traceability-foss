@@ -24,6 +24,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Updated readme links
 - Container labelling refactored
 - Increased table size tenfold. From 5, 10, 25 to 50, 100, 250
+- Moved dash-ip tool to root-pom to have a managed version
+- Updated backend dependencies to reflect current state
+- Removed all excluded files from kics scan
 - Updated notifications contract policy to include trace policy constraint
 
 ### Removed
