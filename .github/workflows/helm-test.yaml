@@ -57,8 +57,7 @@ jobs:
       - name: Build & push Image Frontend
         uses: docker/build-push-action@v4
         with:
-          context: ./frontend
-          # file: ./base/Dockerfile <- when error
+        #  context: ./frontend - uncomment to actually build & push frontend
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.APP_FRONTEND_NAME}}:${{ env.TAG }}
 
@@ -89,5 +88,5 @@ jobs:
           helm repo add irs-edc-consumer https://eclipse-tractusx.github.io/item-relationship-service
           helm repo add postgresql https://charts.bitnami.com/bitnami
           helm repo add runix https://helm.runix.net
-          ct install --charts charts/traceability-foss --helm-extra-set-args "--set backend.image.repository=kind-registry:5000/traceability-foss-app"
+          ct install --charts charts/traceability-foss --helm-extra-set-args "--set backend.image.repository=${{ env.REGISTRY }}/${{ env.APP_NAME}} --set frontend.image.repository=${{ env.REGISTRY }}/${{ env.APP_FRONTEND_NAME}}"
         if: steps.list-changed.outputs.changed == 'true'
