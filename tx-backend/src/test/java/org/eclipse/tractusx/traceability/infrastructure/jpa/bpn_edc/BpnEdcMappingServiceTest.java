@@ -19,33 +19,34 @@
 
 package org.eclipse.tractusx.traceability.infrastructure.jpa.bpn_edc;
 
-import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMappingException;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMappingNotFoundException;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.ports.BpnEdcMappingRepository;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.service.BpnEdcMappingService;
-import org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.jpa.BpnEdcMappingEntity;
+import org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.rest.BpnEdcMappingRequest;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.data.domain.PageRequest;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.*;
+import java.util.List;
 
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
 class BpnEdcMappingServiceTest {
-
-    private BpnEdcMappingService bpnEdcMappingService;
 
     @Mock
     private BpnEdcMappingRepository bpnEdcMappingRepositoryMock;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        bpnEdcMappingService = new BpnEdcMappingService(bpnEdcMappingRepositoryMock);
-    }
+    @InjectMocks
+    private BpnEdcMappingService bpnEdcMappingService;
+
 
     @Test
     @DisplayName("Test getBpnEdcMappings")
@@ -59,21 +60,20 @@ class BpnEdcMappingServiceTest {
     void testCreateBpnEdcMapping() {
         String bpn = "12345";
         String url = "https://example.com/12345";
-        when(bpnEdcMappingRepositoryMock.exists(bpn)).thenReturn(false);
-        bpnEdcMappingService.createBpnEdcMapping(bpn, url);
-        verify(bpnEdcMappingRepositoryMock, times(1)).save(any(BpnEdcMappingEntity.class));
+        List<BpnEdcMappingRequest> bpnEdcMappingRequests = List.of(new BpnEdcMappingRequest(bpn, url));
+        bpnEdcMappingService.saveAllBpnEdcMappings(bpnEdcMappingRequests);
+        verify(bpnEdcMappingRepositoryMock, times(1)).saveAll(bpnEdcMappingRequests);
     }
 
+
     @Test
-    @DisplayName("Test createBpnEdcMapping with existing mapping")
-    void testCreateBpnEdcMappingWithExistingMapping() {
+    @DisplayName("Test updateEdcMapping")
+    void testUpdateBpnEdcMapping() {
         String bpn = "12345";
         String url = "https://example.com/12345";
-        when(bpnEdcMappingRepositoryMock.exists(bpn)).thenReturn(true);
-        Assertions.assertThrows(BpnEdcMappingException.class, () -> {
-            bpnEdcMappingService.createBpnEdcMapping(bpn, url);
-        });
-        verify(bpnEdcMappingRepositoryMock, never()).save(any(BpnEdcMappingEntity.class));
+        List<BpnEdcMappingRequest> bpnEdcMappingRequests = List.of(new BpnEdcMappingRequest(bpn, url));
+        bpnEdcMappingService.updateAllBpnEdcMappings(bpnEdcMappingRequests);
+        verify(bpnEdcMappingRepositoryMock, times(1)).saveAll(bpnEdcMappingRequests);
     }
 
     @Test

@@ -23,12 +23,11 @@ import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotNull;
 
 public record BpnEdcMappingRequest(
-    @NotNull(message = "BPN must be present")
-    @ApiModelProperty(example = "BPNL00000003CSGV")
-    String bpn,
-    @ValidUrlParameter
-    @NotNull(message = "A valid URL must be present")
-    String url
-
+        @NotNull(message = "BPN must be present")
+        @ApiModelProperty(example = "BPNL00000003CSGV")
+        String bpn,
+        @ValidUrlParameter
+        @NotNull(message = "A valid URL must be present")
+        String url
 ) {
 }

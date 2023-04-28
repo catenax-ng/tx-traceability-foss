@@ -22,6 +22,7 @@ package org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.jp
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMapping;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMappingNotFoundException;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.ports.BpnEdcMappingRepository;
+import org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.rest.BpnEdcMappingRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -38,10 +39,11 @@ public class PersistentBpnEdcMappingRepository implements BpnEdcMappingRepositor
     @Override
     public BpnEdcMapping findById(String bpn) {
         return jpaBpnEdcRepository.findById(bpn)
-                .map(this::toBpnEdc)
+                .map(this::toDTO)
                 .orElseThrow(() -> new BpnEdcMappingNotFoundException("EDC URL mapping with BPN %s was not found."
                         .formatted(bpn)));
     }
+
     @Override
     public boolean exists(String bpn) {
         return jpaBpnEdcRepository.findById(bpn).isPresent();
@@ -49,7 +51,7 @@ public class PersistentBpnEdcMappingRepository implements BpnEdcMappingRepositor
 
     @Override
     public List<BpnEdcMapping> findAll() {
-        return jpaBpnEdcRepository.findAll().stream().map(this::toBpnEdc).toList();
+        return jpaBpnEdcRepository.findAll().stream().map(this::toDTO).toList();
     }
 
     @Override
@@ -58,14 +60,22 @@ public class PersistentBpnEdcMappingRepository implements BpnEdcMappingRepositor
     }
 
     @Override
-    public void save(BpnEdcMappingEntity entity) {
-        jpaBpnEdcRepository.save(entity);
+    public List<BpnEdcMapping> saveAll(List<BpnEdcMappingRequest> bpnEdcMappings) {
+        List<BpnEdcMappingEntity> bpnEdcMappingEntities = bpnEdcMappings.stream().map(this::toEntity).toList();
+        return jpaBpnEdcRepository.saveAll(bpnEdcMappingEntities).stream().map(this::toDTO).toList();
     }
 
-    private BpnEdcMapping toBpnEdc(BpnEdcMappingEntity entity) {
+    private BpnEdcMapping toDTO(BpnEdcMappingEntity entity) {
         return new BpnEdcMapping(
                 entity.getBpn(),
                 entity.getUrl()
+        );
+    }
+
+    private BpnEdcMappingEntity toEntity(BpnEdcMappingRequest bpnEdcMappings) {
+        return new BpnEdcMappingEntity(
+                bpnEdcMappings.bpn(),
+                bpnEdcMappings.url()
         );
     }
 

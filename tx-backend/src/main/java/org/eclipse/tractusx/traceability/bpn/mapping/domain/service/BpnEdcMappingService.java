@@ -20,18 +20,21 @@
 package org.eclipse.tractusx.traceability.bpn.mapping.domain.service;
 
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMapping;
-import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMappingException;
-import org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.jpa.BpnEdcMappingEntity;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMappingNotFoundException;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.ports.BpnEdcMappingRepository;
+import org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.rest.BpnEdcMappingRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 @Component
 public class BpnEdcMappingService {
 
     private final BpnEdcMappingRepository bpnEdcMappingRepository;
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public BpnEdcMappingService(BpnEdcMappingRepository bpnEdcMappingRepository) {
         this.bpnEdcMappingRepository = bpnEdcMappingRepository;
@@ -41,11 +44,17 @@ public class BpnEdcMappingService {
         return bpnEdcMappingRepository.findAll();
     }
 
-    public void createBpnEdcMapping(String bpn, String url) {
-        if (bpnEdcMappingRepository.exists(bpn)) {
-            throw new BpnEdcMappingException("BPN EDC Mapping for BPN: {} already exists.");
-        }
-        bpnEdcMappingRepository.save(new BpnEdcMappingEntity(bpn, url));
+    public List<BpnEdcMapping> saveAllBpnEdcMappings(List<BpnEdcMappingRequest> bpnEdcMappings) {
+        return bpnEdcMappingRepository.saveAll(bpnEdcMappings);
+    }
+
+    public List<BpnEdcMapping> updateAllBpnEdcMappings(List<BpnEdcMappingRequest> bpnEdcMappings) {
+        bpnEdcMappings.forEach(bpnEdcMappingRequest -> {
+            if (!bpnEdcMappingRepository.exists(bpnEdcMappingRequest.bpn())) {
+                logger.warn("Cannot update mapping of bpn {}, therefore will be created", bpnEdcMappingRequest.bpn());
+            }
+        });
+        return bpnEdcMappingRepository.saveAll(bpnEdcMappings);
     }
 
     public void deleteBpnEdcMapping(String bpn) {

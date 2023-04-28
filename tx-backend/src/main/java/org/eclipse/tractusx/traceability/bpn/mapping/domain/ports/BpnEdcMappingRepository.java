@@ -20,9 +20,7 @@
 package org.eclipse.tractusx.traceability.bpn.mapping.domain.ports;
 
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMapping;
-import org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.jpa.BpnEdcMappingEntity;
-import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.springframework.data.domain.Pageable;
+import org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.rest.BpnEdcMappingRequest;
 
 import java.util.List;
 
@@ -34,7 +32,7 @@ public interface BpnEdcMappingRepository {
 
     boolean exists(String bpn);
 
-    void save(BpnEdcMappingEntity entity);
+    List<BpnEdcMapping> saveAll(List<BpnEdcMappingRequest> bpnEdcMappings);
 
     void deleteById(String bpn);
 
