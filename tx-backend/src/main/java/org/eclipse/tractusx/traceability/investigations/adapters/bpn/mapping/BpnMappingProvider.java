@@ -22,8 +22,6 @@ import org.eclipse.tractusx.traceability.bpn.mapping.domain.ports.BpnEdcMappingR
 import org.eclipse.tractusx.traceability.infrastructure.edc.properties.EdcProperties;
 import org.eclipse.tractusx.traceability.investigations.domain.ports.EDCUrlProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +31,6 @@ public class BpnMappingProvider implements EDCUrlProvider {
 
     private final BpnEdcMappingRepository bpnEdcMappingRepository;
     private final EdcProperties edcProperties;
-
 
     public BpnMappingProvider(@Autowired BpnEdcMappingRepository bpnEdcMappingRepository, EdcProperties edcProperties) {
         this.bpnEdcMappingRepository = bpnEdcMappingRepository;
