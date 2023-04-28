@@ -47,14 +47,14 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Build & push Image App
+      - name: Build & push Image App to KinD
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.APP_NAME}}:${{ env.TAG }}
 
-      - name: Build & push Image Frontend
+      - name: Build & push Image Frontend to KinD
         uses: docker/build-push-action@v4
         with:
           context: ./frontend
