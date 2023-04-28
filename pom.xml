@@ -102,7 +102,9 @@
             org/eclipse/tractusx/traceability/infrastructure/jpa/notification/NotificationEntity.java,
             org/eclipse/tractusx/traceability/infrastructure/jpa/notification/InvestigationEntity.java,
             org/eclipse/tractusx/traceability/investigations/domain/model/Investigation.java,
-            org/eclipse/tractusx/traceability/investigations/domain/model/Notification.java
+            org/eclipse/tractusx/traceability/investigations/domain/model/Notification.java,
+            org/eclipse/tractusx/traceability/infrastructure/jpa/bpn_edc/BpnEdcMappingEntity.java,
+            org/eclipse/tractusx/traceability/common/config/ErrorHandlingConfig.java
         </sonar.exclusions>
     </properties>
 
@@ -131,5 +133,35 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>dash-licenses-snapshots</id>
+            <url>https://repo.eclipse.org/content/repositories/dash-licenses-snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+            <plugin>
+                <groupId>org.eclipse.dash</groupId>
+                <artifactId>license-tool-plugin</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <id>license-check</id>
+                        <goals>
+                            <goal>license-check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>

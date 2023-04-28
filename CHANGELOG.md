@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added possibility to create an alert within my parts page, marked with WIP
 - Added additional irs request on irs-service to also include SingleLevelUsageAsBuilt param
 - Added owner column to asset table
+- Added upstream visibility for parts
+- Added bpn-url mapping api which provides simple CRUD operations
 
 ### Changed
 - Updated spring-boot:core from 6.0.6 to 6.0.8 for cve-2023-20863
@@ -24,6 +26,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Updated readme links
 - Container labelling refactored
 - Increased table size tenfold. From 5, 10, 25 to 50, 100, 250
+- Moved dash-ip tool to root-pom to have a managed version
+- Updated backend dependencies to reflect current state
+- Removed all excluded files from kics scan
 
 ### Removed
 - Removed usage of add-license-header script in FE hook
