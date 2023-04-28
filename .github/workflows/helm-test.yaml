@@ -26,7 +26,8 @@ env:
   REGISTRY: kind-registry:5000
   JAVA_VERSION: 17
   TAG: testing
-  APP_NAME: traceability-app
+  APP_NAME: traceability-foss-app
+  APP_FRONTEND_NAME: traceability-foss-frontend
 
 jobs:
   lint-test:
@@ -46,12 +47,19 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Build Image
+      - name: Build & push Image App
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.APP_NAME}}:${{ env.TAG }}
+
+      - name: Build & push Image Frontend
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.APP_FRONTEND_NAME}}:${{ env.TAG }}
 
       - name: Set up Helm
         uses: azure/setup-helm@v3
@@ -80,5 +88,5 @@ jobs:
           helm repo add irs-edc-consumer https://eclipse-tractusx.github.io/item-relationship-service
           helm repo add postgresql https://charts.bitnami.com/bitnami
           helm repo add runix https://helm.runix.net
-          ct install --charts charts/traceability-foss
+          ct install --charts charts/traceability-foss --set backend.image.repository=kind-registry:5000/traceability-foss
         if: steps.list-changed.outputs.changed == 'true'

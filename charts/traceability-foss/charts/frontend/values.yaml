@@ -22,7 +22,7 @@ enabled: false
 replicaCount: 1
 
 image:
-  repository: ghcr.io/catenax-ng/tx-traceability-foss
+  repository: ghcr.io/catenax-ng/tx-traceability-foss-frontend
   pullPolicy: Always
 
 ##
