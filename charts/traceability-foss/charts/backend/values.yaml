@@ -22,7 +22,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/catenax-ng/tx-traceability-foss
-  tag: "testing"  # will result in error bc gitsha, right now this setup is for testing TODO
+  tag: ""  # will result in error bc gitsha, right now this setup is for testing TODO
   pullPolicy: Always
 
 ##
