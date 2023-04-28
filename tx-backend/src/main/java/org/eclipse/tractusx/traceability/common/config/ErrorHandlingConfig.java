@@ -39,6 +39,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.AuthenticationException;
@@ -74,6 +75,13 @@ public class ErrorHandlingConfig implements AuthenticationFailureHandler {
         logger.warn("handleMethodArgumentNotValidException", exception);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(errorMessage));
+    }
+
+    @ExceptionHandler(JpaSystemException.class)
+    ResponseEntity<ErrorResponse> handleJpaSystemException(JpaSystemException exception) {
+        logger.warn("handleJpaSystemException", exception);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse("Failed to deserialize request body."));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

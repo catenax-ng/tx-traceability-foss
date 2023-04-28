@@ -40,7 +40,7 @@ class BpnEdcMappingControllerIT extends IntegrationSpecification implements BpnR
         when:
         given()
                 .contentType(ContentType.JSON)
-                .body(List.of(mappings))
+                .body(asJson(List.of(mappings)))
                 .header(jwtAuthorization(ADMIN))
                 .when()
                 .post("/api/bpn-config")
