@@ -164,8 +164,7 @@ export class RelationsFacade {
     if (!nodeList) return of(null).pipe(first());
 
     const loadedElements = this.loadedElementsFacade.loadedElements;
-    const getLoadedElement = (id: string) => loadedElements[id];
-    const isNoChildLoading = nodeList.every(id => getLoadedElement(id) && getLoadedElement(id)?.state != 'loading');
+    const isNoChildLoading = nodeList.every(id => loadedElements[id] && loadedElements[id]?.state != 'loading');
 
     if (isNoChildLoading) {
       const mappedChildren = nodeList.map(childId => loadedElements[childId]);

@@ -27,7 +27,8 @@ import { RelationComponentState } from '@shared/modules/relations/core/component
   providers: [RelationComponentState, RelationsFacade],
 })
 export class TreeComponent implements OnDestroy, AfterViewInit {
-  @Input() showMiniMap = true;
+  @Input() showMiniMap = false;
+  @Input() shouldRenderParents = false;
   @Input() isStandalone = true;
   @Input() htmlId: string;
 
@@ -113,7 +114,7 @@ export class TreeComponent implements OnDestroy, AfterViewInit {
     this.tree = !this.tree ? new Tree(treeConfigRight) : this.tree;
 
     if (!this.showMiniMap) return;
-    // this.minimap = new Minimap(this.tree, this.treeDirection);
+    this.minimap = new Minimap(this.tree, this.treeDirection);
   }
 
   private updateChildren({ id }: TreeElement): void {
@@ -142,7 +143,7 @@ export class TreeComponent implements OnDestroy, AfterViewInit {
 
   private renderTree(treeData: TreeStructure): void {
     this.tree.renderTree(treeData, this.treeDirection);
-    // this.renderMinimap(treeData);
+    this.renderMinimap(treeData);
   }
 
   private renderMinimap(treeData: TreeStructure): void {

@@ -69,9 +69,8 @@ describe('D3 Tree', () => {
     const component = await renderTree();
     component.detectChanges();
 
-    // TODO: fix minimap
-    // const minimapBody = await waitFor(() => screen.getByTestId('app-part-relation-0--minimap--main'));
-    // expect(minimapBody).toBeInTheDocument();
+    const minimapBody = await waitFor(() => screen.getByTestId('app-part-relation-0--minimap--main'));
+    expect(minimapBody).toBeInTheDocument();
 
     // Wait for minimap to completely render
     await sleepForTests(200);
@@ -82,9 +81,11 @@ describe('D3 Tree', () => {
 
     expect(cameraElement).not.toHaveAttribute('transform');
     increaseButton.click();
+    await sleepForTests(100);
     expect(cameraElement).toHaveAttribute('transform', 'translate(0,0) scale(1.1)');
 
     decreaseButton.click();
+    await sleepForTests(100);
     expect(cameraElement).toHaveAttribute('transform', 'translate(0,0) scale(1)');
   });
 
@@ -161,12 +162,12 @@ describe('D3 Tree', () => {
 
     const pathsLeft = await waitFor(() => screen.getByTestId('app-part-relation-0--LEFT--paths'));
     expect(pathsLeft).toBeInTheDocument();
-    expect(pathsLeft.getElementsByTagName('path').length).toBe(1);
+    expect(pathsLeft.getElementsByTagName('path').length).toBe(0);
 
     const nodesLeft = await waitFor(() => screen.getByTestId('app-part-relation-0--LEFT--nodes'));
     expect(nodesLeft).toBeInTheDocument();
     const nodesLeftList = nodesLeft.getElementsByClassName('node');
-    expect(nodesLeftList.length).toBe(2);
+    expect(nodesLeftList.length).toBe(1);
     expect(nodesLeftList.item(0).getElementsByTagName('a').length).toBe(3);
     // check first node in details
     expect(nodesLeftList.item(0).getElementsByTagName('a').item(0).getAttribute('transform')).toBe('translate(0,0)');
@@ -186,8 +187,8 @@ describe('D3 Tree', () => {
       'Audi A1 S...',
     );
 
-    expect(nodesLeftList.item(1).getElementsByTagName('a').length).toBe(2);
+    expect(nodesLeftList.item(0).getElementsByTagName('a').length).toBe(3);
     // check position of second node
-    expect(nodesLeftList.item(1).getElementsByTagName('a').item(0).getAttribute('transform')).toBe('translate(-250,0)');
+    expect(nodesLeftList.item(0).getElementsByTagName('a').item(0).getAttribute('transform')).toBe('translate(0,0)');
   });
 });

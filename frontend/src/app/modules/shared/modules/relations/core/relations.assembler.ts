@@ -21,6 +21,7 @@
 
 import { Part, QualityType } from '@page/parts/model/parts.model';
 import { TreeElement, TreeStructure } from '@shared/modules/relations/model/relations.model';
+import _deepClone from 'lodash-es/cloneDeep';
 
 export class RelationsAssembler {
   public static assemblePartForRelation(part: Part, idFallback?: string): TreeElement {
@@ -38,7 +39,9 @@ export class RelationsAssembler {
 
   public static elementToTreeStructure(element: TreeElement, isParentDirection = false): TreeStructure {
     if (!element) return null;
-    const nodes = isParentDirection ? element.parents : element.children;
+    const clonedElement = _deepClone(element);
+    const nodes = isParentDirection ? clonedElement.parents : clonedElement.children;
+    delete clonedElement.parents;
 
     const children: TreeStructure[] = nodes
       ? nodes.map(childId => ({
@@ -49,7 +52,7 @@ export class RelationsAssembler {
         }))
       : null;
 
-    return { ...element, state: element.state || 'done', children };
+    return { ...clonedElement, state: clonedElement.state || 'done', children };
   }
 
   public static createLoadingElement(id: string): TreeElement {

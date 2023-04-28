@@ -49,8 +49,7 @@ export const renderTree = async () => {
   );
 };
 
-// TODO: fix minimap
-xdescribe('D3 Minimap', () => {
+describe('D3 Minimap', () => {
   it('should initialize minimap class', async () => {
     await renderTree();
     expect(await waitFor(() => screen.getByTestId('app-part-relation-0--minimap--main'))).toBeInTheDocument();
@@ -91,8 +90,8 @@ xdescribe('D3 Minimap', () => {
     const viewportContainer = screen.getByTestId('app-part-relation-0--minimap--rect-group').firstChild;
 
     // Wait for minimap to completely render wait for animation (500 ms)
-    await sleepForTests(600);
-    const expectedTransform = 'translate(-12.833333333333336,-150) scale(1)';
+    await sleepForTests(1000);
+    const expectedTransform = 'translate(-12.833333333333336,-90) scale(1)';
     expect(viewportContainer).toHaveAttribute('transform', expectedTransform);
   });
 });

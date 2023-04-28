@@ -24,10 +24,10 @@ import { RelationComponentState } from '@shared/modules/relations/core/component
 import { LoadedElementsFacade } from '@shared/modules/relations/core/loaded-elements.facade';
 import { LoadedElementsState } from '@shared/modules/relations/core/loaded-elements.state';
 import { RelationsFacade } from '@shared/modules/relations/core/relations.facade';
-import { TreeDirection, TreeElement, TreeStructure } from '@shared/modules/relations/model/relations.model';
+import { TreeElement, TreeStructure } from '@shared/modules/relations/model/relations.model';
 import { PartsService } from '@shared/service/parts.service';
 import { waitFor } from '@testing-library/angular';
-import { firstValueFrom, of } from 'rxjs';
+import { firstValueFrom, of, Subscription } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import {
   MOCK_part_1,
@@ -38,6 +38,7 @@ import {
 
 describe('Relations facade', () => {
   const childDescriptionsToChild = children => children.map(({ id }) => id);
+  let sub: Subscription;
   let relationsFacade: RelationsFacade,
     loadedElementsFacade: LoadedElementsFacade,
     componentStateMock: RelationComponentState;
@@ -52,6 +53,10 @@ describe('Relations facade', () => {
     loadedElementsFacade = new LoadedElementsFacade(new LoadedElementsState());
     componentStateMock = new RelationComponentState();
     relationsFacade = new RelationsFacade(partsServiceMok, loadedElementsFacade, componentStateMock);
+
+    relationsFacade.isParentRelationTree = false;
+    sub?.unsubscribe();
+    sub = relationsFacade.initRequestPartDetailQueue().subscribe();
   });
 
   const getOpenElements = async () => await firstValueFrom(componentStateMock.openElements$.pipe(debounceTime(700)));
@@ -65,7 +70,7 @@ describe('Relations facade', () => {
         [MOCK_part_3.id]: childDescriptionsToChild(MOCK_part_3.childDescriptions),
       };
 
-      relationsFacade.openElementWithChildren(TreeDirection.RIGHT, mockTreeElement);
+      relationsFacade.openElementWithChildren(mockTreeElement);
       expect(await getOpenElements()).toEqual(expected);
     });
   });
@@ -76,7 +81,7 @@ describe('Relations facade', () => {
       const mockTreeElement = { id, children: childDescriptionsToChild(childDescriptions) } as TreeElement;
       const expected = {};
 
-      relationsFacade.updateOpenElement(TreeDirection.RIGHT, mockTreeElement);
+      relationsFacade.updateOpenElement(mockTreeElement);
       expect(await getOpenElements()).toEqual(expected);
     });
   });
@@ -88,8 +93,8 @@ describe('Relations facade', () => {
       const mockTreeElement = { id, children } as TreeElement;
       const expected = { MOCK_part_1: ['MOCK_part_2', 'MOCK_part_3'], MOCK_part_3: ['MOCK_part_5'] };
 
-      relationsFacade.openElementWithChildren(TreeDirection.RIGHT, mockTreeElement);
-      relationsFacade.deleteOpenElement(TreeDirection.RIGHT, children[0]);
+      relationsFacade.openElementWithChildren(mockTreeElement);
+      relationsFacade.deleteOpenElement(children[0]);
 
       expect(await getOpenElements()).toEqual(expected);
     });
@@ -103,11 +108,11 @@ describe('Relations facade', () => {
         [MOCK_part_3.id]: childDescriptionsToChild(MOCK_part_3.childDescriptions),
       };
 
-      relationsFacade.openElementWithChildren(TreeDirection.RIGHT, mockTreeElement);
+      relationsFacade.openElementWithChildren(mockTreeElement);
       const allOpenElements = await getOpenElements();
       await waitFor(() => expect(allOpenElements).toEqual(expected_all));
 
-      relationsFacade.deleteOpenElement(TreeDirection.RIGHT, MOCK_part_2.id);
+      relationsFacade.deleteOpenElement(MOCK_part_2.id);
 
       const expected_deleted = {
         [MOCK_part_1.id]: childDescriptionsToChild(MOCK_part_1.childDescriptions),
@@ -176,10 +181,8 @@ describe('Relations facade', () => {
       const mockTreeElement = { id, children: childDescriptionsToChild(childDescriptions) } as TreeElement;
 
       loadedElementsFacade.addLoadedElement(mockTreeElement);
-      relationsFacade.openElementWithChildren(TreeDirection.RIGHT, mockTreeElement);
-      expect(relationsFacade.formatOpenElementsToTreeData(TreeDirection.RIGHT, await getOpenElements())).toEqual(
-        expected,
-      );
+      relationsFacade.openElementWithChildren(mockTreeElement);
+      expect(relationsFacade.formatOpenElementsToTreeData(await getOpenElements())).toEqual(expected);
     });
   });
 });

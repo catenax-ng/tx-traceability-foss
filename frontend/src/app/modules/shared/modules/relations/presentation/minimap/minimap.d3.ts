@@ -47,7 +47,6 @@ export class Minimap {
   private zoom: ZoomBehavior<ZoomedElementBaseType, unknown>;
   private nextTreeUpdateAt = 0;
   private zoomChangeStore: ZoomTransform;
-  private isMinimapOwner: boolean;
 
   constructor(private readonly treeInstance: Tree, private readonly direction: TreeDirection) {
     this.treeInstance.minimapConnector = {
@@ -72,7 +71,6 @@ export class Minimap {
   private setIds(): void {
     const minimap = this.treeInstance.mainId + '--minimap';
     const main = `${minimap}--main`;
-    const direction = `${minimap}--${this.direction}`;
     const closeButton = `${minimap}--closing`;
     const viewport = `${minimap}--rect`;
     const viewportContainer = `${minimap}--rect-group`;
@@ -80,26 +78,23 @@ export class Minimap {
     const closing = `${minimap}--closing`;
     const icon = `${minimap}--icon`;
 
-    this.ids = { minimap, main, direction, closeButton, viewport, viewportContainer, circle, closing, icon };
+    this.ids = { minimap, main, closeButton, viewport, viewportContainer, circle, closing, icon };
   }
 
   public renderMinimap(data: TreeStructure): TreeSvg {
-    // d3.select(`#${this.ids.direction}`).remove();
+    d3.select(`#${this.ids.main}`).remove();
     const root = d3.hierarchy(data);
 
     let svg = d3.select(`#${this.ids.main}`) as TreeSvg;
-    this.isMinimapOwner = this.isMinimapOwner === undefined ? svg.empty() : this.isMinimapOwner;
     if (svg.empty()) svg = this.creatMainSvg(root);
-    // svg = svg.append('g').attr('id', this.ids.direction);
 
     // First draw paths so paths are behind circles.
     D3RenderHelper.renderTreePaths(this.direction, svg, root, this.r, this.ids.minimap, true);
-    D3RenderHelper.renderMinimapNodes(this.direction, svg, root, this.r, this.ids.minimap);
+    D3RenderHelper.renderMinimapNodes(svg, root, this.r, this.ids.minimap);
     // Recalculate height after circles are drawn because of uneven distribution.
     this.setMapHeight();
 
-    const viewportSvg = d3.select(`#${this.ids.viewportContainer}`) as TreeSvg;
-    if (!viewportSvg || viewportSvg.empty()) this.drawTreeViewport(svg);
+    this.drawTreeViewport(svg);
     D3RenderHelper.renderMinimapClosing(
       svg,
       `${this.ids.closing}`,

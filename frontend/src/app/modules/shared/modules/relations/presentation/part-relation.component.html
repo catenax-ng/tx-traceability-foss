@@ -46,6 +46,7 @@ SPDX-License-Identifier: Apache-2.0
     [rootPart]="rootPart$ | async"
     [resizeTrigger$]="resizeTrigger$"
     [showMiniMap]="showMiniMap"
+    [shouldRenderParents]="true"
     [isStandalone]="isStandalone"
     [htmlId]="htmlId"
     [direction]="'RIGHT'"
@@ -53,17 +54,16 @@ SPDX-License-Identifier: Apache-2.0
   <app-tree
     [rootPart]="rootPart$ | async"
     [resizeTrigger$]="resizeTrigger$"
-    [showMiniMap]="showMiniMap"
     [isStandalone]="isStandalone"
     [htmlId]="htmlId"
     [direction]="'LEFT'"
   ></app-tree>
-  <!--<figure
-        *ngIf="this.showMiniMap"
-        class="part-relation&#45;&#45;minimap"
-        data-testId="part-relation&#45;&#45;minimap&#45;&#45;test-id"
-        [id]="htmlId + '&#45;&#45;minimap'"
-      ></figure>-->
+  <figure
+    *ngIf="this.showMiniMap"
+    class="part-relation--minimap"
+    data-testId="part-relation--minimap--test-id"
+    [id]="htmlId + '--minimap'"
+  ></figure>
 </ng-template>
 
 <ng-template #errorTmp let-partDetails="view">

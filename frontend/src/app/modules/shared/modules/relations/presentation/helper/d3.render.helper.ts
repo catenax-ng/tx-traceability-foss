@@ -61,17 +61,10 @@ export class D3RenderHelper {
       .attr('d', (node: HierarchyCircularLink<TreeStructure>) => link(node));
   }
 
-  public static renderMinimapNodes(
-    direction: TreeDirection,
-    svg: TreeSvg,
-    root: HierarchyNode<TreeStructure>,
-    r: number,
-    id: string,
-  ): void {
+  public static renderMinimapNodes(svg: TreeSvg, root: HierarchyNode<TreeStructure>, r: number, id: string): void {
     function renderElements(dataNode: TreeNode) {
       const el = d3.select(this);
       const { x, y } = dataNode;
-      if (x === undefined || y === undefined) return;
 
       let circleNode = el.select(`#${id}--Circle`);
 
@@ -85,7 +78,7 @@ export class D3RenderHelper {
           .attr('class', ({ data }: TreeNode) => `tree--element__circle-${data.state}`);
       }
 
-      circleNode.attr('transform', () => `translate(${D3RenderHelper.modifyYByDirection(direction, y)},${x})`);
+      circleNode.attr('transform', () => `translate(${y},${x})`);
     }
 
     D3RenderHelper.renderNodes(svg, root, r, id, renderElements);

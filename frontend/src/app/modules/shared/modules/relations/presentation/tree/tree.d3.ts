@@ -102,6 +102,7 @@ export class Tree {
   }
 
   public changeViewPosition(transform: ZoomTransform): void {
+    if (!this.zoom) return;
     this.nextMinimapUpdate = Date.now() + 500;
     d3.select(`#${this.mainId}-svg`).call(this.zoom.transform as any, transform);
   }
