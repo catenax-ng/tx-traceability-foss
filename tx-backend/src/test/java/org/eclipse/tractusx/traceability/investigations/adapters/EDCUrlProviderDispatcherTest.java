@@ -2,14 +2,15 @@ package org.eclipse.tractusx.traceability.investigations.adapters;
 
 import feign.FeignException;
 import feign.Request;
+import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMapping;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.ports.BpnEdcMappingRepository;
 import org.eclipse.tractusx.traceability.infrastructure.edc.properties.EdcProperties;
-import org.eclipse.tractusx.traceability.investigations.adapters.bpn.mapping.BpnMappingProvider;
 import org.eclipse.tractusx.traceability.investigations.adapters.feign.portal.ConnectorDiscoveryMappingResponse;
 import org.eclipse.tractusx.traceability.investigations.adapters.feign.portal.PortalAdministrationApiClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class EDCUrlProviderDispatcherTest {
 
+    @InjectMocks
     private EDCUrlProviderDispatcher edcUrlProviderDispatcher;
 
     @Mock
@@ -30,9 +32,6 @@ class EDCUrlProviderDispatcherTest {
 
     @Mock
     private EdcProperties edcProperties;
-
-    @Mock
-    private BpnMappingProvider bpnMappingProvider;
 
     @Mock
     private BpnEdcMappingRepository bpnEdcMappingRepository;
@@ -64,28 +63,30 @@ class EDCUrlProviderDispatcherTest {
         // given
         String bpn = "BPN1234";
         String connectorEndpoint = "https://some-edc-url.com";
-
+        BpnEdcMapping bpnEdcMapping = new BpnEdcMapping(bpn, FALLBACK_URL);
         // and
         when(portalAdministrationApiClient.getConnectorEndpointMappings(List.of(bpn)))
                 .thenReturn(List.of(new ConnectorDiscoveryMappingResponse(bpn, List.of(connectorEndpoint))));
-        when(bpnMappingProvider.getEdcUrls(bpn)).thenReturn(List.of(FALLBACK_URL));
+        when(bpnEdcMappingRepository.exists(bpn)).thenReturn(true);
+        when(bpnEdcMappingRepository.findById(bpn)).thenReturn(bpnEdcMapping);
         // when
         List<String> edcUrls = edcUrlProviderDispatcher.getEdcUrls(bpn);
 
         // then
         List<String> expectedEdcUrls = new ArrayList<>(List.of(connectorEndpoint));
         expectedEdcUrls.add(FALLBACK_URL);
-        assertThat(edcUrls).isEqualTo(expectedEdcUrls);
-        assertThat(edcUrls).hasSize(2);
+        assertThat(edcUrls).isEqualTo(expectedEdcUrls).hasSize(2);
     }
 
     @Test
     void testEdcUrlProviderDispatcherGetEdcUrlsFromFallbackMappingOnServiceUnavailable() {
         // given
         String bpn = "BPN1234";
+        BpnEdcMapping bpnEdcMapping = new BpnEdcMapping(bpn, FALLBACK_URL);
         when(portalAdministrationApiClient.getConnectorEndpointMappings(List.of(bpn)))
                 .thenThrow(serviceUnavailable());
-        when(bpnMappingProvider.getEdcUrls(bpn)).thenReturn(List.of(FALLBACK_URL));
+        when(bpnEdcMappingRepository.exists(bpn)).thenReturn(true);
+        when(bpnEdcMappingRepository.findById(bpn)).thenReturn(bpnEdcMapping);
         // when
         List<String> edcUrls = edcUrlProviderDispatcher.getEdcUrls(bpn);
 
@@ -97,9 +98,11 @@ class EDCUrlProviderDispatcherTest {
     void testEdcUrlProviderDispatcherGetEdcUrlsFromFallbackMappingOnNullResponse() {
         // given
         String bpn = "BPN1234";
+        BpnEdcMapping bpnEdcMapping = new BpnEdcMapping(bpn, FALLBACK_URL);
         // and
         when(portalAdministrationApiClient.getConnectorEndpointMappings(List.of(bpn))).thenReturn(null);
-        when(bpnMappingProvider.getEdcUrls(bpn)).thenReturn(List.of(FALLBACK_URL));
+        when(bpnEdcMappingRepository.exists(bpn)).thenReturn(true);
+        when(bpnEdcMappingRepository.findById(bpn)).thenReturn(bpnEdcMapping);
         // when
         List<String> edcUrls = edcUrlProviderDispatcher.getEdcUrls(bpn);
 
@@ -111,11 +114,13 @@ class EDCUrlProviderDispatcherTest {
     void testEdcUrlProviderDispatcherGetEdcUrlsFromFallbackDefaultMapping() {
         // given
         String bpn = "BPN1234";
-
+        BpnEdcMapping bpnEdcMapping = new BpnEdcMapping(bpn, FALLBACK_URL);
         // and
         when(portalAdministrationApiClient.getConnectorEndpointMappings(List.of(bpn)))
                 .thenThrow(new RuntimeException("unit-tests"));
-        when(bpnMappingProvider.getEdcUrls(bpn)).thenReturn(List.of(FALLBACK_URL));
+
+        when(bpnEdcMappingRepository.exists(bpn)).thenReturn(true);
+        when(bpnEdcMappingRepository.findById(bpn)).thenReturn(bpnEdcMapping);
         // when
         List<String> edcUrls = edcUrlProviderDispatcher.getEdcUrls(bpn);
 
