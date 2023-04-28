@@ -57,7 +57,7 @@ jobs:
       - name: Build & push Image Frontend
         uses: docker/build-push-action@v4
         with:
-        #  context: ./frontend - uncomment to actually build & push frontend
+          context: ./frontend
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.APP_FRONTEND_NAME }}:${{ env.TAG }}
 
