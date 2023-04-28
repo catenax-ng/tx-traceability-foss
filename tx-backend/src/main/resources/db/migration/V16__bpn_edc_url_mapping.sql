@@ -2,7 +2,7 @@ create table bpn_edc_mappings
 (
 	bpn varchar(255),
 	url varchar(255),
-    created timestamptz not null,
+    created timestamptz,
     updated timestamptz,
 	primary key (bpn),
 	unique(url)
