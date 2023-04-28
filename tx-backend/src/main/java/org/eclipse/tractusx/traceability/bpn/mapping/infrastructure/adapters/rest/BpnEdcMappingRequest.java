@@ -20,14 +20,17 @@
 package org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.rest;
 
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public record BpnEdcMappingRequest(
         @NotNull(message = "BPN must be present")
+        @NotEmpty(message = "BPN must be present")
         @ApiModelProperty(example = "BPNL00000003CSGV")
         String bpn,
         @ValidUrlParameter
         @NotNull(message = "A valid URL must be present")
+        @NotEmpty(message = "A valid URL must be present")
         String url
 ) {
 }

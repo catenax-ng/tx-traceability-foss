@@ -126,6 +126,25 @@ class BpnEdcMappingControllerIT extends IntegrationSpecification implements BpnR
                 .statusCode(400)
     }
 
+    def "should report a bad request due malformed request"() {
+        expect:
+        given()
+                .contentType(ContentType.JSON)
+                .body(
+                        asJson(
+                                [
+                                        abc: "de",
+                                        url: "https://test.de"
+                                ]
+                        )
+                )
+                .header(jwtAuthorization(ADMIN))
+                .when()
+                .post("/api/bpn-config")
+                .then()
+                .statusCode(400)
+    }
+
     def "should report an forbidden request"() {
         BpnEdcMappingRequest mappings = new BpnEdcMappingRequest("BPN123", "https://newurl.com")
         expect:
