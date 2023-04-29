@@ -51,7 +51,7 @@ public class Notification {
     private Instant targetDate;
     private Severity severity;
     private String messageId;
-    private boolean isInitial;
+    private Boolean isInitial;
 
     public Notification(String id,
                         String notificationReferenceId,
@@ -70,7 +70,7 @@ public class Notification {
                         LocalDateTime created,
                         LocalDateTime updated,
                         String messageId,
-                        boolean isInitial) {
+                        Boolean isInitial) {
         this.id = id;
         this.notificationReferenceId = notificationReferenceId;
         this.senderBpnNumber = senderBpnNumber;
@@ -91,11 +91,11 @@ public class Notification {
         this.isInitial = isInitial;
     }
 
-    public boolean isInitial() {
+    public Boolean isInitial() {
         return isInitial;
     }
 
-    public void setInitial(boolean initial) {
+    public void setInitial(Boolean initial) {
         isInitial = initial;
     }
 

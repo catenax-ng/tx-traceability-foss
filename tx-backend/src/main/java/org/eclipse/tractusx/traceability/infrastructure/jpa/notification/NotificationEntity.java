@@ -74,7 +74,7 @@ public class NotificationEntity {
     private LocalDateTime updated;
     private InvestigationStatus status;
     private String messageId;
-    private boolean isInitial;
+    private Boolean isInitial;
 
     public NotificationEntity() {
     }
@@ -92,7 +92,7 @@ public class NotificationEntity {
                               String edcNotificationId,
                               InvestigationStatus status,
                               String messageId,
-                              boolean isInitial) {
+                              Boolean isInitial) {
         this.id = id;
         this.investigation = investigation;
         this.senderBpnNumber = senderBpnNumber;
@@ -251,11 +251,11 @@ public class NotificationEntity {
         return messageId;
     }
 
-    public boolean isInitial() {
+    public Boolean isInitial() {
         return isInitial;
     }
 
-    public void setInitial(boolean initial) {
+    public void setInitial(Boolean initial) {
         isInitial = initial;
     }
 }
