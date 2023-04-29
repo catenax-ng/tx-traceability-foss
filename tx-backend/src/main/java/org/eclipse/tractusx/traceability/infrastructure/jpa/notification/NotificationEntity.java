@@ -74,6 +74,7 @@ public class NotificationEntity {
     private LocalDateTime updated;
     private InvestigationStatus status;
     private String messageId;
+    private boolean isInitial;
 
     public NotificationEntity() {
     }
@@ -90,7 +91,8 @@ public class NotificationEntity {
                               Severity severity,
                               String edcNotificationId,
                               InvestigationStatus status,
-                              String messageId) {
+                              String messageId,
+                              boolean isInitial) {
         this.id = id;
         this.investigation = investigation;
         this.senderBpnNumber = senderBpnNumber;
@@ -105,6 +107,7 @@ public class NotificationEntity {
         this.created = LocalDateTime.now();
         this.status = status;
         this.messageId = messageId;
+        this.isInitial = isInitial;
     }
 
     @PreUpdate
@@ -246,5 +249,13 @@ public class NotificationEntity {
 
     public String getMessageId() {
         return messageId;
+    }
+
+    public boolean isInitial() {
+        return isInitial;
+    }
+
+    public void setInitial(boolean initial) {
+        isInitial = initial;
     }
 }

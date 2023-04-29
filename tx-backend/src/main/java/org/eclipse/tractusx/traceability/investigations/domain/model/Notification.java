@@ -51,6 +51,7 @@ public class Notification {
     private Instant targetDate;
     private Severity severity;
     private String messageId;
+    private boolean isInitial;
 
     public Notification(String id,
                         String notificationReferenceId,
@@ -68,7 +69,8 @@ public class Notification {
                         String edcNotificationId,
                         LocalDateTime created,
                         LocalDateTime updated,
-                        String messageId) {
+                        String messageId,
+                        boolean isInitial) {
         this.id = id;
         this.notificationReferenceId = notificationReferenceId;
         this.senderBpnNumber = senderBpnNumber;
@@ -86,6 +88,15 @@ public class Notification {
         this.created = created;
         this.updated = updated;
         this.messageId = messageId;
+        this.isInitial = isInitial;
+    }
+
+    public boolean isInitial() {
+        return isInitial;
+    }
+
+    public void setInitial(boolean initial) {
+        isInitial = initial;
     }
 
     void changeStatusTo(InvestigationStatus to) {
@@ -257,7 +268,8 @@ public class Notification {
                 edcNotificationId,
                 created,
                 updated,
-                UUID.randomUUID().toString()
+                UUID.randomUUID().toString(),
+                false
         );
     }
 
@@ -281,6 +293,7 @@ public class Notification {
                 ", targetDate=" + targetDate +
                 ", severity=" + severity +
                 ", messageId='" + messageId + '\'' +
+                ", isInitial='" + isInitial + '\'' +
                 '}';
     }
 }

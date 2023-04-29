@@ -258,7 +258,8 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
                 notificationEntity.getEdcNotificationId(),
                 notificationEntity.getCreated(),
                 notificationEntity.getUpdated(),
-                notificationEntity.getMessageId()
+                notificationEntity.getMessageId(),
+                notificationEntity.isInitial()
         );
     }
 
@@ -283,7 +284,8 @@ public class PersistentInvestigationsRepository implements InvestigationsReposit
                 notification.getSeverity(),
                 notification.getEdcNotificationId(),
                 notification.getInvestigationStatus(),
-                notification.getMessageId()
+                notification.getMessageId(),
+                notification.isInitial()
         );
     }
 
