@@ -25,6 +25,7 @@ import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
@@ -65,7 +66,7 @@ public class AssetEntity {
     @CollectionTable(name = "asset_parent_descriptors")
     private List<ParentDescription> parentDescriptors;
 
-    @ManyToMany(mappedBy = "assets")
+    @ManyToMany(mappedBy = "assets", fetch = FetchType.EAGER)
     private List<InvestigationEntity> investigations = new ArrayList<>();
 
     public AssetEntity(String id, String idShort, String nameAtManufacturer,
@@ -237,13 +238,11 @@ public class AssetEntity {
     }
 
     public boolean isOnInvestigation() {
-        List<InvestigationEntity> investigationEntities = getInvestigations();
-
-        if (investigationEntities == null || investigationEntities.isEmpty()) {
+        if (investigations == null || investigations.isEmpty()) {
             return false;
         }
 
-        return investigationEntities.stream()
+        return investigations.stream()
                 .allMatch(investigation -> investigation.getStatus() != InvestigationStatus.CLOSED);
     }
 

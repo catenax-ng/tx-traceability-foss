@@ -90,9 +90,9 @@ public class InvestigationsPublisherService {
     public InvestigationId startInvestigation(BPN applicationBpn, List<String> assetIds, String description, Instant targetDate, Severity severity) {
         Investigation investigation = Investigation.startInvestigation(clock.instant(), applicationBpn, description);
 
-        Map<String, List<Asset>> assetsByManufacturer = assetRepository.getAssetsById(assetIds).stream().collect(Collectors.groupingBy(Asset::getManufacturerId));
+        Map<String, List<Asset>> assetsByBPN = assetRepository.getAssetsById(assetIds).stream().collect(Collectors.groupingBy(Asset::getManufacturerId));
 
-        assetsByManufacturer
+        assetsByBPN
                 .entrySet()
                 .stream()
                 .map(it -> createNotification(applicationBpn, description, targetDate, severity, it, InvestigationStatus.CREATED))
