@@ -4,6 +4,7 @@ import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.asset.Asset
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.catalog.Catalog;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.offer.ContractOffer;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.*;
+import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.contract.service.EdcCatalogService;
 import org.eclipse.tractusx.traceability.infrastructure.edc.properties.EdcProperties;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +30,9 @@ class EdcServiceTest {
 
 	@Mock
 	private HttpCallService httpCallService;
+
+    @Mock
+    private EdcCatalogService edcCatalogService;
 
 	@Mock
 	private ObjectMapper objectMapper;
@@ -69,9 +73,10 @@ class EdcServiceTest {
 
 
 		Map<String, String> header = new HashMap<>();
-		when(httpCallService.getCatalogFromProvider(CONSUMER_EDC_DATA_MANAGEMENT_URL, PROVIDER_CONNECTOR_CONTROL_PLANE_IDS_URL, header)).thenReturn(catalog);
+        when(edcCatalogService.getCatalog(PROVIDER_CONNECTOR_CONTROL_PLANE_IDS_URL)).thenReturn(catalog);
 
-		// when
+
+        // when
 		Optional<ContractOffer> contractOfferResult = edcService.findNotificationContractOffer(CONSUMER_EDC_DATA_MANAGEMENT_URL,
                 PROVIDER_CONNECTOR_CONTROL_PLANE_IDS_URL, header, true);
 
@@ -134,11 +139,10 @@ class EdcServiceTest {
 		Asset asset = Builder.newInstance().properties(properties).build();
 		ContractOffer expectedContractOffer = ContractOffer.Builder.newInstance().id("123").policy(policy).asset(asset).build();
 		Catalog catalog = Catalog.Builder.newInstance().id("234").contractOffers(List.of(expectedContractOffer)).build();
+        when(edcCatalogService.getCatalog(PROVIDER_CONNECTOR_CONTROL_PLANE_IDS_URL)).thenReturn(catalog);
 
 
 		Map<String, String> header = new HashMap<>();
-		when(httpCallService.getCatalogFromProvider(CONSUMER_EDC_DATA_MANAGEMENT_URL,
-                PROVIDER_CONNECTOR_CONTROL_PLANE_IDS_URL, header)).thenReturn(catalog);
 
 		// when
 		Optional<ContractOffer> contractOfferResult =
