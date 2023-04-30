@@ -66,7 +66,7 @@ public class AssetEntity {
     @CollectionTable(name = "asset_parent_descriptors")
     private List<ParentDescription> parentDescriptors;
 
-    @ManyToMany(mappedBy = "assets", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "assets")
     private List<InvestigationEntity> investigations = new ArrayList<>();
 
     public AssetEntity(String id, String idShort, String nameAtManufacturer,
