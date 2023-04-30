@@ -22,12 +22,15 @@ package org.eclipse.tractusx.traceability.infrastructure.edc.blackbox;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.MultivaluedMap;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.catalog.Catalog;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.AtomicConstraint;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.LiteralExpression;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.contract.model.CatalogRequestDTO;
 import org.eclipse.tractusx.traceability.infrastructure.edc.properties.EdcProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,11 +71,12 @@ public class HttpCallService {
 
 	public Catalog getCatalogFromProvider(
 		String consumerEdcDataManagementUrl,
-		String providerConnectorControlPlaneIDSUrl,
-		Map<String, String> headers
+		Map<String, String> headers,
+        CatalogRequestDTO catalogRequestDTO
 	) throws IOException {
-		var url = consumerEdcDataManagementUrl + edcProperties.getCatalogPath() + providerConnectorControlPlaneIDSUrl;
-		var request = new Request.Builder().url(url);
+		var url = consumerEdcDataManagementUrl + edcProperties.getCatalogPath();
+        MediaType mediaType = MediaType.parse("application/json");
+		var request = new Request.Builder().url(url).post(RequestBody.create(mediaType,objectMapper.writeValueAsString(catalogRequestDTO)));
 		headers.forEach(request::addHeader);
 
 		return (Catalog) sendRequest(request.build(), Catalog.class);

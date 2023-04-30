@@ -33,6 +33,7 @@ import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.Poli
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.transfer.DataAddress;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.transfer.TransferRequestDto;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.transfer.TransferType;
+import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.contract.model.CatalogRequestDTO;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.contract.service.EdcCatalogService;
 import org.eclipse.tractusx.traceability.infrastructure.edc.properties.EdcProperties;
 import org.slf4j.Logger;
@@ -77,8 +78,9 @@ public class EdcService {
             Map<String, String> header,
             boolean isInitialNotification
     ) throws IOException {
-        Catalog catalog = edcCatalogService.getCatalog(providerConnectorControlPlaneIDSUrl);
-       // Catalog catalog = httpCallService.getCatalogFromProvider(consumerEdcDataManagementUrl, providerConnectorControlPlaneIDSUrl, header);
+       // Catalog catalog = edcCatalogService.getCatalog(providerConnectorControlPlaneIDSUrl);
+        CatalogRequestDTO catalogRequestDTO = new CatalogRequestDTO(providerConnectorControlPlaneIDSUrl);
+       Catalog catalog = httpCallService.getCatalogFromProvider(consumerEdcDataManagementUrl, header, catalogRequestDTO);
         if (catalog.getContractOffers().isEmpty()) {
             logger.error("No contract found");
             throw new BadRequestException("Provider has no contract offers for us. Catalog is empty.");
