@@ -25,13 +25,12 @@ import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Owner;
-import org.eclipse.tractusx.traceability.infrastructure.jpa.investigation.InvestigationEntity;
+import org.eclipse.tractusx.traceability.investigations.adapters.jpa.InvestigationEntity;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 
 import java.time.Instant;

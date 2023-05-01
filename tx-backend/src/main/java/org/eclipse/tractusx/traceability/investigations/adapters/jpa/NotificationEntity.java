@@ -18,7 +18,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-package org.eclipse.tractusx.traceability.infrastructure.jpa.notification;
+package org.eclipse.tractusx.traceability.investigations.adapters.jpa;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -31,7 +31,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.AssetEntity;
-import org.eclipse.tractusx.traceability.infrastructure.jpa.investigation.InvestigationEntity;
+import org.eclipse.tractusx.traceability.investigations.adapters.jpa.InvestigationEntity;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
 

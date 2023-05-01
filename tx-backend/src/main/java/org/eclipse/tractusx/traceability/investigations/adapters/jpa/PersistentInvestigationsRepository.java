@@ -25,10 +25,6 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asse
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.JpaAssetsRepository;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.infrastructure.jpa.investigation.InvestigationEntity;
-import org.eclipse.tractusx.traceability.infrastructure.jpa.investigation.JpaInvestigationRepository;
-import org.eclipse.tractusx.traceability.infrastructure.jpa.notification.JpaNotificationRepository;
-import org.eclipse.tractusx.traceability.infrastructure.jpa.notification.NotificationEntity;
 import org.eclipse.tractusx.traceability.investigations.domain.model.AffectedPart;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Investigation;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationId;
