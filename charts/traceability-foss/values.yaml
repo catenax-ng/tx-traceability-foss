@@ -156,6 +156,8 @@ backend:
     repository: ghcr.io/catenax-ng/tx-traceability-foss
     pullPolicy: Always
 
+  springprofile: dev #will be set as dev
+
   ##
   ## Image pull secret to create to obtain the container image
   ## Note: 'imagePullSecret.dockerconfigjson' takes precedence if configured together with 'imagePullSecrets'
