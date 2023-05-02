@@ -156,7 +156,7 @@ backend:
     repository: ghcr.io/catenax-ng/tx-traceability-foss
     pullPolicy: Always
 
-  springprofile: dev #will be set as dev
+  springprofile: dev  # will be set as dev
 
   ##
   ## Image pull secret to create to obtain the container image
