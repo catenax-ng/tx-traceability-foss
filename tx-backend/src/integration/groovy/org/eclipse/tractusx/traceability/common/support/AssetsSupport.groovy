@@ -39,7 +39,7 @@ trait AssetsSupport implements AssetRepositoryProvider, InvestigationsRepository
         assetRepository().saveAll(assetsConverter().readAndConvertAssets())
     }
 
-    void defaultAssetsStoredWithOnGoingInvestigation(InvestigationStatus investigationStatus) {
+    void defaultAssetsStoredWithOnGoingInvestigation(InvestigationStatus investigationStatus, boolean inInvestigation) {
         List<AssetEntity> assetEntities = assetsConverter().readAndConvertAssets().collect { asset ->
             new AssetEntity(
                     asset.getId(), asset.getIdShort(),
@@ -62,7 +62,7 @@ trait AssetsSupport implements AssetRepositoryProvider, InvestigationsRepository
                             .toList(),
                     asset.getQualityType(),
                     asset.getVan(),
-                    true
+                    inInvestigation
             )
         }
 
