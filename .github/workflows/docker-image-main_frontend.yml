@@ -8,11 +8,10 @@ env:
   GHCR_REGISTRY: ghcr.io
   DOCKER_HUB_AVAILABLE: ${{ secrets.DOCKER_HUB_USER }} != '' && ${{ secrets.DOCKER_HUB_TOKEN }} != ''
   DOCKER_HUB_REGISTRY_NAMESPACE: tractusx
-  UBUNTU: ubuntu-latest
 
 jobs:
   build:
-    runs-on: ${{env.UBUNTU}}
+    runs-on: ${{ubuntu-latest}}
     defaults:
       run:
         working-directory: frontend

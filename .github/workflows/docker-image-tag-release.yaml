@@ -12,11 +12,10 @@ env:
   JAVA_VERSION: 17
   DOCKER_HUB_AVAILABLE: ${{ secrets.DOCKER_HUB_USER }} != '' && ${{ secrets.DOCKER_HUB_TOKEN }} != ''
   DOCKER_HUB_REGISTRY_NAMESPACE: tractusx
-  UBUNTU: ubuntu-latest
 
 jobs:
   Release-docker-image-frontend:
-    runs-on: ${{env.UBUNTU}}
+    runs-on: ${{ubuntu-latest}}
     defaults:
       run:
         working-directory: frontend
@@ -68,7 +67,7 @@ jobs:
           repository: ${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{ github.repository }}-frontend
 
   Release-docker-image-backend:
-    runs-on: ${{env.UBUNTU}}
+    runs-on: ${{ubuntu-latest}}
     defaults:
       run:
         working-directory: tx-backend
