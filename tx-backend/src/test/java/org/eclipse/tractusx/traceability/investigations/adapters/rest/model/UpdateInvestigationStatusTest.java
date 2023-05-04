@@ -28,22 +28,23 @@ class UpdateInvestigationStatusTest {
 
     @Test
     void testToInvestigationStatusACCEPTED() {
-        UpdateInvestigationStatus accepted = UpdateInvestigationStatus.ACCEPTED;
-        InvestigationStatus actualInvestigationStatus = InvestigationStatus.toInvestigationStatus(accepted);
+        String accepted = "ACCEPTED";
+        InvestigationStatus actualInvestigationStatus = InvestigationStatus.fromStringValue(accepted);
         assertThat(actualInvestigationStatus.name()).isEqualTo("ACCEPTED");
     }
 
     @Test
     void testToInvestigationStatusACKNOWLEDGED() {
-        UpdateInvestigationStatus accepted = UpdateInvestigationStatus.ACKNOWLEDGED;
-        InvestigationStatus actualInvestigationStatus = InvestigationStatus.toInvestigationStatus(accepted);
+        String acknowledged = "ACKNOWLEDGED";
+        InvestigationStatus actualInvestigationStatus = InvestigationStatus.fromStringValue(acknowledged);
         assertThat(actualInvestigationStatus.name()).isEqualTo("ACKNOWLEDGED");
     }
 
     @Test
     void testToInvestigationStatusDECLINED() {
-        UpdateInvestigationStatus accepted = UpdateInvestigationStatus.DECLINED;
-        InvestigationStatus actualInvestigationStatus = InvestigationStatus.toInvestigationStatus(accepted);
+        String declined = "DECLINED";
+        ;
+        InvestigationStatus actualInvestigationStatus = InvestigationStatus.fromStringValue(declined);
         assertThat(actualInvestigationStatus.name()).isEqualTo("DECLINED");
     }
 

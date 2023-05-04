@@ -1,7 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
- * Copyright (c) 2022, 2023 ZF Friedrichshafen AG
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,14 +16,13 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-
 package org.eclipse.tractusx.traceability.investigations.adapters.rest.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
+import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.UpdateInvestigationStatus;
 
-public class SeverityValidatorImpl implements ConstraintValidator<ValidSeverity, String> {
+public class ValidUpdateInvestigationStatusImpl implements ConstraintValidator<ValidUpdateInvestigationStatus, String> {
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
@@ -35,13 +32,7 @@ public class SeverityValidatorImpl implements ConstraintValidator<ValidSeverity,
         }
 
         try {
-            Severity[] severities = Severity.values();
-            for (Severity severity : severities) {
-                if (severity.getRealName().equals(value)) {
-                    return true;
-                }
-            }
-            Severity.valueOf(value);
+            UpdateInvestigationStatus.valueOf(value);
             return true;
         } catch (IllegalArgumentException e) {
             return false;

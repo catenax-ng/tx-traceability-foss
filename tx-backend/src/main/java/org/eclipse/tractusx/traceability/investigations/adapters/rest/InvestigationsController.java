@@ -46,6 +46,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,6 +64,7 @@ import static org.eclipse.tractusx.traceability.investigations.adapters.rest.val
 @RequestMapping(value = "/investigations", consumes = "application/json", produces = "application/json")
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERVISOR', 'ROLE_USER')")
 @Tag(name = "Investigations")
+@Validated
 public class InvestigationsController {
 
     private final InvestigationsReadService investigationsReadService;
@@ -196,10 +198,10 @@ public class InvestigationsController {
     @PreAuthorize("hasAnyRole('ROLE_SUPERVISOR')")
     @PostMapping("/{investigationId}/update")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateInvestigation(@PathVariable Long investigationId, @RequestBody UpdateInvestigationRequest updateInvestigationRequest) {
+    public void updateInvestigation(@PathVariable Long investigationId, @Valid @RequestBody UpdateInvestigationRequest updateInvestigationRequest) {
         validate(updateInvestigationRequest);
         logger.info(API_LOG_START + "/{}/update with params {}", investigationId, updateInvestigationRequest);
-        investigationsPublisherService.updateInvestigationPublisher(traceabilityProperties.getBpn(), investigationId, InvestigationStatus.toInvestigationStatus(updateInvestigationRequest.status()), updateInvestigationRequest.reason());
+        investigationsPublisherService.updateInvestigationPublisher(traceabilityProperties.getBpn(), investigationId, InvestigationStatus.fromStringValue(updateInvestigationRequest.status()), updateInvestigationRequest.reason());
     }
 }
 

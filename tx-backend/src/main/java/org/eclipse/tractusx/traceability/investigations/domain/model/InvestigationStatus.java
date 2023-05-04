@@ -21,9 +21,6 @@
 
 package org.eclipse.tractusx.traceability.investigations.domain.model;
 
-import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.BadRequestException;
-import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.UpdateInvestigationStatus;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
@@ -97,12 +94,7 @@ public enum InvestigationStatus {
         return Optional.ofNullable(MAPPINGS.get(value));
     }
 
-    public static InvestigationStatus toInvestigationStatus(UpdateInvestigationStatus status) {
-        Optional<InvestigationStatus> investigationStatus = InvestigationStatus.fromValue(status.name());
-        if (investigationStatus.isPresent()) {
-            return investigationStatus.get();
-        } else {
-            throw new BadRequestException(String.format("Status %s is not correct", status.name()));
-        }
+    public static InvestigationStatus fromStringValue(String value) {
+        return MAPPINGS.get(value);
     }
 }

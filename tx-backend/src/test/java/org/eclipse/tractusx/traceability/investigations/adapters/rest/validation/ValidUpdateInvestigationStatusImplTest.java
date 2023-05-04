@@ -1,7 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
- * Copyright (c) 2022, 2023 ZF Friedrichshafen AG
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,7 +16,6 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-
 package org.eclipse.tractusx.traceability.investigations.adapters.rest.validation;
 
 import org.junit.jupiter.api.Test;
@@ -26,24 +23,20 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class SeverityValidatorImplTest {
+class ValidUpdateInvestigationStatusImplTest {
 
-    private final SeverityValidatorImpl validator = new SeverityValidatorImpl();
+    private final ValidUpdateInvestigationStatusImpl validator = new ValidUpdateInvestigationStatusImpl();
 
     @Test
-    void testSeveritySuccess() {
-        boolean isMinor = validator.isValid("MINOR", null);
-        boolean isMajor = validator.isValid("MAJOR", null);
-        boolean isLifeThreatening = validator.isValid("LIFE-THREATENING", null);
-        boolean isCritical = validator.isValid("CRITICAL", null);
-        boolean isLifeThreateningUnderscore = validator.isValid("LIFE_THREATENING", null);
+    void testUpdateInvestigationStatus() {
+        boolean isAcknowledged = validator.isValid("ACKNOWLEDGED", null);
+        boolean isAccepted = validator.isValid("ACCEPTED", null);
+        boolean isDeclined = validator.isValid("DECLINED", null);
 
         boolean wrongParameter = validator.isValid("anything", null);
-        assertTrue(isMinor, "MINOR should pass validation");
-        assertTrue(isMajor, "MAJOR should pass validation");
-        assertTrue(isLifeThreatening, "LIFE-THREATENING should pass validation");
-        assertTrue(isCritical, "CRITICAL should pass validation");
-        assertTrue(isLifeThreateningUnderscore, "LIFE_THREATENING should pass validation");
+        assertTrue(isAcknowledged, "ACKNOWLEDGED should pass validation");
+        assertTrue(isAccepted, "ACCEPTED should pass validation");
+        assertTrue(isDeclined, "DECLINED should pass validation");
         assertFalse(wrongParameter, "anything should not pass validation");
     }
 

@@ -41,7 +41,7 @@ public class UpdateInvestigationValidator {
     }
 
     public static void validate(UpdateInvestigationRequest updateInvestigationRequest) {
-        InvestigationStatus status = InvestigationStatus.toInvestigationStatus(updateInvestigationRequest.status());
+        InvestigationStatus status = InvestigationStatus.fromStringValue(updateInvestigationRequest.status());
 
         if (!ALLOWED_STATUSES.contains(status)) {
             throw new UpdateInvestigationValidationException("%s not allowed for update investigation with".formatted(status));

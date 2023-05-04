@@ -24,8 +24,9 @@ package org.eclipse.tractusx.traceability.investigations.adapters.rest.model;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.eclipse.tractusx.traceability.investigations.adapters.rest.validation.ValidUpdateInvestigationStatus;
 
 public record UpdateInvestigationRequest(
-        @NotNull(message = "status must be present") @ApiModelProperty(example = "ACKNOWLEDGE") UpdateInvestigationStatus status,
+        @NotNull(message = "status must be present") @ValidUpdateInvestigationStatus @ApiModelProperty(example = "ACKNOWLEDGED") String status,
         @Size(min = 15, max = 1000, message = "Accept or Decline reasons should have at least 15 characters and at most 1000 characters") @ApiModelProperty(example = "The reason.") String reason) {
 }
