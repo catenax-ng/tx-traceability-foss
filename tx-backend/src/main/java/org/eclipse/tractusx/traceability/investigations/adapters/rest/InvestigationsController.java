@@ -199,7 +199,7 @@ public class InvestigationsController {
     public void updateInvestigation(@PathVariable Long investigationId, @RequestBody UpdateInvestigationRequest updateInvestigationRequest) {
         validate(updateInvestigationRequest);
         logger.info(API_LOG_START + "/{}/update with params {}", investigationId, updateInvestigationRequest);
-        investigationsPublisherService.updateInvestigationPublisher(traceabilityProperties.getBpn(), investigationId, updateInvestigationRequest.status(), updateInvestigationRequest.reason());
+        investigationsPublisherService.updateInvestigationPublisher(traceabilityProperties.getBpn(), investigationId, InvestigationStatus.toInvestigationStatus(updateInvestigationRequest.status()), updateInvestigationRequest.reason());
     }
 }
 

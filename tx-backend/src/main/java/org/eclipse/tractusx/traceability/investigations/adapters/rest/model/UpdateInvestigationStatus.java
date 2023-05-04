@@ -1,7 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
- * Copyright (c) 2022, 2023 ZF Friedrichshafen AG
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -21,11 +19,9 @@
 
 package org.eclipse.tractusx.traceability.investigations.adapters.rest.model;
 
-import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+public enum UpdateInvestigationStatus {
+    ACKNOWLEDGED,
+    ACCEPTED,
+    DECLINED
+};
 
-public record UpdateInvestigationRequest(
-        @NotNull(message = "status must be present") @ApiModelProperty(example = "ACKNOWLEDGE") UpdateInvestigationStatus status,
-        @Size(min = 15, max = 1000, message = "Accept or Decline reasons should have at least 15 characters and at most 1000 characters") @ApiModelProperty(example = "The reason.") String reason) {
-}

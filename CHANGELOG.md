@@ -12,6 +12,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Bumped veracode/veracode-uploadandscan-action@0.2.5 to 0.2.6
 - Updated catena links from readme to reflext tractusx links
 
+### Removed
+- Not needed enum params in UpdateInvestigationRequest
+
 ## [3.3.0] - 2023-05-02
 ### Added
 - Added tx-root pom for maven multi module project
