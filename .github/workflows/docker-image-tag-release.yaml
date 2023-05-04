@@ -44,14 +44,14 @@ jobs:
           tags: ${{ env.GHCR_REGISTRY }}/${{ github.repository }}-frontend:${{ env.TAG_NAME }}, ${{ env.GHCR_REGISTRY }}/${{ github.repository }}-frontend:latest
 
       - name: Login to Docker Hub
-        if: ${{env.DOCKER_HUB_AVAILABLE}}
+        if: ${{env.DOCKER_HUB_AVAILABLE}} == true
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
       - name: Build and push for Docker Hub ${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{ github.repository }}-frontend:${{ env.TAG_NAME }} and :latest
-        if: ${{env.DOCKER_HUB_AVAILABLE}}
+        if: ${{env.DOCKER_HUB_AVAILABLE}} == true
         uses: docker/build-push-action@v4
         with:
           context: frontend
@@ -60,7 +60,7 @@ jobs:
 
       - name: Update Docker Hub description
         uses: peter-evans/dockerhub-description@v3
-        if: ${{env.DOCKER_HUB_AVAILABLE}}
+        if: ${{env.DOCKER_HUB_AVAILABLE}} == true
         with:
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
@@ -103,18 +103,18 @@ jobs:
         run: mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn --batch-mode -DskipTests=true install jib:build -Dimage=${{ env.GHCR_REGISTRY }}/${{ github.repository }} -Djib.to.tags=${{ env.TAG_NAME }},latest
 
       - name: Login to Docker Hub
-        if: ${{env.DOCKER_HUB_AVAILABLE}}
+        if: ${{env.DOCKER_HUB_AVAILABLE}} == true
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
       - name: Build & push docker image for Docker Hub ${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{ github.repository }}:${{ env.TAG_NAME }}
-        if: ${{env.DOCKER_HUB_AVAILABLE}}
+        if: ${{env.DOCKER_HUB_AVAILABLE}} == true
         run: mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn --batch-mode -DskipTests=true install jib:build -Dimage=${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{github.repository}} -Djib.to.tags=${{ env.TAG_NAME }},latest
 
       - name: Update Docker Hub description
-        if: ${{env.DOCKER_HUB_AVAILABLE}}
+        if: ${{env.DOCKER_HUB_AVAILABLE}} == true
         uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USER }}
