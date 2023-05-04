@@ -5,16 +5,18 @@ on:
   pull_request:
 
 env:
-  REGISTRY: ghcr.io
+  GHCR_REGISTRY: ghcr.io
   JAVA_VERSION: 17
-  COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+  DOCKER_HUB_AVAILABLE: ${{ secrets.DOCKER_HUB_USER }} != '' && ${{ secrets.DOCKER_HUB_TOKEN }} != ''
+  DOCKER_HUB_REGISTRY_NAMESPACE: tractusx
+  UBUNTU: ubuntu-latest
 
 jobs:
   Test-and-Sonar:
     permissions:
       checks: write
       pull-requests: write
-    runs-on: ubuntu-latest
+    runs-on: ${{env.UBUNTU}}
     defaults:
       run:
         working-directory: tx-backend
@@ -81,15 +83,16 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Login to Docker Registry
+      - name: Login to GHCR Registry
+        if: !${{env.DOCKER_HUB_AVAILABLE}}
         uses: docker/login-action@v2
         with:
-          registry: ${{ env.REGISTRY }}
+          GHCR_REGISTRY: ${{ env.GHCR_REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push docker image
-        run: mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn --batch-mode -DskipTests=true install jib:build -Dimage=${{ env.REGISTRY }}/${{ github.repository }}:${{ env.COMMIT_SHA }}
+      - name: Build & Push docker image ${{ env.GHCR_REGISTRY }}/${{ github.repository }}:${{ github.sha }}
+        run: mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn --batch-mode -DskipTests=true install jib:build -Dimage=${{ env.GHCR_REGISTRY }}/${{ github.repository }}:${{ github.sha }}
 
   Dependency-analysis:
     runs-on: ubuntu-latest
