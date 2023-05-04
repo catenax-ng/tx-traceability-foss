@@ -8,6 +8,7 @@ env:
   GHCR_REGISTRY: ghcr.io
   DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
   DOCKER_HUB_REGISTRY_NAMESPACE: tractusx
+  FRONTEND_IMAGE_DOCKER_HUB: traceability-foss-frontend
 
 jobs:
   build:
@@ -25,7 +26,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Login to GHCR Registry
-        if: ${{env.DOCKER_HUB_AVAILABLE}} == false
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+        if: env.DOCKER_HUB_USER == ''
         uses: docker/login-action@v2
         with:
           registry: ${{ env.GHCR_REGISTRY }}
@@ -33,7 +36,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push to GHCR Registry ${{ env.GHCR_REGISTRY }}/${{ github.repository }}-frontend:${{ github.sha }}
-        if: ${{env.DOCKER_HUB_AVAILABLE}} == false
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+        if: env.DOCKER_HUB_USER == ''
         uses: docker/build-push-action@v4
         with:
           context: frontend
@@ -41,24 +46,30 @@ jobs:
           tags: ${{ env.GHCR_REGISTRY }}/${{ github.repository }}-frontend:${{ github.sha }}
 
       - name: Login to Docker Hub
-        if: ${{env.DOCKER_HUB_AVAILABLE}} == true
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+        if: env.DOCKER_HUB_USER != ''
         uses: docker/login-action@v2
         with:
           username: ${{ env.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      - name: Build and push for Docker Hub ${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{ github.repository }}-frontend:${{ github.sha }}
-        if: ${{env.DOCKER_HUB_AVAILABLE}} == true
+      - name: Build and push for Docker Hub ${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{ env.FRONTEND_IMAGE_DOCKER_HUB }}:${{ github.sha }}
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+        if: env.DOCKER_HUB_USER != ''
         uses: docker/build-push-action@v4
         with:
           context: frontend
           push: true
-          tags: ${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{ github.repository }}-frontend:${{ github.sha }}
+          tags: ${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{ env.FRONTEND_IMAGE_DOCKER_HUB }}:${{ github.sha }}
 
       - name: Update Docker Hub description
         uses: peter-evans/dockerhub-description@v3
-        if: ${{env.DOCKER_HUB_AVAILABLE}} == true
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+        if: env.DOCKER_HUB_USER != ''
         with:
           username: ${{ env.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-          repository: ${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{ github.repository }}-frontend
+          repository: ${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{ env.FRONTEND_IMAGE_DOCKER_HUB }}

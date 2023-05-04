@@ -7,8 +7,8 @@ on:
 env:
   GHCR_REGISTRY: ghcr.io
   JAVA_VERSION: 17
-  DOCKER_HUB_USER: ${{secrets.DOCKER_HUB_USER}}
   DOCKER_HUB_REGISTRY_NAMESPACE: tractusx
+  BACKEND_IMAGE_DOCKER_HUB: traceability-foss
 
 jobs:
   Publish-docker-image:
@@ -29,7 +29,9 @@ jobs:
           cache: 'maven'
 
       - name: Login to GHCR Registry
-        if: ${{env.DOCKER_HUB_USER}} == ''
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+        if: env.DOCKER_HUB_USER == ''
         uses: docker/login-action@v2
         with:
           registry: ${{ env.GHCR_REGISTRY }}
@@ -37,25 +39,33 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build & Push docker image for GHCR ${{ env.GHCR_REGISTRY }}/${{ github.repository }}:${{ github.sha }}
-        if: ${{env.DOCKER_HUB_USER}} == ''
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+        if: env.DOCKER_HUB_USER == ''
         run: mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn --batch-mode -DskipTests=true install jib:build -Dimage=${{ env.GHCR_REGISTRY }}/${{ github.repository }}:${{ github.sha }}
 
 
       - name: Login to Docker Hub
-        if: ${{env.DOCKER_HUB_USER}} != ''
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+        if: env.DOCKER_HUB_USER != ''
         uses: docker/login-action@v2
         with:
           username:
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      - name: Build & push docker image for Docker Hub ${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{ github.repository }}:${{ github.sha }}
-        if: ${{env.DOCKER_HUB_USER}} != ''
-        run: mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn --batch-mode -DskipTests=true install jib:build -Dimage=${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{github.repository}} -Djib.to.tags=${{ github.sha }}
+      - name: Build & push docker image for Docker Hub ${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{ env.BACKEND_IMAGE_DOCKER_HUB }}:${{ github.sha }}
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+        if: env.DOCKER_HUB_USER != ''
+        run: mvn -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn --batch-mode -DskipTests=true install jib:build -Dimage=${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{ env.BACKEND_IMAGE_DOCKER_HUB }} -Djib.to.tags=${{ github.sha }}
 
       - name: Update Docker Hub description
-        if: ${{env.DOCKER_HUB_AVAILABLE}} == true
+        env:
+          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+        if: env.DOCKER_HUB_USER != ''
         uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ env.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-          repository: ${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{github.repository}}
+          repository: ${{ env.DOCKER_HUB_REGISTRY_NAMESPACE }}/${{ env.BACKEND_IMAGE_DOCKER_HUB }}
