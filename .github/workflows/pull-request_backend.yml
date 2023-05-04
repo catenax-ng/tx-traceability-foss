@@ -84,7 +84,7 @@ jobs:
           cache: 'maven'
 
       - name: Login to GHCR Registry
-        if: !${{env.DOCKER_HUB_AVAILABLE}}
+        if: ${{env.DOCKER_HUB_AVAILABLE}} == false
         uses: docker/login-action@v2
         with:
           GHCR_REGISTRY: ${{ env.GHCR_REGISTRY }}
