@@ -72,7 +72,7 @@ class InvestigationsPublisherServiceTest {
     @Mock
     private Clock clock;
     @Mock
-    private InvestigationsReadService investigationsReadService;
+    private InvestigationService investigationService;
     @Mock
     private NotificationsService notificationsService;
     @Mock
@@ -103,14 +103,12 @@ class InvestigationsPublisherServiceTest {
         BPN bpn = new BPN("bpn123");
         Long id = 1L;
         Investigation investigation = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.CREATED, InvestigationStatus.CREATED);
-        when(investigationsReadService.loadInvestigation(any())).thenReturn(investigation);
         when(repository.update(investigation)).thenReturn(new InvestigationId(id));
 
         // When
-        investigationsPublisherService.cancelInvestigation(bpn, id);
+        investigationsPublisherService.cancelInvestigation(bpn, investigation);
 
         // Then
-        verify(investigationsReadService).loadInvestigation(new InvestigationId(id));
         verify(repository).update(investigation);
         assertEquals(InvestigationStatus.CANCELED, investigation.getInvestigationStatus());
     }
@@ -122,14 +120,12 @@ class InvestigationsPublisherServiceTest {
         final BPN bpn = new BPN("bpn123");
         InvestigationId investigationId = new InvestigationId(1L);
         Investigation investigation = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.CREATED, InvestigationStatus.CREATED);
-        when(investigationsReadService.loadInvestigation(investigationId)).thenReturn(investigation);
         when(repository.update(investigation)).thenReturn(investigationId);
 
         // When
-        investigationsPublisherService.approveInvestigation(bpn, id);
+        investigationsPublisherService.approveInvestigation(bpn, investigation);
 
         // Then
-        verify(investigationsReadService).loadInvestigation(investigationId);
         verify(repository).update(investigation);
         verify(notificationsService).asyncNotificationExecutor(any());
     }
@@ -192,10 +188,8 @@ class InvestigationsPublisherServiceTest {
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestDataWithNotificationList(InvestigationStatus.RECEIVED, "recipientBPN", notifications);
 
-        when(investigationsReadService.loadInvestigation(any(InvestigationId.class))).thenReturn(investigationTestData);
-
         // When
-        investigationsPublisherService.updateInvestigationPublisher(bpn, investigationIdRaw, status, reason);
+        investigationsPublisherService.updateInvestigationPublisher(bpn, investigationTestData, status, reason);
 
         // Then
         Mockito.verify(repository).update(investigationTestData);
@@ -260,10 +254,8 @@ class InvestigationsPublisherServiceTest {
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestDataWithNotificationList(InvestigationStatus.ACKNOWLEDGED, "recipientBPN", notifications);
 
-        when(investigationsReadService.loadInvestigation(any(InvestigationId.class))).thenReturn(investigationTestData);
-
         // When
-        investigationsPublisherService.updateInvestigationPublisher(bpn, investigationIdRaw, status, reason);
+        investigationsPublisherService.updateInvestigationPublisher(bpn, investigationTestData, status, reason);
 
         // Then
         Mockito.verify(repository).update(investigationTestData);
@@ -328,10 +320,8 @@ class InvestigationsPublisherServiceTest {
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestDataWithNotificationList(InvestigationStatus.ACKNOWLEDGED, "recipientBPN", notifications);
 
-        when(investigationsReadService.loadInvestigation(any(InvestigationId.class))).thenReturn(investigationTestData);
-
         // When
-        investigationsPublisherService.updateInvestigationPublisher(bpn, investigationIdRaw, status, reason);
+        investigationsPublisherService.updateInvestigationPublisher(bpn, investigationTestData, status, reason);
 
         // Then
         Mockito.verify(repository).update(investigationTestData);
@@ -396,10 +386,8 @@ class InvestigationsPublisherServiceTest {
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestDataWithNotificationList(InvestigationStatus.ACCEPTED, "senderBPN", notifications);
 
-        when(investigationsReadService.loadInvestigation(any(InvestigationId.class))).thenReturn(investigationTestData);
-
         // When
-        investigationsPublisherService.updateInvestigationPublisher(bpn, investigationIdRaw, status, reason);
+        investigationsPublisherService.updateInvestigationPublisher(bpn, investigationTestData, status, reason);
 
         // Then
         Mockito.verify(repository).update(investigationTestData);
@@ -443,10 +431,8 @@ class InvestigationsPublisherServiceTest {
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestDataWithNotificationList(InvestigationStatus.SENT, "recipientBPN", notifications);
 
-        when(investigationsReadService.loadInvestigation(any(InvestigationId.class))).thenReturn(investigationTestData);
-
         // When
-        assertThrows(InvestigationIllegalUpdate.class, () -> investigationsPublisherService.updateInvestigationPublisher(bpn, investigationIdRaw, status, reason));
+        assertThrows(InvestigationIllegalUpdate.class, () -> investigationsPublisherService.updateInvestigationPublisher(bpn, investigationTestData, status, reason));
 
         // Then
         Mockito.verify(repository, never()).update(investigationTestData);

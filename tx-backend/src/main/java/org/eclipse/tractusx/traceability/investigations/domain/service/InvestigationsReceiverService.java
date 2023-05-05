@@ -41,17 +41,17 @@ import java.lang.invoke.MethodHandles;
 public class InvestigationsReceiverService {
 
     private final InvestigationsRepository repository;
-    private final InvestigationsReadService investigationsReadService;
+    private final InvestigationService investigationService;
     private final NotificationMapper notificationMapper;
     private final AssetService assetService;
     private final InvestigationMapper investigationMapper;
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public InvestigationsReceiverService(InvestigationsRepository repository,
-                                         InvestigationsReadService investigationsReadService,
+                                         InvestigationService investigationService,
                                          NotificationMapper notificationMapper, AssetService assetService, InvestigationMapper investigationMapper) {
         this.repository = repository;
-        this.investigationsReadService = investigationsReadService;
+        this.investigationService = investigationService;
         this.notificationMapper = notificationMapper;
         this.assetService = assetService;
         this.investigationMapper = investigationMapper;
@@ -68,7 +68,7 @@ public class InvestigationsReceiverService {
 
     public void handleNotificationUpdate(EDCNotification edcNotification) {
         Notification notification = notificationMapper.toNotification(edcNotification);
-        Investigation investigation = investigationsReadService.loadInvestigationByEdcNotificationId(edcNotification.getNotificationId());
+        Investigation investigation = investigationService.loadInvestigationByEdcNotificationIdOrNotFoundException(edcNotification.getNotificationId());
         switch (edcNotification.convertInvestigationStatus()) {
             case ACKNOWLEDGED -> investigation.acknowledge(notification);
             case ACCEPTED -> investigation.accept(edcNotification.getInformation(), notification);

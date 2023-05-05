@@ -1,5 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2021,2022 Contributors to the CatenaX (ng) GitHub Organisation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -16,7 +16,6 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-
 package org.eclipse.tractusx.traceability.investigations.domain.service;
 
 import org.eclipse.tractusx.traceability.common.model.PageResult;
@@ -45,32 +44,31 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class InvestigationsReadServiceTest {
+class InvestigationServiceImplTest {
 
     @Mock
-    private InvestigationsRepository repository;
+    private InvestigationsRepository investigationsRepositoryMock;
     @InjectMocks
-    private InvestigationsReadService investigationsReadService;
-
+    private InvestigationServiceImpl investigationService;
 
     @Test
     void testFindNotPresentInvestigationThrowsException() {
         // given
-        when(repository.findById(any(InvestigationId.class))).thenReturn(Optional.empty());
+        when(investigationsRepositoryMock.findById(any(InvestigationId.class))).thenReturn(Optional.empty());
 
         // expect
-        assertThrows(InvestigationNotFoundException.class, () -> investigationsReadService.findInvestigation(0L));
+        assertThrows(InvestigationNotFoundException.class, () -> investigationService.findInvestigation(0L));
     }
 
     @Test
     void testFindExistingInvestigation() {
         // given
-        when(repository.findById(any(InvestigationId.class))).thenReturn(Optional.of(
+        when(investigationsRepositoryMock.findById(any(InvestigationId.class))).thenReturn(Optional.of(
                 InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED)
         ));
 
         // expect
-        InvestigationData investigationData = investigationsReadService.findInvestigation(0L);
+        InvestigationData investigationData = investigationService.findInvestigation(0L);
 
         // then
         assertThat(investigationData).isNotNull();
@@ -79,14 +77,14 @@ class InvestigationsReadServiceTest {
     @Test
     void testFindCreatedInvestigations() {
         // given
-        when(repository.getInvestigations(any(InvestigationSide.class), any(Pageable.class))).thenReturn(new PageResult<>(
+        when(investigationsRepositoryMock.getInvestigations(any(InvestigationSide.class), any(Pageable.class))).thenReturn(new PageResult<>(
                 List.of(
                         InvestigationTestDataFactory.createInvestigationTestData(InvestigationSide.SENDER),
                         InvestigationTestDataFactory.createInvestigationTestData(InvestigationSide.SENDER)
                 )));
 
         // expect
-        PageResult<InvestigationData> result = investigationsReadService.getCreatedInvestigations(PageRequest.of(0, 5));
+        PageResult<InvestigationData> result = investigationService.getCreatedInvestigations(PageRequest.of(0, 5));
 
         // then
         assertThat(result).isNotNull();
@@ -96,13 +94,13 @@ class InvestigationsReadServiceTest {
     @Test
     void testFindReceivedInvestigations() {
         // given
-        when(repository.getInvestigations(any(InvestigationSide.class), any(Pageable.class))).thenReturn(new PageResult<>(
+        when(investigationsRepositoryMock.getInvestigations(any(InvestigationSide.class), any(Pageable.class))).thenReturn(new PageResult<>(
                 List.of(
                         InvestigationTestDataFactory.createInvestigationTestData(InvestigationSide.RECEIVER)
                 )));
 
         // expect
-        PageResult<InvestigationData> result = investigationsReadService.getReceivedInvestigations(PageRequest.of(0, 5));
+        PageResult<InvestigationData> result = investigationService.getReceivedInvestigations(PageRequest.of(0, 5));
 
         // then
         assertThat(result).isNotNull();
@@ -112,22 +110,22 @@ class InvestigationsReadServiceTest {
     @Test
     void testLoadNotPresentInvestigationThrowsException() {
         // given
-        when(repository.findById(any(InvestigationId.class))).thenReturn(Optional.empty());
+        when(investigationsRepositoryMock.findById(any(InvestigationId.class))).thenReturn(Optional.empty());
 
         // expect
         InvestigationId investigationId = new InvestigationId(0L);
-        assertThrows(InvestigationNotFoundException.class, () -> investigationsReadService.loadInvestigation(investigationId));
+        assertThrows(InvestigationNotFoundException.class, () -> investigationService.loadInvestigationOrNotFoundException(investigationId));
     }
 
     @Test
     void testLoadExistingInvestigation() {
         // given
-        when(repository.findById(any(InvestigationId.class))).thenReturn(Optional.of(
+        when(investigationsRepositoryMock.findById(any(InvestigationId.class))).thenReturn(Optional.of(
                 InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED)
         ));
 
         // expect
-        Investigation investigation = investigationsReadService.loadInvestigation(new InvestigationId(0L));
+        Investigation investigation = investigationService.loadInvestigationOrNotFoundException(new InvestigationId(0L));
 
         // then
         assertThat(investigation).isNotNull();
@@ -136,22 +134,22 @@ class InvestigationsReadServiceTest {
     @Test
     void testLoadNotPresentInvestigationByEdcNotificationIdThrowsException() {
         // given
-        when(repository.findByEdcNotificationId(any())).thenReturn(Optional.empty());
+        when(investigationsRepositoryMock.findByEdcNotificationId(any())).thenReturn(Optional.empty());
 
         // expect
-        assertThrows(InvestigationNotFoundException.class, () -> investigationsReadService.loadInvestigationByEdcNotificationId("0"));
+        assertThrows(InvestigationNotFoundException.class, () -> investigationService.loadInvestigationByEdcNotificationIdOrNotFoundException("0"));
     }
 
     @Test
     void testLoadPresentInvestigationByEdcNotificationId() {
         // given
-        when(repository.findByEdcNotificationId(any())).thenReturn(Optional.of(
+        when(investigationsRepositoryMock.findByEdcNotificationId(any())).thenReturn(Optional.of(
                         InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED)
                 )
         );
 
         // when
-        Investigation investigation = investigationsReadService.loadInvestigationByEdcNotificationId("0");
+        Investigation investigation = investigationService.loadInvestigationByEdcNotificationIdOrNotFoundException("0");
 
         // then
         assertThat(investigation).isNotNull();

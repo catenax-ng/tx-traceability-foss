@@ -20,71 +20,102 @@
 package org.eclipse.tractusx.traceability.investigations.domain.service;
 
 import lombok.RequiredArgsConstructor;
-import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.investigations.application.request.CloseInvestigationRequest;
-import org.eclipse.tractusx.traceability.investigations.application.request.UpdateInvestigationRequest;
+import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
 import org.eclipse.tractusx.traceability.investigations.application.response.InvestigationData;
+import org.eclipse.tractusx.traceability.investigations.domain.model.Investigation;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationId;
+import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationSide;
+import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationNotFoundException;
+import org.eclipse.tractusx.traceability.investigations.domain.repository.InvestigationsRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
 
-
+@RequiredArgsConstructor
 @Service
 public class InvestigationServiceImpl implements InvestigationService {
 
-    private final InvestigationsReadService investigationsReadService;
     private final InvestigationsPublisherService investigationsPublisherService;
+    private final TraceabilityProperties traceabilityProperties;
+    private final InvestigationsRepository investigationsRepository;
 
-    @Autowired
-    public InvestigationServiceImpl(InvestigationsReadService investigationsReadService, InvestigationsPublisherService investigationsPublisherService) {
-        this.investigationsReadService = investigationsReadService;
-        this.investigationsPublisherService = investigationsPublisherService;
-    }
 
     @Override
-    public InvestigationId startInvestigation(BPN bpn, List<String> partIds, String description, Instant targetDate, String severity) {
-        return investigationsPublisherService.startInvestigation(
-                bpn, partIds, description, targetDate, Severity.fromString(severity));
+    public InvestigationId startInvestigation(List<String> partIds, String description, Instant targetDate, String severity) {
+        return investigationsPublisherService.startInvestigation(traceabilityProperties.getBpn(),
+                partIds, description, targetDate, Severity.fromString(severity));
     }
 
     @Override
     public PageResult<InvestigationData> getCreatedInvestigations(Pageable pageable) {
-        return null;
+        return getInvestigationsPageResult(pageable, InvestigationSide.SENDER);
     }
 
     @Override
     public PageResult<InvestigationData> getReceivedInvestigations(Pageable pageable) {
-        return null;
+        return getInvestigationsPageResult(pageable, InvestigationSide.RECEIVER);
     }
 
     @Override
-    public InvestigationData getInvestigation(Long investigationId) {
-        return null;
+    public InvestigationData findInvestigation(Long id) {
+        InvestigationId investigationId = new InvestigationId(id);
+        Investigation investigation = loadInvestigationOrNotFoundException(investigationId);
+        return investigation.toData();
+    }
+
+    @Override
+    public Investigation loadInvestigationOrNotFoundException(InvestigationId investigationId) {
+        return investigationsRepository.findById(investigationId)
+                .orElseThrow(() -> new InvestigationNotFoundException(investigationId));
+    }
+
+    @Override
+    public Investigation loadInvestigationByEdcNotificationIdOrNotFoundException(String edcNotificationId) {
+        return investigationsRepository.findByEdcNotificationId(edcNotificationId)
+                .orElseThrow(() -> new InvestigationNotFoundException(edcNotificationId));
     }
 
     @Override
     public void approveInvestigation(Long investigationId) {
-
+        Investigation investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
+        investigationsPublisherService.approveInvestigation(traceabilityProperties.getBpn(), investigation);
     }
 
     @Override
     public void cancelInvestigation(Long investigationId) {
-
+        Investigation investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
+        investigationsPublisherService.cancelInvestigation(traceabilityProperties.getBpn(), investigation);
     }
 
     @Override
-    public void closeInvestigation(Long investigationId, CloseInvestigationRequest closeInvestigationRequest) {
-
+    public void closeInvestigation(Long investigationId, InvestigationStatus status, String reason) {
+        Investigation investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
+        investigationsPublisherService.updateInvestigationPublisher(traceabilityProperties.getBpn(), investigation, status, reason);
     }
 
     @Override
-    public void updateInvestigation(Long investigationId, UpdateInvestigationRequest updateInvestigationRequest) {
+    public void updateInvestigation(Long investigationId, InvestigationStatus status, String reason) {
+        Investigation investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
+        investigationsPublisherService.updateInvestigationPublisher(traceabilityProperties.getBpn(), investigation, status, reason);
+    }
 
+    private PageResult<InvestigationData> getInvestigationsPageResult(Pageable pageable, InvestigationSide investigationSide) {
+        List<InvestigationData> investigationData = investigationsRepository.getInvestigations(investigationSide, pageable)
+                .content()
+                .stream()
+                .sorted(Investigation.COMPARE_BY_NEWEST_INVESTIGATION_CREATION_TIME)
+                .map(Investigation::toData)
+                .toList();
+
+        Page<InvestigationData> investigationDataPage = new PageImpl<>(investigationData, pageable, investigationsRepository.countInvestigations(investigationSide));
+
+        return new PageResult<>(investigationDataPage);
     }
 }

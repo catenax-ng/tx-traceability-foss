@@ -25,7 +25,11 @@ import org.eclipse.tractusx.traceability.common.mapper.NotificationMapper;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotificationFactory;
-import org.eclipse.tractusx.traceability.investigations.domain.model.*;
+import org.eclipse.tractusx.traceability.investigations.domain.model.AffectedPart;
+import org.eclipse.tractusx.traceability.investigations.domain.model.Investigation;
+import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
+import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
+import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
 import org.eclipse.tractusx.traceability.investigations.domain.repository.InvestigationsRepository;
 import org.eclipse.tractusx.traceability.testdata.InvestigationTestDataFactory;
 import org.eclipse.tractusx.traceability.testdata.NotificationTestDataFactory;
@@ -40,37 +44,39 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Instant;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 class InvestigationsReceiverServiceTest {
 
-	@Mock
-	private InvestigationsRepository mockRepository;
-
-	@Mock
-	private NotificationMapper mockNotificationMapper;
-
-	@Mock
-	private InvestigationMapper mockInvestigationMapper;
+    @Mock
+    private InvestigationsRepository mockRepository;
 
     @Mock
-    private InvestigationsReadService investigationsReadService;
+    private NotificationMapper mockNotificationMapper;
+
+    @Mock
+    private InvestigationMapper mockInvestigationMapper;
+
+    @Mock
+    private InvestigationService investigationService;
 
     @Mock
     private AssetService assetService;
 
-	@InjectMocks
-	private InvestigationsReceiverService service;
+    @InjectMocks
+    private InvestigationsReceiverService service;
 
 
-	@Test
-	@DisplayName("Test testHandleNotificationReceiveValidSentNotification sent is valid")
-	void testHandleNotificationReceiveValidSentNotification() {
+    @Test
+    @DisplayName("Test testHandleNotificationReceiveValidSentNotification sent is valid")
+    void testHandleNotificationReceiveValidSentNotification() {
 
-		// Given
-		List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
+        // Given
+        List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
         Notification notification = new Notification(
                 "123",
                 "id123",
@@ -92,19 +98,19 @@ class InvestigationsReceiverServiceTest {
                 true
         );
 
-		Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.RECEIVED, InvestigationStatus.RECEIVED, "recipientBPN");
-		Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
-		EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
-			"it", notification);
+        Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.RECEIVED, InvestigationStatus.RECEIVED, "recipientBPN");
+        Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
+        EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
+                "it", notification);
 
-		when(mockNotificationMapper.toNotification(edcNotification)).thenReturn(notificationTestData);
-		when(mockInvestigationMapper.toInvestigation(any(BPN.class), anyString(), any(Notification.class))).thenReturn(investigationTestData);
+        when(mockNotificationMapper.toNotification(edcNotification)).thenReturn(notificationTestData);
+        when(mockInvestigationMapper.toInvestigation(any(BPN.class), anyString(), any(Notification.class))).thenReturn(investigationTestData);
 
-		// When
-		service.handleNotificationReceive(edcNotification);
-		// Then
-		Mockito.verify(mockRepository).save(investigationTestData);
-	}
+        // When
+        service.handleNotificationReceive(edcNotification);
+        // Then
+        Mockito.verify(mockRepository).save(investigationTestData);
+    }
 
     @Test
     @DisplayName("Test testHandleNotificationUpdateValidAcknowledgeNotificationTransition is valid")
@@ -134,14 +140,13 @@ class InvestigationsReceiverServiceTest {
         );
 
 
-
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.RECEIVED, InvestigationStatus.RECEIVED, "recipientBPN");
         Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
         EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
                 "it", notification);
 
         when(mockNotificationMapper.toNotification(edcNotification)).thenReturn(notificationTestData);
-        when(investigationsReadService.loadInvestigationByEdcNotificationId(edcNotification.getNotificationId())).thenReturn(investigationTestData);
+        when(investigationService.loadInvestigationByEdcNotificationIdOrNotFoundException(edcNotification.getNotificationId())).thenReturn(investigationTestData);
 
         // When
         service.handleNotificationUpdate(edcNotification);
@@ -177,14 +182,13 @@ class InvestigationsReceiverServiceTest {
         );
 
 
-
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED, "recipientBPN");
         Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
         EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
                 "it", notification);
 
         when(mockNotificationMapper.toNotification(edcNotification)).thenReturn(notificationTestData);
-        when(investigationsReadService.loadInvestigationByEdcNotificationId(edcNotification.getNotificationId())).thenReturn(investigationTestData);
+        when(investigationService.loadInvestigationByEdcNotificationIdOrNotFoundException(edcNotification.getNotificationId())).thenReturn(investigationTestData);
 
         // When
         service.handleNotificationUpdate(edcNotification);
@@ -220,14 +224,13 @@ class InvestigationsReceiverServiceTest {
         );
 
 
-
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED, "recipientBPN");
         Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
         EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
                 "it", notification);
 
         when(mockNotificationMapper.toNotification(edcNotification)).thenReturn(notificationTestData);
-        when(investigationsReadService.loadInvestigationByEdcNotificationId(edcNotification.getNotificationId())).thenReturn(investigationTestData);
+        when(investigationService.loadInvestigationByEdcNotificationIdOrNotFoundException(edcNotification.getNotificationId())).thenReturn(investigationTestData);
 
         // When
         service.handleNotificationUpdate(edcNotification);
@@ -263,14 +266,13 @@ class InvestigationsReceiverServiceTest {
         );
 
 
-
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED, "senderBPN");
         Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
         EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
                 "it", notification);
 
         when(mockNotificationMapper.toNotification(edcNotification)).thenReturn(notificationTestData);
-        when(investigationsReadService.loadInvestigationByEdcNotificationId(edcNotification.getNotificationId())).thenReturn(investigationTestData);
+        when(investigationService.loadInvestigationByEdcNotificationIdOrNotFoundException(edcNotification.getNotificationId())).thenReturn(investigationTestData);
 
         // When
         service.handleNotificationUpdate(edcNotification);

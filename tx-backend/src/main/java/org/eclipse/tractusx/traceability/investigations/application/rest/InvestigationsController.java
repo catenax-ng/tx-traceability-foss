@@ -30,9 +30,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.common.config.FeatureFlags;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
 import org.eclipse.tractusx.traceability.investigations.application.request.CloseInvestigationRequest;
 import org.eclipse.tractusx.traceability.investigations.application.request.StartInvestigationRequest;
 import org.eclipse.tractusx.traceability.investigations.application.request.UpdateInvestigationRequest;
@@ -40,8 +40,6 @@ import org.eclipse.tractusx.traceability.investigations.application.response.Inv
 import org.eclipse.tractusx.traceability.investigations.application.response.StartInvestigationResponse;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.investigations.domain.service.InvestigationService;
-import org.eclipse.tractusx.traceability.investigations.domain.service.InvestigationsPublisherService;
-import org.eclipse.tractusx.traceability.investigations.domain.service.InvestigationsReadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -67,24 +65,13 @@ import static org.eclipse.tractusx.traceability.investigations.application.valid
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERVISOR', 'ROLE_USER')")
 @Tag(name = "Investigations")
 @Validated
+@RequiredArgsConstructor
 public class InvestigationsController {
 
-
     private final InvestigationService investigationService;
-    private final InvestigationsReadService investigationsReadService;
-    private final InvestigationsPublisherService investigationsPublisherService;
-    private final TraceabilityProperties traceabilityProperties;
+
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String API_LOG_START = "Received API call on /investigations";
-
-    public InvestigationsController(InvestigationService investigationService, InvestigationsReadService investigationsReadService,
-                                    InvestigationsPublisherService investigationsPublisherService,
-                                    TraceabilityProperties traceabilityProperties) {
-        this.investigationService = investigationService;
-        this.investigationsReadService = investigationsReadService;
-        this.investigationsPublisherService = investigationsPublisherService;
-        this.traceabilityProperties = traceabilityProperties;
-    }
 
     @Operation(operationId = "investigateAssets",
             summary = "Start investigations by part ids",
@@ -99,7 +86,7 @@ public class InvestigationsController {
     public StartInvestigationResponse investigateAssets(@RequestBody @Valid StartInvestigationRequest request) {
         logger.info(API_LOG_START + " with params: {}", request);
         return new StartInvestigationResponse(investigationService.startInvestigation(
-                traceabilityProperties.getBpn(), request.partIds(), request.description(), request.targetDate(), request.severity()).value());
+                request.partIds(), request.description(), request.targetDate(), request.severity()).value());
     }
 
     @Operation(operationId = "getCreatedInvestigations",
@@ -116,7 +103,7 @@ public class InvestigationsController {
     @GetMapping("/created")
     public PageResult<InvestigationData> getCreatedInvestigations(Pageable pageable) {
         logger.info(API_LOG_START + "/created");
-        return investigationsReadService.getCreatedInvestigations(pageable);
+        return investigationService.getCreatedInvestigations(pageable);
     }
 
     @Operation(operationId = "getReceivedInvestigations",
@@ -133,7 +120,7 @@ public class InvestigationsController {
     @GetMapping("/received")
     public PageResult<InvestigationData> getReceivedInvestigations(Pageable pageable) {
         logger.info(API_LOG_START + "/received");
-        return investigationsReadService.getReceivedInvestigations(pageable);
+        return investigationService.getReceivedInvestigations(pageable);
     }
 
     @Operation(operationId = "getInvestigation",
@@ -147,7 +134,7 @@ public class InvestigationsController {
     @GetMapping("/{investigationId}")
     public InvestigationData getInvestigation(@PathVariable Long investigationId) {
         logger.info(API_LOG_START + "/{}", investigationId);
-        return investigationsReadService.findInvestigation(investigationId);
+        return investigationService.findInvestigation(investigationId);
     }
 
     @Operation(operationId = "approveInvestigation",
@@ -162,7 +149,7 @@ public class InvestigationsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void approveInvestigation(@PathVariable Long investigationId) {
         logger.info(API_LOG_START + "/{}/approve", investigationId);
-        investigationsPublisherService.approveInvestigation(traceabilityProperties.getBpn(), investigationId);
+        investigationService.approveInvestigation(investigationId);
     }
 
     @Operation(operationId = "cancelInvestigation",
@@ -177,7 +164,7 @@ public class InvestigationsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancelInvestigation(@PathVariable Long investigationId) {
         logger.info(API_LOG_START + "/{}/cancel", investigationId);
-        investigationsPublisherService.cancelInvestigation(traceabilityProperties.getBpn(), investigationId);
+        investigationService.cancelInvestigation(investigationId);
     }
 
     @Operation(operationId = "closeInvestigation",
@@ -193,7 +180,7 @@ public class InvestigationsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void closeInvestigation(@PathVariable Long investigationId, @Valid @RequestBody CloseInvestigationRequest closeInvestigationRequest) {
         logger.info(API_LOG_START + "/{}/close with params {}", investigationId, closeInvestigationRequest);
-        investigationsPublisherService.updateInvestigationPublisher(traceabilityProperties.getBpn(), investigationId, InvestigationStatus.CLOSED, closeInvestigationRequest.reason());
+        investigationService.closeInvestigation(investigationId, InvestigationStatus.CLOSED, closeInvestigationRequest.reason());
     }
 
     @Operation(operationId = "updateInvestigation",
@@ -208,9 +195,10 @@ public class InvestigationsController {
     @PostMapping("/{investigationId}/update")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateInvestigation(@PathVariable Long investigationId, @Valid @RequestBody UpdateInvestigationRequest updateInvestigationRequest) {
+        // TODO should be part of serviceImpl not controller
         validate(updateInvestigationRequest);
         logger.info(API_LOG_START + "/{}/update with params {}", investigationId, updateInvestigationRequest);
-        investigationsPublisherService.updateInvestigationPublisher(traceabilityProperties.getBpn(), investigationId, InvestigationStatus.fromStringValue(updateInvestigationRequest.status().name()), updateInvestigationRequest.reason());
+        investigationService.updateInvestigation(investigationId, InvestigationStatus.fromStringValue(updateInvestigationRequest.status().name()), updateInvestigationRequest.reason());
     }
 }
 

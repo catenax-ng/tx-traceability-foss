@@ -55,8 +55,7 @@ import java.util.stream.Collectors;
 public class InvestigationsPublisherService {
 
     private final NotificationsService notificationsService;
-    private final InvestigationsRepository repository;
-    private final InvestigationsReadService investigationsReadService;
+    private final InvestigationsRepository investigationsRepository;
     private final AssetRepository assetRepository;
     private final AssetService assetService;
     private final BpnRepository bpnRepository;
@@ -65,14 +64,12 @@ public class InvestigationsPublisherService {
 
 
     public InvestigationsPublisherService(NotificationsService notificationsService,
-                                          InvestigationsRepository repository,
-                                          InvestigationsReadService investigationsReadService,
+                                          InvestigationsRepository investigationsRepository,
                                           AssetRepository assetRepository,
                                           AssetService assetService, BpnRepository bpnRepository,
                                           Clock clock) {
         this.notificationsService = notificationsService;
-        this.repository = repository;
-        this.investigationsReadService = investigationsReadService;
+        this.investigationsRepository = investigationsRepository;
         this.assetRepository = assetRepository;
         this.assetService = assetService;
         this.bpnRepository = bpnRepository;
@@ -102,7 +99,7 @@ public class InvestigationsPublisherService {
 
         assetService.setAssetsInvestigationStatus(investigation);
         logger.info("Start Investigation {}", investigation);
-        return repository.save(investigation);
+        return investigationsRepository.save(investigation);
     }
 
     private Notification createNotification(BPN applicationBpn, String description, Instant targetDate, Severity severity, Map.Entry<String, List<Asset>> asset, InvestigationStatus investigationStatus) {
@@ -139,27 +136,23 @@ public class InvestigationsPublisherService {
      * Cancels an ongoing investigation with the given BPN and ID.
      *
      * @param applicationBpn the BPN associated with the investigation
-     * @param id             the ID of the investigation to cancel
+     * @param investigation  the Investigation to cancel
      */
-    public void cancelInvestigation(BPN applicationBpn, Long id) {
-        InvestigationId investigationId = new InvestigationId(id);
-        Investigation investigation = investigationsReadService.loadInvestigation(investigationId);
+    public void cancelInvestigation(BPN applicationBpn, Investigation investigation) {
         investigation.cancel(applicationBpn);
         assetService.setAssetsInvestigationStatus(investigation);
-        repository.update(investigation);
+        investigationsRepository.update(investigation);
     }
 
     /**
      * Approves an ongoing investigation with the given BPN and ID to the next stage.
      *
      * @param applicationBpn the BPN associated with the investigation
-     * @param id             the ID of the investigation to send
+     * @param investigation  the Investigation to send
      */
-    public void approveInvestigation(BPN applicationBpn, Long id) {
-        InvestigationId investigationId = new InvestigationId(id);
-        Investigation investigation = investigationsReadService.loadInvestigation(investigationId);
+    public void approveInvestigation(BPN applicationBpn, Investigation investigation) {
         investigation.send(applicationBpn);
-        repository.update(investigation);
+        investigationsRepository.update(investigation);
         // For each asset within investigation a notification was created before
         investigation.getNotifications().forEach(notificationsService::asyncNotificationExecutor);
     }
@@ -167,13 +160,12 @@ public class InvestigationsPublisherService {
     /**
      * Updates an ongoing investigation with the given BPN, ID, status and reason.
      *
-     * @param applicationBpn     the BPN associated with the investigation
-     * @param investigationIdRaw the ID of the investigation to update
-     * @param status             the InvestigationStatus of the investigation to update
-     * @param reason             the reason for update of the investigation
+     * @param applicationBpn the BPN associated with the investigation
+     * @param investigation  the Investigation to update
+     * @param status         the InvestigationStatus of the investigation to update
+     * @param reason         the reason for update of the investigation
      */
-    public void updateInvestigationPublisher(BPN applicationBpn, Long investigationIdRaw, InvestigationStatus status, String reason) {
-        Investigation investigation = investigationsReadService.loadInvestigation(new InvestigationId(investigationIdRaw));
+    public void updateInvestigationPublisher(BPN applicationBpn, Investigation investigation, InvestigationStatus status, String reason) {
 
         validate(applicationBpn, status, investigation);
 
@@ -187,14 +179,14 @@ public class InvestigationsPublisherService {
                 case ACCEPTED -> investigation.accept(reason, notificationToSend);
                 case DECLINED -> investigation.decline(reason, notificationToSend);
                 case CLOSED -> investigation.close(reason, notificationToSend);
-                default -> throw new InvestigationIllegalUpdate("Can't update %s investigation with %s status".formatted(investigationIdRaw, status));
+                default -> throw new InvestigationIllegalUpdate("Can't update %s investigation with %s status".formatted(investigation.getId(), status));
             }
             logger.info("::updateInvestigationPublisher::notificationToSend {}", notificationToSend);
             investigation.addNotification(notificationToSend);
             notificationsToSend.add(notificationToSend);
         });
         assetService.setAssetsInvestigationStatus(investigation);
-        repository.update(investigation);
+        investigationsRepository.update(investigation);
         notificationsToSend.forEach(notificationsService::asyncNotificationExecutor);
     }
 
