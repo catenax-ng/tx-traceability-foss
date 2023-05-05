@@ -704,8 +704,8 @@
               }
             }
           },
-          "200": {
-            "description": "Returns the updated asset",
+          "403": {
+            "description": "Forbidden.",
             "content": {
               "application/json": {
                 "schema": {
@@ -714,8 +714,8 @@
               }
             }
           },
-          "403": {
-            "description": "Forbidden.",
+          "200": {
+            "description": "Returns the updated asset",
             "content": {
               "application/json": {
                 "schema": {
@@ -1028,8 +1028,8 @@
               }
             }
           },
-          "200": {
-            "description": "Returns dashboard data",
+          "403": {
+            "description": "Forbidden.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1038,8 +1038,8 @@
               }
             }
           },
-          "403": {
-            "description": "Forbidden.",
+          "200": {
+            "description": "Returns dashboard data",
             "content": {
               "application/json": {
                 "schema": {

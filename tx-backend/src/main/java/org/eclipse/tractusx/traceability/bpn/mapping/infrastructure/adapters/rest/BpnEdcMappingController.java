@@ -20,6 +20,8 @@
 package org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -70,7 +72,7 @@ public class BpnEdcMappingController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("")
-    public @Size(max = 1000) List<BpnEdcMapping> getBpnEdcs() {
+    public @ArraySchema(arraySchema = @Schema(description = "BPN Mappings"), maxItems = Integer.MAX_VALUE) List<BpnEdcMapping> getBpnEdcs() {
         return service.findAllBpnEdcMappings();
     }
 
@@ -84,7 +86,7 @@ public class BpnEdcMappingController {
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @PostMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public @Size(max = 1000) List<BpnEdcMapping> createBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
+    public @ArraySchema(arraySchema = @Schema(description = "BPN Mappings"), maxItems = Integer.MAX_VALUE) List<BpnEdcMapping> createBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
         logger.info("BpnEdcController [createBpnEdcUrlMappings]");
         return service.saveAllBpnEdcMappings(bpnEdcMappings);
     }
@@ -99,7 +101,7 @@ public class BpnEdcMappingController {
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @PutMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public @Size(max = 1000) List<BpnEdcMapping> updateBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
+    public @ArraySchema(arraySchema = @Schema(description = "BPN Mappings"), maxItems = Integer.MAX_VALUE)  List<BpnEdcMapping> updateBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
         logger.info("BpnEdcController [createBpnEdcUrlMappings]");
         return service.updateAllBpnEdcMappings(bpnEdcMappings);
     }
