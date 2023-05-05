@@ -20,7 +20,9 @@
 package org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -67,7 +69,10 @@ public class BpnEdcMappingController {
             tags = {"BpnEdcMapping"},
             description = "The endpoint returns a result of BPN EDC URL mappings.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found"),
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found", content = @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(arraySchema = @Schema(description = "BPN Mappings"), maxItems = Integer.MAX_VALUE)
+    )),
             @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @GetMapping("")
