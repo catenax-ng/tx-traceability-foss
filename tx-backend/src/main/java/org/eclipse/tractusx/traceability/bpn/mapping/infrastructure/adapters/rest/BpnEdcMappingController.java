@@ -28,7 +28,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Size;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMapping;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.service.BpnEdcMappingService;
 import org.slf4j.Logger;
@@ -71,7 +70,7 @@ public class BpnEdcMappingController {
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found", content = @Content(
             mediaType = "application/json",
-            array = @ArraySchema(arraySchema = @Schema(description = "BPN Mappings"), maxItems = Integer.MAX_VALUE)
+            array = @ArraySchema(arraySchema = @Schema(description = "BPN Mappings", implementation = BpnEdcMapping.class), maxItems = Integer.MAX_VALUE)
     )),
             @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
@@ -85,9 +84,12 @@ public class BpnEdcMappingController {
             tags = {"BpnEdcMapping"},
             description = "The endpoint creates BPN EDC URL mappings",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
-    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Created."),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found for BpnEdcMapping", content = @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(arraySchema = @Schema(description = "BpnEdcMapping", implementation = BpnEdcMapping.class), maxItems = Integer.MAX_VALUE)
+    )),
+            @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @PostMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public List<BpnEdcMapping> createBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
@@ -100,12 +102,14 @@ public class BpnEdcMappingController {
             tags = {"BpnEdcMapping"},
             description = "The endpoint updates BPN EDC URL mappings",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
-    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Created."),
-            @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found for BpnEdcMapping", content = @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(arraySchema = @Schema(description = "BpnEdcMapping", implementation = BpnEdcMapping.class), maxItems = Integer.MAX_VALUE)
+    )), @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @PutMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public @Size(max = 1000) List<BpnEdcMapping> updateBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
+    public List<BpnEdcMapping> updateBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
         logger.info("BpnEdcController [createBpnEdcUrlMappings]");
         return service.updateAllBpnEdcMappings(bpnEdcMappings);
     }

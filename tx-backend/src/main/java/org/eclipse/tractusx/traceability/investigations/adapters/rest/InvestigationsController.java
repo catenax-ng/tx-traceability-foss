@@ -23,13 +23,13 @@ package org.eclipse.tractusx.traceability.investigations.adapters.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Size;
 import org.eclipse.tractusx.traceability.common.config.FeatureFlags;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
@@ -105,9 +105,12 @@ public class InvestigationsController {
             tags = {"Investigations"},
             description = "The endpoint returns created investigations as paged result.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK."),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found for Asset", content = @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(arraySchema = @Schema(description = "InvestigationData", implementation = InvestigationData.class), maxItems = Integer.MAX_VALUE)
+    )),
+            @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @GetMapping("/created")
     public PageResult<InvestigationData> getCreatedInvestigations(Pageable pageable) {
         logger.info(API_LOG_START + "/created");
@@ -119,9 +122,12 @@ public class InvestigationsController {
             tags = {"Investigations"},
             description = "The endpoint returns received investigations as paged result.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK."),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found for Asset", content = @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(arraySchema = @Schema(description = "InvestigationData", implementation = InvestigationData.class), maxItems = Integer.MAX_VALUE)
+    )),
+            @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @GetMapping("/received")
     public PageResult<InvestigationData> getReceivedInvestigations(Pageable pageable) {
         logger.info(API_LOG_START + "/received");
