@@ -64,7 +64,7 @@ public class RegistryLookupMetricsController {
 		@ApiResponse(responseCode = "401", description = "Authorization failed."),
 		@ApiResponse(responseCode = "403", description = "Forbidden.")})
 	@GetMapping("/registry-lookup")
-	public PageResult<RegistryLookupMetric> metrics(@Size(max = 1000) Pageable pageable) {
+	public @Size(max = 1000) @ArraySchema(arraySchema = @Schema(description = "RegistryLookupMetric", implementation = RegistryLookupMetric.class), maxItems = Integer.MAX_VALUE) PageResult<RegistryLookupMetric> metrics(@Size(max = 1000) Pageable pageable) {
 		return registryLookupMeterRegistry.getMetrics(pageable);
 	}
 }
