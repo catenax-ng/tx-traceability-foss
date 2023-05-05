@@ -27,6 +27,7 @@ import jakarta.validation.constraints.Size;
 import org.eclipse.tractusx.traceability.investigations.adapters.rest.validation.ValidUpdateInvestigationStatus;
 
 public record UpdateInvestigationRequest(
-        @NotNull(message = "status must be present") @ValidUpdateInvestigationStatus @ApiModelProperty(example = "ACKNOWLEDGED") String status,
+        @NotNull(message = "status must be present") @ValidUpdateInvestigationStatus @ApiModelProperty(example = "ACKNOWLEDGED",
+                allowableValues = "ACKNOWLEDGED, ACCEPTED, DECLINED") String status,
         @ApiModelProperty(example = "The reason.") String reason) {
 }
