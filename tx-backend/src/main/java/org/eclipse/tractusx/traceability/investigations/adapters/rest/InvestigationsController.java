@@ -27,6 +27,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import org.eclipse.tractusx.traceability.common.config.FeatureFlags;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
@@ -120,7 +121,7 @@ public class InvestigationsController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("/received")
-    public PageResult<InvestigationData> getReceivedInvestigations(Pageable pageable) {
+    public @Size(max = 1000) PageResult<InvestigationData> getReceivedInvestigations(Pageable pageable) {
         logger.info(API_LOG_START + "/received");
         return investigationsReadService.getReceivedInvestigations(pageable);
     }

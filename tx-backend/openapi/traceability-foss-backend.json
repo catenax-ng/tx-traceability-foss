@@ -1157,8 +1157,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Returns the asset by childId",
+          "401": {
+            "description": "Authorization failed.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1167,8 +1167,8 @@
               }
             }
           },
-          "401": {
-            "description": "Authorization failed.",
+          "200": {
+            "description": "Returns the asset by childId",
             "content": {
               "application/json": {
                 "schema": {
@@ -1677,6 +1677,8 @@
             "type": "string"
           },
           "assetIds": {
+            "maxItems": 1000,
+            "minItems": 0,
             "type": "array",
             "items": {
               "type": "string"

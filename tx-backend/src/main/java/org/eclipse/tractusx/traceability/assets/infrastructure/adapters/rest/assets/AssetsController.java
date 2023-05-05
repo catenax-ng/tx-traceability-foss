@@ -29,6 +29,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import jakarta.ws.rs.QueryParam;
 import org.eclipse.tractusx.traceability.assets.application.AssetFacade;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
@@ -84,7 +85,7 @@ public class AssetsController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("")
-    public PageResult<Asset> assets(Pageable pageable, @QueryParam("owner") Owner owner) {
+    public @Size(max = 1000) PageResult<Asset> assets(Pageable pageable, @QueryParam("owner") Owner owner) {
         return assetRepository.getAssets(pageable, owner);
     }
 
@@ -159,7 +160,7 @@ public class AssetsController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @PostMapping("/detail-information")
-    public List<Asset> getDetailInformation(@Valid @RequestBody GetDetailInformationRequest getDetailInformationRequest) {
+    public @Size(max = 1000) List<Asset> getDetailInformation(@Valid @RequestBody GetDetailInformationRequest getDetailInformationRequest) {
         return assetRepository.getAssetsById(getDetailInformationRequest.assetIds());
     }
 }
