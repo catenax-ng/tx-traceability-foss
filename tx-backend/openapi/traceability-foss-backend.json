@@ -607,6 +607,100 @@
           "required": true
         },
         "responses": {
+          "200": {
+            "description": "Returns list of found assets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "description": "Assets",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "idShort": {
+                        "type": "string"
+                      },
+                      "nameAtManufacturer": {
+                        "type": "string"
+                      },
+                      "manufacturerPartId": {
+                        "type": "string"
+                      },
+                      "partInstanceId": {
+                        "type": "string"
+                      },
+                      "manufacturerId": {
+                        "type": "string"
+                      },
+                      "batchId": {
+                        "type": "string"
+                      },
+                      "manufacturerName": {
+                        "type": "string"
+                      },
+                      "nameAtCustomer": {
+                        "type": "string"
+                      },
+                      "customerPartId": {
+                        "type": "string"
+                      },
+                      "manufacturingDate": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "manufacturingCountry": {
+                        "type": "string"
+                      },
+                      "owner": {
+                        "type": "string",
+                        "enum": [
+                          "SUPPLIER",
+                          "CUSTOMER",
+                          "OWN"
+                        ]
+                      },
+                      "childDescriptions": {
+                        "maxItems": 2147483647,
+                        "type": "array",
+                        "description": "Child relationships",
+                        "items": {
+                          "$ref": "#/components/schemas/Descriptions"
+                        }
+                      },
+                      "parentDescriptions": {
+                        "maxItems": 2147483647,
+                        "type": "array",
+                        "description": "Parent relationships",
+                        "items": {
+                          "$ref": "#/components/schemas/Descriptions"
+                        }
+                      },
+                      "underInvestigation": {
+                        "type": "boolean"
+                      },
+                      "qualityType": {
+                        "type": "string",
+                        "enum": [
+                          "Ok",
+                          "Minor",
+                          "Major",
+                          "Critical",
+                          "LifeThreatening"
+                        ]
+                      },
+                      "van": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "401": {
             "description": "Authorization failed.",
             "content": {
@@ -614,18 +708,13 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Asset"
+                    "maxItems": 2147483647,
+                    "type": "array",
+                    "description": "Assets",
+                    "items": {
+                      "$ref": "#/components/schemas/Asset"
+                    }
                   }
-                }
-              }
-            }
-          },
-          "200": {
-            "description": "Returns list of found assets",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Asset"
                 }
               }
             }
@@ -637,7 +726,12 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Asset"
+                    "maxItems": 2147483647,
+                    "type": "array",
+                    "description": "Assets",
+                    "items": {
+                      "$ref": "#/components/schemas/Asset"
+                    }
                   }
                 }
               }
@@ -677,7 +771,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Asset"
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "description": "Assets",
+                  "items": {
+                    "$ref": "#/components/schemas/Asset"
+                  }
                 }
               }
             }
@@ -687,7 +786,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Asset"
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "description": "Assets",
+                  "items": {
+                    "$ref": "#/components/schemas/Asset"
+                  }
                 }
               }
             }
@@ -697,7 +801,91 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Asset"
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "description": "Assets",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "idShort": {
+                        "type": "string"
+                      },
+                      "nameAtManufacturer": {
+                        "type": "string"
+                      },
+                      "manufacturerPartId": {
+                        "type": "string"
+                      },
+                      "partInstanceId": {
+                        "type": "string"
+                      },
+                      "manufacturerId": {
+                        "type": "string"
+                      },
+                      "batchId": {
+                        "type": "string"
+                      },
+                      "manufacturerName": {
+                        "type": "string"
+                      },
+                      "nameAtCustomer": {
+                        "type": "string"
+                      },
+                      "customerPartId": {
+                        "type": "string"
+                      },
+                      "manufacturingDate": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "manufacturingCountry": {
+                        "type": "string"
+                      },
+                      "owner": {
+                        "type": "string",
+                        "enum": [
+                          "SUPPLIER",
+                          "CUSTOMER",
+                          "OWN"
+                        ]
+                      },
+                      "childDescriptions": {
+                        "maxItems": 2147483647,
+                        "type": "array",
+                        "description": "Child relationships",
+                        "items": {
+                          "$ref": "#/components/schemas/Descriptions"
+                        }
+                      },
+                      "parentDescriptions": {
+                        "maxItems": 2147483647,
+                        "type": "array",
+                        "description": "Parent relationships",
+                        "items": {
+                          "$ref": "#/components/schemas/Descriptions"
+                        }
+                      },
+                      "underInvestigation": {
+                        "type": "boolean"
+                      },
+                      "qualityType": {
+                        "type": "string",
+                        "enum": [
+                          "Ok",
+                          "Minor",
+                          "Major",
+                          "Critical",
+                          "LifeThreatening"
+                        ]
+                      },
+                      "van": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -744,17 +932,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Asset"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Asset"
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "description": "Assets",
+                  "items": {
+                    "$ref": "#/components/schemas/Asset"
+                  }
                 }
               }
             }
@@ -764,7 +947,106 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Asset"
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "description": "Assets",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "idShort": {
+                        "type": "string"
+                      },
+                      "nameAtManufacturer": {
+                        "type": "string"
+                      },
+                      "manufacturerPartId": {
+                        "type": "string"
+                      },
+                      "partInstanceId": {
+                        "type": "string"
+                      },
+                      "manufacturerId": {
+                        "type": "string"
+                      },
+                      "batchId": {
+                        "type": "string"
+                      },
+                      "manufacturerName": {
+                        "type": "string"
+                      },
+                      "nameAtCustomer": {
+                        "type": "string"
+                      },
+                      "customerPartId": {
+                        "type": "string"
+                      },
+                      "manufacturingDate": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "manufacturingCountry": {
+                        "type": "string"
+                      },
+                      "owner": {
+                        "type": "string",
+                        "enum": [
+                          "SUPPLIER",
+                          "CUSTOMER",
+                          "OWN"
+                        ]
+                      },
+                      "childDescriptions": {
+                        "maxItems": 2147483647,
+                        "type": "array",
+                        "description": "Child relationships",
+                        "items": {
+                          "$ref": "#/components/schemas/Descriptions"
+                        }
+                      },
+                      "parentDescriptions": {
+                        "maxItems": 2147483647,
+                        "type": "array",
+                        "description": "Parent relationships",
+                        "items": {
+                          "$ref": "#/components/schemas/Descriptions"
+                        }
+                      },
+                      "underInvestigation": {
+                        "type": "boolean"
+                      },
+                      "qualityType": {
+                        "type": "string",
+                        "enum": [
+                          "Ok",
+                          "Minor",
+                          "Major",
+                          "Critical",
+                          "LifeThreatening"
+                        ]
+                      },
+                      "van": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "description": "Assets",
+                  "items": {
+                    "$ref": "#/components/schemas/Asset"
+                  }
                 }
               }
             }
@@ -891,7 +1173,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InvestigationData"
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "description": "Investigations",
+                  "items": {
+                    "$ref": "#/components/schemas/InvestigationData"
+                  }
                 }
               }
             }
@@ -901,7 +1188,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InvestigationData"
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "description": "Investigations",
+                  "items": {
+                    "$ref": "#/components/schemas/InvestigationData"
+                  }
                 }
               }
             }
@@ -911,7 +1203,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InvestigationData"
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "description": "Investigations",
+                  "items": {
+                    "$ref": "#/components/schemas/InvestigationData"
+                  }
                 }
               }
             }
@@ -1063,8 +1360,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Returns dashboard data",
+          "401": {
+            "description": "Authorization failed.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1073,8 +1370,8 @@
               }
             }
           },
-          "401": {
-            "description": "Authorization failed.",
+          "200": {
+            "description": "Returns dashboard data",
             "content": {
               "application/json": {
                 "schema": {
@@ -1207,17 +1504,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Asset"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Asset"
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "description": "Assets",
+                  "items": {
+                    "$ref": "#/components/schemas/Asset"
+                  }
                 }
               }
             }
@@ -1227,7 +1519,106 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Asset"
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "description": "Assets",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "idShort": {
+                        "type": "string"
+                      },
+                      "nameAtManufacturer": {
+                        "type": "string"
+                      },
+                      "manufacturerPartId": {
+                        "type": "string"
+                      },
+                      "partInstanceId": {
+                        "type": "string"
+                      },
+                      "manufacturerId": {
+                        "type": "string"
+                      },
+                      "batchId": {
+                        "type": "string"
+                      },
+                      "manufacturerName": {
+                        "type": "string"
+                      },
+                      "nameAtCustomer": {
+                        "type": "string"
+                      },
+                      "customerPartId": {
+                        "type": "string"
+                      },
+                      "manufacturingDate": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "manufacturingCountry": {
+                        "type": "string"
+                      },
+                      "owner": {
+                        "type": "string",
+                        "enum": [
+                          "SUPPLIER",
+                          "CUSTOMER",
+                          "OWN"
+                        ]
+                      },
+                      "childDescriptions": {
+                        "maxItems": 2147483647,
+                        "type": "array",
+                        "description": "Child relationships",
+                        "items": {
+                          "$ref": "#/components/schemas/Descriptions"
+                        }
+                      },
+                      "parentDescriptions": {
+                        "maxItems": 2147483647,
+                        "type": "array",
+                        "description": "Parent relationships",
+                        "items": {
+                          "$ref": "#/components/schemas/Descriptions"
+                        }
+                      },
+                      "underInvestigation": {
+                        "type": "boolean"
+                      },
+                      "qualityType": {
+                        "type": "string",
+                        "enum": [
+                          "Ok",
+                          "Minor",
+                          "Major",
+                          "Critical",
+                          "LifeThreatening"
+                        ]
+                      },
+                      "van": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "description": "Assets",
+                  "items": {
+                    "$ref": "#/components/schemas/Asset"
+                  }
                 }
               }
             }
@@ -1488,6 +1879,7 @@
             "maxItems": 100,
             "minItems": 1,
             "type": "array",
+            "description": "Assets",
             "items": {
               "type": "string"
             }
@@ -1725,6 +2117,7 @@
             "maxItems": 1000,
             "minItems": 0,
             "type": "array",
+            "description": "assetIds",
             "items": {
               "type": "string"
             }
@@ -1773,7 +2166,12 @@
           "content": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/InvestigationData"
+              "maxItems": 2147483647,
+              "type": "array",
+              "description": "Investigations",
+              "items": {
+                "$ref": "#/components/schemas/InvestigationData"
+              }
             }
           },
           "page": {
@@ -1820,7 +2218,12 @@
           "content": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Asset"
+              "maxItems": 2147483647,
+              "type": "array",
+              "description": "Assets",
+              "items": {
+                "$ref": "#/components/schemas/Asset"
+              }
             }
           },
           "page": {

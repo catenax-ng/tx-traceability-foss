@@ -72,7 +72,7 @@ public class BpnEdcMappingController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("")
-    public @ArraySchema(arraySchema = @Schema(description = "BPN Mappings"), maxItems = Integer.MAX_VALUE) List<BpnEdcMapping> getBpnEdcs() {
+    public List<BpnEdcMapping> getBpnEdcs() {
         return service.findAllBpnEdcMappings();
     }
 
@@ -86,7 +86,7 @@ public class BpnEdcMappingController {
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @PostMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public @ArraySchema(arraySchema = @Schema(description = "BPN Mappings"), maxItems = Integer.MAX_VALUE) List<BpnEdcMapping> createBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
+    public List<BpnEdcMapping> createBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
         logger.info("BpnEdcController [createBpnEdcUrlMappings]");
         return service.saveAllBpnEdcMappings(bpnEdcMappings);
     }
@@ -101,7 +101,7 @@ public class BpnEdcMappingController {
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @PutMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public @ArraySchema(arraySchema = @Schema(description = "BPN Mappings"), maxItems = Integer.MAX_VALUE) @Size(max = Integer.MAX_VALUE) List<BpnEdcMapping> updateBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
+    public List<BpnEdcMapping> updateBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
         logger.info("BpnEdcController [createBpnEdcUrlMappings]");
         return service.updateAllBpnEdcMappings(bpnEdcMappings);
     }

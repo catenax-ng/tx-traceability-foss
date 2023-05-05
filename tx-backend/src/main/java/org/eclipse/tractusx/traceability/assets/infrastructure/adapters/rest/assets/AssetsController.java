@@ -85,7 +85,7 @@ public class AssetsController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("")
-    public @Size(max = 1000) PageResult<Asset> assets(Pageable pageable, @QueryParam("owner") Owner owner) {
+    public PageResult<Asset> assets(Pageable pageable, @QueryParam("owner") Owner owner) {
         return assetRepository.getAssets(pageable, owner);
     }
 

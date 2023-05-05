@@ -22,7 +22,6 @@ package org.eclipse.tractusx.traceability.bpn.mapping.domain.model;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Size;
 
 @ArraySchema(arraySchema = @Schema(description = "BPN Mappings"), maxItems = Integer.MAX_VALUE)
 public record BpnEdcMapping(@ApiModelProperty(example = "BPNL00000003CSGV") String bpn,

@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
-
+@ArraySchema(arraySchema = @Schema(description = "Assets"), maxItems = Integer.MAX_VALUE)
 public final class Asset {
     private static final Logger logger = LoggerFactory.getLogger(Asset.class);
 	@ApiModelProperty(example = "urn:uuid:ceb6b964-5779-49c1-b5e9-0ee70528fcbd")
