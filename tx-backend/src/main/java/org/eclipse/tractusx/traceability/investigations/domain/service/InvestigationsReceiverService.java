@@ -21,6 +21,7 @@
 
 package org.eclipse.tractusx.traceability.investigations.domain.service;
 
+import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
 import org.eclipse.tractusx.traceability.common.mapper.InvestigationMapper;
 import org.eclipse.tractusx.traceability.common.mapper.NotificationMapper;
@@ -30,6 +31,7 @@ import org.eclipse.tractusx.traceability.investigations.domain.model.Investigati
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationId;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationIllegalUpdate;
+import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationNotFoundException;
 import org.eclipse.tractusx.traceability.investigations.domain.repository.InvestigationsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,38 +39,30 @@ import org.springframework.stereotype.Component;
 
 import java.lang.invoke.MethodHandles;
 
+@RequiredArgsConstructor
 @Component
 public class InvestigationsReceiverService {
 
-    private final InvestigationsRepository repository;
-    private final InvestigationService investigationService;
+    private final InvestigationsRepository investigationsRepository;
     private final NotificationMapper notificationMapper;
     private final AssetService assetService;
     private final InvestigationMapper investigationMapper;
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public InvestigationsReceiverService(InvestigationsRepository repository,
-                                         InvestigationService investigationService,
-                                         NotificationMapper notificationMapper, AssetService assetService, InvestigationMapper investigationMapper) {
-        this.repository = repository;
-        this.investigationService = investigationService;
-        this.notificationMapper = notificationMapper;
-        this.assetService = assetService;
-        this.investigationMapper = investigationMapper;
-    }
-
     public void handleNotificationReceive(EDCNotification edcNotification) {
         BPN investigationCreatorBPN = BPN.of(edcNotification.getSenderBPN());
         Notification notification = notificationMapper.toNotification(edcNotification);
         Investigation investigation = investigationMapper.toInvestigation(investigationCreatorBPN, edcNotification.getInformation(), notification);
-        InvestigationId investigationId = repository.save(investigation);
+        InvestigationId investigationId = investigationsRepository.save(investigation);
         assetService.setAssetsInvestigationStatus(investigation);
         logger.info("Stored received edcNotification in investigation with id {}", investigationId);
     }
 
     public void handleNotificationUpdate(EDCNotification edcNotification) {
         Notification notification = notificationMapper.toNotification(edcNotification);
-        Investigation investigation = investigationService.loadInvestigationByEdcNotificationIdOrNotFoundException(edcNotification.getNotificationId());
+        Investigation investigation = investigationsRepository.findByEdcNotificationId(edcNotification.getNotificationId())
+                .orElseThrow(() -> new InvestigationNotFoundException(edcNotification.getNotificationId()));
+
         switch (edcNotification.convertInvestigationStatus()) {
             case ACKNOWLEDGED -> investigation.acknowledge(notification);
             case ACCEPTED -> investigation.accept(edcNotification.getInformation(), notification);
@@ -78,7 +72,7 @@ public class InvestigationsReceiverService {
         }
         investigation.addNotification(notification);
         assetService.setAssetsInvestigationStatus(investigation);
-        InvestigationId investigationId = repository.update(investigation);
+        InvestigationId investigationId = investigationsRepository.update(investigation);
         logger.info("Stored update edcNotification in investigation with id {}", investigationId);
     }
 }

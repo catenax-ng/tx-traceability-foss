@@ -180,7 +180,7 @@ public class InvestigationsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void closeInvestigation(@PathVariable Long investigationId, @Valid @RequestBody CloseInvestigationRequest closeInvestigationRequest) {
         logger.info(API_LOG_START + "/{}/close with params {}", investigationId, closeInvestigationRequest);
-        investigationService.closeInvestigation(investigationId, InvestigationStatus.CLOSED, closeInvestigationRequest.reason());
+        investigationService.updateInvestigation(investigationId, InvestigationStatus.CLOSED, closeInvestigationRequest.reason());
     }
 
     @Operation(operationId = "updateInvestigation",

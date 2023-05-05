@@ -23,6 +23,7 @@ import org.eclipse.tractusx.traceability.assets.domain.ports.AssetRepository;
 import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
 import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
 import org.eclipse.tractusx.traceability.common.model.BPN;
+import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
 import org.eclipse.tractusx.traceability.investigations.domain.model.AffectedPart;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Investigation;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationId;
@@ -78,6 +79,9 @@ class InvestigationsPublisherServiceTest {
     @Mock
     private BpnRepository bpnRepository;
 
+    @Mock
+    private TraceabilityProperties traceabilityProperties;
+
     @Test
     void testStartInvestigationSuccessful() {
         // Given
@@ -85,11 +89,9 @@ class InvestigationsPublisherServiceTest {
         when(assetRepository.getAssetsById(Arrays.asList("asset-1", "asset-2"))).thenReturn(List.of(AssetTestDataFactory.createAssetTestData()));
         when(repository.save(any(Investigation.class))).thenReturn(investigation.getId());
         when(bpnRepository.findManufacturerName(anyString())).thenReturn(Optional.empty());
-
+        when(traceabilityProperties.getBpn()).thenReturn(BPN.of("bpn-123"));
         // When
-        investigationsPublisherService.startInvestigation(
-                BPN.of("bpn-123"),
-                Arrays.asList("asset-1", "asset-2"), "Test investigation", Instant.parse("2022-03-01T12:00:00Z"), Severity.MINOR);
+        investigationsPublisherService.startInvestigation(Arrays.asList("asset-1", "asset-2"), "Test investigation", Instant.parse("2022-03-01T12:00:00Z"), Severity.MINOR);
 
         // Then
         verify(assetRepository).getAssetsById(Arrays.asList("asset-1", "asset-2"));
@@ -104,9 +106,9 @@ class InvestigationsPublisherServiceTest {
         Long id = 1L;
         Investigation investigation = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.CREATED, InvestigationStatus.CREATED);
         when(repository.update(investigation)).thenReturn(new InvestigationId(id));
-
+        when(traceabilityProperties.getBpn()).thenReturn(bpn);
         // When
-        investigationsPublisherService.cancelInvestigation(bpn, investigation);
+        investigationsPublisherService.cancelInvestigation(investigation);
 
         // Then
         verify(repository).update(investigation);
@@ -121,9 +123,9 @@ class InvestigationsPublisherServiceTest {
         InvestigationId investigationId = new InvestigationId(1L);
         Investigation investigation = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.CREATED, InvestigationStatus.CREATED);
         when(repository.update(investigation)).thenReturn(investigationId);
-
+        when(traceabilityProperties.getBpn()).thenReturn(bpn);
         // When
-        investigationsPublisherService.approveInvestigation(bpn, investigation);
+        investigationsPublisherService.approveInvestigation(investigation);
 
         // Then
         verify(repository).update(investigation);
@@ -187,9 +189,9 @@ class InvestigationsPublisherServiceTest {
         notifications.add(notification2);
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestDataWithNotificationList(InvestigationStatus.RECEIVED, "recipientBPN", notifications);
-
+        when(traceabilityProperties.getBpn()).thenReturn(bpn);
         // When
-        investigationsPublisherService.updateInvestigationPublisher(bpn, investigationTestData, status, reason);
+        investigationsPublisherService.updateInvestigationPublisher(investigationTestData, status, reason);
 
         // Then
         Mockito.verify(repository).update(investigationTestData);
@@ -253,9 +255,9 @@ class InvestigationsPublisherServiceTest {
         notifications.add(notification2);
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestDataWithNotificationList(InvestigationStatus.ACKNOWLEDGED, "recipientBPN", notifications);
-
+        when(traceabilityProperties.getBpn()).thenReturn(bpn);
         // When
-        investigationsPublisherService.updateInvestigationPublisher(bpn, investigationTestData, status, reason);
+        investigationsPublisherService.updateInvestigationPublisher(investigationTestData, status, reason);
 
         // Then
         Mockito.verify(repository).update(investigationTestData);
@@ -319,9 +321,9 @@ class InvestigationsPublisherServiceTest {
         notifications.add(notification2);
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestDataWithNotificationList(InvestigationStatus.ACKNOWLEDGED, "recipientBPN", notifications);
-
+        when(traceabilityProperties.getBpn()).thenReturn(bpn);
         // When
-        investigationsPublisherService.updateInvestigationPublisher(bpn, investigationTestData, status, reason);
+        investigationsPublisherService.updateInvestigationPublisher(investigationTestData, status, reason);
 
         // Then
         Mockito.verify(repository).update(investigationTestData);
@@ -385,9 +387,9 @@ class InvestigationsPublisherServiceTest {
         notifications.add(notification2);
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestDataWithNotificationList(InvestigationStatus.ACCEPTED, "senderBPN", notifications);
-
+        when(traceabilityProperties.getBpn()).thenReturn(bpn);
         // When
-        investigationsPublisherService.updateInvestigationPublisher(bpn, investigationTestData, status, reason);
+        investigationsPublisherService.updateInvestigationPublisher(investigationTestData, status, reason);
 
         // Then
         Mockito.verify(repository).update(investigationTestData);
@@ -430,9 +432,9 @@ class InvestigationsPublisherServiceTest {
         notifications.add(notification);
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestDataWithNotificationList(InvestigationStatus.SENT, "recipientBPN", notifications);
-
+        when(traceabilityProperties.getBpn()).thenReturn(bpn);
         // When
-        assertThrows(InvestigationIllegalUpdate.class, () -> investigationsPublisherService.updateInvestigationPublisher(bpn, investigationTestData, status, reason));
+        assertThrows(InvestigationIllegalUpdate.class, () -> investigationsPublisherService.updateInvestigationPublisher(investigationTestData, status, reason));
 
         // Then
         Mockito.verify(repository, never()).update(investigationTestData);

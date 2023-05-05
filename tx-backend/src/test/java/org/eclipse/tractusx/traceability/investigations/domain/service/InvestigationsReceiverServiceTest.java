@@ -43,6 +43,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
@@ -60,9 +61,6 @@ class InvestigationsReceiverServiceTest {
 
     @Mock
     private InvestigationMapper mockInvestigationMapper;
-
-    @Mock
-    private InvestigationService investigationService;
 
     @Mock
     private AssetService assetService;
@@ -146,7 +144,7 @@ class InvestigationsReceiverServiceTest {
                 "it", notification);
 
         when(mockNotificationMapper.toNotification(edcNotification)).thenReturn(notificationTestData);
-        when(investigationService.loadInvestigationByEdcNotificationIdOrNotFoundException(edcNotification.getNotificationId())).thenReturn(investigationTestData);
+        when(mockRepository.findByEdcNotificationId(edcNotification.getNotificationId())).thenReturn(Optional.of(investigationTestData));
 
         // When
         service.handleNotificationUpdate(edcNotification);
@@ -188,7 +186,7 @@ class InvestigationsReceiverServiceTest {
                 "it", notification);
 
         when(mockNotificationMapper.toNotification(edcNotification)).thenReturn(notificationTestData);
-        when(investigationService.loadInvestigationByEdcNotificationIdOrNotFoundException(edcNotification.getNotificationId())).thenReturn(investigationTestData);
+        when(mockRepository.findByEdcNotificationId(edcNotification.getNotificationId())).thenReturn(Optional.of(investigationTestData));
 
         // When
         service.handleNotificationUpdate(edcNotification);
@@ -230,7 +228,7 @@ class InvestigationsReceiverServiceTest {
                 "it", notification);
 
         when(mockNotificationMapper.toNotification(edcNotification)).thenReturn(notificationTestData);
-        when(investigationService.loadInvestigationByEdcNotificationIdOrNotFoundException(edcNotification.getNotificationId())).thenReturn(investigationTestData);
+        when(mockRepository.findByEdcNotificationId(edcNotification.getNotificationId())).thenReturn(Optional.of(investigationTestData));
 
         // When
         service.handleNotificationUpdate(edcNotification);
@@ -272,7 +270,7 @@ class InvestigationsReceiverServiceTest {
                 "it", notification);
 
         when(mockNotificationMapper.toNotification(edcNotification)).thenReturn(notificationTestData);
-        when(investigationService.loadInvestigationByEdcNotificationIdOrNotFoundException(edcNotification.getNotificationId())).thenReturn(investigationTestData);
+        when(mockRepository.findByEdcNotificationId(edcNotification.getNotificationId())).thenReturn(Optional.of(investigationTestData));
 
         // When
         service.handleNotificationUpdate(edcNotification);

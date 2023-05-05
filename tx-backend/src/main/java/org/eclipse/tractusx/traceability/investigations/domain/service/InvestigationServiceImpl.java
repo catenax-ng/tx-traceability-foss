@@ -21,7 +21,6 @@ package org.eclipse.tractusx.traceability.investigations.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
 import org.eclipse.tractusx.traceability.investigations.application.response.InvestigationData;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Investigation;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationId;
@@ -43,14 +42,13 @@ import java.util.List;
 public class InvestigationServiceImpl implements InvestigationService {
 
     private final InvestigationsPublisherService investigationsPublisherService;
-    private final TraceabilityProperties traceabilityProperties;
+
     private final InvestigationsRepository investigationsRepository;
 
 
     @Override
     public InvestigationId startInvestigation(List<String> partIds, String description, Instant targetDate, String severity) {
-        return investigationsPublisherService.startInvestigation(traceabilityProperties.getBpn(),
-                partIds, description, targetDate, Severity.fromString(severity));
+        return investigationsPublisherService.startInvestigation(partIds, description, targetDate, Severity.fromString(severity));
     }
 
     @Override
@@ -85,25 +83,19 @@ public class InvestigationServiceImpl implements InvestigationService {
     @Override
     public void approveInvestigation(Long investigationId) {
         Investigation investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
-        investigationsPublisherService.approveInvestigation(traceabilityProperties.getBpn(), investigation);
+        investigationsPublisherService.approveInvestigation(investigation);
     }
 
     @Override
     public void cancelInvestigation(Long investigationId) {
         Investigation investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
-        investigationsPublisherService.cancelInvestigation(traceabilityProperties.getBpn(), investigation);
-    }
-
-    @Override
-    public void closeInvestigation(Long investigationId, InvestigationStatus status, String reason) {
-        Investigation investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
-        investigationsPublisherService.updateInvestigationPublisher(traceabilityProperties.getBpn(), investigation, status, reason);
+        investigationsPublisherService.cancelInvestigation(investigation);
     }
 
     @Override
     public void updateInvestigation(Long investigationId, InvestigationStatus status, String reason) {
         Investigation investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
-        investigationsPublisherService.updateInvestigationPublisher(traceabilityProperties.getBpn(), investigation, status, reason);
+        investigationsPublisherService.updateInvestigationPublisher(investigation, status, reason);
     }
 
     private PageResult<InvestigationData> getInvestigationsPageResult(Pageable pageable, InvestigationSide investigationSide) {

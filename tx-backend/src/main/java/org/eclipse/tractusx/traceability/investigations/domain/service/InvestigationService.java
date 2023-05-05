@@ -45,7 +45,5 @@ public interface InvestigationService {
 
     void cancelInvestigation(Long investigationId);
 
-    void closeInvestigation(Long investigationId, InvestigationStatus investigationStatus, String reason);
-
     void updateInvestigation(Long investigationId, InvestigationStatus investigationStatus, String reason);
 }

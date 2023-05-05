@@ -21,11 +21,13 @@
 
 package org.eclipse.tractusx.traceability.investigations.domain.service;
 
+import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.ports.AssetRepository;
 import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
 import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
 import org.eclipse.tractusx.traceability.common.model.BPN;
+import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
 import org.eclipse.tractusx.traceability.investigations.domain.model.AffectedPart;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Investigation;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationId;
@@ -51,9 +53,11 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 public class InvestigationsPublisherService {
 
+    private final TraceabilityProperties traceabilityProperties;
     private final NotificationsService notificationsService;
     private final InvestigationsRepository investigationsRepository;
     private final AssetRepository assetRepository;
@@ -63,38 +67,25 @@ public class InvestigationsPublisherService {
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 
-    public InvestigationsPublisherService(NotificationsService notificationsService,
-                                          InvestigationsRepository investigationsRepository,
-                                          AssetRepository assetRepository,
-                                          AssetService assetService, BpnRepository bpnRepository,
-                                          Clock clock) {
-        this.notificationsService = notificationsService;
-        this.investigationsRepository = investigationsRepository;
-        this.assetRepository = assetRepository;
-        this.assetService = assetService;
-        this.bpnRepository = bpnRepository;
-        this.clock = clock;
-    }
-
     /**
      * Starts a new investigation with the given BPN, asset IDs and description.
      *
-     * @param applicationBpn the BPN to use for the investigation
-     * @param assetIds       the IDs of the assets to investigate
-     * @param description    the description of the investigation
-     * @param targetDate     the targetDate of the investigation
-     * @param severity       the severity of the investigation
+     * @param assetIds    the IDs of the assets to investigate
+     * @param description the description of the investigation
+     * @param targetDate  the targetDate of the investigation
+     * @param severity    the severity of the investigation
      * @return the ID of the newly created investigation
      */
-    public InvestigationId startInvestigation(BPN applicationBpn, List<String> assetIds, String description, Instant targetDate, Severity severity) {
-        Investigation investigation = Investigation.startInvestigation(clock.instant(), applicationBpn, description);
+    public InvestigationId startInvestigation(List<String> assetIds, String description, Instant targetDate, Severity severity) {
+        BPN applicationBPN = traceabilityProperties.getBpn();
+        Investigation investigation = Investigation.startInvestigation(clock.instant(), applicationBPN, description);
 
         Map<String, List<Asset>> assetsByBPN = assetRepository.getAssetsById(assetIds).stream().collect(Collectors.groupingBy(Asset::getManufacturerId));
 
         assetsByBPN
                 .entrySet()
                 .stream()
-                .map(it -> createNotification(applicationBpn, description, targetDate, severity, it, InvestigationStatus.CREATED))
+                .map(it -> createNotification(applicationBPN, description, targetDate, severity, it, InvestigationStatus.CREATED))
                 .forEach(investigation::addNotification);
 
         assetService.setAssetsInvestigationStatus(investigation);
@@ -135,11 +126,11 @@ public class InvestigationsPublisherService {
     /**
      * Cancels an ongoing investigation with the given BPN and ID.
      *
-     * @param applicationBpn the BPN associated with the investigation
-     * @param investigation  the Investigation to cancel
+     * @param investigation the Investigation to cancel
      */
-    public void cancelInvestigation(BPN applicationBpn, Investigation investigation) {
-        investigation.cancel(applicationBpn);
+    public void cancelInvestigation(Investigation investigation) {
+        BPN applicationBPN = traceabilityProperties.getBpn();
+        investigation.cancel(applicationBPN);
         assetService.setAssetsInvestigationStatus(investigation);
         investigationsRepository.update(investigation);
     }
@@ -147,11 +138,11 @@ public class InvestigationsPublisherService {
     /**
      * Approves an ongoing investigation with the given BPN and ID to the next stage.
      *
-     * @param applicationBpn the BPN associated with the investigation
-     * @param investigation  the Investigation to send
+     * @param investigation the Investigation to send
      */
-    public void approveInvestigation(BPN applicationBpn, Investigation investigation) {
-        investigation.send(applicationBpn);
+    public void approveInvestigation(Investigation investigation) {
+        BPN applicationBPN = traceabilityProperties.getBpn();
+        investigation.send(applicationBPN);
         investigationsRepository.update(investigation);
         // For each asset within investigation a notification was created before
         investigation.getNotifications().forEach(notificationsService::asyncNotificationExecutor);
@@ -160,20 +151,19 @@ public class InvestigationsPublisherService {
     /**
      * Updates an ongoing investigation with the given BPN, ID, status and reason.
      *
-     * @param applicationBpn the BPN associated with the investigation
-     * @param investigation  the Investigation to update
-     * @param status         the InvestigationStatus of the investigation to update
-     * @param reason         the reason for update of the investigation
+     * @param investigation the Investigation to update
+     * @param status        the InvestigationStatus of the investigation to update
+     * @param reason        the reason for update of the investigation
      */
-    public void updateInvestigationPublisher(BPN applicationBpn, Investigation investigation, InvestigationStatus status, String reason) {
-
-        validate(applicationBpn, status, investigation);
+    public void updateInvestigationPublisher(Investigation investigation, InvestigationStatus status, String reason) {
+        BPN applicationBPN = traceabilityProperties.getBpn();
+        validate(applicationBPN, status, investigation);
 
         List<Notification> allLatestNotificationForEdcNotificationId = getAllLatestNotificationForEdcNotificationId(investigation);
         List<Notification> notificationsToSend = new ArrayList<>();
         logger.info("::updateInvestigationPublisher::allLatestNotificationForEdcNotificationId {}", allLatestNotificationForEdcNotificationId);
         allLatestNotificationForEdcNotificationId.forEach(notification -> {
-            Notification notificationToSend = notification.copyAndSwitchSenderAndReceiver(applicationBpn);
+            Notification notificationToSend = notification.copyAndSwitchSenderAndReceiver(applicationBPN);
             switch (status) {
                 case ACKNOWLEDGED -> investigation.acknowledge(notificationToSend);
                 case ACCEPTED -> investigation.accept(reason, notificationToSend);
