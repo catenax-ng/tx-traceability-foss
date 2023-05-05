@@ -637,8 +637,8 @@
               }
             }
           },
-          "403": {
-            "description": "Forbidden.",
+          "200": {
+            "description": "Returns the assets found",
             "content": {
               "application/json": {
                 "schema": {
@@ -647,8 +647,8 @@
               }
             }
           },
-          "200": {
-            "description": "Returns the assets found",
+          "403": {
+            "description": "Forbidden.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1028,8 +1028,8 @@
               }
             }
           },
-          "403": {
-            "description": "Forbidden.",
+          "200": {
+            "description": "Returns dashboard data",
             "content": {
               "application/json": {
                 "schema": {
@@ -1038,8 +1038,8 @@
               }
             }
           },
-          "200": {
-            "description": "Returns dashboard data",
+          "403": {
+            "description": "Forbidden.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1157,8 +1157,8 @@
           }
         ],
         "responses": {
-          "401": {
-            "description": "Authorization failed.",
+          "200": {
+            "description": "Returns the asset by childId",
             "content": {
               "application/json": {
                 "schema": {
@@ -1167,8 +1167,8 @@
               }
             }
           },
-          "200": {
-            "description": "Returns the asset by childId",
+          "401": {
+            "description": "Authorization failed.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1511,17 +1511,17 @@
             ]
           },
           "childDescriptions": {
-            "maxItems": 1000,
-            "minItems": 0,
+            "maxItems": 2147483647,
             "type": "array",
+            "description": "Child relationships",
             "items": {
               "$ref": "#/components/schemas/Descriptions"
             }
           },
           "parentDescriptions": {
-            "maxItems": 1000,
-            "minItems": 0,
+            "maxItems": 2147483647,
             "type": "array",
+            "description": "Parent relationships",
             "items": {
               "$ref": "#/components/schemas/Descriptions"
             }
