@@ -109,7 +109,7 @@ public class InvestigationsController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("/created")
-    public @ArraySchema(arraySchema = @Schema(description = "Investigations"), maxItems = Integer.MAX_VALUE) PageResult<InvestigationData> getCreatedInvestigations(Pageable pageable) {
+    public PageResult<InvestigationData> getCreatedInvestigations(Pageable pageable) {
         logger.info(API_LOG_START + "/created");
         return investigationsReadService.getCreatedInvestigations(pageable);
     }
@@ -123,7 +123,7 @@ public class InvestigationsController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("/received")
-    public @ArraySchema(arraySchema = @Schema(description = "Investigations"), maxItems = Integer.MAX_VALUE) PageResult<InvestigationData> getReceivedInvestigations(Pageable pageable) {
+    public PageResult<InvestigationData> getReceivedInvestigations(Pageable pageable) {
         logger.info(API_LOG_START + "/received");
         return investigationsReadService.getReceivedInvestigations(pageable);
     }
