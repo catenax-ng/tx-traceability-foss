@@ -23,6 +23,7 @@ package org.eclipse.tractusx.traceability.assets.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.Size;
 import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Owner;
 import org.slf4j.Logger;
@@ -62,7 +63,9 @@ public final class Asset {
 	@ApiModelProperty(example = "CUSTOMER")
 	private final Owner owner;
 
+    @Size(max = 1000)
 	private List<Descriptions> childDescriptions;
+    @Size(max = 1000)
     private List<Descriptions> parentDescriptions;
 	@ApiModelProperty(example = "false")
 	private boolean underInvestigation;
