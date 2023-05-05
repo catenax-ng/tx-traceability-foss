@@ -21,12 +21,12 @@
 
 package org.eclipse.tractusx.traceability.investigations.domain.service;
 
+import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.assets.infrastructure.config.async.AssetsAsyncConfig;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.InvestigationsEDCFacade;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
 import org.eclipse.tractusx.traceability.investigations.domain.ports.EDCUrlProvider;
 import org.eclipse.tractusx.traceability.investigations.domain.repository.InvestigationsRepository;
-import static org.slf4j.LoggerFactory.getLogger;
 import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -34,30 +34,27 @@ import org.springframework.stereotype.Service;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+@RequiredArgsConstructor
 @Service
 public class NotificationsService {
 
-	private final InvestigationsEDCFacade edcFacade;
-	private final InvestigationsRepository repository;
-	private final EDCUrlProvider edcUrlProvider;
-	private static final Logger logger = getLogger(MethodHandles.lookup().lookupClass());
+    private final InvestigationsEDCFacade edcFacade;
+    private final InvestigationsRepository repository;
+    private final EDCUrlProvider edcUrlProvider;
+    private static final Logger logger = getLogger(MethodHandles.lookup().lookupClass());
 
-	public NotificationsService(InvestigationsEDCFacade edcFacade, InvestigationsRepository repository, EDCUrlProvider edcUrlProvider) {
-		this.edcFacade = edcFacade;
-		this.repository = repository;
-		this.edcUrlProvider = edcUrlProvider;
-	}
-
-	@Async(value = AssetsAsyncConfig.UPDATE_NOTIFICATION_EXECUTOR)
-	public void asyncNotificationExecutor(Notification notification) {
+    @Async(value = AssetsAsyncConfig.UPDATE_NOTIFICATION_EXECUTOR)
+    public void asyncNotificationExecutor(Notification notification) {
         logger.info("::asyncNotificationExecutor::notification {}", notification);
-		String senderEdcUrl = edcUrlProvider.getSenderUrl();
+        String senderEdcUrl = edcUrlProvider.getSenderUrl();
 
-		List<String> receiverEdcUrls = edcUrlProvider.getEdcUrls(notification.getReceiverBpnNumber());
-		for (String receiverEdcUrl : receiverEdcUrls) {
+        List<String> receiverEdcUrls = edcUrlProvider.getEdcUrls(notification.getReceiverBpnNumber());
+        for (String receiverEdcUrl : receiverEdcUrls) {
             logger.info("::asyncNotificationExecutor::notificationToSend {}", notification);
-			edcFacade.startEDCTransfer(notification, receiverEdcUrl, senderEdcUrl);
-			repository.update(notification);
-		}
-	}
+            edcFacade.startEDCTransfer(notification, receiverEdcUrl, senderEdcUrl);
+            repository.update(notification);
+        }
+    }
 }
