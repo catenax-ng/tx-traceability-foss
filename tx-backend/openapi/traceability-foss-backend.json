@@ -632,24 +632,6 @@
               }
             }
           },
-          "403": {
-            "description": "Forbidden.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "maxItems": 2147483647,
-                    "type": "array",
-                    "description": "Assets",
-                    "items": {
-                      "$ref": "#/components/schemas/Asset"
-                    }
-                  }
-                }
-              }
-            }
-          },
           "200": {
             "description": "Returns list of found assets",
             "content": {
@@ -738,6 +720,24 @@
                       "van": {
                         "type": "string"
                       }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "maxItems": 2147483647,
+                    "type": "array",
+                    "description": "Assets",
+                    "items": {
+                      "$ref": "#/components/schemas/Asset"
                     }
                   }
                 }
@@ -934,21 +934,6 @@
           "required": true
         },
         "responses": {
-          "401": {
-            "description": "Authorization failed.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "maxItems": 2147483647,
-                  "type": "array",
-                  "description": "Assets",
-                  "items": {
-                    "$ref": "#/components/schemas/Asset"
-                  }
-                }
-              }
-            }
-          },
           "200": {
             "description": "Returns the updated asset",
             "content": {
@@ -1038,6 +1023,21 @@
                         "type": "string"
                       }
                     }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "maxItems": 2147483647,
+                  "type": "array",
+                  "description": "Assets",
+                  "items": {
+                    "$ref": "#/components/schemas/Asset"
                   }
                 }
               }
@@ -1367,8 +1367,8 @@
           }
         ],
         "responses": {
-          "401": {
-            "description": "Authorization failed.",
+          "200": {
+            "description": "Returns dashboard data",
             "content": {
               "application/json": {
                 "schema": {
@@ -1377,8 +1377,8 @@
               }
             }
           },
-          "200": {
-            "description": "Returns dashboard data",
+          "401": {
+            "description": "Authorization failed.",
             "content": {
               "application/json": {
                 "schema": {

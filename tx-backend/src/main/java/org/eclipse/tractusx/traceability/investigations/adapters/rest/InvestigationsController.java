@@ -22,6 +22,8 @@
 package org.eclipse.tractusx.traceability.investigations.adapters.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -107,7 +109,7 @@ public class InvestigationsController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("/created")
-    public PageResult<InvestigationData> getCreatedInvestigations(Pageable pageable) {
+    public @ArraySchema(arraySchema = @Schema(description = "Investigations"), maxItems = Integer.MAX_VALUE) PageResult<InvestigationData> getCreatedInvestigations(Pageable pageable) {
         logger.info(API_LOG_START + "/created");
         return investigationsReadService.getCreatedInvestigations(pageable);
     }
@@ -121,7 +123,7 @@ public class InvestigationsController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("/received")
-    public PageResult<InvestigationData> getReceivedInvestigations(Pageable pageable) {
+    public @ArraySchema(arraySchema = @Schema(description = "Investigations"), maxItems = Integer.MAX_VALUE) PageResult<InvestigationData> getReceivedInvestigations(Pageable pageable) {
         logger.info(API_LOG_START + "/received");
         return investigationsReadService.getReceivedInvestigations(pageable);
     }
