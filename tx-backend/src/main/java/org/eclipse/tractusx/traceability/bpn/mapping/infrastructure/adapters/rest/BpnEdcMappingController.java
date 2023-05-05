@@ -101,7 +101,7 @@ public class BpnEdcMappingController {
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @PutMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public @ArraySchema(arraySchema = @Schema(description = "BPN Mappings"), maxItems = Integer.MAX_VALUE)  List<BpnEdcMapping> updateBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
+    public @ArraySchema(arraySchema = @Schema(description = "BPN Mappings"), maxItems = Integer.MAX_VALUE) @Size(max = Integer.MAX_VALUE) List<BpnEdcMapping> updateBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
         logger.info("BpnEdcController [createBpnEdcUrlMappings]");
         return service.updateAllBpnEdcMappings(bpnEdcMappings);
     }
