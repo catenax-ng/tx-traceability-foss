@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Bumped cypress-io/github-action from 5.6.1 to 5.6.2
 - Bumped veracode/veracode-uploadandscan-action@0.2.5 to 0.2.6
 - Updated catena links from readme to reflext tractusx links
+- Updated swagger api doc and added collection
 
 ## [3.3.0] - 2023-05-02
 ### Added
