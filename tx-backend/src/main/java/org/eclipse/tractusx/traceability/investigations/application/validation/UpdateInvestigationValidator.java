@@ -49,10 +49,9 @@ public class UpdateInvestigationValidator {
 
         String reason = updateInvestigationRequest.reason();
 
-        if (status == ACKNOWLEDGED) {
-            if (reason != null && !reason.isBlank()) {
+        if (status == ACKNOWLEDGED && (reason != null && !reason.isBlank())) {
                 throw new UpdateInvestigationValidationException("Update investigation reason can't be present for %s status".formatted(ACKNOWLEDGED));
-            }
+
         }
 
         if (status != ACKNOWLEDGED) {
