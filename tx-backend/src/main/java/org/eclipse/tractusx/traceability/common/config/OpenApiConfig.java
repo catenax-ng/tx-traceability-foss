@@ -32,6 +32,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.security.OAuthFlow;
 import io.swagger.v3.oas.models.security.OAuthFlows;
 import io.swagger.v3.oas.models.security.Scopes;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -67,6 +68,7 @@ public class OpenApiConfig {
                                                 "profile email", "")))));
         return new OpenAPI()
                 .components(components)
+                .addSecurityItem(new SecurityRequirement().addList("oAuth2", "profile email"))
                 .info(new Info()
                         .title("Trace-FOSS - OpenAPI Documentation")
                         .version("1.0.0")
