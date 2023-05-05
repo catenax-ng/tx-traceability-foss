@@ -19,9 +19,33 @@
 
 package org.eclipse.tractusx.traceability.investigations.adapters.rest.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+@Schema(description = "The UpdateInvestigationStatus")
 public enum UpdateInvestigationStatus {
     ACKNOWLEDGED,
     ACCEPTED,
-    DECLINED
-};
+    DECLINED;
+
+
+    @JsonCreator
+    public static UpdateInvestigationStatus fromValue(final String value) {
+        return Stream.of(UpdateInvestigationStatus.values())
+                .filter(updateInvestigationStatus -> updateInvestigationStatus.name().equals(value))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("Unsupported UpdateInvestigationStatus: " + value
+                        + ". Must be one of: " + supportedUpdateInvestigationStatus()));
+    }
+
+    private static String supportedUpdateInvestigationStatus() {
+        return Stream.of(UpdateInvestigationStatus.values()).map(Enum::name).collect(Collectors.joining(", "));
+    }
+
+}
+
 

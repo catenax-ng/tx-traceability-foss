@@ -22,6 +22,7 @@
 package org.eclipse.tractusx.traceability.investigations.adapters.rest.validation;
 
 import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.UpdateInvestigationRequest;
+import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.UpdateInvestigationStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,7 +47,7 @@ class UpdateInvestigationValidatorTest {
     @DisplayName("No Validation Success for invalid Reason")
     void testUnsuccessfulValidationForInvalidReason() {
 
-        String acknowledged = "ACKNOWLEDGED";
+        UpdateInvestigationStatus acknowledged = UpdateInvestigationStatus.ACKNOWLEDGED;
         String reason = "some-reason-for-update";
         String errorMessage = "Update investigation reason can't be present for ACKNOWLEDGED status";
 
@@ -59,7 +60,7 @@ class UpdateInvestigationValidatorTest {
     @Test
     @DisplayName("Execute Validation successfully")
     void testSuccessfulValidation() {
-        String accepted = "ACCEPTED";
+        UpdateInvestigationStatus accepted = UpdateInvestigationStatus.ACCEPTED;
         UpdateInvestigationRequest request = new UpdateInvestigationRequest(accepted, "abcdefg12313212321123");
         UpdateInvestigationValidator.validate(request);
 

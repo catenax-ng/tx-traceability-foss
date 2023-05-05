@@ -203,7 +203,7 @@ class PublisherInvestigationsControllerIT extends IntegrationSpecification imple
                 .post("/api/investigations/1/update")
                 .then()
                 .statusCode(400)
-                .body(Matchers.containsString("Invalid status. Must be one of ACKNOWLEDGED, ACCEPTED, DECLINED"))
+                .body(Matchers.containsString("message\":\"NoSuchElementException: Unsupported UpdateInvestigationStatus: anything. Must be one of: ACKNOWLEDGED, ACCEPTED, DECLINED"))
     }
 
     def "should cancel investigation"() {
