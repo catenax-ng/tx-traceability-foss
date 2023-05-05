@@ -22,6 +22,7 @@
 package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.rest.assets;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,7 +30,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Size;
 import jakarta.ws.rs.QueryParam;
 import org.eclipse.tractusx.traceability.assets.application.AssetFacade;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
@@ -81,9 +81,12 @@ public class AssetsController {
             tags = {"Assets"},
             description = "The endpoint returns a paged result of assets.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found"),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found for Asset", content = @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(arraySchema = @Schema(description = "Assets"), maxItems = Integer.MAX_VALUE)
+    )),
+            @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @GetMapping("")
     public PageResult<Asset> assets(Pageable pageable, @QueryParam("owner") Owner owner) {
         return assetRepository.getAssets(pageable, owner);
@@ -152,15 +155,14 @@ public class AssetsController {
             tags = {"Assets"},
             description = "The endpoint searchs for assets by id and returns a list of them.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns list of found assets",
-            content = {@Content(schema = @Schema(
-                    type = "array",
-                    implementation = Asset.class
-            ))}),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found for Asset", content = @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(arraySchema = @Schema(description = "Assets"), maxItems = Integer.MAX_VALUE)
+    )),
+            @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @PostMapping("/detail-information")
-    public @Size(max = 1000) List<Asset> getDetailInformation(@Valid @RequestBody GetDetailInformationRequest getDetailInformationRequest) {
+    public List<Asset> getDetailInformation(@Valid @RequestBody GetDetailInformationRequest getDetailInformationRequest) {
         return assetRepository.getAssetsById(getDetailInformationRequest.assetIds());
     }
 }
