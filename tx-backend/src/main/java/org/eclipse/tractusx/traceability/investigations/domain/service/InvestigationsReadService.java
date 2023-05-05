@@ -22,12 +22,12 @@
 package org.eclipse.tractusx.traceability.investigations.domain.service;
 
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.InvestigationData;
+import org.eclipse.tractusx.traceability.investigations.application.response.InvestigationData;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Investigation;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationId;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationSide;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationNotFoundException;
-import org.eclipse.tractusx.traceability.investigations.domain.ports.InvestigationsRepository;
+import org.eclipse.tractusx.traceability.investigations.domain.repository.InvestigationsRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

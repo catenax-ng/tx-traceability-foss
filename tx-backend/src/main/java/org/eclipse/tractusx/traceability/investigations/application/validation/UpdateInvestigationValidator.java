@@ -19,9 +19,9 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.adapters.rest.validation;
+package org.eclipse.tractusx.traceability.investigations.application.validation;
 
-import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.UpdateInvestigationRequest;
+import org.eclipse.tractusx.traceability.investigations.application.request.UpdateInvestigationRequest;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 
 import java.util.Set;

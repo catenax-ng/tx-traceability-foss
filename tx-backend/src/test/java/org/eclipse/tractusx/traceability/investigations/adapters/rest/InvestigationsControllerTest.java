@@ -22,11 +22,12 @@
 package org.eclipse.tractusx.traceability.investigations.adapters.rest;
 
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
-import org.eclipse.tractusx.traceability.investigations.adapters.jpa.PersistentInvestigationsRepository;
+import org.eclipse.tractusx.traceability.investigations.infrastructure.respository.InvestigationsRepositoryImpl;
+import org.eclipse.tractusx.traceability.investigations.application.rest.InvestigationsController;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Investigation;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationId;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
-import org.eclipse.tractusx.traceability.investigations.domain.ports.InvestigationsRepository;
+import org.eclipse.tractusx.traceability.investigations.domain.repository.InvestigationsRepository;
 import org.eclipse.tractusx.traceability.investigations.domain.service.InvestigationsPublisherService;
 import org.eclipse.tractusx.traceability.investigations.domain.service.InvestigationsReadService;
 import org.eclipse.tractusx.traceability.testdata.InvestigationTestDataFactory;
@@ -51,7 +52,7 @@ class InvestigationsControllerTest {
     InvestigationsRepository investigationsRepository;
 
     @Mock
-    PersistentInvestigationsRepository persistentInvestigationsRepository;
+    InvestigationsRepositoryImpl jpaInvestigationRepositoryImpl;
 
     @Mock
     InvestigationsPublisherService investigationsPublisherService;

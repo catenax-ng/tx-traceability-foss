@@ -19,12 +19,13 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.adapters.rest.model;
+package org.eclipse.tractusx.traceability.investigations.application.response;
 
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
+import org.eclipse.tractusx.traceability.investigations.application.response.InvestigationReason;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationSide;
 
 import java.util.List;

@@ -19,7 +19,12 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.adapters.rest.model;
+package org.eclipse.tractusx.traceability.investigations.application.response;
 
-public record StartInvestigationResponse(Long id) {
+import io.swagger.annotations.ApiModelProperty;
+
+public record InvestigationReason(
+	@ApiModelProperty(example = "description of closing reason") String close,
+	@ApiModelProperty(example = "description of accepting reason") String accept,
+	@ApiModelProperty(example = "description of declining reason") String decline) {
 }

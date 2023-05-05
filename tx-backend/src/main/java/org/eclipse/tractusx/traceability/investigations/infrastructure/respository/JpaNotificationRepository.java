@@ -19,12 +19,13 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.adapters.rest.model;
+package org.eclipse.tractusx.traceability.investigations.infrastructure.respository;
 
-import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.NotNull;
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.NotificationEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public record UpdateInvestigationRequest(
-        @NotNull(message = "status must be present") @ApiModelProperty(example = "ACKNOWLEDGED") UpdateInvestigationStatus status,
-        @ApiModelProperty(example = "The reason.") String reason) {
+@Repository
+public interface JpaNotificationRepository extends JpaRepository<NotificationEntity, String> {
+
 }

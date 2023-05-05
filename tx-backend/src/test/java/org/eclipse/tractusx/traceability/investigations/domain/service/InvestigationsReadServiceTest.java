@@ -20,13 +20,13 @@
 package org.eclipse.tractusx.traceability.investigations.domain.service;
 
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.InvestigationData;
+import org.eclipse.tractusx.traceability.investigations.application.response.InvestigationData;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Investigation;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationId;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationSide;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationNotFoundException;
-import org.eclipse.tractusx.traceability.investigations.domain.ports.InvestigationsRepository;
+import org.eclipse.tractusx.traceability.investigations.domain.repository.InvestigationsRepository;
 import org.eclipse.tractusx.traceability.testdata.InvestigationTestDataFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

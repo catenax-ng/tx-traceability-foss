@@ -26,7 +26,7 @@ import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotificationFactory;
 import org.eclipse.tractusx.traceability.investigations.domain.model.*;
-import org.eclipse.tractusx.traceability.investigations.domain.ports.InvestigationsRepository;
+import org.eclipse.tractusx.traceability.investigations.domain.repository.InvestigationsRepository;
 import org.eclipse.tractusx.traceability.testdata.InvestigationTestDataFactory;
 import org.eclipse.tractusx.traceability.testdata.NotificationTestDataFactory;
 import org.junit.jupiter.api.DisplayName;

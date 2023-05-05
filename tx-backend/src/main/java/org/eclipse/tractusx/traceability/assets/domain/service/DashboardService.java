@@ -25,7 +25,7 @@ import org.eclipse.tractusx.traceability.assets.domain.model.Dashboard;
 import org.eclipse.tractusx.traceability.assets.domain.ports.AssetRepository;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Owner;
 import org.eclipse.tractusx.traceability.common.security.JwtAuthentication;
-import org.eclipse.tractusx.traceability.investigations.domain.ports.InvestigationsRepository;
+import org.eclipse.tractusx.traceability.investigations.domain.repository.InvestigationsRepository;
 import org.springframework.stereotype.Component;
 
 @Component

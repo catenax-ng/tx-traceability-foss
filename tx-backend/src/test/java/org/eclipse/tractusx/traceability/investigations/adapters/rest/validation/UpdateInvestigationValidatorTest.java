@@ -21,8 +21,10 @@
 
 package org.eclipse.tractusx.traceability.investigations.adapters.rest.validation;
 
-import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.UpdateInvestigationRequest;
-import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.UpdateInvestigationStatus;
+import org.eclipse.tractusx.traceability.investigations.application.request.UpdateInvestigationRequest;
+import org.eclipse.tractusx.traceability.investigations.application.request.UpdateInvestigationStatus;
+import org.eclipse.tractusx.traceability.investigations.application.validation.UpdateInvestigationValidationException;
+import org.eclipse.tractusx.traceability.investigations.application.validation.UpdateInvestigationValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

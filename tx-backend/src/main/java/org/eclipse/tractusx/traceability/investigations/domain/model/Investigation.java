@@ -22,8 +22,8 @@
 package org.eclipse.tractusx.traceability.investigations.domain.model;
 
 import org.eclipse.tractusx.traceability.common.model.BPN;
-import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.InvestigationData;
-import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.InvestigationReason;
+import org.eclipse.tractusx.traceability.investigations.application.response.InvestigationData;
+import org.eclipse.tractusx.traceability.investigations.application.response.InvestigationReason;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationStatusTransitionNotAllowed;
 

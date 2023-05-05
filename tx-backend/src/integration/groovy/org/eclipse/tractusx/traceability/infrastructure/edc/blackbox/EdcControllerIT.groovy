@@ -28,8 +28,8 @@ import org.eclipse.tractusx.traceability.common.support.InvestigationsSupport
 import org.eclipse.tractusx.traceability.common.support.NotificationsSupport
 import org.eclipse.tractusx.traceability.common.support.TestDataSupport
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification
-import org.eclipse.tractusx.traceability.investigations.adapters.jpa.InvestigationEntity
-import org.eclipse.tractusx.traceability.investigations.adapters.jpa.NotificationEntity
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.InvestigationEntity
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.NotificationEntity
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationSide
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus
 import org.eclipse.tractusx.traceability.investigations.domain.model.Severity

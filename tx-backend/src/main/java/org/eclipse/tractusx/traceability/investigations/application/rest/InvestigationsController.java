@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.adapters.rest;
+package org.eclipse.tractusx.traceability.investigations.application.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -33,14 +33,13 @@ import jakarta.validation.Valid;
 import org.eclipse.tractusx.traceability.common.config.FeatureFlags;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
-import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.CloseInvestigationRequest;
-import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.InvestigationData;
-import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.StartInvestigationRequest;
-import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.StartInvestigationResponse;
-import org.eclipse.tractusx.traceability.investigations.adapters.rest.model.UpdateInvestigationRequest;
-import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationId;
+import org.eclipse.tractusx.traceability.investigations.application.request.CloseInvestigationRequest;
+import org.eclipse.tractusx.traceability.investigations.application.request.StartInvestigationRequest;
+import org.eclipse.tractusx.traceability.investigations.application.request.UpdateInvestigationRequest;
+import org.eclipse.tractusx.traceability.investigations.application.response.InvestigationData;
+import org.eclipse.tractusx.traceability.investigations.application.response.StartInvestigationResponse;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
-import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
+import org.eclipse.tractusx.traceability.investigations.domain.service.InvestigationService;
 import org.eclipse.tractusx.traceability.investigations.domain.service.InvestigationsPublisherService;
 import org.eclipse.tractusx.traceability.investigations.domain.service.InvestigationsReadService;
 import org.slf4j.Logger;
@@ -60,7 +59,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.invoke.MethodHandles;
 
-import static org.eclipse.tractusx.traceability.investigations.adapters.rest.validation.UpdateInvestigationValidator.validate;
+import static org.eclipse.tractusx.traceability.investigations.application.validation.UpdateInvestigationValidator.validate;
 
 @Profile(FeatureFlags.NOTIFICATIONS_ENABLED_PROFILES)
 @RestController
@@ -70,15 +69,18 @@ import static org.eclipse.tractusx.traceability.investigations.adapters.rest.val
 @Validated
 public class InvestigationsController {
 
+
+    private final InvestigationService investigationService;
     private final InvestigationsReadService investigationsReadService;
     private final InvestigationsPublisherService investigationsPublisherService;
     private final TraceabilityProperties traceabilityProperties;
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String API_LOG_START = "Received API call on /investigations";
 
-    public InvestigationsController(InvestigationsReadService investigationsReadService,
+    public InvestigationsController(InvestigationService investigationService, InvestigationsReadService investigationsReadService,
                                     InvestigationsPublisherService investigationsPublisherService,
                                     TraceabilityProperties traceabilityProperties) {
+        this.investigationService = investigationService;
         this.investigationsReadService = investigationsReadService;
         this.investigationsPublisherService = investigationsPublisherService;
         this.traceabilityProperties = traceabilityProperties;
@@ -95,11 +97,9 @@ public class InvestigationsController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public StartInvestigationResponse investigateAssets(@RequestBody @Valid StartInvestigationRequest request) {
-        InvestigationId investigationId =
-                investigationsPublisherService.startInvestigation(
-                        traceabilityProperties.getBpn(), request.partIds(), request.description(), request.targetDate(), Severity.fromString(request.severity()));
         logger.info(API_LOG_START + " with params: {}", request);
-        return new StartInvestigationResponse(investigationId.value());
+        return new StartInvestigationResponse(investigationService.startInvestigation(
+                traceabilityProperties.getBpn(), request.partIds(), request.description(), request.targetDate(), request.severity()).value());
     }
 
     @Operation(operationId = "getCreatedInvestigations",

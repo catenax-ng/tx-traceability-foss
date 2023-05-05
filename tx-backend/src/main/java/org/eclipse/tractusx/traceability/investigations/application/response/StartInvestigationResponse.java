@@ -19,13 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.adapters.jpa;
+package org.eclipse.tractusx.traceability.investigations.application.response;
 
-import org.eclipse.tractusx.traceability.investigations.adapters.jpa.NotificationEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-@Repository
-public interface JpaNotificationRepository extends JpaRepository<NotificationEntity, String> {
-
+public record StartInvestigationResponse(Long id) {
 }

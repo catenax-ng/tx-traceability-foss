@@ -19,12 +19,11 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.adapters.rest.model;
+package org.eclipse.tractusx.traceability.investigations.application.validation;
 
-import io.swagger.annotations.ApiModelProperty;
+public class UpdateInvestigationValidationException extends RuntimeException {
 
-public record InvestigationReason(
-	@ApiModelProperty(example = "description of closing reason") String close,
-	@ApiModelProperty(example = "description of accepting reason") String accept,
-	@ApiModelProperty(example = "description of declining reason") String decline) {
+	public UpdateInvestigationValidationException(String message) {
+		super(message);
+	}
 }

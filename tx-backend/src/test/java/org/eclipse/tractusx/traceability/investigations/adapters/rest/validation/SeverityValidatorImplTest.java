@@ -21,6 +21,7 @@
 
 package org.eclipse.tractusx.traceability.investigations.adapters.rest.validation;
 
+import org.eclipse.tractusx.traceability.investigations.application.validation.SeverityValidatorImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

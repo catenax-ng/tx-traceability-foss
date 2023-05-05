@@ -19,11 +19,13 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.adapters.rest.validation;
+package org.eclipse.tractusx.traceability.investigations.application.request;
 
-public class UpdateInvestigationValidationException extends RuntimeException {
+import io.swagger.annotations.ApiModelProperty;
 
-	public UpdateInvestigationValidationException(String message) {
-		super(message);
-	}
+import jakarta.validation.constraints.Size;
+
+public record CloseInvestigationRequest(
+	@Size(min = 15, max = 1000, message = "Close reason should have at least 15 characters and at most 1000 characters") @ApiModelProperty(example = "The reason.") String reason
+) {
 }

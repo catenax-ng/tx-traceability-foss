@@ -19,32 +19,26 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.adapters.rest.validation;
+package org.eclipse.tractusx.traceability.investigations.application.validation;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
-public class SeverityValidatorImpl implements ConstraintValidator<ValidSeverity, String> {
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
-        // do not validate notNull
-        if (value == null) {
-            return true;
-        }
+@Target({ElementType.FIELD, ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = SeverityValidatorImpl.class)
+@Documented
+public @interface ValidSeverity {
 
-        try {
-            Severity[] severities = Severity.values();
-            for (Severity severity : severities) {
-                if (severity.getRealName().equals(value)) {
-                    return true;
-                }
-            }
-            Severity.valueOf(value);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
+    String message() default "Invalid severity please use one of MINOR, MAJOR, CRITICAL, LIFE-THREATENING";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

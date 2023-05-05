@@ -31,7 +31,7 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.config.openapi.Te
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMappingException;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMappingNotFoundException;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.controller.model.CreateNotificationContractException;
-import org.eclipse.tractusx.traceability.investigations.adapters.rest.validation.UpdateInvestigationValidationException;
+import org.eclipse.tractusx.traceability.investigations.application.validation.UpdateInvestigationValidationException;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationNotFoundException;
 import org.eclipse.tractusx.traceability.investigations.domain.model.exception.InvestigationReceiverBpnMismatchException;
