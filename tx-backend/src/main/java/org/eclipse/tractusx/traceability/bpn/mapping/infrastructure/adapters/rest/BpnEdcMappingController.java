@@ -28,6 +28,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMapping;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.service.BpnEdcMappingService;
 import org.slf4j.Logger;
@@ -92,7 +93,7 @@ public class BpnEdcMappingController {
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @PostMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public List<BpnEdcMapping> createBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
+    public List<BpnEdcMapping> createBpnEdcUrlMapping(@RequestBody @Valid @Size(max = 1000) List<BpnEdcMappingRequest> bpnEdcMappings) {
         logger.info("BpnEdcController [createBpnEdcUrlMappings]");
         return service.saveAllBpnEdcMappings(bpnEdcMappings);
     }
@@ -109,7 +110,7 @@ public class BpnEdcMappingController {
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @PutMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public List<BpnEdcMapping> updateBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
+    public List<BpnEdcMapping> updateBpnEdcUrlMapping(@RequestBody @Valid @Size(max = 1000) List<BpnEdcMappingRequest> bpnEdcMappings) {
         logger.info("BpnEdcController [createBpnEdcUrlMappings]");
         return service.updateAllBpnEdcMappings(bpnEdcMappings);
     }
