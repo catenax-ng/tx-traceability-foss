@@ -20,8 +20,7 @@
 package org.eclipse.tractusx.traceability.bpn.mapping.infrastructure.adapters.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -69,8 +68,8 @@ public class BpnEdcMappingController {
             description = "The endpoint returns a result of BPN EDC URL mappings.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found"),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
+            @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @GetMapping("")
     public List<BpnEdcMapping> getBpnEdcs() {
         return service.findAllBpnEdcMappings();
@@ -97,11 +96,11 @@ public class BpnEdcMappingController {
             description = "The endpoint updates BPN EDC URL mappings",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "Created."),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
+            @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
+            @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @PutMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public List<BpnEdcMapping> updateBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
+    public @Size(max = 1000) List<BpnEdcMapping> updateBpnEdcUrlMapping(@RequestBody @Valid List<BpnEdcMappingRequest> bpnEdcMappings) {
         logger.info("BpnEdcController [createBpnEdcUrlMappings]");
         return service.updateAllBpnEdcMappings(bpnEdcMappings);
     }

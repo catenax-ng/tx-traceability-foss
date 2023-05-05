@@ -134,40 +134,10 @@
             }
           },
           "401": {
-            "description": "Authorization failed.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "maxItems": 2147483647,
-                    "type": "array",
-                    "description": "BPN Mappings",
-                    "items": {
-                      "$ref": "#/components/schemas/BpnEdcMapping"
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Authorization failed."
           },
           "403": {
-            "description": "Forbidden.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "maxItems": 2147483647,
-                    "type": "array",
-                    "description": "BPN Mappings",
-                    "items": {
-                      "$ref": "#/components/schemas/BpnEdcMapping"
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Forbidden."
           }
         },
         "security": [
@@ -632,24 +602,6 @@
               }
             }
           },
-          "403": {
-            "description": "Forbidden.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "maxItems": 2147483647,
-                    "type": "array",
-                    "description": "Assets",
-                    "items": {
-                      "$ref": "#/components/schemas/Asset"
-                    }
-                  }
-                }
-              }
-            }
-          },
           "200": {
             "description": "Returns list of found assets",
             "content": {
@@ -738,6 +690,24 @@
                       "van": {
                         "type": "string"
                       }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "maxItems": 2147483647,
+                    "type": "array",
+                    "description": "Assets",
+                    "items": {
+                      "$ref": "#/components/schemas/Asset"
                     }
                   }
                 }
@@ -1422,8 +1392,8 @@
               }
             }
           },
-          "403": {
-            "description": "Forbidden.",
+          "200": {
+            "description": "Returns dashboard data",
             "content": {
               "application/json": {
                 "schema": {
@@ -1432,8 +1402,8 @@
               }
             }
           },
-          "200": {
-            "description": "Returns dashboard data",
+          "403": {
+            "description": "Forbidden.",
             "content": {
               "application/json": {
                 "schema": {
