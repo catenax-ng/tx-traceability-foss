@@ -21,6 +21,7 @@
 
 package org.eclipse.tractusx.traceability.qualitynotification.application.investigation.rest;
 
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,6 +32,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.common.config.FeatureFlags;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.request.CloseInvestigationRequest;
@@ -40,8 +42,6 @@ import org.eclipse.tractusx.traceability.qualitynotification.application.investi
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.StartInvestigationResponse;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.InvestigationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -55,8 +55,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.lang.invoke.MethodHandles;
-
 import static org.eclipse.tractusx.traceability.qualitynotification.application.investigation.validation.UpdateInvestigationValidator.validate;
 
 @Profile(FeatureFlags.NOTIFICATIONS_ENABLED_PROFILES)
@@ -66,11 +64,11 @@ import static org.eclipse.tractusx.traceability.qualitynotification.application.
 @Tag(name = "Investigations")
 @Validated
 @RequiredArgsConstructor
+@Slf4j
 public class InvestigationsController {
 
     private final InvestigationService investigationService;
 
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String API_LOG_START = "Received API call on /investigations";
 
     @Operation(operationId = "investigateAssets",
@@ -84,7 +82,7 @@ public class InvestigationsController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public StartInvestigationResponse investigateAssets(@RequestBody @Valid StartInvestigationRequest request) {
-        logger.info(API_LOG_START + " with params: {}", request);
+        log.info(API_LOG_START + " with params: {}", request);
         return new StartInvestigationResponse(investigationService.startInvestigation(
                 request.partIds(), request.description(), request.targetDate(), request.severity()).value());
     }
@@ -102,7 +100,7 @@ public class InvestigationsController {
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @GetMapping("/created")
     public PageResult<InvestigationDTO> getCreatedInvestigations(Pageable pageable) {
-        logger.info(API_LOG_START + "/created");
+        log.info(API_LOG_START + "/created");
         return investigationService.getCreatedInvestigations(pageable);
     }
 
@@ -119,7 +117,7 @@ public class InvestigationsController {
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @GetMapping("/received")
     public PageResult<InvestigationDTO> getReceivedInvestigations(Pageable pageable) {
-        logger.info(API_LOG_START + "/received");
+        log.info(API_LOG_START + "/received");
         return investigationService.getReceivedInvestigations(pageable);
     }
 
@@ -133,7 +131,7 @@ public class InvestigationsController {
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("/{investigationId}")
     public InvestigationDTO getInvestigation(@PathVariable Long investigationId) {
-        logger.info(API_LOG_START + "/{}", investigationId);
+        log.info(API_LOG_START + "/{}", investigationId);
         return investigationService.findInvestigation(investigationId);
     }
 
@@ -148,7 +146,7 @@ public class InvestigationsController {
     @PostMapping("/{investigationId}/approve")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void approveInvestigation(@PathVariable Long investigationId) {
-        logger.info(API_LOG_START + "/{}/approve", investigationId);
+        log.info(API_LOG_START + "/{}/approve", investigationId);
         investigationService.approveInvestigation(investigationId);
     }
 
@@ -163,7 +161,7 @@ public class InvestigationsController {
     @PostMapping("/{investigationId}/cancel")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancelInvestigation(@PathVariable Long investigationId) {
-        logger.info(API_LOG_START + "/{}/cancel", investigationId);
+        log.info(API_LOG_START + "/{}/cancel", investigationId);
         investigationService.cancelInvestigation(investigationId);
     }
 
@@ -179,7 +177,7 @@ public class InvestigationsController {
     @PostMapping("/{investigationId}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void closeInvestigation(@PathVariable Long investigationId, @Valid @RequestBody CloseInvestigationRequest closeInvestigationRequest) {
-        logger.info(API_LOG_START + "/{}/close with params {}", investigationId, closeInvestigationRequest);
+        log.info(API_LOG_START + "/{}/close with params {}", investigationId, closeInvestigationRequest);
         investigationService.updateInvestigation(investigationId, InvestigationStatus.CLOSED, closeInvestigationRequest.reason());
     }
 
@@ -196,7 +194,7 @@ public class InvestigationsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateInvestigation(@PathVariable Long investigationId, @Valid @RequestBody UpdateInvestigationRequest updateInvestigationRequest) {
         validate(updateInvestigationRequest);
-        logger.info(API_LOG_START + "/{}/update with params {}", investigationId, updateInvestigationRequest);
+        log.info(API_LOG_START + "/{}/update with params {}", investigationId, updateInvestigationRequest);
         investigationService.updateInvestigation(investigationId, InvestigationStatus.fromStringValue(updateInvestigationRequest.status().name()), updateInvestigationRequest.reason());
     }
 }
