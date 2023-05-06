@@ -19,6 +19,8 @@
 
 package org.eclipse.tractusx.traceability.investigations.domain.service;
 
+import org.eclipse.tractusx.traceability.discovery.domain.model.Discovery;
+import org.eclipse.tractusx.traceability.discovery.domain.service.DiscoveryService;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.InvestigationsEDCFacade;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
@@ -40,29 +42,28 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class NotificationsServiceTest {
 
-	@InjectMocks
-	private NotificationsService notificationsService;
+    @InjectMocks
+    private NotificationsService notificationsService;
 
-	@Mock
-	private InvestigationsEDCFacade edcFacade;
+    @Mock
+    private InvestigationsEDCFacade edcFacade;
 
-	@Mock
-	private InvestigationsRepository repository;
+    @Mock
+    private InvestigationsRepository repository;
 
-	@Mock
+    @Mock
     private DiscoveryService discoveryService;
 
-	@Test
-	void testNotificationsServiceUpdateAsync() {
+    @Test
+    void testNotificationsServiceUpdateAsync() {
         // given
         String bpn = "BPN1234";
         String edcReceiverUrl = "https://not-real-edc-receiver-url.com";
         String edcSenderUrl = "https://not-real-edc-sender-url.com";
 
+        Discovery discovery = Discovery.builder().senderUrl(edcSenderUrl).receiverUrls(List.of(edcReceiverUrl)).build();
         // and
-        when(discoveryService.getEdcUrlsByBPN(bpn)).thenReturn(List.of(edcReceiverUrl));
-        when(discoveryService.getApplicationSenderUrl()).thenReturn(edcSenderUrl);
-
+        when(discoveryService.getDiscoveryByBPN(bpn)).thenReturn(discovery);
         // and
         Notification notification = new Notification(
                 null,
@@ -83,13 +84,13 @@ class NotificationsServiceTest {
                 null,
                 null,
                 false
-		);
+        );
 
-		// when
-		notificationsService.asyncNotificationExecutor(notification);
+        // when
+        notificationsService.asyncNotificationExecutor(notification);
 
-		// then
-		verify(edcFacade).startEDCTransfer(any(Notification.class), eq(edcReceiverUrl), eq(edcSenderUrl));
-	//	verify(repository).update(any(Notification.class));
-	}
+        // then
+        verify(edcFacade).startEDCTransfer(any(Notification.class), eq(edcReceiverUrl), eq(edcSenderUrl));
+        //	verify(repository).update(any(Notification.class));
+    }
 }

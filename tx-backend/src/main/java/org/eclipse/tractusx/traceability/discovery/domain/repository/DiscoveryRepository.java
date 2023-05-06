@@ -16,22 +16,12 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-package org.eclipse.tractusx.traceability.investigations.infrastructure.repository.feign;
+package org.eclipse.tractusx.traceability.discovery.domain.repository;
 
-import lombok.RequiredArgsConstructor;
-import org.eclipse.tractusx.traceability.investigations.domain.repository.DiscoveryRepository;
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.feign.ConnectorDiscoveryMappingResponse;
-import org.springframework.stereotype.Component;
+import org.eclipse.tractusx.traceability.discovery.domain.model.Discovery;
 
-import java.util.List;
+import java.util.Optional;
 
-@RequiredArgsConstructor
-@Component
-public class FeignDiscoveryRepositoryImpl implements DiscoveryRepository {
-    private final FeignDiscoveryRepository feignDiscoveryRepository;
-
-    @Override
-    public List<ConnectorDiscoveryMappingResponse> getConnectorEndpointMappings(List<String> bpns) {
-        return feignDiscoveryRepository.getConnectorEndpointMappings(bpns);
-    }
+public interface DiscoveryRepository {
+    Optional<Discovery> getDiscoveryByBpnFromConnectorEndpoint(String bpn);
 }

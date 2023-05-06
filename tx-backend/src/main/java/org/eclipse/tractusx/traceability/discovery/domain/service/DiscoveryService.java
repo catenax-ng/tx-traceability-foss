@@ -19,13 +19,10 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.infrastructure.repository.jpa;
+package org.eclipse.tractusx.traceability.discovery.domain.service;
 
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa.NotificationEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.eclipse.tractusx.traceability.discovery.domain.model.Discovery;
 
-@Repository
-public interface JpaNotificationRepository extends JpaRepository<NotificationEntity, String> {
-
+public interface DiscoveryService {
+    Discovery getDiscoveryByBPN(String bpn);
 }

@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.infrastructure.model.feign;
+package org.eclipse.tractusx.traceability.discovery.infrastructure.model;
 
 import java.util.List;
 

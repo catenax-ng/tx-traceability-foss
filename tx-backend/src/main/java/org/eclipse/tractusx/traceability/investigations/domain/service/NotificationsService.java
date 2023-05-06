@@ -23,6 +23,8 @@ package org.eclipse.tractusx.traceability.investigations.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.assets.infrastructure.config.async.AssetsAsyncConfig;
+import org.eclipse.tractusx.traceability.discovery.domain.model.Discovery;
+import org.eclipse.tractusx.traceability.discovery.domain.service.DiscoveryService;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.InvestigationsEDCFacade;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
 import org.eclipse.tractusx.traceability.investigations.domain.repository.InvestigationsRepository;
@@ -31,7 +33,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
-import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -48,13 +49,13 @@ public class NotificationsService {
     @Async(value = AssetsAsyncConfig.UPDATE_NOTIFICATION_EXECUTOR)
     public void asyncNotificationExecutor(Notification notification) {
         logger.info("::asyncNotificationExecutor::notification {}", notification);
-        String senderEdcUrl = discoveryService.getApplicationSenderUrl();
+        Discovery discovery = discoveryService.getDiscoveryByBPN(notification.getReceiverBpnNumber());
+        String senderEdcUrl = discovery.getSenderUrl();
 
-        List<String> receiverEdcUrls = discoveryService.getEdcUrlsByBPN(notification.getReceiverBpnNumber());
-        for (String receiverEdcUrl : receiverEdcUrls) {
-            logger.info("::asyncNotificationExecutor::notificationToSend {}", notification);
-            edcFacade.startEDCTransfer(notification, receiverEdcUrl, senderEdcUrl);
-            repository.update(notification);
-        }
+        discovery.getReceiverUrls()
+                .forEach(receiverUrl -> {
+                    edcFacade.startEDCTransfer(notification, receiverUrl, senderEdcUrl);
+                    repository.update(notification);
+                });
     }
 }

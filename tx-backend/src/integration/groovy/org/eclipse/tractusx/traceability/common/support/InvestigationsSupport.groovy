@@ -23,7 +23,7 @@ package org.eclipse.tractusx.traceability.common.support
 
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationSide
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa.InvestigationEntity
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.InvestigationEntity
 
 import java.time.Instant
 

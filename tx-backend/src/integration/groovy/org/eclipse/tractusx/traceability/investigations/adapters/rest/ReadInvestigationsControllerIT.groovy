@@ -28,8 +28,8 @@ import org.eclipse.tractusx.traceability.common.support.InvestigationsSupport
 import org.eclipse.tractusx.traceability.common.support.NotificationsSupport
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationSide
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa.InvestigationEntity
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa.NotificationEntity
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.InvestigationEntity
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.NotificationEntity
 import org.hamcrest.Matchers
 import spock.lang.Unroll
 
@@ -104,7 +104,7 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
         and:
         storedNotifications(
                 new NotificationEntity("1", firstInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false),
-                new NotificationEntity("2", secondInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId",false),
+                new NotificationEntity("2", secondInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false),
                 new NotificationEntity("3", thirdInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false),
                 new NotificationEntity("4", fourthInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false),
                 new NotificationEntity("5", fifthInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false)

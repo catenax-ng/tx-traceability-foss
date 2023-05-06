@@ -1,5 +1,7 @@
 /********************************************************************************
- * Copyright (c) 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2022, 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
+ * Copyright (c) 2022, 2023 ZF Friedrichshafen AG
+ * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -16,12 +18,22 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-package org.eclipse.tractusx.traceability.investigations.domain.repository;
 
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.feign.ConnectorDiscoveryMappingResponse;
+package org.eclipse.tractusx.traceability.discovery.infrastructure.repository;
+
+import feign.RequestLine;
+import org.eclipse.tractusx.traceability.assets.infrastructure.config.openapi.CatenaApiConfig;
+import org.eclipse.tractusx.traceability.discovery.infrastructure.model.ConnectorDiscoveryMappingResponse;
+import org.springframework.cloud.openfeign.FeignClient;
 
 import java.util.List;
 
-public interface DiscoveryRepository {
+@FeignClient(
+        name = "portalApi",
+        url = "${feign.portalApi.url}",
+        configuration = {CatenaApiConfig.class}
+)
+public interface FeignDiscoveryRepository {
+    @RequestLine("POST /administration/connectors/discovery")
     List<ConnectorDiscoveryMappingResponse> getConnectorEndpointMappings(List<String> bpns);
 }

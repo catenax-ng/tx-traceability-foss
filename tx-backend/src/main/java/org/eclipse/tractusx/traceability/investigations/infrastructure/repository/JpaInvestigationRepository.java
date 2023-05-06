@@ -19,11 +19,11 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.infrastructure.repository.jpa;
+package org.eclipse.tractusx.traceability.investigations.infrastructure.repository;
 
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationSide;
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa.InvestigationEntity;
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.InvestigationEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -36,15 +36,22 @@ import java.util.Set;
 
 @Repository
 public interface JpaInvestigationRepository extends JpaRepository<InvestigationEntity, Long> {
-	Page<InvestigationEntity> findAllByStatusInOrderByCreatedDesc(Set<InvestigationStatus> statuses, Pageable pageable);
-	Page<InvestigationEntity> findAllBySideEqualsOrderByCreatedDesc(InvestigationSide investigationSide, Pageable pageable);
-	long countAllByStatusEquals(InvestigationStatus status);
-	long countAllBySideEquals(InvestigationSide investigationSide);
-	long countAllByStatusIn(Set<InvestigationStatus> status);
-	@Query("SELECT investigation FROM InvestigationEntity investigation JOIN investigation.notifications notification WHERE notification.id = :notificationId")
-	Optional<InvestigationEntity> findByNotificationsNotificationId(@Param("notificationId") String notificationId);
+    Page<InvestigationEntity> findAllByStatusInOrderByCreatedDesc(Set<InvestigationStatus> statuses, Pageable pageable);
+
+    Page<InvestigationEntity> findAllBySideEqualsOrderByCreatedDesc(InvestigationSide investigationSide, Pageable pageable);
+
+    long countAllByStatusEquals(InvestigationStatus status);
+
+    long countAllBySideEquals(InvestigationSide investigationSide);
+
+    long countAllByStatusIn(Set<InvestigationStatus> status);
+
+    @Query("SELECT investigation FROM InvestigationEntity investigation JOIN investigation.notifications notification WHERE notification.id = :notificationId")
+    Optional<InvestigationEntity> findByNotificationsNotificationId(@Param("notificationId") String notificationId);
+
     @Query("SELECT investigation FROM InvestigationEntity investigation JOIN investigation.notifications notification WHERE notification.notificationReferenceId = :notificationReferenceId")
-    Optional<InvestigationEntity> findByNotificationsNotificationReferenceId(@Param("notificationReferenceId")  String notificationReferenceId);
+    Optional<InvestigationEntity> findByNotificationsNotificationReferenceId(@Param("notificationReferenceId") String notificationReferenceId);
+
     @Query("SELECT investigation FROM InvestigationEntity investigation JOIN investigation.notifications notification WHERE notification.edcNotificationId = :edcNotificationId")
     Optional<InvestigationEntity> findByNotificationsEdcNotificationId(@Param("edcNotificationId") String edcNotificationId);
 }

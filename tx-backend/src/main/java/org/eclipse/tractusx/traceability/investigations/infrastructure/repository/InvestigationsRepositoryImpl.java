@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.infrastructure.repository.jpa;
+package org.eclipse.tractusx.traceability.investigations.infrastructure.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.AssetEntity;
@@ -33,8 +33,8 @@ import org.eclipse.tractusx.traceability.investigations.domain.model.Investigati
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
 import org.eclipse.tractusx.traceability.investigations.domain.repository.InvestigationsRepository;
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa.InvestigationEntity;
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa.NotificationEntity;
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.InvestigationEntity;
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.NotificationEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
