@@ -18,7 +18,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-package org.eclipse.tractusx.traceability.investigations.infrastructure.model;
+package org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

@@ -26,10 +26,10 @@ import org.eclipse.tractusx.traceability.IntegrationSpecification
 import org.eclipse.tractusx.traceability.common.support.BpnSupport
 import org.eclipse.tractusx.traceability.common.support.InvestigationsSupport
 import org.eclipse.tractusx.traceability.common.support.NotificationsSupport
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.InvestigationEntity
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.NotificationEntity
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationSide
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa.InvestigationEntity
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa.NotificationEntity
 import org.hamcrest.Matchers
 import spock.lang.Unroll
 

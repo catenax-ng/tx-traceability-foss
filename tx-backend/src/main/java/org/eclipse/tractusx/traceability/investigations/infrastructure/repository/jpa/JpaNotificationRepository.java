@@ -19,9 +19,9 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.infrastructure.respository;
+package org.eclipse.tractusx.traceability.investigations.infrastructure.repository.jpa;
 
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.NotificationEntity;
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa.NotificationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

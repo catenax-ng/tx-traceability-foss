@@ -19,9 +19,12 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.adapters.feign.portal;
+package org.eclipse.tractusx.traceability.investigations.domain.service;
 
 import java.util.List;
 
-public record ConnectorDiscoveryMappingResponse(String bpn, List<String> connectorEndpoint) {
+public interface DiscoveryService {
+    List<String> getEdcUrlsByBPN(String bpn);
+
+    String getApplicationSenderUrl();
 }

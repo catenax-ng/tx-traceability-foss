@@ -19,31 +19,9 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.common.support
+package org.eclipse.tractusx.traceability.investigations.infrastructure.model.feign;
 
+import java.util.List;
 
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa.NotificationEntity
-
-trait NotificationsSupport implements NotificationsRepositoryProvider {
-
-	NotificationEntity storedNotification(NotificationEntity notification) {
-		return jpaNotificationRepository().save(notification)
-	}
-
-	void storedNotifications(NotificationEntity...notifications) {
-		notifications.each {
-			storedNotification(it)
-		}
-	}
-
-	void assertNotificationsSize(int size) {
-		List<NotificationEntity> notifications = jpaNotificationRepository().findAll()
-
-		assert notifications.size() == size
-	}
-
-	void assertNotifications(Closure closure) {
-		jpaNotificationRepository().findAll().each closure
-	}
-
+public record ConnectorDiscoveryMappingResponse(String bpn, List<String> connectorEndpoint) {
 }

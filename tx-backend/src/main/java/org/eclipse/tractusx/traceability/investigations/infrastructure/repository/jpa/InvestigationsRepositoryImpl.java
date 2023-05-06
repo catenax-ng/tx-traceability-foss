@@ -19,8 +19,9 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.investigations.infrastructure.respository;
+package org.eclipse.tractusx.traceability.investigations.infrastructure.repository.jpa;
 
+import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.AssetEntity;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.JpaAssetsRepository;
 import org.eclipse.tractusx.traceability.common.model.BPN;
@@ -32,8 +33,8 @@ import org.eclipse.tractusx.traceability.investigations.domain.model.Investigati
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
 import org.eclipse.tractusx.traceability.investigations.domain.repository.InvestigationsRepository;
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.InvestigationEntity;
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.NotificationEntity;
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa.InvestigationEntity;
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa.NotificationEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -49,6 +50,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Component
 public class InvestigationsRepositoryImpl implements InvestigationsRepository {
 
@@ -62,16 +64,6 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-
-    public InvestigationsRepositoryImpl(JpaInvestigationRepository investigationRepository,
-                                        JpaAssetsRepository assetsRepository,
-                                        JpaNotificationRepository notificationRepository,
-                                        Clock clock) {
-        this.investigationRepository = investigationRepository;
-        this.assetsRepository = assetsRepository;
-        this.notificationRepository = notificationRepository;
-        this.clock = clock;
-    }
 
     @Override
     public void update(Notification notification) {

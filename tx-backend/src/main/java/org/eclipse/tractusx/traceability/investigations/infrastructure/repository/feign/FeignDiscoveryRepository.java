@@ -19,31 +19,21 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.common.support
+package org.eclipse.tractusx.traceability.investigations.infrastructure.repository.feign;
 
+import feign.RequestLine;
+import org.eclipse.tractusx.traceability.assets.infrastructure.config.openapi.CatenaApiConfig;
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.feign.ConnectorDiscoveryMappingResponse;
+import org.springframework.cloud.openfeign.FeignClient;
 
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.jpa.NotificationEntity
+import java.util.List;
 
-trait NotificationsSupport implements NotificationsRepositoryProvider {
-
-	NotificationEntity storedNotification(NotificationEntity notification) {
-		return jpaNotificationRepository().save(notification)
-	}
-
-	void storedNotifications(NotificationEntity...notifications) {
-		notifications.each {
-			storedNotification(it)
-		}
-	}
-
-	void assertNotificationsSize(int size) {
-		List<NotificationEntity> notifications = jpaNotificationRepository().findAll()
-
-		assert notifications.size() == size
-	}
-
-	void assertNotifications(Closure closure) {
-		jpaNotificationRepository().findAll().each closure
-	}
-
+@FeignClient(
+        name = "portalApi",
+        url = "${feign.portalApi.url}",
+        configuration = {CatenaApiConfig.class}
+)
+public interface FeignDiscoveryRepository {
+    @RequestLine("POST /administration/connectors/discovery")
+    List<ConnectorDiscoveryMappingResponse> getConnectorEndpointMappings(List<String> bpns);
 }

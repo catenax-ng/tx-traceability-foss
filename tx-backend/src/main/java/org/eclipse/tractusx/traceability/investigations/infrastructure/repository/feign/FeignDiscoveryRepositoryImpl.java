@@ -1,7 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
- * Copyright (c) 2022, 2023 ZF Friedrichshafen AG
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,12 +16,22 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+package org.eclipse.tractusx.traceability.investigations.infrastructure.repository.feign;
 
-package org.eclipse.tractusx.traceability.investigations.domain.ports;
+import lombok.RequiredArgsConstructor;
+import org.eclipse.tractusx.traceability.investigations.domain.repository.DiscoveryRepository;
+import org.eclipse.tractusx.traceability.investigations.infrastructure.model.feign.ConnectorDiscoveryMappingResponse;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-public interface EDCUrlProvider {
-	List<String> getEdcUrls(String bpn);
-	String getSenderUrl();
+@RequiredArgsConstructor
+@Component
+public class FeignDiscoveryRepositoryImpl implements DiscoveryRepository {
+    private final FeignDiscoveryRepository feignDiscoveryRepository;
+
+    @Override
+    public List<ConnectorDiscoveryMappingResponse> getConnectorEndpointMappings(List<String> bpns) {
+        return feignDiscoveryRepository.getConnectorEndpointMappings(bpns);
+    }
 }

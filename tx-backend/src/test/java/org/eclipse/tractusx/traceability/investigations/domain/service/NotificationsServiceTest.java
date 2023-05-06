@@ -22,7 +22,6 @@ package org.eclipse.tractusx.traceability.investigations.domain.service;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.InvestigationsEDCFacade;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Notification;
 import org.eclipse.tractusx.traceability.investigations.domain.model.Severity;
-import org.eclipse.tractusx.traceability.investigations.domain.ports.EDCUrlProvider;
 import org.eclipse.tractusx.traceability.investigations.domain.repository.InvestigationsRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,20 +50,20 @@ class NotificationsServiceTest {
 	private InvestigationsRepository repository;
 
 	@Mock
-	private EDCUrlProvider edcUrlProvider;
+    private DiscoveryService discoveryService;
 
 	@Test
 	void testNotificationsServiceUpdateAsync() {
-		// given
-		String bpn = "BPN1234";
-		String edcReceiverUrl = "https://not-real-edc-receiver-url.com";
-		String edcSenderUrl = "https://not-real-edc-sender-url.com";
+        // given
+        String bpn = "BPN1234";
+        String edcReceiverUrl = "https://not-real-edc-receiver-url.com";
+        String edcSenderUrl = "https://not-real-edc-sender-url.com";
 
-		// and
-		when(edcUrlProvider.getEdcUrls(bpn)).thenReturn(List.of(edcReceiverUrl));
-		when(edcUrlProvider.getSenderUrl()).thenReturn(edcSenderUrl);
+        // and
+        when(discoveryService.getEdcUrlsByBPN(bpn)).thenReturn(List.of(edcReceiverUrl));
+        when(discoveryService.getApplicationSenderUrl()).thenReturn(edcSenderUrl);
 
-		// and
+        // and
         Notification notification = new Notification(
                 null,
                 null,
