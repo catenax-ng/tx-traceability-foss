@@ -31,6 +31,11 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.AssetEntity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationSide;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
@@ -38,6 +43,11 @@ import org.eclipse.tractusx.traceability.qualitynotification.domain.investigatio
 import java.time.Instant;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "investigation")
 public class InvestigationEntity {
@@ -66,13 +76,6 @@ public class InvestigationEntity {
     private Instant created;
     private Instant updated;
 
-    public InvestigationEntity() {
-    }
-
-    public InvestigationEntity(List<AssetEntity> assets, String bpn, String description, InvestigationStatus status, InvestigationSide side, Instant created) {
-        this(assets, bpn, status, side, null, description, created);
-    }
-
     public InvestigationEntity(List<AssetEntity> assets, String bpn, InvestigationStatus status, InvestigationSide side, String closeReason, String description, Instant created) {
         this.assets = assets;
         this.bpn = bpn;
@@ -82,101 +85,5 @@ public class InvestigationEntity {
         this.description = description;
         this.created = created;
         this.updated = created;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public List<AssetEntity> getAssets() {
-        return assets;
-    }
-
-    public void setAssets(List<AssetEntity> assets) {
-        this.assets = assets;
-    }
-
-    public String getBpn() {
-        return bpn;
-    }
-
-    public void setBpn(String bpn) {
-        this.bpn = bpn;
-    }
-
-    public InvestigationStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(InvestigationStatus status) {
-        this.status = status;
-    }
-
-    public InvestigationSide getSide() {
-        return side;
-    }
-
-    public void setSide(InvestigationSide side) {
-        this.side = side;
-    }
-
-    public String getCloseReason() {
-        return closeReason;
-    }
-
-    public void setCloseReason(String closeReason) {
-        this.closeReason = closeReason;
-    }
-
-    public String getAcceptReason() {
-        return acceptReason;
-    }
-
-    public void setAcceptReason(String acceptReason) {
-        this.acceptReason = acceptReason;
-    }
-
-    public String getDeclineReason() {
-        return declineReason;
-    }
-
-    public void setDeclineReason(String declineReason) {
-        this.declineReason = declineReason;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Instant getCreated() {
-        return created;
-    }
-
-    public void setCreated(Instant created) {
-        this.created = created;
-    }
-
-    public Instant getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(Instant updated) {
-        this.updated = updated;
-    }
-
-    public List<NotificationEntity> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(List<NotificationEntity> notifications) {
-        this.notifications = notifications;
     }
 }

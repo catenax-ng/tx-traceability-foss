@@ -65,7 +65,7 @@ public class InvestigationServiceImpl implements InvestigationService {
     public InvestigationDTO findInvestigation(Long id) {
         InvestigationId investigationId = new InvestigationId(id);
         Investigation investigation = loadInvestigationOrNotFoundException(investigationId);
-        return investigation.toData();
+        return investigation.toDTO();
     }
 
     @Override
@@ -103,7 +103,7 @@ public class InvestigationServiceImpl implements InvestigationService {
                 .content()
                 .stream()
                 .sorted(Investigation.COMPARE_BY_NEWEST_INVESTIGATION_CREATION_TIME)
-                .map(Investigation::toData)
+                .map(Investigation::toDTO)
                 .toList();
 
         Page<InvestigationDTO> investigationDataPage = new PageImpl<>(investigationData, pageable, investigationsRepository.countInvestigations(investigationSide));

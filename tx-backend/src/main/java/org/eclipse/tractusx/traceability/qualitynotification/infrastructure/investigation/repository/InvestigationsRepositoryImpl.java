@@ -96,14 +96,14 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
         List<AssetEntity> assetEntities = getAssetEntitiesByInvestigation(investigation);
 
         if (!assetEntities.isEmpty()) {
-            InvestigationEntity investigationEntity = new InvestigationEntity(
-                    assetEntities,
-                    investigation.getBpn(),
-                    investigation.getDescription(),
-                    investigation.getInvestigationStatus(),
-                    investigation.getInvestigationSide(),
-                    investigation.getCreationTime()
-            );
+            InvestigationEntity investigationEntity = InvestigationEntity.builder()
+                    .assets(assetEntities)
+                    .bpn(investigation.getBpn())
+                    .description(investigation.getDescription())
+                    .status(investigation.getInvestigationStatus())
+                    .side(investigation.getInvestigationSide())
+                    .created(investigation.getCreationTime())
+                    .build();
 
             investigationRepository.save(investigationEntity);
 
@@ -248,7 +248,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
                 notificationEntity.getCreated(),
                 notificationEntity.getUpdated(),
                 notificationEntity.getMessageId(),
-                notificationEntity.isInitial()
+                notificationEntity.getIsInitial()
         );
     }
 

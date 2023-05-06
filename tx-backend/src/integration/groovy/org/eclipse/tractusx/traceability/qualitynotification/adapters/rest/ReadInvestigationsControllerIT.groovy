@@ -276,7 +276,17 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
         String receiverName = "Receiver name"
 
         and:
-        InvestigationEntity investigationEntity = new InvestigationEntity([], testBpn, "1", InvestigationStatus.RECEIVED, InvestigationSide.SENDER, Instant.now())
+        InvestigationEntity investigationEntity =
+                InvestigationEntity
+                        .builder()
+                        .assets([])
+                        .bpn(testBpn)
+                        .description("1")
+                        .status(InvestigationStatus.RECEIVED)
+                        .side(InvestigationSide.SENDER)
+                        .created(Instant.now())
+                        .build();
+
         InvestigationEntity persistedInvestigation = storedInvestigationFullObject(investigationEntity)
         and:
         NotificationEntity notificationEntity = storedNotification(new NotificationEntity("1", investigationEntity, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageid", false))

@@ -30,6 +30,9 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.AssetEntity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
@@ -38,6 +41,9 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Setter
+@Getter
+@NoArgsConstructor
 @Entity
 @Table(name = "notification")
 public class NotificationEntity {
@@ -75,9 +81,6 @@ public class NotificationEntity {
     private String messageId;
     private Boolean isInitial;
 
-    public NotificationEntity() {
-    }
-
     public NotificationEntity(String id,
                               InvestigationEntity investigation,
                               String senderBpnNumber,
@@ -114,147 +117,4 @@ public class NotificationEntity {
         this.updated = LocalDateTime.now();
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public InvestigationEntity getInvestigation() {
-        return investigation;
-    }
-
-    public void setInvestigation(InvestigationEntity investigationsId) {
-        this.investigation = investigationsId;
-    }
-
-    public String getSenderBpnNumber() {
-        return senderBpnNumber;
-    }
-
-    public void setSenderBpnNumber(String senderBpnNumber) {
-        this.senderBpnNumber = senderBpnNumber;
-    }
-
-    public String getSenderManufacturerName() {
-        return senderManufacturerName;
-    }
-
-    public void setSenderManufacturerName(String senderManufacturerName) {
-        this.senderManufacturerName = senderManufacturerName;
-    }
-
-    public String getReceiverBpnNumber() {
-        return receiverBpnNumber;
-    }
-
-    public void setReceiverBpnNumber(String bpnNumber) {
-        this.receiverBpnNumber = bpnNumber;
-    }
-
-    public String getReceiverManufacturerName() {
-        return receiverManufacturerName;
-    }
-
-    public void setReceiverManufacturerName(String receiverManufacturerName) {
-        this.receiverManufacturerName = receiverManufacturerName;
-    }
-
-    public String getEdcUrl() {
-        return edcUrl;
-    }
-
-    public void setEdcUrl(String edcUrl) {
-        this.edcUrl = edcUrl;
-    }
-
-    public String getContractAgreementId() {
-        return contractAgreementId;
-    }
-
-    public void setContractAgreementId(String contractAgreementId) {
-        this.contractAgreementId = contractAgreementId;
-    }
-
-    public String getNotificationReferenceId() {
-        return notificationReferenceId;
-    }
-
-    public void setNotificationReferenceId(String notificationReferenceId) {
-        this.notificationReferenceId = notificationReferenceId;
-    }
-
-    public List<AssetEntity> getAssets() {
-        return assets;
-    }
-
-    public void setAssets(List<AssetEntity> assets) {
-        this.assets = assets;
-    }
-
-    public Instant getTargetDate() {
-        return this.targetDate;
-    }
-
-    public void setTargetDate(Instant targetDate) {
-        this.targetDate = targetDate;
-    }
-
-    public Severity getSeverity() {
-        return severity;
-    }
-
-    public void setSeverity(Severity severity) {
-        this.severity = severity;
-    }
-
-    public String getEdcNotificationId() {
-        return edcNotificationId;
-    }
-
-    public void setEdcNotificationId(String edcNotificationId) {
-        this.edcNotificationId = edcNotificationId;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public LocalDateTime getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(LocalDateTime updated) {
-        this.updated = updated;
-    }
-
-    public InvestigationStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(InvestigationStatus status) {
-        this.status = status;
-    }
-
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
-    }
-
-    public String getMessageId() {
-        return messageId;
-    }
-
-    public Boolean isInitial() {
-        return isInitial;
-    }
-
-    public void setInitial(Boolean initial) {
-        isInitial = initial;
-    }
 }

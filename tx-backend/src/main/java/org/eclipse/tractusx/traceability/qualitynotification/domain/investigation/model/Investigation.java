@@ -21,6 +21,8 @@
 
 package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model;
 
+import lombok.Builder;
+import lombok.Data;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationDTO;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationReason;
@@ -37,23 +39,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
+@Builder
+@Data
 public class Investigation {
-
-    public static final Comparator<Investigation> COMPARE_BY_NEWEST_INVESTIGATION_CREATION_TIME = (o1, o2) -> {
-        Instant o1CreationTime = o1.createdAt;
-        Instant o2CreationTime = o2.createdAt;
-
-        if (o1CreationTime.equals(o2CreationTime)) {
-            return 0;
-        }
-
-        if (o1CreationTime.isBefore(o2CreationTime)) {
-            return 1;
-        }
-
-        return -1;
-    };
 
     private InvestigationId investigationId;
     private BPN bpn;
@@ -93,6 +81,28 @@ public class Investigation {
                 .collect(Collectors.toMap(Notification::getId, Function.identity()));
     }
 
+    public static final Comparator<Investigation> COMPARE_BY_NEWEST_INVESTIGATION_CREATION_TIME = (o1, o2) -> {
+        Instant o1CreationTime = o1.createdAt;
+        Instant o2CreationTime = o2.createdAt;
+
+        if (o1CreationTime.equals(o2CreationTime)) {
+            return 0;
+        }
+
+        if (o1CreationTime.isBefore(o2CreationTime)) {
+            return 1;
+        }
+
+        return -1;
+    };
+
+    // Override builder pattern for notifications
+    public Investigation notifications(List<Notification> notifications) {
+        this.notifications = notifications.stream()
+                .collect(Collectors.toMap(Notification::getId, Function.identity()));
+        return this;
+    }
+
     public static Investigation startInvestigation(Instant createDate, BPN bpn, String description) {
         return new Investigation(null,
                 bpn,
@@ -126,19 +136,7 @@ public class Investigation {
         return Collections.unmodifiableList(assetIds);
     }
 
-    public InvestigationStatus getInvestigationStatus() {
-        return investigationStatus;
-    }
-
-    public InvestigationSide getInvestigationSide() {
-        return investigationSide;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public InvestigationDTO toData() {
+    public InvestigationDTO toDTO() {
         return InvestigationDTO
                 .builder()
                 .id(investigationId.value())
@@ -254,28 +252,8 @@ public class Investigation {
         this.investigationStatus = to;
     }
 
-    public InvestigationId getId() {
-        return investigationId;
-    }
-
-    public Instant getCreationTime() {
-        return createdAt;
-    }
-
     public List<Notification> getNotifications() {
         return new ArrayList<>(notifications.values());
-    }
-
-    public String getCloseReason() {
-        return closeReason;
-    }
-
-    public String getAcceptReason() {
-        return acceptReason;
-    }
-
-    public String getDeclineReason() {
-        return declineReason;
     }
 
     public void addNotification(Notification notification) {
@@ -294,23 +272,6 @@ public class Investigation {
                 .findFirst()
                 .map(Notification::getSenderManufacturerName)
                 .orElse(null);
-    }
-
-    @Override
-    public String toString() {
-        return "Investigation{" +
-                "investigationId=" + investigationId +
-                ", bpn=" + bpn +
-                ", investigationStatus=" + investigationStatus +
-                ", investigationSide=" + investigationSide +
-                ", description='" + description + '\'' +
-                ", createdAt=" + createdAt +
-                ", assetIds=" + assetIds +
-                ", notifications=" + notifications +
-                ", closeReason='" + closeReason + '\'' +
-                ", acceptReason='" + acceptReason + '\'' +
-                ", declineReason='" + declineReason + '\'' +
-                '}';
     }
 
     private static String getReceiverName(Collection<Notification> notifications) {
