@@ -22,21 +22,19 @@
 package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.assets.infrastructure.config.async.AssetsAsyncConfig;
 import org.eclipse.tractusx.traceability.discovery.domain.model.Discovery;
 import org.eclipse.tractusx.traceability.discovery.domain.service.DiscoveryService;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.InvestigationsEDCFacade;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Notification;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
-import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.lang.invoke.MethodHandles;
-
 import static org.apache.commons.collections4.ListUtils.emptyIfNull;
-import static org.slf4j.LoggerFactory.getLogger;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class NotificationsService {
@@ -45,11 +43,10 @@ public class NotificationsService {
     private final InvestigationsRepository repository;
     private final DiscoveryService discoveryService;
 
-    private static final Logger logger = getLogger(MethodHandles.lookup().lookupClass());
 
     @Async(value = AssetsAsyncConfig.UPDATE_NOTIFICATION_EXECUTOR)
     public void asyncNotificationExecutor(Notification notification) {
-        logger.info("::asyncNotificationExecutor::notification {}", notification);
+        log.info("::asyncNotificationExecutor::notification {}", notification);
         Discovery discovery = discoveryService.getDiscoveryByBPN(notification.getReceiverBpnNumber());
         String senderEdcUrl = discovery.getSenderUrl();
 

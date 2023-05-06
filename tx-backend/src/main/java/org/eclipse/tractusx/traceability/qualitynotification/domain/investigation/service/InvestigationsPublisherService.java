@@ -22,6 +22,7 @@
 package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.ports.AssetRepository;
 import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
@@ -37,11 +38,8 @@ import org.eclipse.tractusx.traceability.qualitynotification.domain.investigatio
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.lang.invoke.MethodHandles;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -53,6 +51,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class InvestigationsPublisherService {
@@ -64,7 +63,6 @@ public class InvestigationsPublisherService {
     private final AssetService assetService;
     private final BpnRepository bpnRepository;
     private final Clock clock;
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 
     /**
@@ -89,7 +87,7 @@ public class InvestigationsPublisherService {
                 .forEach(investigation::addNotification);
 
         assetService.setAssetsInvestigationStatus(investigation);
-        logger.info("Start Investigation {}", investigation);
+        log.info("Start Investigation {}", investigation);
         return investigationsRepository.save(investigation);
     }
 
@@ -161,7 +159,7 @@ public class InvestigationsPublisherService {
 
         List<Notification> allLatestNotificationForEdcNotificationId = getAllLatestNotificationForEdcNotificationId(investigation);
         List<Notification> notificationsToSend = new ArrayList<>();
-        logger.info("::updateInvestigationPublisher::allLatestNotificationForEdcNotificationId {}", allLatestNotificationForEdcNotificationId);
+        log.info("::updateInvestigationPublisher::allLatestNotificationForEdcNotificationId {}", allLatestNotificationForEdcNotificationId);
         allLatestNotificationForEdcNotificationId.forEach(notification -> {
             Notification notificationToSend = notification.copyAndSwitchSenderAndReceiver(applicationBPN);
             switch (status) {
@@ -171,7 +169,7 @@ public class InvestigationsPublisherService {
                 case CLOSED -> investigation.close(reason, notificationToSend);
                 default -> throw new InvestigationIllegalUpdate("Can't update %s investigation with %s status".formatted(investigation.getInvestigationId(), status));
             }
-            logger.info("::updateInvestigationPublisher::notificationToSend {}", notificationToSend);
+            log.info("::updateInvestigationPublisher::notificationToSend {}", notificationToSend);
             investigation.addNotification(notificationToSend);
             notificationsToSend.add(notificationToSend);
         });

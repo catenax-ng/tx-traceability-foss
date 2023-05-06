@@ -22,6 +22,7 @@
 package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
 import org.eclipse.tractusx.traceability.common.mapper.InvestigationMapper;
 import org.eclipse.tractusx.traceability.common.mapper.NotificationMapper;
@@ -33,12 +34,9 @@ import org.eclipse.tractusx.traceability.qualitynotification.domain.investigatio
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationNotFoundException;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.lang.invoke.MethodHandles;
-
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class InvestigationsReceiverService {
@@ -47,7 +45,6 @@ public class InvestigationsReceiverService {
     private final NotificationMapper notificationMapper;
     private final AssetService assetService;
     private final InvestigationMapper investigationMapper;
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public void handleNotificationReceive(EDCNotification edcNotification) {
         BPN investigationCreatorBPN = BPN.of(edcNotification.getSenderBPN());
@@ -55,7 +52,7 @@ public class InvestigationsReceiverService {
         Investigation investigation = investigationMapper.toInvestigation(investigationCreatorBPN, edcNotification.getInformation(), notification);
         InvestigationId investigationId = investigationsRepository.save(investigation);
         assetService.setAssetsInvestigationStatus(investigation);
-        logger.info("Stored received edcNotification in investigation with id {}", investigationId);
+        log.info("Stored received edcNotification in investigation with id {}", investigationId);
     }
 
     public void handleNotificationUpdate(EDCNotification edcNotification) {
@@ -73,6 +70,6 @@ public class InvestigationsReceiverService {
         investigation.addNotification(notification);
         assetService.setAssetsInvestigationStatus(investigation);
         InvestigationId investigationId = investigationsRepository.update(investigation);
-        logger.info("Stored update edcNotification in investigation with id {}", investigationId);
+        log.info("Stored update edcNotification in investigation with id {}", investigationId);
     }
 }

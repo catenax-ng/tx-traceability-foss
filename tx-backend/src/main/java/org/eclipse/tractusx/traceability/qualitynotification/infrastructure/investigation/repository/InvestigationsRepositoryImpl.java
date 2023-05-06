@@ -22,6 +22,7 @@
 package org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.repository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.AssetEntity;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.JpaAssetsRepository;
 import org.eclipse.tractusx.traceability.common.model.BPN;
@@ -35,13 +36,10 @@ import org.eclipse.tractusx.traceability.qualitynotification.domain.investigatio
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationEntity;
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.NotificationEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.lang.invoke.MethodHandles;
 import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +48,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class InvestigationsRepositoryImpl implements InvestigationsRepository {
@@ -61,9 +60,6 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
     private final JpaNotificationRepository notificationRepository;
 
     private final Clock clock;
-
-    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
 
     @Override
     public void update(Notification notification) {
@@ -167,10 +163,10 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
         Map<String, NotificationEntity> notificationEntityMap = notificationEntities.stream().collect(Collectors.toMap(NotificationEntity::getId, notificationEntity -> notificationEntity));
         for (Notification notification : investigation.getNotifications()) {
             if (notificationExists(investigationEntity, notification.getId())) {
-                logger.info("handleNotificationUpdate::notificationExists with id {} for investigation with id {}", notification.getId(), investigation.getInvestigationId());
+                log.info("handleNotificationUpdate::notificationExists with id {} for investigation with id {}", notification.getId(), investigation.getInvestigationId());
                 handleNotificationUpdate(notificationEntityMap.get(notification.getId()), notification);
             } else {
-                logger.info("handleNotificationUpdate::new notification with id {} for investigation with id {}", notification.getId(), investigation.getInvestigationId());
+                log.info("handleNotificationUpdate::new notification with id {} for investigation with id {}", notification.getId(), investigation.getInvestigationId());
                 List<AssetEntity> assetEntitiesByInvestigation = getAssetEntitiesByInvestigation(investigation);
                 handleNotificationCreate(investigationEntity, notification, assetEntitiesByInvestigation);
             }
@@ -185,7 +181,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
     private void handleNotificationCreate(InvestigationEntity investigationEntity, Notification notificationDomain, List<AssetEntity> assetEntities) {
         NotificationEntity notificationEntity = toNotificationEntity(investigationEntity, notificationDomain, assetEntities);
         NotificationEntity savedEntity = notificationRepository.save(notificationEntity);
-        logger.info("Successfully persisted notification entity {}", savedEntity);
+        log.info("Successfully persisted notification entity {}", savedEntity);
     }
 
     private boolean notificationExists(InvestigationEntity investigationEntity, String notificationId) {

@@ -94,13 +94,6 @@ public class Investigation {
         return -1;
     };
 
-/*    // Override builder pattern for notifications
-    public Investigation notifications(List<Notification> notifications) {
-        this.notifications = notifications.stream()
-                .collect(Collectors.toMap(Notification::getId, Function.identity()));
-        return this;
-    }*/
-
     public static Investigation startInvestigation(Instant createDate, BPN bpn, String description) {
         return new Investigation(null,
                 bpn,

@@ -19,12 +19,11 @@
 package org.eclipse.tractusx.traceability.discovery.infrastructure.repository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.discovery.domain.model.Discovery;
 import org.eclipse.tractusx.traceability.discovery.domain.repository.DiscoveryRepository;
 import org.eclipse.tractusx.traceability.discovery.infrastructure.model.ConnectorDiscoveryMappingResponse;
 import org.eclipse.tractusx.traceability.infrastructure.edc.properties.EdcProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,12 +31,12 @@ import java.util.Optional;
 
 import static org.eclipse.tractusx.traceability.discovery.domain.model.Discovery.toDiscovery;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class FeignDiscoveryRepositoryImpl implements DiscoveryRepository {
     private final FeignDiscoveryRepository feignDiscoveryRepository;
     private final EdcProperties edcProperties;
-    private static final Logger logger = LoggerFactory.getLogger(FeignDiscoveryRepositoryImpl.class);
 
     @Override
     public Optional<Discovery> getDiscoveryByBpnFromConnectorEndpoint(String bpn) {
@@ -45,7 +44,7 @@ public class FeignDiscoveryRepositoryImpl implements DiscoveryRepository {
             List<ConnectorDiscoveryMappingResponse> response = feignDiscoveryRepository.getConnectorEndpointMappings(List.of(bpn));
             return Optional.of(toDiscovery(response, bpn, edcProperties.getProviderEdcUrl()));
         } catch (Exception e) {
-            logger.warn("Exception during retrieving EDC Urls from DiscoveryService for {} bpn. Http Message: {} " +
+            log.warn("Exception during retrieving EDC Urls from DiscoveryService for {} bpn. Http Message: {} " +
                     "This is okay if the discovery service is not reachable from the specific environment", bpn, e.getMessage());
             return Optional.empty();
         }
