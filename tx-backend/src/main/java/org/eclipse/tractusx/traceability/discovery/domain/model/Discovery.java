@@ -21,9 +21,14 @@ package org.eclipse.tractusx.traceability.discovery.domain.model;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.eclipse.tractusx.traceability.discovery.infrastructure.model.ConnectorDiscoveryMappingResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
 
 @Setter
 @Getter
@@ -37,22 +42,29 @@ public class Discovery {
         return Discovery.builder().receiverUrls(List.of(receiverUrl)).senderUrl(senderUrl).build();
     }
 
+    public static Discovery toDiscovery(List<ConnectorDiscoveryMappingResponse> connectorDiscoveryMappingResponse, String bpn, String senderUrl) {
+        Map<String, List<String>> bpnToEndpointMappings = emptyIfNull(connectorDiscoveryMappingResponse).stream()
+                .collect(Collectors.toMap(ConnectorDiscoveryMappingResponse::bpn, ConnectorDiscoveryMappingResponse::connectorEndpoint));
+        List<String> receiverUrls = bpnToEndpointMappings.get(bpn);
+        return Discovery.builder().receiverUrls(receiverUrls).senderUrl(senderUrl).build();
+    }
+
     public static Discovery mergeDiscoveries(List<Discovery> discoveries) {
         Discovery mergedDiscovery = Discovery.builder().build();
-
+        List<String> mergedReceiverUrls = new ArrayList<>();
         for (Discovery discovery : discoveries) {
             mergedDiscovery.setSenderUrl(discovery.getSenderUrl());
 
-            List<String> mergedReceiverUrls = new ArrayList<>();
+
             for (String receiverUrl : discovery.getReceiverUrls()) {
                 if (!mergedReceiverUrls.contains(receiverUrl)) {
                     mergedReceiverUrls.add(receiverUrl);
                 }
             }
 
-            mergedDiscovery.setReceiverUrls(mergedReceiverUrls);
-        }
 
+        }
+        mergedDiscovery.setReceiverUrls(mergedReceiverUrls);
         return mergedDiscovery;
     }
 

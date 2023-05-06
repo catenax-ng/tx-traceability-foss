@@ -28,11 +28,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
+import static org.eclipse.tractusx.traceability.discovery.domain.model.Discovery.toDiscovery;
 
 @RequiredArgsConstructor
 @Component
@@ -46,20 +44,12 @@ public class FeignDiscoveryRepositoryImpl implements DiscoveryRepository {
         List<ConnectorDiscoveryMappingResponse> response;
         try {
             response = feignDiscoveryRepository.getConnectorEndpointMappings(List.of(bpn));
-            return Optional.of(toDiscovery(response, bpn));
+            return Optional.of(toDiscovery(response, bpn, edcProperties.getProviderEdcUrl()));
         } catch (Exception e) {
             logger.warn("Exception during retrieving EDC Urls from DiscoveryService for {} bpn. Http Message: {} " +
                     "This is okay if the discovery service is not reachable from the specific environment", bpn, e.getMessage());
             return Optional.empty();
         }
 
-    }
-
-    public Discovery toDiscovery(List<ConnectorDiscoveryMappingResponse> connectorDiscoveryMappingResponse, String bpn) {
-        final String senderUrl = edcProperties.getProviderEdcUrl();
-        Map<String, List<String>> bpnToEndpointMappings = emptyIfNull(connectorDiscoveryMappingResponse).stream()
-                .collect(Collectors.toMap(ConnectorDiscoveryMappingResponse::bpn, ConnectorDiscoveryMappingResponse::connectorEndpoint));
-        List<String> receiverUrls = bpnToEndpointMappings.get(bpn);
-        return Discovery.builder().receiverUrls(receiverUrls).senderUrl(senderUrl).build();
     }
 }

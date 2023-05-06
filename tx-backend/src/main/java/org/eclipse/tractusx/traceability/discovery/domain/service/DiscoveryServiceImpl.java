@@ -56,7 +56,6 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         return mergeDiscoveries(discoveryList);
     }
 
-
     @NotNull
     private Optional<Discovery> getOptionalDiscoveryByBpnFromDiscoveryService(String bpn) {
         return discoveryRepository.getDiscoveryByBpnFromConnectorEndpoint(bpn);
