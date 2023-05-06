@@ -90,7 +90,7 @@ class InvestigationsPublisherServiceTest {
         // Given
         Investigation investigation = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.CLOSED, "bpn123");
         when(assetRepository.getAssetsById(Arrays.asList("asset-1", "asset-2"))).thenReturn(List.of(AssetTestDataFactory.createAssetTestData()));
-        when(repository.save(any(Investigation.class))).thenReturn(investigation.getId());
+        when(repository.save(any(Investigation.class))).thenReturn(investigation.getInvestigationId());
         when(bpnRepository.findManufacturerName(anyString())).thenReturn(Optional.empty());
         when(traceabilityProperties.getBpn()).thenReturn(BPN.of("bpn-123"));
         // When

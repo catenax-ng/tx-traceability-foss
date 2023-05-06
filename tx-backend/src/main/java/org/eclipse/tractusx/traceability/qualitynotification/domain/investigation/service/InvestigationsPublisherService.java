@@ -169,7 +169,7 @@ public class InvestigationsPublisherService {
                 case ACCEPTED -> investigation.accept(reason, notificationToSend);
                 case DECLINED -> investigation.decline(reason, notificationToSend);
                 case CLOSED -> investigation.close(reason, notificationToSend);
-                default -> throw new InvestigationIllegalUpdate("Can't update %s investigation with %s status".formatted(investigation.getId(), status));
+                default -> throw new InvestigationIllegalUpdate("Can't update %s investigation with %s status".formatted(investigation.getInvestigationId(), status));
             }
             logger.info("::updateInvestigationPublisher::notificationToSend {}", notificationToSend);
             investigation.addNotification(notificationToSend);
@@ -195,7 +195,7 @@ public class InvestigationsPublisherService {
                     throw new InvestigationIllegalUpdate("Can't update investigation to status: %s for appBpn: %s and investigationBpn: %s".formatted(status, applicationBpn.value(), investigation.getBpn()));
                 }
             }
-            default -> throw new InvestigationIllegalUpdate("Can't perform unknown status update to: %s for investigation with %s status".formatted(status, investigation.getId()));
+            default -> throw new InvestigationIllegalUpdate("Can't perform unknown status update to: %s for investigation with %s status".formatted(status, investigation.getInvestigationId()));
         }
     }
 

@@ -82,7 +82,7 @@ class InvestigationMapperTest {
         assertEquals(InvestigationStatus.RECEIVED, result.getInvestigationStatus());
         assertEquals(InvestigationSide.RECEIVER, result.getInvestigationSide());
         assertEquals(description, result.getDescription());
-        assertEquals(Instant.parse("2022-03-01T12:00:00Z"), result.getCreationTime());
+        assertEquals(Instant.parse("2022-03-01T12:00:00Z"), result.getCreatedAt());
         assertEquals(List.of("123"), result.getAssetIds());
         assertEquals(List.of(notification), result.getNotifications());
     }

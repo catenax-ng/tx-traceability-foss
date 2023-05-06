@@ -21,7 +21,6 @@
 
 package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model;
 
-import lombok.Builder;
 import lombok.Data;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationDTO;
@@ -39,7 +38,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Builder
 @Data
 public class Investigation {
 
@@ -96,12 +94,12 @@ public class Investigation {
         return -1;
     };
 
-    // Override builder pattern for notifications
+/*    // Override builder pattern for notifications
     public Investigation notifications(List<Notification> notifications) {
         this.notifications = notifications.stream()
                 .collect(Collectors.toMap(Notification::getId, Function.identity()));
         return this;
-    }
+    }*/
 
     public static Investigation startInvestigation(Instant createDate, BPN bpn, String description) {
         return new Investigation(null,

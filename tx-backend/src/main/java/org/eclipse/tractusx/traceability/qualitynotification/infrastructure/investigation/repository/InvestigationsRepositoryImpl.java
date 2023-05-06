@@ -75,8 +75,8 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
 
     @Override
     public InvestigationId update(Investigation investigation) {
-        InvestigationEntity investigationEntity = investigationRepository.findById(investigation.getId().value())
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Investigation with id %s not found!", investigation.getId().value())));
+        InvestigationEntity investigationEntity = investigationRepository.findById(investigation.getInvestigationId().value())
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Investigation with id %s not found!", investigation.getInvestigationId().value())));
 
         investigationEntity.setStatus(investigation.getInvestigationStatus());
         investigationEntity.setUpdated(clock.instant());
@@ -87,7 +87,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
         handleNotificationUpdate(investigationEntity, investigation);
         investigationRepository.save(investigationEntity);
 
-        return investigation.getId();
+        return investigation.getInvestigationId();
     }
 
     @Override
@@ -102,7 +102,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
                     .description(investigation.getDescription())
                     .status(investigation.getInvestigationStatus())
                     .side(investigation.getInvestigationSide())
-                    .created(investigation.getCreationTime())
+                    .created(investigation.getCreatedAt())
                     .build();
 
             investigationRepository.save(investigationEntity);
@@ -167,10 +167,10 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
         Map<String, NotificationEntity> notificationEntityMap = notificationEntities.stream().collect(Collectors.toMap(NotificationEntity::getId, notificationEntity -> notificationEntity));
         for (Notification notification : investigation.getNotifications()) {
             if (notificationExists(investigationEntity, notification.getId())) {
-                logger.info("handleNotificationUpdate::notificationExists with id {} for investigation with id {}", notification.getId(), investigation.getId());
+                logger.info("handleNotificationUpdate::notificationExists with id {} for investigation with id {}", notification.getId(), investigation.getInvestigationId());
                 handleNotificationUpdate(notificationEntityMap.get(notification.getId()), notification);
             } else {
-                logger.info("handleNotificationUpdate::new notification with id {} for investigation with id {}", notification.getId(), investigation.getId());
+                logger.info("handleNotificationUpdate::new notification with id {} for investigation with id {}", notification.getId(), investigation.getInvestigationId());
                 List<AssetEntity> assetEntitiesByInvestigation = getAssetEntitiesByInvestigation(investigation);
                 handleNotificationCreate(investigationEntity, notification, assetEntitiesByInvestigation);
             }
