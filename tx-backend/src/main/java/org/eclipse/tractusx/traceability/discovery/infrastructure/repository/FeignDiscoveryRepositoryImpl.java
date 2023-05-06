@@ -41,15 +41,13 @@ public class FeignDiscoveryRepositoryImpl implements DiscoveryRepository {
 
     @Override
     public Optional<Discovery> getDiscoveryByBpnFromConnectorEndpoint(String bpn) {
-        List<ConnectorDiscoveryMappingResponse> response;
         try {
-            response = feignDiscoveryRepository.getConnectorEndpointMappings(List.of(bpn));
+            List<ConnectorDiscoveryMappingResponse> response = feignDiscoveryRepository.getConnectorEndpointMappings(List.of(bpn));
             return Optional.of(toDiscovery(response, bpn, edcProperties.getProviderEdcUrl()));
         } catch (Exception e) {
             logger.warn("Exception during retrieving EDC Urls from DiscoveryService for {} bpn. Http Message: {} " +
                     "This is okay if the discovery service is not reachable from the specific environment", bpn, e.getMessage());
             return Optional.empty();
         }
-
     }
 }
