@@ -27,14 +27,64 @@ import org.eclipse.tractusx.traceability.IntegrationSpecification
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset
 import org.eclipse.tractusx.traceability.common.security.JwtRole
 import org.eclipse.tractusx.traceability.common.support.*
+import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification
+import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotificationFactory
+import org.eclipse.tractusx.traceability.investigations.domain.model.AffectedPart
 import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus
+import org.eclipse.tractusx.traceability.investigations.domain.model.Notification
+import org.eclipse.tractusx.traceability.investigations.domain.model.Severity
+import org.eclipse.tractusx.traceability.investigations.domain.service.InvestigationsReceiverService
 import org.hamcrest.Matchers
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.transaction.annotation.Transactional
 import spock.lang.Unroll
+
+import java.time.Instant
 
 import static io.restassured.RestAssured.given
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN
 
 class PublisherInvestigationsControllerIT extends IntegrationSpecification implements IrsApiSupport, AssetsSupport, InvestigationsSupport, NotificationsSupport, BpnSupport {
+    @Autowired
+    InvestigationsReceiverService investigationsReceiverService
+
+    @Transactional
+    def "should receive notification"() {
+        given:
+        defaultAssetsStored()
+
+        and:
+        EDCNotification notification = EDCNotificationFactory.createQualityInvestigation(
+                "it",
+                new Notification(
+                        "some-id",
+                        null,
+                        "bpn-a",
+                        "Sender Manufacturer name",
+                        "BPNL00000003AXS3",
+                        "Receiver manufacturer name",
+                        "edcUrl",
+                        null,
+                        "description",
+                        InvestigationStatus.SENT,
+                        [new AffectedPart("urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb")],
+                        Instant.parse("2018-11-30T18:35:24.00Z"),
+                        Severity.MINOR,
+                        "some-id",
+                        null,
+                        null,
+                        "messageid",
+                        false
+                )
+        )
+
+        when:
+        investigationsReceiverService.handleNotificationReceive(notification)
+
+        then:
+        assertInvestigationsSize(1)
+        assertNotificationsSize(1)
+    }
 
     def "should start investigation"() {
         given:
