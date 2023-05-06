@@ -28,11 +28,11 @@ import org.eclipse.tractusx.traceability.common.support.InvestigationsSupport
 import org.eclipse.tractusx.traceability.common.support.NotificationsSupport
 import org.eclipse.tractusx.traceability.common.support.TestDataSupport
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification
-import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationSide
-import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus
-import org.eclipse.tractusx.traceability.investigations.domain.model.Severity
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.InvestigationEntity
-import org.eclipse.tractusx.traceability.investigations.infrastructure.model.NotificationEntity
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationSide
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationEntity
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.NotificationEntity
 import org.springframework.beans.factory.annotation.Autowired
 
 import java.time.Instant

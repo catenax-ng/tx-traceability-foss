@@ -33,8 +33,8 @@ import org.eclipse.tractusx.traceability.common.config.PostgreSQLConfig
 import org.eclipse.tractusx.traceability.common.config.RestAssuredConfig
 import org.eclipse.tractusx.traceability.common.config.RestitoConfig
 import org.eclipse.tractusx.traceability.common.support.*
-import org.eclipse.tractusx.traceability.investigations.infrastructure.repository.JpaInvestigationRepository
-import org.eclipse.tractusx.traceability.investigations.infrastructure.repository.JpaNotificationRepository
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.repository.JpaInvestigationRepository
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.repository.JpaNotificationRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
