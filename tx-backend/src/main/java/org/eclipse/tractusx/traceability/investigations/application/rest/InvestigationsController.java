@@ -195,7 +195,6 @@ public class InvestigationsController {
     @PostMapping("/{investigationId}/update")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateInvestigation(@PathVariable Long investigationId, @Valid @RequestBody UpdateInvestigationRequest updateInvestigationRequest) {
-        // TODO should be part of serviceImpl not controller
         validate(updateInvestigationRequest);
         logger.info(API_LOG_START + "/{}/update with params {}", investigationId, updateInvestigationRequest);
         investigationService.updateInvestigation(investigationId, InvestigationStatus.fromStringValue(updateInvestigationRequest.status().name()), updateInvestigationRequest.reason());
