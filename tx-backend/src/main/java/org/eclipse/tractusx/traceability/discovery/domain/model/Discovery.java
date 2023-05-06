@@ -43,7 +43,7 @@ public class Discovery {
         for (Discovery discovery : discoveries) {
             mergedDiscovery.setSenderUrl(discovery.getSenderUrl());
 
-            List<String> mergedReceiverUrls = new ArrayList<>(mergedDiscovery.getReceiverUrls());
+            List<String> mergedReceiverUrls = new ArrayList<>();
             for (String receiverUrl : discovery.getReceiverUrls()) {
                 if (!mergedReceiverUrls.contains(receiverUrl)) {
                     mergedReceiverUrls.add(receiverUrl);

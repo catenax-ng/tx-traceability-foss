@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
 
+import static org.apache.commons.collections4.ListUtils.emptyIfNull;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RequiredArgsConstructor
@@ -52,7 +53,7 @@ public class NotificationsService {
         Discovery discovery = discoveryService.getDiscoveryByBPN(notification.getReceiverBpnNumber());
         String senderEdcUrl = discovery.getSenderUrl();
 
-        discovery.getReceiverUrls()
+        emptyIfNull(discovery.getReceiverUrls())
                 .forEach(receiverUrl -> {
                     edcFacade.startEDCTransfer(notification, receiverUrl, senderEdcUrl);
                     repository.update(notification);
