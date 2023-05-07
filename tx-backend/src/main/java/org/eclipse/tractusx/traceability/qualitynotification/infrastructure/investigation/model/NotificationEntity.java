@@ -45,9 +45,9 @@ import java.util.List;
 
 @Setter
 @Getter
-@NoArgsConstructor
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "notification")
 public class NotificationEntity {
@@ -66,12 +66,9 @@ public class NotificationEntity {
             inverseJoinColumns = @JoinColumn(name = "asset_id")
     )
     private List<AssetEntity> assets;
-
     private String senderBpnNumber;
-
     private String senderManufacturerName;
     private String receiverBpnNumber;
-
     private String receiverManufacturerName;
     private String edcUrl;
     private String contractAgreementId;
@@ -84,37 +81,6 @@ public class NotificationEntity {
     private InvestigationStatus status;
     private String messageId;
     private Boolean isInitial;
-
-    public NotificationEntity(String id,
-                              InvestigationEntity investigation,
-                              String senderBpnNumber,
-                              String senderManufacturerName,
-                              String receiverBpnNumber,
-                              String receiverManufacturerName,
-                              List<AssetEntity> assets,
-                              String notificationReferenceId,
-                              Instant targetDate,
-                              Severity severity,
-                              String edcNotificationId,
-                              InvestigationStatus status,
-                              String messageId,
-                              Boolean isInitial) {
-        this.id = id;
-        this.investigation = investigation;
-        this.senderBpnNumber = senderBpnNumber;
-        this.senderManufacturerName = senderManufacturerName;
-        this.receiverBpnNumber = receiverBpnNumber;
-        this.receiverManufacturerName = receiverManufacturerName;
-        this.assets = assets;
-        this.notificationReferenceId = notificationReferenceId;
-        this.targetDate = targetDate;
-        this.severity = severity;
-        this.edcNotificationId = edcNotificationId;
-        this.created = LocalDateTime.now();
-        this.status = status;
-        this.messageId = messageId;
-        this.isInitial = isInitial;
-    }
 
     @PreUpdate
     public void preUpdate() {

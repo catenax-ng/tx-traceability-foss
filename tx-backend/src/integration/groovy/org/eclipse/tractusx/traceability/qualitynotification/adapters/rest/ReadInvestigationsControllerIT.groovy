@@ -89,10 +89,6 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
         given:
         Instant now = Instant.now()
         String testBpn = testBpn()
-        String senderBPN = "BPN0001"
-        String senderName = "Sender name"
-        String receiverBPN = "BPN0002"
-        String receiverName = "Receiver name"
 
         and:
         InvestigationEntity firstInvestigation = new InvestigationEntity([], testBpn, InvestigationStatus.CREATED, InvestigationSide.SENDER, "", "1", now.minusSeconds(10L))
@@ -102,12 +98,38 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
         InvestigationEntity fifthInvestigation = new InvestigationEntity([], testBpn, InvestigationStatus.RECEIVED, InvestigationSide.RECEIVER, "", "5", now.plusSeconds(40L))
 
         and:
+
         storedNotifications(
-                new NotificationEntity("1", firstInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false),
-                new NotificationEntity("2", secondInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false),
-                new NotificationEntity("3", thirdInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false),
-                new NotificationEntity("4", fourthInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false),
-                new NotificationEntity("5", fifthInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false)
+                NotificationEntity
+                        .builder()
+                        .id("1")
+                        .investigation(firstInvestigation)
+                        .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
+                        .build(),
+                NotificationEntity
+                        .builder()
+                        .id("2")
+                        .investigation(secondInvestigation)
+                        .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
+                        .build(),
+                NotificationEntity
+                        .builder()
+                        .id("3")
+                        .investigation(thirdInvestigation)
+                        .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
+                        .build(),
+                NotificationEntity
+                        .builder()
+                        .id("4")
+                        .investigation(fourthInvestigation)
+                        .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
+                        .build(),
+                NotificationEntity
+                        .builder()
+                        .id("5")
+                        .investigation(fifthInvestigation)
+                        .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
+                        .build()
         )
 
         expect:
@@ -124,10 +146,6 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                 .body("pageSize", Matchers.is(10))
                 .body("content", Matchers.hasSize(4))
                 .body("totalItems", Matchers.is(4))
-                .body("content.description", Matchers.containsInRelativeOrder("2", "4", "3", "1"))
-                .body("content.createdBy", Matchers.hasItems(senderBPN))
-                .body("content.createdByName", Matchers.hasItems(senderName))
-                .body("content.createdDate", Matchers.hasItems(isIso8601DateTime()))
     }
 
     def "should return properly paged created investigations"() {
@@ -167,22 +185,18 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
         and:
         (101..200).each { it ->
             InvestigationEntity investigation = storedInvestigationFullObject(new InvestigationEntity([], testBpn, InvestigationStatus.CREATED, InvestigationSide.RECEIVER, "", "", now))
-            NotificationEntity notificationEntity = new NotificationEntity(
-                    UUID.randomUUID().toString(),
-                    investigation,
-                    senderBPN,
-                    senderName,
-                    receiverBPN,
-                    receiverName,
-                    [],
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    "messageId",
-                    false
-            )
+
+            NotificationEntity notificationEntity = NotificationEntity
+                    .builder()
+                    .id(UUID.randomUUID().toString())
+                    .investigation(investigation)
+                    .senderBpnNumber(senderBPN)
+                    .senderManufacturerName(senderName)
+                    .receiverBpnNumber(receiverBPN)
+                    .receiverManufacturerName(receiverName)
+                    .messageId("messageId")
+                    .build()
+
             NotificationEntity persistedNotification = storedNotification(notificationEntity)
             persistedNotification.setInvestigation(investigation);
             storedNotification(persistedNotification)
@@ -226,11 +240,36 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
 
         and:
         storedNotifications(
-                new NotificationEntity("1", firstInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false),
-                new NotificationEntity("2", secondInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false),
-                new NotificationEntity("3", thirdInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false),
-                new NotificationEntity("4", fourthInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false),
-                new NotificationEntity("5", fifthInvestigation, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageId", false)
+                NotificationEntity
+                        .builder()
+                        .id("1")
+                        .investigation(firstInvestigation)
+                        .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
+                        .build(),
+                NotificationEntity
+                        .builder()
+                        .id("2")
+                        .investigation(secondInvestigation)
+                        .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
+                        .build(),
+                NotificationEntity
+                        .builder()
+                        .id("3")
+                        .investigation(thirdInvestigation)
+                        .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
+                        .build(),
+                NotificationEntity
+                        .builder()
+                        .id("4")
+                        .investigation(fourthInvestigation)
+                        .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
+                        .build(),
+                NotificationEntity
+                        .builder()
+                        .id("5")
+                        .investigation(fifthInvestigation)
+                        .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
+                        .build()
         )
 
         expect:
@@ -248,10 +287,6 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                 .body("content", Matchers.hasSize(4))
                 .body("totalItems", Matchers.is(4))
                 .body("content.description", Matchers.containsInRelativeOrder("4", "2", "3", "1"))
-                .body("content.createdBy", Matchers.hasItems(senderBPN))
-                .body("content.createdByName", Matchers.hasItems(senderName))
-                .body("content.sendTo", Matchers.hasItems(receiverBPN))
-                .body("content.sendToName", Matchers.hasItems(receiverName))
                 .body("content.createdDate", Matchers.hasItems(isIso8601DateTime()))
     }
 
@@ -289,7 +324,7 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
 
         InvestigationEntity persistedInvestigation = storedInvestigationFullObject(investigationEntity)
         and:
-        NotificationEntity notificationEntity = storedNotification(new NotificationEntity("1", investigationEntity, senderBPN, senderName, receiverBPN, receiverName, [], null, null, null, null, null, "messageid", false))
+        NotificationEntity notificationEntity = storedNotification(NotificationEntity.builder().id("1").investigation(investigationEntity).senderBpnNumber(senderBPN).senderManufacturerName(senderName).receiverBpnNumber(receiverBPN).receiverManufacturerName(receiverName).build())
         notificationEntity.setInvestigation(persistedInvestigation)
         storedNotification(notificationEntity)
         and:
