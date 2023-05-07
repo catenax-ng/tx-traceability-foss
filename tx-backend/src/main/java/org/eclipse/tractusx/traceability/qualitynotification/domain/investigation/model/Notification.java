@@ -21,7 +21,9 @@
 
 package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model;
 
-import com.nimbusds.oauth2.sdk.util.StringUtils;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.NotificationStatusTransitionNotAllowed;
 
@@ -33,6 +35,9 @@ import java.util.UUID;
 
 import static java.util.Objects.requireNonNullElseGet;
 
+@Getter
+@Setter
+@ToString
 public class Notification {
     private final String id;
     private String notificationReferenceId;
@@ -91,14 +96,6 @@ public class Notification {
         this.isInitial = isInitial;
     }
 
-    public Boolean isInitial() {
-        return isInitial;
-    }
-
-    public void setInitial(Boolean initial) {
-        isInitial = initial;
-    }
-
     void changeStatusTo(InvestigationStatus to) {
         boolean transitionAllowed = investigationStatus.transitionAllowed(to);
 
@@ -108,133 +105,6 @@ public class Notification {
         this.investigationStatus = to;
     }
 
-    public void updateNotificationReferenceId(String notificationReferenceId) {
-        this.notificationReferenceId = notificationReferenceId;
-    }
-
-    public boolean existOnReceiverSide() {
-        return StringUtils.isNotBlank(this.getNotificationReferenceId());
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getNotificationReferenceId() {
-        return notificationReferenceId;
-    }
-
-    public String getContractAgreementId() {
-        return contractAgreementId;
-    }
-
-    public void setContractAgreementId(String contractAgreementId) {
-        this.contractAgreementId = contractAgreementId;
-    }
-
-    public List<AffectedPart> getAffectedParts() {
-        return affectedParts;
-    }
-
-    public String getSenderBpnNumber() {
-        return senderBpnNumber;
-    }
-
-    public void setSenderBpnNumber(String senderBpnNumber) {
-        this.senderBpnNumber = senderBpnNumber;
-    }
-
-    public void setReceiverBpnNumber(String receiverBpnNumber) {
-        this.receiverBpnNumber = receiverBpnNumber;
-    }
-
-    public String getSenderManufacturerName() {
-        return senderManufacturerName;
-    }
-
-    public String getReceiverBpnNumber() {
-        return receiverBpnNumber;
-    }
-
-    public String getReceiverManufacturerName() {
-        return receiverManufacturerName;
-    }
-
-    public void setEdcUrl(String edcUrl) {
-        this.edcUrl = edcUrl;
-    }
-
-    public String getEdcUrl() {
-        return edcUrl;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public InvestigationStatus getInvestigationStatus() {
-        return investigationStatus;
-    }
-
-    public Instant getTargetDate() {
-        return this.targetDate;
-    }
-
-    public void setInvestigationStatus(InvestigationStatus investigationStatus) {
-        this.investigationStatus = investigationStatus;
-    }
-
-    public Severity getSeverity() {
-        return severity;
-    }
-
-    public void setSeverity(Severity severity) {
-        this.severity = severity;
-    }
-
-    public void setTargetDate(Instant targetDate) {
-        this.targetDate = targetDate;
-    }
-
-    public void setNotificationReferenceId(String notificationReferenceId) {
-        this.notificationReferenceId = notificationReferenceId;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public LocalDateTime getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(LocalDateTime updated) {
-        this.updated = updated;
-    }
-
-    public String getEdcNotificationId() {
-        return edcNotificationId;
-    }
-
-    public void setEdcNotificationId(String edcNotificationId) {
-        this.edcNotificationId = edcNotificationId;
-    }
-
-    public String getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
-    }
 
     // Important - receiver and sender will be saved in switched order
     public Notification copyAndSwitchSenderAndReceiver(BPN applicationBpn) {
@@ -271,29 +141,5 @@ public class Notification {
                 UUID.randomUUID().toString(),
                 false
         );
-    }
-
-    @Override
-    public String toString() {
-        return "Notification{" +
-                "id='" + id + '\'' +
-                ", notificationReferenceId='" + notificationReferenceId + '\'' +
-                ", senderBpnNumber='" + senderBpnNumber + '\'' +
-                ", senderManufacturerName='" + senderManufacturerName + '\'' +
-                ", receiverBpnNumber='" + receiverBpnNumber + '\'' +
-                ", receiverManufacturerName='" + receiverManufacturerName + '\'' +
-                ", edcUrl='" + edcUrl + '\'' +
-                ", contractAgreementId='" + contractAgreementId + '\'' +
-                ", affectedParts=" + affectedParts +
-                ", description='" + description + '\'' +
-                ", investigationStatus=" + investigationStatus +
-                ", edcNotificationId='" + edcNotificationId + '\'' +
-                ", created=" + created +
-                ", updated=" + updated +
-                ", targetDate=" + targetDate +
-                ", severity=" + severity +
-                ", messageId='" + messageId + '\'' +
-                ", isInitial='" + isInitial + '\'' +
-                '}';
     }
 }

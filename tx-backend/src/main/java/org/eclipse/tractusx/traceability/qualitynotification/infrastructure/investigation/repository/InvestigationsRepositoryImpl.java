@@ -256,22 +256,23 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
             throw new IllegalStateException("Investigation with id %s has no notification assets".formatted(investigationEntity.getId()));
         }
 
-        return new NotificationEntity(
-                notification.getId(),
-                investigationEntity,
-                notification.getSenderBpnNumber(),
-                notification.getSenderManufacturerName(),
-                notification.getReceiverBpnNumber(),
-                notification.getReceiverManufacturerName(),
-                notificationAssets,
-                notification.getNotificationReferenceId(),
-                notification.getTargetDate(),
-                notification.getSeverity(),
-                notification.getEdcNotificationId(),
-                notification.getInvestigationStatus(),
-                notification.getMessageId(),
-                notification.isInitial()
-        );
+        return NotificationEntity
+                .builder()
+                .id(notification.getId())
+                .investigation(investigationEntity)
+                .senderBpnNumber(notification.getSenderBpnNumber())
+                .senderManufacturerName(notification.getSenderManufacturerName())
+                .receiverBpnNumber(notification.getReceiverBpnNumber())
+                .receiverManufacturerName(notification.getReceiverManufacturerName())
+                .assets(notificationAssets)
+                .notificationReferenceId(notification.getNotificationReferenceId())
+                .targetDate(notification.getTargetDate())
+                .severity(notification.getSeverity())
+                .edcNotificationId(notification.getEdcNotificationId())
+                .status(notification.getInvestigationStatus())
+                .messageId(notification.getMessageId())
+                .isInitial(notification.getIsInitial())
+                .build();
     }
 
     private List<AssetEntity> filterNotificationAssets(Notification notification, List<AssetEntity> assets) {
