@@ -47,143 +47,107 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(MockitoExtension.class)
 class InvestigationPublisherTest {
 
-	Investigation investigation;
+    Investigation investigation;
 
-	@Test
-	@DisplayName("Forbid Cancel Investigation with disallowed status")
-	void forbidCancellingInvestigationWithDisallowedStatus() {
+    @Test
+    @DisplayName("Forbid Cancel Investigation with disallowed status")
+    void forbidCancellingInvestigationWithDisallowedStatus() {
+        InvestigationStatus status = RECEIVED;
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, status);
+        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.cancel(bpn));
+        assertEquals(status, investigation.getInvestigationStatus());
+    }
 
-		InvestigationStatus status = RECEIVED;
-		BPN bpn = new BPN("BPNL000000000001");
-		investigation = senderInvestigationWithStatus(bpn, status);
+    @Test
+    @DisplayName("Forbid Send Investigation with disallowed status")
+    void forbidSendingInvestigationWithDisallowedStatus() {
+        InvestigationStatus status = SENT;
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, status);
+        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.send(bpn));
+        assertEquals(status, investigation.getInvestigationStatus());
+    }
 
-		assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.cancel(bpn));
-
-		assertEquals(status, investigation.getInvestigationStatus());
-
-	}
-
-	@Test
-	@DisplayName("Forbid Send Investigation with disallowed status")
-	void forbidSendingInvestigationWithDisallowedStatus() {
-
-		InvestigationStatus status = SENT;
-		BPN bpn = new BPN("BPNL000000000001");
-		investigation = senderInvestigationWithStatus(bpn, status);
-
-		assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.send(bpn));
-
-		assertEquals(status, investigation.getInvestigationStatus());
-
-	}
-
-	@Test
-	@DisplayName("Forbid Close Investigation for different BPN")
-	void forbidCloseInvestigationWithDisallowedStatus() {
-
-		InvestigationStatus status = CREATED;
-		BPN bpn = new BPN("BPNL000000000001");
+    @Test
+    @DisplayName("Forbid Close Investigation for different BPN")
+    void forbidCloseInvestigationWithDisallowedStatus() {
+        InvestigationStatus status = CREATED;
+        BPN bpn = new BPN("BPNL000000000001");
         BPN bpnOther = new BPN("BPNL12321321321");
-		investigation = senderInvestigationWithStatus(bpnOther, status);
+        investigation = senderInvestigationWithStatus(bpnOther, status);
+        assertThrows(InvestigationIllegalUpdate.class, () -> investigation.close(bpn, "some-reason"));
+        assertEquals(status, investigation.getInvestigationStatus());
+    }
 
-		assertThrows(InvestigationIllegalUpdate.class, () -> investigation.close(bpn, "some-reason"));
+    @Test
+    @DisplayName("Forbid Cancel Investigation for different BPN")
+    void forbidCancelInvestigationForDifferentBpn() {
+        InvestigationStatus status = CREATED;
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, status);
+        BPN bpn2 = new BPN("BPNL000000000002");
+        assertThrows(InvestigationIllegalUpdate.class, () -> investigation.cancel(bpn2));
+        assertEquals(status, investigation.getInvestigationStatus());
+    }
 
-		assertEquals(status, investigation.getInvestigationStatus());
+    @Test
+    @DisplayName("Forbid Send Investigation for different BPN")
+    void forbidSendInvestigationForDifferentBpn() {
+        InvestigationStatus status = CREATED;
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, status);
+        BPN bpn2 = new BPN("BPNL000000000002");
+        assertThrows(InvestigationIllegalUpdate.class, () -> investigation.send(bpn2));
+        assertEquals(status, investigation.getInvestigationStatus());
+    }
 
-	}
+    @Test
+    @DisplayName("Forbid Close Investigation for different BPN")
+    void forbidCloseInvestigationForDifferentBpn() {
+        InvestigationStatus status = CREATED;
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, status);
+        BPN bpn2 = new BPN("BPNL000000000002");
+        assertThrows(InvestigationIllegalUpdate.class, () -> investigation.close(bpn2, "some reason"));
+        assertEquals(status, investigation.getInvestigationStatus());
+    }
 
-	@Test
-	@DisplayName("Forbid Cancel Investigation for different BPN")
-	void forbidCancelInvestigationForDifferentBpn() {
+    @Test
+    @DisplayName("Send Investigation status")
+    void sendInvestigationSuccessfully() {
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, CREATED);
+        investigation.send(bpn);
+        assertEquals(SENT, investigation.getInvestigationStatus());
+    }
 
-		InvestigationStatus status = CREATED;
+    @Test
+    @DisplayName("Cancel Investigation status")
+    void cancelInvestigationSuccessfully() {
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, CREATED);
+        investigation.cancel(bpn);
+        assertEquals(CANCELED, investigation.getInvestigationStatus());
+    }
 
-		BPN bpn = new BPN("BPNL000000000001");
-		investigation = senderInvestigationWithStatus(bpn, status);
-
-		BPN bpn2 = new BPN("BPNL000000000002");
-
-		assertThrows(InvestigationIllegalUpdate.class, () -> investigation.cancel(bpn2));
-
-		assertEquals(status, investigation.getInvestigationStatus());
-
-	}
-
-	@Test
-	@DisplayName("Forbid Send Investigation for different BPN")
-	void forbidSendInvestigationForDifferentBpn() {
-
-		InvestigationStatus status = CREATED;
-
-		BPN bpn = new BPN("BPNL000000000001");
-		investigation = senderInvestigationWithStatus(bpn, status);
-
-		assertThrows(InvestigationIllegalUpdate.class, () -> investigation.send(new BPN("BPNL000000000002")));
-
-		assertEquals(status, investigation.getInvestigationStatus());
-
-	}
-
-	@Test
-	@DisplayName("Forbid Close Investigation for different BPN")
-	void forbidCloseInvestigationForDifferentBpn() {
-
-		InvestigationStatus status = CREATED;
-		BPN bpn = new BPN("BPNL000000000001");
-		investigation = senderInvestigationWithStatus(bpn, status);
-
-		assertThrows(InvestigationIllegalUpdate.class, () -> investigation.close(new BPN("BPNL000000000002"), "some reason"));
-
-		assertEquals(status, investigation.getInvestigationStatus());
-
-
-	}
-
-	@Test
-	@DisplayName("Send Investigation status")
-	void sendInvestigationSuccessfully() {
-
-		BPN bpn = new BPN("BPNL000000000001");
-		investigation = senderInvestigationWithStatus(bpn, CREATED);
-		investigation.send(bpn);
-
-		assertEquals(SENT, investigation.getInvestigationStatus());
-
-	}
-
-	@Test
-	@DisplayName("Cancel Investigation status")
-	void cancelInvestigationSuccessfully() {
-		BPN bpn = new BPN("BPNL000000000001");
-		investigation = senderInvestigationWithStatus(bpn, CREATED);
-		investigation.cancel(bpn);
+    @Test
+    @DisplayName("Close Investigation with allowed status")
+    void closeInvestigationWithAllowedStatusSuccessfully() {
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, SENT);
+        investigation.close(bpn, "some-reason");
+        assertEquals(CLOSED, investigation.getInvestigationStatus());
+    }
 
 
-		assertEquals(CANCELED, investigation.getInvestigationStatus());
-	}
+    // util functions
+    private Investigation senderInvestigationWithStatus(BPN bpn, InvestigationStatus status) {
+        return investigationWithStatus(bpn, status, InvestigationSide.SENDER);
+    }
 
-	@Test
-	@DisplayName("Close Investigation with allowed status")
-	void closeInvestigationWithAllowedStatusSuccessfully() {
-
-		InvestigationStatus status = SENT;
-
-		BPN bpn = new BPN("BPNL000000000001");
-		investigation = senderInvestigationWithStatus(bpn, status);
-		investigation.close(bpn, "some-reason");
-
-		assertEquals(CLOSED, investigation.getInvestigationStatus());
-
-	}
-
-
-	// util functions
-	private Investigation senderInvestigationWithStatus(BPN bpn, InvestigationStatus status) {
-		return investigationWithStatus(bpn, status, InvestigationSide.SENDER);
-	}
-
-	private Investigation investigationWithStatus(BPN bpn, InvestigationStatus status, InvestigationSide side) {
-		return new Investigation(new InvestigationId(1L), bpn, status, side, "", "", "", "", Instant.now(), new ArrayList<>(), new ArrayList<>());
-	}
+    private Investigation investigationWithStatus(BPN bpn, InvestigationStatus status, InvestigationSide side) {
+        return new Investigation(new InvestigationId(1L), bpn, status, side, "", "", "", "", Instant.now(), new ArrayList<>(), new ArrayList<>());
+    }
 }
 
