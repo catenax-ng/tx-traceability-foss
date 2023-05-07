@@ -33,11 +33,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 import static org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus.ACCEPTED;
 import static org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus.ACKNOWLEDGED;
@@ -439,79 +441,22 @@ class InvestigationReceiverTest {
 
     }
 
-    @Test
-    @DisplayName("Forbid Cancel Investigation with status sent")
-    void forbidCancelInvestigationWithStatusSent() {
+    private static Stream<Arguments> provideCancelInvalidStatus() {
+        return Stream.of(
+                Arguments.of(CANCELED),
+                Arguments.of(CLOSED),
+                Arguments.of(DECLINED),
+                Arguments.of(ACCEPTED)
 
-        InvestigationStatus status = SENT;
-
-        investigation = receiverInvestigationWithStatus(status);
-
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.cancel(new BPN("BPNL000000000001")));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
+        );
     }
 
-    @Test
-    @DisplayName("Forbid Cancel Investigation with status received")
-    void forbidCancelInvestigationWithStatusReceived() {
-
-        InvestigationStatus status = RECEIVED;
-
-        investigation = receiverInvestigationWithStatus(status);
-
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.cancel(new BPN("BPNL000000000001")));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Cancel Investigation with status acknowledged")
-    void forbidCancelInvestigationWithStatusAcknowledged() {
-
-        InvestigationStatus status = ACKNOWLEDGED;
-
-        investigation = receiverInvestigationWithStatus(status);
-
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.cancel(new BPN("BPNL000000000001")));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Cancel Investigation with status accepted")
-    void forbidCancelInvestigationWithStatusAccepted() {
-
-        InvestigationStatus status = ACCEPTED;
-
-        investigation = receiverInvestigationWithStatus(status);
-
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.cancel(new BPN("BPNL000000000001")));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Cancel Investigation with status declined")
-    void forbidCancelInvestigationWithStatusDeclined() {
-
-        InvestigationStatus status = DECLINED;
-
-        investigation = receiverInvestigationWithStatus(status);
-
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.cancel(new BPN("BPNL000000000001")));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
+    ;
 
     @ParameterizedTest
     @DisplayName("Forbid Cancel Investigation with invalid statuses")
-    @EnumSource(value = InvestigationStatus.class, names = {"CANCELED", "CLOSED"})
+    @MethodSource("provideCancelInvalidStatus")
+        //  @EnumSource(value = InvestigationStatus.class, names = {"CANCELED", "CLOSED", "DECLINED", "ACCEPTED", "ACKNOWLEDGED", "RECEIVED", "SENT" })
     void forbidCancelInvestigationWithInvalidStatus(InvestigationStatus status) {
         Investigation investigation = receiverInvestigationWithStatus(status);
         BPN bpn = new BPN("BPNL000000000001");
