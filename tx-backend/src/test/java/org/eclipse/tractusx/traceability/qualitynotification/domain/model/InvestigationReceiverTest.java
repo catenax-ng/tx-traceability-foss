@@ -57,155 +57,89 @@ class InvestigationReceiverTest {
 
     Investigation investigation;
 
-    @Test
-    @DisplayName("Forbid Acknowledge Investigation with disallowed status")
-    void forbidAcknowledgeInvestigationWithStatusCreated() {
+    private static Stream<Arguments> provideInvalidStatusForAcknowledgeInvestigation() {
+        return Stream.of(
+                Arguments.of(CLOSED),
+                Arguments.of(DECLINED),
+                Arguments.of(ACCEPTED),
+                Arguments.of(CANCELED),
+                Arguments.of(CREATED)
 
+        );
+    }
+
+    private static Stream<Arguments> provideInvalidStatusForAcceptInvestigation() {
+        return Stream.of(
+                Arguments.of(CREATED),
+                Arguments.of(CANCELED),
+                Arguments.of(DECLINED),
+                Arguments.of(RECEIVED),
+                Arguments.of(SENT),
+                Arguments.of(CLOSED)
+        );
+    }
+
+    private static Stream<Arguments> provideInvalidStatusForDeclineInvestigation() {
+        return Stream.of(
+                Arguments.of(CLOSED),
+                Arguments.of(CANCELED),
+                Arguments.of(DECLINED),
+                Arguments.of(ACCEPTED),
+                Arguments.of(RECEIVED),
+                Arguments.of(SENT),
+                Arguments.of(CREATED)
+        );
+    }
+
+    private static Stream<Arguments> provideInvalidStatusForCloseInvestigation() {
+        return Stream.of(
+                Arguments.of(CLOSED),
+                Arguments.of(CANCELED)
+        );
+    }
+
+    private static Stream<Arguments> provideInvalidStatusForSendInvestigation() {
+        return Stream.of(
+                Arguments.of(CLOSED),
+                Arguments.of(CANCELED),
+                Arguments.of(DECLINED),
+                Arguments.of(ACCEPTED),
+                Arguments.of(ACKNOWLEDGED),
+                Arguments.of(RECEIVED),
+                Arguments.of(SENT)
+        );
+    }
+
+    private static Stream<Arguments> provideInvalidStatusForCancelInvestigation() {
+        return Stream.of(
+                Arguments.of(CANCELED),
+                Arguments.of(CLOSED),
+                Arguments.of(DECLINED),
+                Arguments.of(ACCEPTED),
+                Arguments.of(ACKNOWLEDGED),
+                Arguments.of(RECEIVED),
+                Arguments.of(SENT)
+        );
+    }
+
+    @ParameterizedTest
+    @DisplayName("Forbid Acknowledge Investigation with invalid status")
+    @MethodSource("provideInvalidStatusForAcknowledgeInvestigation")
+    void forbidAcknowledgeInvestigationWithStatusClosed(InvestigationStatus status) {
         // Given
-        Notification notification = testNotification();
-        InvestigationStatus status = CREATED;
         investigation = receiverInvestigationWithStatus(status);
-
+        Notification notification = testNotification();
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.acknowledge(notification));
 
         assertEquals(status, investigation.getInvestigationStatus());
 
     }
 
-    @Test
-    @DisplayName("Forbid Acknowledge Investigation with status canceled")
-    void forbidAcknowledgeInvestigationWithStatusCanceled() {
-
-        // Given
-        InvestigationStatus status = CANCELED;
-        investigation = receiverInvestigationWithStatus(status);
-
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.acknowledge(testNotification()));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Acknowledge Investigation with status accepted")
-    void forbidAcknowledgeInvestigationWithStatusAccepted() {
-
-        // Given
-        InvestigationStatus status = ACCEPTED;
-        investigation = receiverInvestigationWithStatus(status);
-
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.acknowledge(testNotification()));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Acknowledge Investigation with status Declined")
-    void forbidAcknowledgeInvestigationWithStatusDeclined() {
-
-        // Given
-        InvestigationStatus status = DECLINED;
-        investigation = receiverInvestigationWithStatus(status);
-
+    @ParameterizedTest
+    @DisplayName("Forbid Accept Investigation with invalid status")
+    @MethodSource("provideInvalidStatusForAcceptInvestigation")
+    void forbidAcceptInvestigationWithDisallowedStatus(InvestigationStatus status) {
         Notification notification = testNotification();
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.acknowledge(notification));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Acknowledge Investigation with status Closed")
-    void forbidAcknowledgeInvestigationWithStatusClosed() {
-
-        // Given
-        InvestigationStatus status = CLOSED;
-        investigation = receiverInvestigationWithStatus(status);
-        Notification notification = testNotification();
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.acknowledge(notification));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Accept Investigation with status Closed")
-    void forbidAcceptInvestigationWithStatusClosed() {
-
-        // Given
-        InvestigationStatus status = CLOSED;
-        investigation = receiverInvestigationWithStatus(status);
-        Notification notification = testNotification();
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.accept("random reason", notification));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Accept Investigation with status sent")
-    void forbidAcceptInvestigationWithStatusSent() {
-
-        // Given
-        InvestigationStatus status = SENT;
-        investigation = receiverInvestigationWithStatus(status);
-        Notification notification = testNotification();
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.accept("random reason", notification));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Accept Investigation with status received")
-    void forbidAcceptInvestigationWithStatusReceived() {
-
-        // Given
-        InvestigationStatus status = RECEIVED;
-        investigation = receiverInvestigationWithStatus(status);
-        Notification notification = testNotification();
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.accept("random reason", notification));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Accept Investigation with status declined")
-    void forbidAcceptInvestigationWithStatusDeclined() {
-
-        // Given
-        InvestigationStatus status = DECLINED;
-        investigation = receiverInvestigationWithStatus(status);
-        Notification notification = testNotification();
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.accept("random reason", notification));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Acknowledge Investigation with status canceled")
-    void forbidAcceptInvestigationWithStatusCanceled() {
-
-        // Given
-        InvestigationStatus status = CANCELED;
-        investigation = receiverInvestigationWithStatus(status);
-        Notification notification = testNotification();
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.accept("random reason", notification));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-
-    @Test
-    @DisplayName("Forbid Accept Investigation with disallowed status")
-    void forbidAcceptInvestigationWithDisallowedStatus() {
-        Notification notification = testNotification();
-
-        InvestigationStatus status = CREATED;
 
         investigation = receiverInvestigationWithStatus(status);
 
@@ -215,27 +149,10 @@ class InvestigationReceiverTest {
 
     }
 
-    @Test
-    @DisplayName("Forbid Decline Investigation with disallowed status")
-    void forbidDeclineInvestigationWithDisallowedStatus() {
-        Notification notification = testNotification();
-
-        InvestigationStatus status = CREATED;
-
-        investigation = receiverInvestigationWithStatus(status);
-
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.decline("some-reason", notification));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Decline Investigation with status sent")
-    void forbidDeclineInvestigationWithStatusSent() {
-
-        InvestigationStatus status = SENT;
-
+    @ParameterizedTest
+    @DisplayName("Forbid Decline Investigation with invalid status")
+    @MethodSource("provideInvalidStatusForDeclineInvestigation")
+    void forbidDeclineInvestigationWithInvalidStatus(InvestigationStatus status) {
         investigation = receiverInvestigationWithStatus(status);
         Notification notification = testNotification();
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.decline("some-reason", notification));
@@ -244,83 +161,10 @@ class InvestigationReceiverTest {
 
     }
 
-    @Test
-    @DisplayName("Forbid Decline Investigation with status received")
-    void forbidDeclineInvestigationWithStatusReceived() {
-
-        InvestigationStatus status = RECEIVED;
-
-        investigation = receiverInvestigationWithStatus(status);
-        Notification notification = testNotification();
-
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.decline("some-reason", notification));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Decline Investigation with status accepted")
-    void forbidDeclineInvestigationWithStatusAccepted() {
-
-        InvestigationStatus status = ACCEPTED;
-
-        investigation = receiverInvestigationWithStatus(status);
-        Notification notification = testNotification();
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.decline("some-reason", notification));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Decline Investigation with status declined")
-    void forbidDeclineInvestigationWithStatusDeclined() {
-
-        InvestigationStatus status = DECLINED;
-
-        investigation = receiverInvestigationWithStatus(status);
-        Notification notification = testNotification();
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.decline("some-reason", notification));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Decline Investigation with status canceled")
-    void forbidDeclineInvestigationWithStatusCanceled() {
-
-        InvestigationStatus status = CANCELED;
-
-        investigation = receiverInvestigationWithStatus(status);
-        Notification notification = testNotification();
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.decline("some-reason", notification));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Decline Investigation with status closed")
-    void forbidDeclineInvestigationWithStatusClosed() {
-
-        InvestigationStatus status = CLOSED;
-
-        investigation = receiverInvestigationWithStatus(status);
-        Notification notification = testNotification();
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.decline("some-reason", notification));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Close Investigation with status canceled")
-    void forbidCloseInvestigationWithStatusCanceled() {
-
-        InvestigationStatus status = CANCELED;
-
+    @ParameterizedTest
+    @DisplayName("Forbid Close Investigation with invalid status")
+    @MethodSource("provideInvalidStatusForCloseInvestigation")
+    void forbidCloseInvestigationWithInvalidStatus(InvestigationStatus status) {
         investigation = receiverInvestigationWithStatus(status);
         BPN bpn = new BPN("BPNL000000000001");
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.close(bpn, "some-reason"));
@@ -329,134 +173,22 @@ class InvestigationReceiverTest {
 
     }
 
-    @Test
-    @DisplayName("Forbid Close Investigation with status closed")
-    void forbidCloseInvestigationWithStatusClosed() {
-
-        InvestigationStatus status = CLOSED;
-
-        investigation = receiverInvestigationWithStatus(status);
-        BPN bpn = new BPN("BPNL000000000001");
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.close(bpn, "some-reason"));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Send Investigation with status sent")
-    void forbidSendInvestigationWithStatusSent() {
-
-        InvestigationStatus status = SENT;
+    @ParameterizedTest
+    @DisplayName("Forbid Send Investigation with invalid status")
+    @MethodSource("provideInvalidStatusForSendInvestigation")
+    void forbidSendInvestigationWithInvalidStatus(InvestigationStatus status) {
 
         investigation = receiverInvestigationWithStatus(status);
         BPN bpn = new BPN("BPNL000000000001");
+
         assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.send(bpn));
-
         assertEquals(status, investigation.getInvestigationStatus());
 
     }
-
-    @Test
-    @DisplayName("Forbid Send Investigation with status received")
-    void forbidSendInvestigationWithStatusReceived() {
-
-        InvestigationStatus status = RECEIVED;
-
-        investigation = receiverInvestigationWithStatus(status);
-        BPN bpn = new BPN("BPNL000000000001");
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.send(bpn));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Send Investigation with status acknowledged")
-    void forbidSendInvestigationWithStatusAcknowledged() {
-
-        InvestigationStatus status = ACKNOWLEDGED;
-
-        investigation = receiverInvestigationWithStatus(status);
-        BPN bpn = new BPN("BPNL000000000001");
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.send(bpn));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Send Investigation with status accepted")
-    void forbidSendInvestigationWithStatusAccepted() {
-
-        InvestigationStatus status = ACCEPTED;
-
-        investigation = receiverInvestigationWithStatus(status);
-
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.send(new BPN("BPNL000000000001")));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Send Investigation with status declined")
-    void forbidSendInvestigationWithStatusDeclined() {
-
-        InvestigationStatus status = DECLINED;
-
-        investigation = receiverInvestigationWithStatus(status);
-
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.send(new BPN("BPNL000000000001")));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Send Investigation with status canceled")
-    void forbidSendInvestigationWithStatusCanceled() {
-
-        InvestigationStatus status = CANCELED;
-
-        investigation = receiverInvestigationWithStatus(status);
-
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.send(new BPN("BPNL000000000001")));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    @Test
-    @DisplayName("Forbid Send Investigation with status closed")
-    void forbidSendInvestigationWithStatusClosed() {
-
-        InvestigationStatus status = CLOSED;
-
-        investigation = receiverInvestigationWithStatus(status);
-
-        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.send(new BPN("BPNL000000000001")));
-
-        assertEquals(status, investigation.getInvestigationStatus());
-
-    }
-
-    private static Stream<Arguments> provideCancelInvalidStatus() {
-        return Stream.of(
-                Arguments.of(CANCELED),
-                Arguments.of(CLOSED),
-                Arguments.of(DECLINED),
-                Arguments.of(ACCEPTED)
-
-        );
-    }
-
-    ;
 
     @ParameterizedTest
     @DisplayName("Forbid Cancel Investigation with invalid statuses")
-    @MethodSource("provideCancelInvalidStatus")
-        //  @EnumSource(value = InvestigationStatus.class, names = {"CANCELED", "CLOSED", "DECLINED", "ACCEPTED", "ACKNOWLEDGED", "RECEIVED", "SENT" })
+    @MethodSource("provideInvalidStatusForCancelInvestigation")
     void forbidCancelInvestigationWithInvalidStatus(InvestigationStatus status) {
         Investigation investigation = receiverInvestigationWithStatus(status);
         BPN bpn = new BPN("BPNL000000000001");
