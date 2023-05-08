@@ -199,7 +199,6 @@ class PublisherInvestigationsControllerIT extends IntegrationSpecification imple
                 .body(Matchers.containsString("Description should have at least 15 characters and at most 1000 characters"))
     }
 
-
     def "should throw bad request on update investigation reason too long"() {
         given:
         List<String> partIds = [
