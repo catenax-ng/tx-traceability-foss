@@ -91,11 +91,46 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
         String testBpn = testBpn()
 
         and:
-        InvestigationEntity firstInvestigation = new InvestigationEntity([], testBpn, InvestigationStatus.CREATED, InvestigationSide.SENDER, "", "1", now.minusSeconds(10L))
-        InvestigationEntity secondInvestigation = new InvestigationEntity([], testBpn, InvestigationStatus.CREATED, InvestigationSide.SENDER, "", "2", now.plusSeconds(21L))
-        InvestigationEntity thirdInvestigation = new InvestigationEntity([], testBpn, InvestigationStatus.CREATED, InvestigationSide.SENDER, "", "3", now)
-        InvestigationEntity fourthInvestigation = new InvestigationEntity([], testBpn, InvestigationStatus.CREATED, InvestigationSide.SENDER, "", "4", now.plusSeconds(20L))
-        InvestigationEntity fifthInvestigation = new InvestigationEntity([], testBpn, InvestigationStatus.RECEIVED, InvestigationSide.RECEIVER, "", "5", now.plusSeconds(40L))
+        InvestigationEntity firstInvestigation = InvestigationEntity.builder()
+                .assets(Collections.emptyList())
+                .bpn(testBpn)
+                .status(InvestigationStatus.CREATED)
+                .side(InvestigationSide.SENDER)
+                .description("1")
+                .created(now.minusSeconds(10L))
+                .build();
+        InvestigationEntity secondInvestigation = InvestigationEntity.builder()
+                .assets(Collections.emptyList())
+                .bpn(testBpn)
+                .status(InvestigationStatus.CREATED)
+                .description("2")
+                .side(InvestigationSide.SENDER)
+                .created(now.plusSeconds(21L))
+                .build();
+        InvestigationEntity thirdInvestigation = InvestigationEntity.builder()
+                .assets(Collections.emptyList())
+                .bpn(testBpn)
+                .status(InvestigationStatus.CREATED)
+                .description("3")
+                .side(InvestigationSide.SENDER)
+                .created(now)
+                .build();
+        InvestigationEntity fourthInvestigation = InvestigationEntity.builder()
+                .assets(Collections.emptyList())
+                .bpn(testBpn)
+                .status(InvestigationStatus.CREATED)
+                .description("4")
+                .side(InvestigationSide.SENDER)
+                .created(now.plusSeconds(20L))
+                .build();
+        InvestigationEntity fifthInvestigation = InvestigationEntity.builder()
+                .assets(Collections.emptyList())
+                .bpn(testBpn)
+                .status(InvestigationStatus.CREATED)
+                .description("5")
+                .side(InvestigationSide.RECEIVER)
+                .created(now.plusSeconds(40L))
+                .build();
 
         and:
 
@@ -155,7 +190,15 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
 
         and:
         (1..100).each { it ->
-            storedInvestigation(new InvestigationEntity([], testBpn, InvestigationStatus.CREATED, InvestigationSide.SENDER, "", "", now))
+
+            InvestigationEntity investigationEntity = InvestigationEntity.builder()
+                    .assets(Collections.emptyList())
+                    .bpn(testBpn)
+                    .status(InvestigationStatus.CREATED)
+                    .side(InvestigationSide.SENDER)
+                    .created(now)
+                    .build();
+            storedInvestigation(investigationEntity)
         }
 
         expect:
@@ -184,7 +227,15 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
         String receiverName = "Receiver name"
         and:
         (101..200).each { it ->
-            InvestigationEntity investigation = storedInvestigationFullObject(new InvestigationEntity([], testBpn, InvestigationStatus.CREATED, InvestigationSide.RECEIVER, "", "", now))
+            InvestigationEntity investigationEntity = InvestigationEntity.builder()
+                    .assets(Collections.emptyList())
+                    .bpn(testBpn)
+                    .status(InvestigationStatus.CREATED)
+                    .side(InvestigationSide.RECEIVER)
+                    .created(now)
+                    .build();
+
+            InvestigationEntity investigation = storedInvestigationFullObject(investigationEntity)
 
             NotificationEntity notificationEntity = NotificationEntity
                     .builder()
@@ -226,17 +277,48 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
         given:
         Instant now = Instant.now()
         String testBpn = testBpn()
-        String senderBPN = "BPN0001"
-        String senderName = "Sender name"
-        String receiverBPN = "BPN0002"
-        String receiverName = "Receiver name"
 
         and:
-        InvestigationEntity firstInvestigation = new InvestigationEntity([], testBpn, InvestigationStatus.RECEIVED, InvestigationSide.RECEIVER, "", "1", now.minusSeconds(5L))
-        InvestigationEntity secondInvestigation = new InvestigationEntity([], testBpn, InvestigationStatus.RECEIVED, InvestigationSide.RECEIVER, "", "2", now.plusSeconds(2L))
-        InvestigationEntity thirdInvestigation = new InvestigationEntity([], testBpn, InvestigationStatus.RECEIVED, InvestigationSide.RECEIVER, "", "3", now)
-        InvestigationEntity fourthInvestigation = new InvestigationEntity([], testBpn, InvestigationStatus.RECEIVED, InvestigationSide.RECEIVER, "", "4", now.plusSeconds(20L))
-        InvestigationEntity fifthInvestigation = new InvestigationEntity([], testBpn, InvestigationStatus.CREATED, InvestigationSide.SENDER, "", "5", now.plusSeconds(40L))
+        InvestigationEntity firstInvestigation = InvestigationEntity.builder()
+                .assets(Collections.emptyList())
+                .bpn(testBpn)
+                .status(InvestigationStatus.RECEIVED)
+                .side(InvestigationSide.RECEIVER)
+                .description("1")
+                .created(now.minusSeconds(5L))
+                .build();
+        InvestigationEntity secondInvestigation = InvestigationEntity.builder()
+                .assets(Collections.emptyList())
+                .bpn(testBpn)
+                .status(InvestigationStatus.RECEIVED)
+                .description("2")
+                .side(InvestigationSide.RECEIVER)
+                .created(now.plusSeconds(2L))
+                .build();
+        InvestigationEntity thirdInvestigation = InvestigationEntity.builder()
+                .assets(Collections.emptyList())
+                .bpn(testBpn)
+                .status(InvestigationStatus.RECEIVED)
+                .description("3")
+                .side(InvestigationSide.RECEIVER)
+                .created(now)
+                .build();
+        InvestigationEntity fourthInvestigation = InvestigationEntity.builder()
+                .assets(Collections.emptyList())
+                .bpn(testBpn)
+                .status(InvestigationStatus.RECEIVED)
+                .description("4")
+                .side(InvestigationSide.RECEIVER)
+                .created(now.plusSeconds(20L))
+                .build();
+        InvestigationEntity fifthInvestigation = InvestigationEntity.builder()
+                .assets(Collections.emptyList())
+                .bpn(testBpn)
+                .status(InvestigationStatus.CREATED)
+                .description("5")
+                .side(InvestigationSide.SENDER)
+                .created(now.plusSeconds(40L))
+                .build();
 
         and:
         storedNotifications(

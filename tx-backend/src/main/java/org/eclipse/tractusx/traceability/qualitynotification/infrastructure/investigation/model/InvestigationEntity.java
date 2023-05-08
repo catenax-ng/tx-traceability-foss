@@ -76,14 +76,4 @@ public class InvestigationEntity {
     private Instant created;
     private Instant updated;
 
-    public InvestigationEntity(List<AssetEntity> assets, String bpn, InvestigationStatus status, InvestigationSide side, String closeReason, String description, Instant created) {
-        this.assets = assets;
-        this.bpn = bpn;
-        this.status = status;
-        this.side = side;
-        this.closeReason = closeReason;
-        this.description = description;
-        this.created = created;
-        this.updated = created;
-    }
 }

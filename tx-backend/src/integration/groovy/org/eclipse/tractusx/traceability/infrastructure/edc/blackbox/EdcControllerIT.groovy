@@ -92,8 +92,13 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
                 .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                 .build()
 
-        InvestigationEntity investigation = new InvestigationEntity(
-                [], "BPNL00000003AXS3", InvestigationStatus.SENT, InvestigationSide.SENDER, "", "some-description", Instant.now())
+        InvestigationEntity investigation = InvestigationEntity.builder()
+                .assets(Collections.emptyList())
+                .bpn("BPNL00000003AXS3")
+                .status(InvestigationStatus.SENT)
+                .side(InvestigationSide.SENDER)
+                .created(Instant.now())
+                .build();
 
         InvestigationEntity persistedInvestigation = storedInvestigationFullObject(investigation)
 
@@ -136,8 +141,14 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
                 .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                 .build()
 
-        InvestigationEntity investigation = new InvestigationEntity(
-                [], "BPNL00000003AXS3", InvestigationStatus.SENT, InvestigationSide.SENDER, "", "some-description", Instant.now())
+
+        InvestigationEntity investigation = InvestigationEntity.builder()
+                .assets(Collections.emptyList())
+                .bpn("BPNL00000003AXS3")
+                .status(InvestigationStatus.SENT)
+                .side(InvestigationSide.SENDER)
+                .created(Instant.now())
+                .build();
 
         InvestigationEntity persistedInvestigation = storedInvestigationFullObject(investigation)
 
@@ -172,8 +183,13 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
     def "should call the /qualitynotifications/update api with wrong requestobject "() {
         given:
 
-        InvestigationEntity investigation = new InvestigationEntity(
-                [], "BPNL00000003AXS3", InvestigationStatus.RECEIVED, InvestigationSide.RECEIVER, "", "some-description", Instant.now())
+        InvestigationEntity investigation = InvestigationEntity.builder()
+                .assets(Collections.emptyList())
+                .bpn("BPNL00000003AXS3")
+                .status(InvestigationStatus.RECEIVED)
+                .side(InvestigationSide.RECEIVER)
+                .created(Instant.now())
+                .build();
 
         storedInvestigationFullObject(investigation)
 

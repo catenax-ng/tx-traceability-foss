@@ -66,15 +66,14 @@ trait AssetsSupport implements AssetRepositoryProvider, InvestigationsRepository
         }
 
         assetEntities.collect { it ->
-            new InvestigationEntity(
-                    [it],
-                    it.getManufacturerId(),
-                    investigationStatus,
-                    InvestigationSide.SENDER,
-                    "",
-                    "some long description",
-                    Instant.now()
-            )
+            InvestigationEntity.builder()
+                    .assets(List.of(it))
+                    .bpn(it.getManufacturerId())
+                    .status(investigationStatus)
+                    .side(InvestigationSide.SENDER)
+                    .description("some long description")
+                    .created(Instant.now())
+                    .build();
         }.each { jpaInvestigationRepository().save(it) }
     }
 
