@@ -23,37 +23,31 @@ package org.eclipse.tractusx.traceability.qualitynotification.infrastructure.inv
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.AssetEntity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationMessageBaseEntity;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Setter
 @Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "notification")
-public class NotificationEntity {
+public class NotificationEntity extends QualityNotificationMessageBaseEntity {
 
-    @Id
-    private String id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "investigation_id")
@@ -66,25 +60,6 @@ public class NotificationEntity {
             inverseJoinColumns = @JoinColumn(name = "asset_id")
     )
     private List<AssetEntity> assets;
-    private String senderBpnNumber;
-    private String senderManufacturerName;
-    private String receiverBpnNumber;
-    private String receiverManufacturerName;
-    private String edcUrl;
-    private String contractAgreementId;
-    private String notificationReferenceId;
-    private Instant targetDate;
-    private Severity severity;
-    private String edcNotificationId;
-    private LocalDateTime created;
-    private LocalDateTime updated;
     private InvestigationStatus status;
-    private String messageId;
-    private Boolean isInitial;
-
-    @PreUpdate
-    public void preUpdate() {
-        this.updated = LocalDateTime.now();
-    }
 
 }

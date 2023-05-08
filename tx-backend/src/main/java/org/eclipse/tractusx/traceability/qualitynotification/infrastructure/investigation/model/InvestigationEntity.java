@@ -23,37 +23,29 @@ package org.eclipse.tractusx.traceability.qualitynotification.infrastructure.inv
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.AssetEntity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationSide;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationBaseEntity;
 
-import java.time.Instant;
 import java.util.List;
 
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Entity
+@SuperBuilder
 @Table(name = "investigation")
-public class InvestigationEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class InvestigationEntity extends QualityNotificationBaseEntity {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -65,15 +57,7 @@ public class InvestigationEntity {
 
     @OneToMany(mappedBy = "investigation")
     private List<NotificationEntity> notifications;
-
-    private String bpn;
     private InvestigationStatus status;
     private InvestigationSide side;
-    private String closeReason;
-    private String acceptReason;
-    private String declineReason;
-    private String description;
-    private Instant created;
-    private Instant updated;
 
 }
