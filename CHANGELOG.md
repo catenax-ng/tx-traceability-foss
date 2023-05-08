@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Updated path of digital twin registry for dev environment
 - Updated swagger api doc and added collection
 - Updated dev setup documentation
+- Changed logic of investigations to be more extensible for alerts
 
 ### Removed
 - Not needed enum params in UpdateInvestigationRequest
