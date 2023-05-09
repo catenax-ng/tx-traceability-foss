@@ -167,8 +167,29 @@ Is achieved by defining the order of the BPNLs of the desired manufacturers. See
     }
   ]
 ```
-
 ...AZQP -> ...3ML1 -> ...CNKC
+and adding an AssemlyPartRelationship Aspect with the corresponding childCatenaXId:
+```json
+{
+"urn:bamm:io.catenax.assembly_part_relationship:1.1.0#AssemblyPartRelationship" : [ {
+"catenaXId" : "urn:uuid:7eeeac86-7b69-444d-81e6-655d0f1513bd",
+"childParts" : [ {
+"quantity" : {
+"quantityNumber" : 1,
+"measurementUnit" : {
+"datatypeURI" : "urn:bamm:io.openmanufacturing:meta-model:1.0.0#curie",
+"lexicalValue" : "unit:piece"
+    }
+  },
+"lifecycleContext" : "AsBuilt",
+"assembledOn" : "2022-02-03T14:48:54.709Z",
+"lastModifiedOn" : "2022-02-03T14:48:54.709Z",
+"childCatenaXId" : "urn:uuid:1d2d8480-90a5-4a17-9ecb-2ff039d35fec"
+    } ]
+  } ]
+}
+```
+
 
 ## Building upward Relationships in Testdata
 
