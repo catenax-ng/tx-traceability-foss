@@ -28,6 +28,8 @@ import org.eclipse.tractusx.traceability.common.support.InvestigationsSupport
 import org.eclipse.tractusx.traceability.common.support.NotificationsSupport
 import org.eclipse.tractusx.traceability.common.support.TestDataSupport
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationSideBaseEntity
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationStatusBaseEntity
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationEntity
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.NotificationEntity
 import org.springframework.beans.factory.annotation.Autowired
@@ -59,7 +61,7 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
         then:
         assertNotificationsSize(1)
         assertInvestigationsSize(1)
-        assertInvestigationStatus(InvestigationStatus.RECEIVED)
+        assertInvestigationStatus(QualityNotificationStatus.RECEIVED)
     }
 
     def "should not create an investigation on API callback /qualitynotifications/receive bad request bpn of notification does not match app bpn"() {
@@ -93,8 +95,8 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
         InvestigationEntity investigation = InvestigationEntity.builder()
                 .assets(Collections.emptyList())
                 .bpn("BPNL00000003AXS3")
-                .status(InvestigationStatus.SENT)
-                .side(InvestigationSide.SENDER)
+                .status(QualityNotificationStatusBaseEntity.SENT)
+                .side(QualityNotificationSideBaseEntity.SENDER)
                 .created(Instant.now())
                 .build();
 
@@ -127,7 +129,7 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
         assertNotificationsSize(2)
         assertInvestigationsSize(1)
 
-        assertInvestigationStatus(InvestigationStatus.ACKNOWLEDGED)
+        assertInvestigationStatus(QualityNotificationStatusBaseEntity.ACKNOWLEDGED)
     }
 
     def "should throw bad request because edcNotification Method is not supported /qualitynotifications/receive"() {
@@ -143,8 +145,8 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
         InvestigationEntity investigation = InvestigationEntity.builder()
                 .assets(Collections.emptyList())
                 .bpn("BPNL00000003AXS3")
-                .status(InvestigationStatus.SENT)
-                .side(InvestigationSide.SENDER)
+                .status(QualityNotificationStatusBaseEntity.SENT)
+                .side(QualityNotificationSideBaseEntity.SENDER)
                 .created(Instant.now())
                 .build();
 
@@ -184,8 +186,8 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
         InvestigationEntity investigation = InvestigationEntity.builder()
                 .assets(Collections.emptyList())
                 .bpn("BPNL00000003AXS3")
-                .status(InvestigationStatus.RECEIVED)
-                .side(InvestigationSide.RECEIVER)
+                .status(QualityNotificationStatusBaseEntity.RECEIVED)
+                .side(QualityNotificationSideBaseEntity.RECEIVER)
                 .created(Instant.now())
                 .build();
 
@@ -222,7 +224,7 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
         then:
         assertNotificationsSize(0)
         assertInvestigationsSize(1)
-        assertInvestigationStatus(InvestigationStatus.RECEIVED)
+        assertInvestigationStatus(QualityNotificationStatusBaseEntity.RECEIVED)
 
     }
 }

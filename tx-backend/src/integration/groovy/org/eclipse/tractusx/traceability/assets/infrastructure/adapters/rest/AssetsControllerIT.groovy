@@ -28,6 +28,7 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.ir
 import org.eclipse.tractusx.traceability.common.support.AssetsSupport
 import org.eclipse.tractusx.traceability.common.support.BpnSupport
 import org.eclipse.tractusx.traceability.common.support.IrsApiSupport
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus
 import org.hamcrest.Matchers
 import spock.util.concurrent.PollingConditions
 
@@ -262,7 +263,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
 
     def "should return asset without under investigation mark"() {
         given:
-        defaultAssetsStoredWithOnGoingInvestigation(InvestigationStatus.CLOSED, false)
+        defaultAssetsStoredWithOnGoingInvestigation(QualityNotificationStatus.CLOSED, false)
 
         expect:
         given()
@@ -277,7 +278,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
 
     def "should return asset with under investigation mark"() {
         given:
-        defaultAssetsStoredWithOnGoingInvestigation(InvestigationStatus.SENT, true)
+        defaultAssetsStoredWithOnGoingInvestigation(QualityNotificationStatus.SENT, true)
 
         expect:
         given()

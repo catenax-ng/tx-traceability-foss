@@ -29,10 +29,12 @@ import org.eclipse.tractusx.traceability.common.security.JwtRole
 import org.eclipse.tractusx.traceability.common.support.*
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotificationFactory
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationMessage
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Notification
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.InvestigationsReceiverService
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationStatusBaseEntity
 import org.hamcrest.Matchers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
@@ -53,10 +55,10 @@ class PublisherInvestigationsControllerIT extends IntegrationSpecification imple
         defaultAssetsStored()
 
         and:
-        Notification notificationBuild = Notification.builder()
+        QualityNotificationMessage notificationBuild = QualityNotificationMessage.builder()
                 .id("some-id")
 
-                .investigationStatus(InvestigationStatus.RECEIVED)
+                .investigationStatus(QualityNotificationStatus.RECEIVED)
                 .affectedParts(List.of(new AffectedPart("123")))
                 .senderManufacturerName("bpn-a")
                 .senderBpnNumber("Sender Manufacturer name")
@@ -474,7 +476,7 @@ class PublisherInvestigationsControllerIT extends IntegrationSpecification imple
 
         then:
         assertInvestigationsSize(1)
-        assertInvestigationStatus(InvestigationStatus.CLOSED)
+        assertInvestigationStatus(QualityNotificationStatusBaseEntity.CLOSED)
     }
 
     def "should not cancel not existing investigation"() {

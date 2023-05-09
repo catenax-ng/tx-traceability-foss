@@ -23,6 +23,8 @@ package org.eclipse.tractusx.traceability.common.support
 
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.AssetsConverter
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.AssetEntity
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationSideBaseEntity
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationStatusBaseEntity
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationEntity
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -36,7 +38,7 @@ trait AssetsSupport implements AssetRepositoryProvider, InvestigationsRepository
         assetRepository().saveAll(assetsConverter().readAndConvertAssets())
     }
 
-    void defaultAssetsStoredWithOnGoingInvestigation(InvestigationStatus investigationStatus, boolean inInvestigation) {
+    void defaultAssetsStoredWithOnGoingInvestigation(QualityNotificationStatusBaseEntity investigationStatus, boolean inInvestigation) {
         List<AssetEntity> assetEntities = assetsConverter().readAndConvertAssets().collect { asset ->
             new AssetEntity(
                     asset.getId(), asset.getIdShort(),
@@ -68,7 +70,7 @@ trait AssetsSupport implements AssetRepositoryProvider, InvestigationsRepository
                     .assets(List.of(it))
                     .bpn(it.getManufacturerId())
                     .status(investigationStatus)
-                    .side(InvestigationSide.SENDER)
+                    .side(QualityNotificationSideBaseEntity.SENDER)
                     .description("some long description")
                     .created(Instant.now())
                     .build();
