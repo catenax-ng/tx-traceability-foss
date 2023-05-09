@@ -54,28 +54,43 @@ class PublisherInvestigationsControllerIT extends IntegrationSpecification imple
         defaultAssetsStored()
 
         and:
+        Notification notificationBuild = Notification.builder()
+                .id("some-id")
+
+                .investigationStatus(InvestigationStatus.RECEIVED)
+                .affectedParts(List.of(new AffectedPart("123")))
+                .senderManufacturerName("bpn-a")
+                .senderBpnNumber("Sender Manufacturer name")
+                .receiverBpnNumber("BPNL00000003AXS3")
+                .receiverManufacturerName("Receiver manufacturer name")
+                .severity(Severity.MINOR)
+                .isInitial(false)
+                .targetDate(Instant.parse("2018-11-30T18:35:24.00Z"))
+                .isInitial(false)
+                .messageId("messageId")
+                .build();
         EDCNotification notification = EDCNotificationFactory.createQualityInvestigation(
-                "it",
-                new Notification(
-                        "some-id",
-                        null,
-                        "bpn-a",
-                        "Sender Manufacturer name",
-                        "BPNL00000003AXS3",
-                        "Receiver manufacturer name",
-                        "edcUrl",
-                        null,
-                        "description",
-                        InvestigationStatus.SENT,
-                        [new AffectedPart("urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb")],
-                        Instant.parse("2018-11-30T18:35:24.00Z"),
-                        Severity.MINOR,
-                        "some-id",
-                        null,
-                        null,
-                        "messageid",
-                        false
-                )
+                "it", notificationBuild
+                /*  new Notification(
+                          "some-id",
+                          null,
+                          "bpn-a",
+                          "Sender Manufacturer name",
+                          "BPNL00000003AXS3",
+                          "Receiver manufacturer name",
+                          "edcUrl",
+                          null,
+                          "description",
+                          InvestigationStatus.SENT,
+                          [new AffectedPart("urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb")],
+                          Instant.parse("2018-11-30T18:35:24.00Z"),
+                          Severity.MINOR,
+                          "some-id",
+                          null,
+                          null,
+                          "messageid",
+                          false
+                  )*/
         )
 
         when:
