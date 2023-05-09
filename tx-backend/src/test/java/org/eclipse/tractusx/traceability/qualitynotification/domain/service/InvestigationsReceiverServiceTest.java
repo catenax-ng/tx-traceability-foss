@@ -76,7 +76,25 @@ class InvestigationsReceiverServiceTest {
 
         // Given
         List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
-        Notification notification = new Notification(
+        Notification notification = Notification.builder()
+                .id("123")
+                .notificationReferenceId("id123")
+                .senderBpnNumber("senderBPN")
+                .senderManufacturerName("senderManufacturerName")
+                .receiverBpnNumber("recipientBPN")
+                .receiverManufacturerName("receiverManufacturerName")
+                .edcUrl("senderAddress")
+                .contractAgreementId("agreement")
+                .description("123")
+                .investigationStatus(InvestigationStatus.SENT)
+                .affectedParts(affectedParts)
+                .severity(Severity.MINOR)
+                .edcNotificationId("123")
+                .targetDate(Instant.now())
+                .messageId("messageId")
+                .isInitial(true)
+                .build();
+      /*  Notification notification = new Notification(
                 "123",
                 "id123",
                 "senderBPN",
@@ -95,7 +113,7 @@ class InvestigationsReceiverServiceTest {
                 null,
                 "messageId",
                 true
-        );
+        );*/
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.RECEIVED, InvestigationStatus.RECEIVED, "recipientBPN");
         Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
@@ -117,7 +135,7 @@ class InvestigationsReceiverServiceTest {
 
         // Given
         List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
-        Notification notification = new Notification(
+       /* Notification notification = new Notification(
                 "123",
                 "id123",
                 "senderBPN",
@@ -136,7 +154,26 @@ class InvestigationsReceiverServiceTest {
                 null,
                 "messageId",
                 false
-        );
+        );*/
+
+        Notification notification = Notification.builder()
+                .id("123")
+                .notificationReferenceId("id123")
+                .senderBpnNumber("senderBPN")
+                .senderManufacturerName("senderManufacturerName")
+                .receiverBpnNumber("recipientBPN")
+                .receiverManufacturerName("receiverManufacturerName")
+                .edcUrl("senderAddress")
+                .contractAgreementId("agreement")
+                .description("123")
+                .investigationStatus(InvestigationStatus.ACKNOWLEDGED)
+                .affectedParts(affectedParts)
+                .severity(Severity.MINOR)
+                .edcNotificationId("123")
+                .targetDate(Instant.now())
+                .messageId("messageId")
+                .isInitial(false)
+                .build();
 
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.RECEIVED, InvestigationStatus.RECEIVED, "recipientBPN");
@@ -159,7 +196,7 @@ class InvestigationsReceiverServiceTest {
 
         // Given
         List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
-        Notification notification = new Notification(
+ /*       Notification notification = new Notification(
                 "123",
                 "id123",
                 "senderBPN",
@@ -178,8 +215,26 @@ class InvestigationsReceiverServiceTest {
                 null,
                 "messageId",
                 false
-        );
+        );*/
 
+        Notification notification = Notification.builder()
+                .id("123")
+                .notificationReferenceId("id123")
+                .senderBpnNumber("senderBPN")
+                .senderManufacturerName("senderManufacturerName")
+                .receiverBpnNumber("recipientBPN")
+                .receiverManufacturerName("receiverManufacturerName")
+                .edcUrl("senderAddress")
+                .contractAgreementId("agreement")
+                .description("123")
+                .investigationStatus(InvestigationStatus.DECLINED)
+                .affectedParts(affectedParts)
+                .severity(Severity.MINOR)
+                .edcNotificationId("123")
+                .targetDate(Instant.now())
+                .messageId("messageId")
+                .isInitial(false)
+                .build();
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED, "recipientBPN");
         Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
@@ -201,7 +256,7 @@ class InvestigationsReceiverServiceTest {
 
         // Given
         List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
-        Notification notification = new Notification(
+/*        Notification notification = new Notification(
                 "123",
                 "id123",
                 "senderBPN",
@@ -220,8 +275,26 @@ class InvestigationsReceiverServiceTest {
                 null,
                 "messageId",
                 false
-        );
+        );*/
 
+        Notification notification = Notification.builder()
+                .id("123")
+                .notificationReferenceId("id123")
+                .senderBpnNumber("senderBPN")
+                .senderManufacturerName("senderManufacturerName")
+                .receiverBpnNumber("recipientBPN")
+                .receiverManufacturerName("receiverManufacturerName")
+                .edcUrl("senderAddress")
+                .contractAgreementId("agreement")
+                .description("123")
+                .investigationStatus(InvestigationStatus.ACCEPTED)
+                .affectedParts(affectedParts)
+                .severity(Severity.MINOR)
+                .edcNotificationId("123")
+                .targetDate(Instant.now())
+                .messageId("messageId")
+                .isInitial(false)
+                .build();
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED, "recipientBPN");
         Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
@@ -243,7 +316,7 @@ class InvestigationsReceiverServiceTest {
 
         // Given
         List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
-        Notification notification = new Notification(
+ /*       Notification notification = new Notification(
                 "123",
                 "id123",
                 "senderBPN",
@@ -262,8 +335,26 @@ class InvestigationsReceiverServiceTest {
                 null,
                 "messageId",
                 false
-        );
+        );*/
 
+        Notification notification = Notification.builder()
+                .id("123")
+                .notificationReferenceId("id123")
+                .senderBpnNumber("senderBPN")
+                .senderManufacturerName("senderManufacturerName")
+                .receiverBpnNumber("recipientBPN")
+                .receiverManufacturerName("receiverManufacturerName")
+                .edcUrl("senderAddress")
+                .contractAgreementId("agreement")
+                .description("123")
+                .investigationStatus(InvestigationStatus.CLOSED)
+                .affectedParts(affectedParts)
+                .severity(Severity.MINOR)
+                .edcNotificationId("123")
+                .targetDate(Instant.now())
+                .messageId("messageId")
+                .isInitial(false)
+                .build();
 
         Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED, "senderBPN");
         Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();

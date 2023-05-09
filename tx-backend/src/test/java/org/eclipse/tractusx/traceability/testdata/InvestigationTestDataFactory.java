@@ -32,16 +32,34 @@ import java.time.Instant;
 import java.util.List;
 
 public class InvestigationTestDataFactory {
-	public static Investigation createInvestigationTestData(InvestigationStatus investigationStatus, InvestigationStatus notificationInvestigationStatus, final String bpnString) {
-		InvestigationId investigationId = new InvestigationId(1L);
-		BPN bpn = new BPN(bpnString);
-		InvestigationSide investigationSide = InvestigationSide.SENDER;
-		String closeReason = null;
-		String acceptReason = null;
-		String declineReason = null;
-		String description = "Test Investigation";
-		Instant createdAt = Instant.now();
-		List<String> assetIds = List.of("asset123", "asset456");
+    public static Investigation createInvestigationTestData(InvestigationStatus investigationStatus, InvestigationStatus notificationInvestigationStatus, final String bpnString) {
+        InvestigationId investigationId = new InvestigationId(1L);
+        BPN bpn = new BPN(bpnString);
+        InvestigationSide investigationSide = InvestigationSide.SENDER;
+        String description = "Test Investigation";
+        Instant createdAt = Instant.now();
+        List<String> assetIds = List.of("asset123", "asset456");
+
+        Notification notification = Notification.builder()
+                .id("1")
+                .notificationReferenceId("notificationId")
+                .senderBpnNumber("senderBPN")
+                .senderManufacturerName("senderManufacturerName")
+                .receiverBpnNumber("recipientBPN")
+                .receiverManufacturerName("receiverManufacturerName")
+                .edcUrl("senderAddress")
+                .contractAgreementId("agreement")
+                .description(description)
+                .investigationStatus(investigationStatus)
+                .affectedParts(List.of(new AffectedPart("part123")))
+                .targetDate(Instant.now())
+                .severity(Severity.MINOR)
+                .edcNotificationId("1")
+                .messageId("messageId")
+                .isInitial(true)
+                .build();
+        List<Notification> notifications = List.of(notification);
+/*
 		List<Notification> notifications = List.of(new Notification(
                 "1",
                 "notificationId",
@@ -61,61 +79,69 @@ public class InvestigationTestDataFactory {
                 null,
                 "messageId",
                 true
-		));
+		));*/
 
-		return new Investigation(
-			investigationId,
-			bpn,
-			investigationStatus,
-			investigationSide,
-			closeReason,
-			acceptReason,
-			declineReason,
-			description,
-			createdAt,
-			assetIds,
-			notifications
-		);
-	}
+        return Investigation.builder()
+                .investigationId(investigationId)
+                .bpn(bpn)
+                .investigationStatus(investigationStatus)
+                .investigationSide(investigationSide)
+                .description(description)
+                .createdAt(createdAt)
+                .assetIds(assetIds)
+                .notifications(notifications)
+                .build();
+    }
 
 
-	public static Investigation createInvestigationTestDataWithNotificationList(InvestigationStatus investigationStatus, String bpnString, List<Notification> notifications) {
-		InvestigationId investigationId = new InvestigationId(1L);
-		BPN bpn = new BPN(bpnString);
-		InvestigationSide investigationSide = InvestigationSide.SENDER;
-		String closeReason = null;
-		String acceptReason = null;
-		String declineReason = null;
-		String description = "Test Investigation";
-		Instant createdAt = Instant.now();
-		List<String> assetIds = List.of("asset123", "asset456");
+    public static Investigation createInvestigationTestDataWithNotificationList(InvestigationStatus investigationStatus, String bpnString, List<Notification> notifications) {
+        InvestigationId investigationId = new InvestigationId(1L);
+        BPN bpn = new BPN(bpnString);
+        InvestigationSide investigationSide = InvestigationSide.SENDER;
+        String description = "Test Investigation";
+        Instant createdAt = Instant.now();
+        List<String> assetIds = List.of("asset123", "asset456");
 
-		return new Investigation(
-			investigationId,
-			bpn,
-			investigationStatus,
-			investigationSide,
-			closeReason,
-			acceptReason,
-			declineReason,
-			description,
-			createdAt,
-			assetIds,
-			notifications
-		);
-	}
+        return Investigation.builder()
+                .investigationId(investigationId)
+                .bpn(bpn)
+                .investigationStatus(investigationStatus)
+                .investigationSide(investigationSide)
+                .description(description)
+                .createdAt(createdAt)
+                .assetIds(assetIds)
+                .notifications(notifications)
+                .build();
+    }
 
-	public static Investigation createInvestigationTestData(InvestigationStatus investigationStatus, InvestigationStatus notificationInvestigationStatus) {
-		InvestigationId investigationId = new InvestigationId(1L);
-		BPN bpn = new BPN("bpn123");
-		InvestigationSide investigationSide = InvestigationSide.SENDER;
-		String closeReason = null;
-		String acceptReason = null;
-		String declineReason = null;
-		String description = "Test Investigation";
-		Instant createdAt = Instant.now();
-		List<String> assetIds = List.of("asset123", "asset456");
-		List<Notification> notifications = List.of(new Notification(
+    public static Investigation createInvestigationTestData(InvestigationStatus investigationStatus, InvestigationStatus notificationInvestigationStatus) {
+        InvestigationId investigationId = new InvestigationId(1L);
+        BPN bpn = new BPN("bpn123");
+        InvestigationSide investigationSide = InvestigationSide.SENDER;
+        String description = "Test Investigation";
+        Instant createdAt = Instant.now();
+        List<String> assetIds = List.of("asset123", "asset456");
+
+        Notification notification = Notification.builder()
+                .id("1")
+                .notificationReferenceId("notificationId")
+                .senderBpnNumber("senderBPN")
+                .senderManufacturerName("senderManufacturerName")
+                .receiverBpnNumber("recipientBPN")
+                .receiverManufacturerName("receiverManufacturerName")
+                .edcUrl("senderAddress")
+                .contractAgreementId("agreement")
+                .description(description)
+                .investigationStatus(notificationInvestigationStatus)
+                .affectedParts(List.of(new AffectedPart("part123")))
+                .severity(Severity.MINOR)
+                .edcNotificationId("123")
+                .messageId("messageId")
+                .isInitial(true)
+                .build();
+        List<Notification> notifications = List.of(notification);
+
+/*		List<Notification> notifications = List.of(new Notification(
                 "1",
                 "notificationId",
                 "senderBPN",
@@ -134,22 +160,19 @@ public class InvestigationTestDataFactory {
                 null,
                 "messageId",
                 true
-		));
+		));*/
 
-		return new Investigation(
-			investigationId,
-			bpn,
-			investigationStatus,
-			investigationSide,
-			closeReason,
-			acceptReason,
-			declineReason,
-			description,
-			createdAt,
-			assetIds,
-			notifications
-		);
-	}
+        return Investigation.builder()
+                .investigationId(investigationId)
+                .bpn(bpn)
+                .investigationStatus(investigationStatus)
+                .investigationSide(investigationSide)
+                .description(description)
+                .createdAt(createdAt)
+                .assetIds(assetIds)
+                .notifications(notifications)
+                .build();
+    }
 
     public static Investigation createInvestigationTestData(InvestigationSide investigationSide) {
         InvestigationId investigationId = new InvestigationId(1L);
@@ -160,7 +183,28 @@ public class InvestigationTestDataFactory {
         String description = "Test Investigation";
         Instant createdAt = Instant.now();
         List<String> assetIds = List.of("asset123", "asset456");
-        List<Notification> notifications = List.of(new Notification(
+
+
+        Notification notification = Notification.builder()
+                .id("1")
+                .notificationReferenceId("notificationId")
+                .senderBpnNumber("senderBPN")
+                .senderManufacturerName("senderManufacturerName")
+                .receiverBpnNumber("recipientBPN")
+                .receiverManufacturerName("receiverManufacturerName")
+                .edcUrl("senderAddress")
+                .contractAgreementId("agreement")
+                .description(description)
+                .investigationStatus(InvestigationStatus.ACKNOWLEDGED)
+                .affectedParts(List.of(new AffectedPart("part123")))
+                .severity(Severity.MINOR)
+                .edcNotificationId("123")
+                .messageId("messageId")
+                .isInitial(true)
+                .build();
+        List<Notification> notifications = List.of(notification);
+
+/*        List<Notification> notifications = List.of(new Notification(
                 "1",
                 "notificationId",
                 "senderBPN",
@@ -179,20 +223,17 @@ public class InvestigationTestDataFactory {
                 null,
                 "messageId",
                 true
-        ));
+        ));*/
 
-        return new Investigation(
-                investigationId,
-                bpn,
-                InvestigationStatus.ACKNOWLEDGED,
-                investigationSide,
-                closeReason,
-                acceptReason,
-                declineReason,
-                description,
-                createdAt,
-                assetIds,
-                notifications
-        );
+        return Investigation.builder()
+                .investigationId(investigationId)
+                .bpn(bpn)
+                .investigationStatus(InvestigationStatus.ACKNOWLEDGED)
+                .investigationSide(investigationSide)
+                .description(description)
+                .createdAt(createdAt)
+                .assetIds(assetIds)
+                .notifications(notifications)
+                .build();
     }
 }

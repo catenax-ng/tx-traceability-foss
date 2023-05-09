@@ -21,14 +21,11 @@
 
 package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.SuperBuilder;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationDTO;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationReason;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotification;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationSide;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationStatusTransitionNotAllowed;
 
@@ -37,21 +34,33 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@SuperBuilder
+import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
+
+@Builder
 @Data
-public class Investigation extends QualityNotification {
+public class Investigation {
 
     private InvestigationId investigationId;
-    private QualityNotificationStatus investigationStatus;
-    private QualityNotificationSide investigationSide;
+    private BPN bpn;
+    private InvestigationStatus investigationStatus;
+    private InvestigationSide investigationSide;
+    private String description;
+    private Instant createdAt;
+    @Builder.Default
+    private List<String> assetIds = new ArrayList<>();
 
+    private Map<String, Notification> notifications = new HashMap<>();
+    private String closeReason;
+    private String acceptReason;
+    private String declineReason;
 
-    public Investigation(InvestigationId investigationId,
+/*    public Investigation(InvestigationId investigationId,
                          BPN bpn,
                          InvestigationStatus investigationStatus,
                          InvestigationSide investigationSide,
@@ -67,15 +76,15 @@ public class Investigation extends QualityNotification {
         this.bpn = bpn;
         this.investigationStatus = investigationStatus;
         this.investigationSide = investigationSide;
-        this.setCloseReason(closeReason);
+        this.closeReason = closeReason;
         this.acceptReason = acceptReason;
         this.declineReason = declineReason;
         this.description = description;
         this.createdAt = createdAt;
         this.assetIds = assetIds;
-        this.notifications = notifications.stream()
-                .collect(Collectors.toMap(Notification::getId, Function.identity()));
-    }
+
+    }*/
+
 
     public static final Comparator<Investigation> COMPARE_BY_NEWEST_INVESTIGATION_CREATION_TIME = (o1, o2) -> {
         Instant o1CreationTime = o1.createdAt;
@@ -93,18 +102,17 @@ public class Investigation extends QualityNotification {
     };
 
     public static Investigation startInvestigation(Instant createDate, BPN bpn, String description) {
-        return new Investigation(null,
-                bpn,
-                InvestigationStatus.CREATED,
-                InvestigationSide.SENDER,
-                null,
-                null,
-                null,
-                description,
-                createDate,
-                new ArrayList<>(),
-                new ArrayList<>()
-        );
+        return Investigation.builder()
+                .bpn(bpn)
+                .investigationStatus(InvestigationStatus.CREATED)
+                .investigationSide(InvestigationSide.SENDER)
+                .description(description)
+                .createdAt(createDate)
+                .assetIds(Collections.emptyList())
+                .notifications(Collections.emptyList())
+                .build();
+
+
     }
 
     private static String getSenderBPN(Collection<Notification> notifications) {
@@ -161,8 +169,11 @@ public class Investigation extends QualityNotification {
         validateBPN(applicationBpn);
         changeStatusTo(InvestigationStatus.CLOSED);
         this.closeReason = reason;
-        this.notifications.values()
-                .forEach(notification -> notification.setDescription(reason));
+        if (this.notifications != null) {
+            this.notifications.values()
+                    .forEach(notification -> notification.setDescription(reason));
+        }
+
     }
 
     public void acknowledge(Notification notification) {
@@ -201,13 +212,15 @@ public class Investigation extends QualityNotification {
     }
 
     private void setInvestigationStatusAndReasonForNotification(Notification notificationDomain, InvestigationStatus investigationStatus, String reason) {
-        for (Notification notification : this.notifications.values()) {
-            if (notification.getId().equals(notificationDomain.getId())) {
-                if (reason != null) {
-                    notification.setDescription(reason);
+        if (this.notifications != null) {
+            for (Notification notification : this.notifications.values()) {
+                if (notification.getId().equals(notificationDomain.getId())) {
+                    if (reason != null) {
+                        notification.setDescription(reason);
+                    }
+                    notification.setInvestigationStatus(investigationStatus);
+                    break;
                 }
-                notification.setInvestigationStatus(investigationStatus);
-                break;
             }
         }
     }
@@ -225,8 +238,10 @@ public class Investigation extends QualityNotification {
             throw new InvestigationStatusTransitionNotAllowed(investigationId, investigationStatus, to);
         }
 
-        notifications.values()
-                .forEach(notification -> notification.changeStatusTo(to));
+        if (notifications != null) {
+            notifications.values()
+                    .forEach(notification -> notification.changeStatusTo(to));
+        }
 
         this.investigationStatus = to;
     }
@@ -269,4 +284,14 @@ public class Investigation extends QualityNotification {
                 .map(Notification::getReceiverManufacturerName)
                 .orElse(null);
     }
+
+    public static class InvestigationBuilder {
+        public InvestigationBuilder notifications(List<Notification> notifications) {
+            this.notifications = emptyIfNull(notifications).stream()
+                    .collect(Collectors.toMap(Notification::getId, Function.identity()));
+            return this;
+        }
+    }
+
+
 }

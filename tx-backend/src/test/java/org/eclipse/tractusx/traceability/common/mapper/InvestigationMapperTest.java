@@ -55,9 +55,22 @@ class InvestigationMapperTest {
         String sender = "BPNL000000000001";
         String receiver = "BPNL000000000002";
         String description = "Test investigation";
-        Notification notification = new Notification("1",
+        Notification notification = Notification.builder()
+                .id("1")
+                .notificationReferenceId("Test notification")
+                .investigationStatus(InvestigationStatus.RECEIVED)
+                .affectedParts(List.of(new AffectedPart("123")))
+                .senderManufacturerName("senderManufacturerName")
+                .senderBpnNumber(sender)
+                .receiverBpnNumber(receiver)
+                .receiverManufacturerName("receiverManufacturerName")
+                .severity(Severity.MINOR)
+                .isInitial(false)
+                .messageId("1")
+                .build();
+/*        Notification notification = new Notification("1",
                 "Test notification",
-                sender, "senderManufacturerName",
+                sender, ""senderManufacturerName"",
                 receiver,
                 "receiverManufacturerName",
                 "",
@@ -72,7 +85,7 @@ class InvestigationMapperTest {
                 null,
                 "messageId",
                 false
-        );
+        );*/
         when(clock.instant()).thenReturn(Instant.parse("2022-03-01T12:00:00Z"));
 
         // When

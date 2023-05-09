@@ -94,26 +94,21 @@ public class InvestigationsPublisherService {
     private Notification createNotification(BPN applicationBpn, String description, Instant targetDate, Severity severity, Map.Entry<String, List<Asset>> asset, InvestigationStatus investigationStatus) {
         final String notificationId = UUID.randomUUID().toString();
         final String messageId = UUID.randomUUID().toString();
-        return new Notification(
-                notificationId,
-                null,
-                applicationBpn.value(),
-                getManufacturerName(applicationBpn.value()),
-                asset.getKey(),
-                getManufacturerName(asset.getKey()),
-                null,
-                null,
-                description,
-                investigationStatus,
-                asset.getValue().stream().map(Asset::getId).map(AffectedPart::new).toList(),
-                targetDate,
-                severity,
-                notificationId,
-                null,
-                null,
-                messageId,
-                true
-        );
+        return Notification.builder()
+                .id(notificationId)
+                .senderBpnNumber(applicationBpn.value())
+                .senderManufacturerName(getManufacturerName(applicationBpn.value()))
+                .receiverBpnNumber(asset.getKey())
+                .receiverManufacturerName(getManufacturerName(asset.getKey()))
+                .description(description)
+                .investigationStatus(investigationStatus)
+                .affectedParts(asset.getValue().stream().map(Asset::getId).map(AffectedPart::new).toList())
+                .targetDate(targetDate)
+                .severity(severity)
+                .edcNotificationId(notificationId)
+                .messageId(messageId)
+                .isInitial(true)
+                .build();
     }
 
     private String getManufacturerName(String bpn) {

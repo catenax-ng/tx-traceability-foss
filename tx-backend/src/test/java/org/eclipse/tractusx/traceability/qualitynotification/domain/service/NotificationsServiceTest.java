@@ -66,7 +66,13 @@ class NotificationsServiceTest {
         // and
         when(discoveryService.getDiscoveryByBPN(bpn)).thenReturn(discovery);
         // and
-        Notification notification = new Notification(
+        Notification notification = Notification.builder()
+                .receiverBpnNumber(bpn)
+                .targetDate(Instant.now())
+                .severity(Severity.MINOR)
+                .isInitial(false)
+                .build();
+      /*  Notification notification = new Notification(
                 null,
                 null,
                 null,
@@ -85,7 +91,7 @@ class NotificationsServiceTest {
                 null,
                 null,
                 false
-        );
+        );*/
 
         // when
         notificationsService.asyncNotificationExecutor(notification);

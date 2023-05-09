@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.domain.model;
+package org.eclipse.tractusx.traceability.qualitynotification.domain.model.investigation;
 
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Investigation;
@@ -27,6 +27,7 @@ import org.eclipse.tractusx.traceability.qualitynotification.domain.investigatio
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationSide;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Notification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationStatusTransitionNotAllowed;
 import org.eclipse.tractusx.traceability.testdata.NotificationTestDataFactory;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +39,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import static org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus.ACCEPTED;
@@ -53,9 +53,106 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
-class InvestigationReceiverTest {
+class InvestigationTest {
 
     Investigation investigation;
+
+    @Test
+    @DisplayName("Forbid Cancel Investigation with disallowed status")
+    void forbidCancellingInvestigationWithDisallowedStatus() {
+        InvestigationStatus status = RECEIVED;
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, status);
+        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.cancel(bpn));
+        assertEquals(status, investigation.getInvestigationStatus());
+    }
+
+    @Test
+    @DisplayName("Forbid Send Investigation with disallowed status")
+    void forbidSendingInvestigationWithDisallowedStatus() {
+        InvestigationStatus status = SENT;
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, status);
+        assertThrows(InvestigationStatusTransitionNotAllowed.class, () -> investigation.send(bpn));
+        assertEquals(status, investigation.getInvestigationStatus());
+    }
+
+    @Test
+    @DisplayName("Forbid Close Investigation for different BPN")
+    void forbidCloseInvestigationWithDisallowedStatus() {
+        InvestigationStatus status = CREATED;
+        BPN bpn = new BPN("BPNL000000000001");
+        BPN bpnOther = new BPN("BPNL12321321321");
+        investigation = senderInvestigationWithStatus(bpnOther, status);
+        assertThrows(InvestigationIllegalUpdate.class, () -> investigation.close(bpn, "some-reason"));
+        assertEquals(status, investigation.getInvestigationStatus());
+    }
+
+    @Test
+    @DisplayName("Forbid Cancel Investigation for different BPN")
+    void forbidCancelInvestigationForDifferentBpn() {
+        InvestigationStatus status = CREATED;
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, status);
+        BPN bpn2 = new BPN("BPNL000000000002");
+        assertThrows(InvestigationIllegalUpdate.class, () -> investigation.cancel(bpn2));
+        assertEquals(status, investigation.getInvestigationStatus());
+    }
+
+    @Test
+    @DisplayName("Forbid Send Investigation for different BPN")
+    void forbidSendInvestigationForDifferentBpn() {
+        InvestigationStatus status = CREATED;
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, status);
+        BPN bpn2 = new BPN("BPNL000000000002");
+        assertThrows(InvestigationIllegalUpdate.class, () -> investigation.send(bpn2));
+        assertEquals(status, investigation.getInvestigationStatus());
+    }
+
+    @Test
+    @DisplayName("Forbid Close Investigation for different BPN")
+    void forbidCloseInvestigationForDifferentBpn() {
+        InvestigationStatus status = CREATED;
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, status);
+        BPN bpn2 = new BPN("BPNL000000000002");
+        assertThrows(InvestigationIllegalUpdate.class, () -> investigation.close(bpn2, "some reason"));
+        assertEquals(status, investigation.getInvestigationStatus());
+    }
+
+    @Test
+    @DisplayName("Send Investigation status")
+    void sendInvestigationSuccessfully() {
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, CREATED);
+        investigation.send(bpn);
+        assertEquals(SENT, investigation.getInvestigationStatus());
+    }
+
+    @Test
+    @DisplayName("Cancel Investigation status")
+    void cancelInvestigationSuccessfully() {
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, CREATED);
+        investigation.cancel(bpn);
+        assertEquals(CANCELED, investigation.getInvestigationStatus());
+    }
+
+    @Test
+    @DisplayName("Close Investigation with allowed status")
+    void closeInvestigationWithAllowedStatusSuccessfully() {
+        BPN bpn = new BPN("BPNL000000000001");
+        investigation = senderInvestigationWithStatus(bpn, SENT);
+        investigation.close(bpn, "some-reason");
+        assertEquals(CLOSED, investigation.getInvestigationStatus());
+    }
+
+
+    // util functions
+    private Investigation senderInvestigationWithStatus(BPN bpn, InvestigationStatus status) {
+        return investigationWithStatus(bpn, status, InvestigationSide.SENDER);
+    }
 
     private static Stream<Arguments> provideInvalidStatusForAcknowledgeInvestigation() {
         return Stream.of(
@@ -120,6 +217,19 @@ class InvestigationReceiverTest {
                 Arguments.of(RECEIVED),
                 Arguments.of(SENT)
         );
+    }
+
+    private Investigation investigationWithStatus(BPN bpn, InvestigationStatus status, InvestigationSide side) {
+
+        return Investigation.builder()
+                .investigationId(new InvestigationId(1L))
+                .bpn(bpn)
+                .investigationStatus(status)
+                .investigationSide(side)
+                .createdAt(Instant.now())
+                .build();
+
+        // return new Investigation(new InvestigationId(1L), bpn, status, side, "", "", "", "", Instant.now(), new ArrayList<>(), new ArrayList<>());
     }
 
     @ParameterizedTest
@@ -235,10 +345,18 @@ class InvestigationReceiverTest {
 
     private Investigation investigationWithStatus(InvestigationStatus status, InvestigationSide side) {
         BPN bpn = new BPN("BPNL000000000001");
-        return new Investigation(new InvestigationId(1L), bpn, status, side, "", "", "", "", Instant.now(), new ArrayList<>(), new ArrayList<>());
+        return Investigation.builder()
+                .investigationId(new InvestigationId(1L))
+                .bpn(bpn)
+                .investigationStatus(status)
+                .investigationSide(side)
+                .build();
+        // todo check if we need empty lists
+        //   return new Investigation(new InvestigationId(1L), bpn, status, side, "", "", "", "", Instant.now(), new ArrayList<>(), new ArrayList<>());
     }
 
     private Notification testNotification() {
         return NotificationTestDataFactory.createNotificationTestData();
     }
 }
+

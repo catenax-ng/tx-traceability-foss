@@ -54,18 +54,14 @@ public class InvestigationMapper {
         notification.getAffectedParts().stream()
                 .map(AffectedPart::assetId)
                 .forEach(assetIds::add);
-        return new Investigation(
-                null,
-                bpn,
-                InvestigationStatus.RECEIVED,
-                InvestigationSide.RECEIVER,
-                null,
-                null,
-                null,
-                description,
-                clock.instant(),
-                assetIds,
-                List.of(notification)
-        );
+        return Investigation.builder()
+                .bpn(bpn)
+                .investigationStatus(InvestigationStatus.RECEIVED)
+                .investigationSide(InvestigationSide.RECEIVER)
+                .description(description)
+                .createdAt(clock.instant())
+                .assetIds(assetIds)
+                .notifications(List.of(notification))
+                .build();
     }
 }

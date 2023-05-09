@@ -31,7 +31,26 @@ public class NotificationTestDataFactory {
 
     public static Notification createNotificationTestData() {
         List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
-        return new Notification(
+
+        return Notification.builder()
+                .id("123")
+                .notificationReferenceId("id123")
+                .senderBpnNumber("senderBPN")
+                .senderManufacturerName("senderManufacturerName")
+                .receiverBpnNumber("recipientBPN")
+                .receiverManufacturerName("receiverManufacturerName")
+                .edcUrl("senderAddress")
+                .contractAgreementId("agreement")
+                .description("123")
+                .investigationStatus(InvestigationStatus.ACKNOWLEDGED)
+                .affectedParts(affectedParts)
+                .severity(Severity.MINOR)
+                .edcNotificationId("123")
+                .targetDate(Instant.parse("2022-03-01T12:00:00Z"))
+                .messageId("messageId")
+                .isInitial(true)
+                .build();
+       /* return new Notification(
                 "123",
                 "id123",
                 "senderBPN",
@@ -50,6 +69,6 @@ public class NotificationTestDataFactory {
                 null,
                 "messageId",
                 true
-        );
+        );*/
     }
 }

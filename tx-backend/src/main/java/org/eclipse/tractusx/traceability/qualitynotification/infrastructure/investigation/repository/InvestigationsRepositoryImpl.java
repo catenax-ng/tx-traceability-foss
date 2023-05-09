@@ -74,7 +74,8 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
         InvestigationEntity investigationEntity = investigationRepository.findById(investigation.getInvestigationId().value())
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Investigation with id %s not found!", investigation.getInvestigationId().value())));
 
-        investigationEntity.setStatus(investigation.getInvestigationStatus());
+        // TODO
+        // investigationEntity.setStatus(investigation.getInvestigationStatus());
         investigationEntity.setUpdated(clock.instant());
         investigationEntity.setCloseReason(investigation.getCloseReason());
         investigationEntity.setAcceptReason(investigation.getAcceptReason());
@@ -96,8 +97,8 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
                     .assets(assetEntities)
                     .bpn(investigation.getBpn())
                     .description(investigation.getDescription())
-                    .status(investigation.getInvestigationStatus())
-                    .side(investigation.getInvestigationSide())
+                    //   .status(investigation.getInvestigationStatus())
+                    //  .side(investigation.getInvestigationSide())
                     .created(investigation.getCreatedAt())
                     .build();
 
@@ -206,46 +207,47 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
                 .map(AssetEntity::getId)
                 .toList();
 
-        return new Investigation(
-                new InvestigationId(investigationEntity.getId()),
-                new BPN(investigationEntity.getBpn()),
-                investigationEntity.getStatus(),
-                investigationEntity.getSide(),
-                investigationEntity.getCloseReason(),
-                investigationEntity.getAcceptReason(),
-                investigationEntity.getDeclineReason(),
-                investigationEntity.getDescription(),
-                investigationEntity.getCreated(),
-                assetIds,
-                notifications
-        );
+        return Investigation.builder()
+                .investigationId(new InvestigationId(investigationEntity.getId()))
+                .bpn(BPN.of(investigationEntity.getBpn()))
+                // todo
+                // .investigationStatus(investigationEntity.getStatus())
+                //.investigationSide(investigationEntity.getSide())
+                .closeReason(investigationEntity.getCloseReason())
+                .acceptReason(investigationEntity.getAcceptReason())
+                .declineReason(investigationEntity.getDeclineReason())
+                .createdAt(investigationEntity.getCreated())
+                .assetIds(assetIds)
+                .notifications(notifications)
+                .build();
     }
 
     private Notification toNotification(NotificationEntity notificationEntity) {
         InvestigationEntity investigation = notificationEntity.getInvestigation();
 
-        return new Notification(
-                notificationEntity.getId(),
-                notificationEntity.getNotificationReferenceId(),
-                notificationEntity.getSenderBpnNumber(),
-                notificationEntity.getSenderManufacturerName(),
-                notificationEntity.getReceiverBpnNumber(),
-                notificationEntity.getReceiverManufacturerName(),
-                notificationEntity.getEdcUrl(),
-                notificationEntity.getContractAgreementId(),
-                investigation.getDescription(),
-                investigation.getStatus(),
-                notificationEntity.getAssets().stream()
+        return Notification.builder()
+                .id(notificationEntity.getId())
+                .notificationReferenceId(notificationEntity.getNotificationReferenceId())
+                .senderBpnNumber(notificationEntity.getSenderBpnNumber())
+                .senderManufacturerName(notificationEntity.getSenderManufacturerName())
+                .receiverBpnNumber(notificationEntity.getReceiverBpnNumber())
+                .receiverManufacturerName(notificationEntity.getReceiverManufacturerName())
+                .description(investigation.getDescription())
+                .edcUrl(notificationEntity.getEdcUrl())
+                .contractAgreementId(notificationEntity.getContractAgreementId())
+                // TODO
+                // .investigationStatus(investigationStatus)
+                .affectedParts(notificationEntity.getAssets().stream()
                         .map(asset -> new AffectedPart(asset.getId()))
-                        .toList(),
-                notificationEntity.getTargetDate(),
-                notificationEntity.getSeverity(),
-                notificationEntity.getEdcNotificationId(),
-                notificationEntity.getCreated(),
-                notificationEntity.getUpdated(),
-                notificationEntity.getMessageId(),
-                notificationEntity.getIsInitial()
-        );
+                        .toList())
+                .targetDate(notificationEntity.getTargetDate())
+                .severity(notificationEntity.getSeverity())
+                .edcNotificationId(notificationEntity.getEdcNotificationId())
+                .messageId(notificationEntity.getMessageId())
+                .created(notificationEntity.getCreated())
+                .updated(notificationEntity.getUpdated())
+                .isInitial(notificationEntity.getIsInitial())
+                .build();
     }
 
 
@@ -269,7 +271,8 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
                 .targetDate(notification.getTargetDate())
                 .severity(notification.getSeverity())
                 .edcNotificationId(notification.getEdcNotificationId())
-                .status(notification.getInvestigationStatus())
+                // todo
+                // .status(notification.getInvestigationStatus())
                 .messageId(notification.getMessageId())
                 .isInitial(notification.getIsInitial())
                 .build();

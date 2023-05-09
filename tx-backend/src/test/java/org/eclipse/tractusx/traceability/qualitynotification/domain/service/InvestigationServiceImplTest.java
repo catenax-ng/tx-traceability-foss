@@ -16,7 +16,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-package org.eclipse.tractusx.traceability.qualitynotification.domain.service;
+package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service;
 
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationDTO;
@@ -26,7 +26,6 @@ import org.eclipse.tractusx.traceability.qualitynotification.domain.investigatio
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationNotFoundException;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.InvestigationServiceImpl;
 import org.eclipse.tractusx.traceability.testdata.InvestigationTestDataFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

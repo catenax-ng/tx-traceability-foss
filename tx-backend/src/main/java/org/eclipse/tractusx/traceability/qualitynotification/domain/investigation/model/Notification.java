@@ -21,9 +21,10 @@
 
 package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model;
 
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.NotificationStatusTransitionNotAllowed;
 
@@ -33,11 +34,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static java.util.Objects.requireNonNullElseGet;
-
+@Builder
 @Getter
 @Setter
-@ToString
+@Data
 public class Notification {
     private final String id;
     private String notificationReferenceId;
@@ -47,7 +47,8 @@ public class Notification {
     private final String receiverManufacturerName;
     private String edcUrl;
     private String contractAgreementId;
-    private final List<AffectedPart> affectedParts;
+    @Builder.Default
+    private final List<AffectedPart> affectedParts = new ArrayList<>();
     private String description;
     private InvestigationStatus investigationStatus;
     private String edcNotificationId;
@@ -58,7 +59,7 @@ public class Notification {
     private String messageId;
     private Boolean isInitial;
 
-    public Notification(String id,
+/*    public Notification(String id,
                         String notificationReferenceId,
                         String senderBpnNumber,
                         String senderManufacturerName,
@@ -94,7 +95,7 @@ public class Notification {
         this.updated = updated;
         this.messageId = messageId;
         this.isInitial = isInitial;
-    }
+    }*/
 
     void changeStatusTo(InvestigationStatus to) {
         boolean transitionAllowed = investigationStatus.transitionAllowed(to);
@@ -109,37 +110,39 @@ public class Notification {
     // Important - receiver and sender will be saved in switched order
     public Notification copyAndSwitchSenderAndReceiver(BPN applicationBpn) {
         final String notificationId = UUID.randomUUID().toString();
-        String receiver = receiverBpnNumber;
-        String sender = senderBpnNumber;
-        String receiverManufactureName = receiverManufacturerName;
-        String senderManufactureName = senderManufacturerName;
+        String receiverBPN = receiverBpnNumber;
+        String senderBPN = senderBpnNumber;
+        String receiverName;
+        String senderName;
 
         // This is needed to make sure that the app can send a message to the receiver and not addresses itself
         if (applicationBpn.value().equals(receiverBpnNumber)) {
-            receiver = senderBpnNumber;
-            sender = receiverBpnNumber;
-            receiverManufactureName = senderManufacturerName;
-            senderManufactureName = receiverManufacturerName;
+            receiverBPN = senderBpnNumber;
+            senderBPN = receiverBpnNumber;
+            receiverName = senderManufacturerName;
+            senderName = receiverManufacturerName;
+        } else {
+            receiverName = receiverManufacturerName;
+            senderName = senderManufacturerName;
         }
-        return new Notification(
-                notificationId,
-                null,
-                sender,
-                senderManufactureName,
-                receiver,
-                receiverManufactureName,
-                edcUrl,
-                contractAgreementId,
-                description,
-                investigationStatus,
-                affectedParts,
-                targetDate,
-                severity,
-                edcNotificationId,
-                created,
-                updated,
-                UUID.randomUUID().toString(),
-                false
-        );
+        return Notification.builder()
+                .id(notificationId)
+                .senderBpnNumber(senderBPN)
+                .senderManufacturerName(senderName)
+                .receiverBpnNumber(receiverBPN)
+                .receiverManufacturerName(receiverName)
+                .edcUrl(edcUrl)
+                .contractAgreementId(contractAgreementId)
+                .description(description)
+                .investigationStatus(investigationStatus)
+                .affectedParts(affectedParts)
+                .targetDate(targetDate)
+                .severity(severity)
+                .edcNotificationId(edcNotificationId)
+                .created(created)
+                .updated(updated)
+                .messageId(UUID.randomUUID().toString())
+                .isInitial(false)
+                .build();
     }
 }

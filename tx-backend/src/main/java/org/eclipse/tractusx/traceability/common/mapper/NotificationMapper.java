@@ -47,26 +47,24 @@ public class NotificationMapper {
      */
     public Notification toNotification(EDCNotification edcNotification) {
         String notificationId = UUID.randomUUID().toString();
-        return new Notification(
-                notificationId,
-                edcNotification.getNotificationId(),
-                edcNotification.getSenderBPN(),
-                getManufacturerName(edcNotification.getSenderBPN()),
-                edcNotification.getRecipientBPN(),
-                getManufacturerName(edcNotification.getRecipientBPN()),
-                edcNotification.getSenderAddress(),
-                null,
-                edcNotification.getInformation(),
-                edcNotification.convertInvestigationStatus(),
-                edcNotification.getListOfAffectedItems(),
-                edcNotification.getTargetDate(),
-                Severity.fromString(edcNotification.getSeverity()),
-                edcNotification.getNotificationId(),
-                null,
-                null,
-                edcNotification.getMessageId(),
-                false
-        );
+        return Notification.builder()
+                .id(notificationId)
+                .notificationReferenceId(edcNotification.getNotificationId())
+                .senderBpnNumber(edcNotification.getSenderBPN())
+                .senderManufacturerName(getManufacturerName(edcNotification.getSenderBPN()))
+                .receiverBpnNumber(edcNotification.getRecipientBPN())
+                .receiverManufacturerName(getManufacturerName(edcNotification.getRecipientBPN()))
+                .edcUrl(edcNotification.getSenderAddress())
+                .description(edcNotification.getInformation())
+                .investigationStatus(edcNotification.convertInvestigationStatus())
+                .affectedParts(edcNotification.getListOfAffectedItems())
+                .targetDate(edcNotification.getTargetDate())
+                .severity(Severity.fromString(edcNotification.getSeverity()))
+                .edcNotificationId(edcNotification.getNotificationId())
+                .messageId(edcNotification.getMessageId())
+                .isInitial(false)
+                .build();
+
     }
 
     private String getManufacturerName(String senderBPN) {
