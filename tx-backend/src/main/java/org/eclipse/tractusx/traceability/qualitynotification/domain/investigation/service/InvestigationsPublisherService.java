@@ -42,6 +42,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Clock;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -96,6 +97,7 @@ public class InvestigationsPublisherService {
         final String messageId = UUID.randomUUID().toString();
         return QualityNotificationMessage.builder()
                 .id(notificationId)
+                .created(LocalDateTime.now())
                 .senderBpnNumber(applicationBpn.value())
                 .senderManufacturerName(getManufacturerName(applicationBpn.value()))
                 .receiverBpnNumber(asset.getKey())
