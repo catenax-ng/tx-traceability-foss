@@ -407,6 +407,7 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
         InvestigationEntity investigationEntity =
                 InvestigationEntity
                         .builder()
+                        .id(1L)
                         .assets([])
                         .bpn(testBpn)
                         .description("1")
@@ -417,11 +418,21 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
 
         InvestigationEntity persistedInvestigation = storedInvestigationFullObject(investigationEntity)
         and:
-        NotificationEntity notificationEntity = storedNotification(NotificationEntity.builder().id("1").investigation(investigationEntity).senderBpnNumber(senderBPN).senderManufacturerName(senderName).receiverBpnNumber(receiverBPN).status(QualityNotificationStatusBaseEntity.CREATED).receiverManufacturerName(receiverName).build())
+        NotificationEntity notificationEntity = storedNotification(
+                NotificationEntity
+                        .builder()
+                        .id("1")
+                        .investigation(persistedInvestigation)
+                        .senderBpnNumber(senderBPN)
+                        .senderManufacturerName(senderName)
+                        .receiverBpnNumber(receiverBPN)
+                        .status(QualityNotificationStatusBaseEntity.CREATED)
+                        .receiverManufacturerName(receiverName)
+                        .build())
         notificationEntity.setInvestigation(persistedInvestigation)
         storedNotification(notificationEntity)
         and:
-        Long investigationId = investigationEntity.getId()
+        Long investigationId = persistedInvestigation.getId()
 
         expect:
         given()

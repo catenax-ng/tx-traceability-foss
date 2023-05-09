@@ -221,6 +221,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
                 .acceptReason(investigationEntity.getAcceptReason())
                 .declineReason(investigationEntity.getDeclineReason())
                 .createdAt(investigationEntity.getCreated())
+                .description(investigationEntity.getDescription())
                 .assetIds(assetIds)
                 .notifications(notifications)
                 .build();
