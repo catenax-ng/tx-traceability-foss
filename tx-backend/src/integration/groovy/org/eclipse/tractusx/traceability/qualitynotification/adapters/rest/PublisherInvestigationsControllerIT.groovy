@@ -34,7 +34,6 @@ import org.eclipse.tractusx.traceability.qualitynotification.domain.base.Quality
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.InvestigationsReceiverService
-import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationStatusBaseEntity
 import org.hamcrest.Matchers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
@@ -57,9 +56,8 @@ class PublisherInvestigationsControllerIT extends IntegrationSpecification imple
         and:
         QualityNotificationMessage notificationBuild = QualityNotificationMessage.builder()
                 .id("some-id")
-
-                .investigationStatus(QualityNotificationStatus.RECEIVED)
-                .affectedParts(List.of(new AffectedPart("123")))
+                .investigationStatus(QualityNotificationStatus.SENT)
+                .affectedParts(List.of(new AffectedPart("urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb")))
                 .senderManufacturerName("bpn-a")
                 .senderBpnNumber("Sender Manufacturer name")
                 .receiverBpnNumber("BPNL00000003AXS3")
@@ -476,7 +474,7 @@ class PublisherInvestigationsControllerIT extends IntegrationSpecification imple
 
         then:
         assertInvestigationsSize(1)
-        assertInvestigationStatus(QualityNotificationStatusBaseEntity.CLOSED)
+        assertInvestigationStatus(QualityNotificationStatus.CLOSED)
     }
 
     def "should not cancel not existing investigation"() {

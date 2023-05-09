@@ -44,6 +44,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -116,7 +117,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
 
     @Override
     public PageResult<QualityNotification> getInvestigations(QualityNotificationSide investigationSide, Pageable pageable) {
-        Page<InvestigationEntity> entities = investigationRepository.findAllBySideEqualsOrderByCreatedDesc(investigationSide, pageable);
+        Page<InvestigationEntity> entities = investigationRepository.findAllBySideEqualsOrderByCreatedDesc(QualityNotificationSideBaseEntity.valueOf(investigationSide.name()), pageable);
         return new PageResult<>(entities, this::toInvestigation);
     }
 
@@ -128,7 +129,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
 
     @Override
     public long countPendingInvestigations() {
-        return investigationRepository.countAllByStatusEquals(QualityNotificationStatus.fromStringValue(QualityNotificationStatusBaseEntity.RECEIVED.name()));
+        return investigationRepository.countAllByStatusEquals(QualityNotificationStatusBaseEntity.RECEIVED);
     }
 
     @Override
@@ -151,12 +152,15 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
 
     @Override
     public long countInvestigations(Set<QualityNotificationStatus> statuses) {
-        return investigationRepository.countAllByStatusIn(statuses);
+        Set<QualityNotificationStatusBaseEntity> transformedSet = statuses.stream()
+                .map(status -> QualityNotificationStatusBaseEntity.valueOf(status.name())) // Convert using name()
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(QualityNotificationStatusBaseEntity.class)));
+        return investigationRepository.countAllByStatusIn(transformedSet);
     }
 
     @Override
     public long countInvestigations(QualityNotificationSide investigationSide) {
-        return investigationRepository.countAllBySideEquals(investigationSide);
+        return investigationRepository.countAllBySideEquals(QualityNotificationSideBaseEntity.valueOf(investigationSide.name()));
     }
 
     private void handleNotificationUpdate(InvestigationEntity investigationEntity, QualityNotification investigation) {

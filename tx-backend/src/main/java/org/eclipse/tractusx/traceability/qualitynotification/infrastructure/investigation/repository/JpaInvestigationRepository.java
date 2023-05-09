@@ -21,8 +21,8 @@
 
 package org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.repository;
 
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationSide;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationSideBaseEntity;
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationStatusBaseEntity;
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,15 +36,15 @@ import java.util.Set;
 
 @Repository
 public interface JpaInvestigationRepository extends JpaRepository<InvestigationEntity, Long> {
-    Page<InvestigationEntity> findAllByStatusInOrderByCreatedDesc(Set<QualityNotificationStatus> statuses, Pageable pageable);
+    Page<InvestigationEntity> findAllByStatusInOrderByCreatedDesc(Set<QualityNotificationStatusBaseEntity> statuses, Pageable pageable);
 
-    Page<InvestigationEntity> findAllBySideEqualsOrderByCreatedDesc(QualityNotificationSide investigationSide, Pageable pageable);
+    Page<InvestigationEntity> findAllBySideEqualsOrderByCreatedDesc(QualityNotificationSideBaseEntity investigationSide, Pageable pageable);
 
-    long countAllByStatusEquals(QualityNotificationStatus status);
+    long countAllByStatusEquals(QualityNotificationStatusBaseEntity status);
 
-    long countAllBySideEquals(QualityNotificationSide investigationSide);
+    long countAllBySideEquals(QualityNotificationSideBaseEntity investigationSide);
 
-    long countAllByStatusIn(Set<QualityNotificationStatus> status);
+    long countAllByStatusIn(Set<QualityNotificationStatusBaseEntity> status);
 
     @Query("SELECT investigation FROM InvestigationEntity investigation JOIN investigation.notifications notification WHERE notification.id = :notificationId")
     Optional<InvestigationEntity> findByNotificationsNotificationId(@Param("notificationId") String notificationId);

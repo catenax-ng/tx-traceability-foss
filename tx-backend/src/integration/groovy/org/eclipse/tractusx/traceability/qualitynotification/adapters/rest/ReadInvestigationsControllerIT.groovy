@@ -139,28 +139,33 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                         .builder()
                         .id("1")
                         .investigation(firstInvestigation)
+                        .status(QualityNotificationStatusBaseEntity.CREATED)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
                 NotificationEntity
                         .builder()
+                        .status(QualityNotificationStatusBaseEntity.CREATED)
                         .id("2")
                         .investigation(secondInvestigation)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
                 NotificationEntity
                         .builder()
+                        .status(QualityNotificationStatusBaseEntity.CREATED)
                         .id("3")
                         .investigation(thirdInvestigation)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
                 NotificationEntity
                         .builder()
+                        .status(QualityNotificationStatusBaseEntity.CREATED)
                         .id("4")
                         .investigation(fourthInvestigation)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
                 NotificationEntity
                         .builder()
+                        .status(QualityNotificationStatusBaseEntity.CREATED)
                         .id("5")
                         .investigation(fifthInvestigation)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
@@ -242,6 +247,7 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                     .id(UUID.randomUUID().toString())
                     .investigation(investigation)
                     .senderBpnNumber(senderBPN)
+                    .status(QualityNotificationStatusBaseEntity.CREATED)
                     .senderManufacturerName(senderName)
                     .receiverBpnNumber(receiverBPN)
                     .receiverManufacturerName(receiverName)
@@ -326,30 +332,35 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                         .builder()
                         .id("1")
                         .investigation(firstInvestigation)
+                        .status(QualityNotificationStatusBaseEntity.CREATED)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
                 NotificationEntity
                         .builder()
                         .id("2")
                         .investigation(secondInvestigation)
+                        .status(QualityNotificationStatusBaseEntity.CREATED)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
                 NotificationEntity
                         .builder()
                         .id("3")
                         .investigation(thirdInvestigation)
+                        .status(QualityNotificationStatusBaseEntity.CREATED)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
                 NotificationEntity
                         .builder()
                         .id("4")
                         .investigation(fourthInvestigation)
+                        .status(QualityNotificationStatusBaseEntity.CREATED)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
                 NotificationEntity
                         .builder()
                         .id("5")
                         .investigation(fifthInvestigation)
+                        .status(QualityNotificationStatusBaseEntity.CREATED)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build()
         )
@@ -406,7 +417,7 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
 
         InvestigationEntity persistedInvestigation = storedInvestigationFullObject(investigationEntity)
         and:
-        NotificationEntity notificationEntity = storedNotification(NotificationEntity.builder().id("1").investigation(investigationEntity).senderBpnNumber(senderBPN).senderManufacturerName(senderName).receiverBpnNumber(receiverBPN).receiverManufacturerName(receiverName).build())
+        NotificationEntity notificationEntity = storedNotification(NotificationEntity.builder().id("1").investigation(investigationEntity).senderBpnNumber(senderBPN).senderManufacturerName(senderName).receiverBpnNumber(receiverBPN).status(QualityNotificationStatusBaseEntity.CREATED).receiverManufacturerName(receiverName).build())
         notificationEntity.setInvestigation(persistedInvestigation)
         storedNotification(notificationEntity)
         and:

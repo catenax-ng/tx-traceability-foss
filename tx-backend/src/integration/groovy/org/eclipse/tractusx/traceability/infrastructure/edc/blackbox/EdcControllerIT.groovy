@@ -28,6 +28,7 @@ import org.eclipse.tractusx.traceability.common.support.InvestigationsSupport
 import org.eclipse.tractusx.traceability.common.support.NotificationsSupport
 import org.eclipse.tractusx.traceability.common.support.TestDataSupport
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationSideBaseEntity
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationStatusBaseEntity
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationEntity
@@ -129,7 +130,7 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
         assertNotificationsSize(2)
         assertInvestigationsSize(1)
 
-        assertInvestigationStatus(QualityNotificationStatusBaseEntity.ACKNOWLEDGED)
+        assertInvestigationStatus(QualityNotificationStatus.ACKNOWLEDGED)
     }
 
     def "should throw bad request because edcNotification Method is not supported /qualitynotifications/receive"() {
@@ -224,7 +225,7 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
         then:
         assertNotificationsSize(0)
         assertInvestigationsSize(1)
-        assertInvestigationStatus(QualityNotificationStatusBaseEntity.RECEIVED)
+        assertInvestigationStatus(QualityNotificationStatus.RECEIVED)
 
     }
 }

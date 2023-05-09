@@ -63,7 +63,7 @@ trait InvestigationsSupport implements InvestigationsRepositoryProvider {
 
     void assertInvestigationStatus(QualityNotificationStatus investigationStatus) {
         jpaInvestigationRepository().findAll().each {
-            assert it.status == investigationStatus
+            assert it.status.name() == investigationStatus.name()
         }
     }
 
