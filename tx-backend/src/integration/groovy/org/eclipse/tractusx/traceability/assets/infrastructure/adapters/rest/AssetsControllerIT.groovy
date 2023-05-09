@@ -29,7 +29,7 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.ir
 import org.eclipse.tractusx.traceability.common.support.AssetsSupport
 import org.eclipse.tractusx.traceability.common.support.BpnSupport
 import org.eclipse.tractusx.traceability.common.support.IrsApiSupport
-import org.eclipse.tractusx.traceability.investigations.domain.model.InvestigationStatus
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus
 import org.hamcrest.Matchers
 import spock.util.concurrent.PollingConditions
 
@@ -353,7 +353,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .header(jwtAuthorization(ADMIN))
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/assets", )
+                .get("/api/assets",)
                 .then()
                 .statusCode(200)
                 .body("totalItems", equalTo(13))
@@ -370,7 +370,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .body("content[0]", hasEntry("manufacturingDate", "2014-11-18T08:23:55Z"))
                 .body("content[0]", hasEntry("manufacturingCountry", "DEU"))
                 .body("content[0]", hasEntry("owner", "OWN"))
-                .body("content[0]", hasEntry("underInvestigation",false))
+                .body("content[0]", hasEntry("underInvestigation", false))
                 .body("content[0]", hasEntry("qualityType", "Ok"))
                 .body("content[0]", hasEntry("van", "OMA-TGFAYUHXFLHHUQQMPLTE"))
 
@@ -386,16 +386,16 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .contentType(ContentType.JSON)
                 .queryParam("owner", ownerValue)
                 .when()
-                .get("/api/assets", )
+                .get("/api/assets",)
                 .then()
                 .statusCode(200)
                 .body("totalItems", equalTo(totalItemsValue))
 
         where:
-        ownerValue  || totalItemsValue
-        "OWN"       || 3
-        "CUSTOMER"  || 0
-        "SUPPLIER"  || 10
+        ownerValue || totalItemsValue
+        "OWN"      || 3
+        "CUSTOMER" || 0
+        "SUPPLIER" || 10
     }
 
     def "should return assets country map"() {
