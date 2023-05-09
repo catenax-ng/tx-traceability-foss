@@ -70,7 +70,7 @@ public class InvestigationServiceImpl implements InvestigationService {
 
     @Override
     public QualityNotification loadInvestigationOrNotFoundException(InvestigationId investigationId) {
-        return investigationsRepository.findById(investigationId)
+        return investigationsRepository.findOptionalQualityNotificationById(investigationId)
                 .orElseThrow(() -> new InvestigationNotFoundException(investigationId));
     }
 
@@ -99,14 +99,14 @@ public class InvestigationServiceImpl implements InvestigationService {
     }
 
     private PageResult<InvestigationResponse> getInvestigationsPageResult(Pageable pageable, QualityNotificationSide investigationSide) {
-        List<InvestigationResponse> investigationData = investigationsRepository.getInvestigations(investigationSide, pageable)
+        List<InvestigationResponse> investigationData = investigationsRepository.findQualityNotificationsBySide(investigationSide, pageable)
                 .content()
                 .stream()
                 .sorted(QualityNotification.COMPARE_BY_NEWEST_INVESTIGATION_CREATION_TIME)
                 .map(QualityNotification::toDTO)
                 .toList();
 
-        Page<InvestigationResponse> investigationDataPage = new PageImpl<>(investigationData, pageable, investigationsRepository.countInvestigations(investigationSide));
+        Page<InvestigationResponse> investigationDataPage = new PageImpl<>(investigationData, pageable, investigationsRepository.countQualityNotificationEntitiesBySide(investigationSide));
 
         return new PageResult<>(investigationDataPage);
     }

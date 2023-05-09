@@ -44,7 +44,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -65,7 +64,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
     private final Clock clock;
 
     @Override
-    public void update(QualityNotificationMessage notification) {
+    public void updateQualityNotificationMessageEntity(QualityNotificationMessage notification) {
         NotificationEntity entity = notificationRepository.findById(notification.getId())
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Notification with id %s not found!", notification.getId())));
         handleNotificationUpdate(entity, notification);
@@ -73,7 +72,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
     }
 
     @Override
-    public InvestigationId update(QualityNotification investigation) {
+    public InvestigationId updateQualityNotificationEntity(QualityNotification investigation) {
         InvestigationEntity investigationEntity = investigationRepository.findById(investigation.getInvestigationId().value())
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Investigation with id %s not found!", investigation.getInvestigationId().value())));
 
@@ -90,7 +89,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
     }
 
     @Override
-    public InvestigationId save(QualityNotification investigation) {
+    public InvestigationId saveQualityNotificationEntity(QualityNotification investigation) {
 
         List<AssetEntity> assetEntities = getAssetEntitiesByInvestigation(investigation);
 
@@ -116,33 +115,22 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
     }
 
     @Override
-    public PageResult<QualityNotification> getInvestigations(QualityNotificationSide investigationSide, Pageable pageable) {
+    public PageResult<QualityNotification> findQualityNotificationsBySide(QualityNotificationSide investigationSide, Pageable pageable) {
         Page<InvestigationEntity> entities = investigationRepository.findAllBySideEqualsOrderByCreatedDesc(QualityNotificationSideBaseEntity.valueOf(investigationSide.name()), pageable);
         return new PageResult<>(entities, this::toInvestigation);
     }
 
     @Override
-    public Optional<QualityNotification> findById(InvestigationId investigationId) {
+    public Optional<QualityNotification> findOptionalQualityNotificationById(InvestigationId investigationId) {
         return investigationRepository.findById(investigationId.value())
                 .map(this::toInvestigation);
     }
 
     @Override
-    public long countPendingInvestigations() {
-        return investigationRepository.countAllByStatusEquals(QualityNotificationStatusBaseEntity.RECEIVED);
+    public long countQualityNotificationEntitiesByStatus(QualityNotificationStatus qualityNotificationStatus) {
+        return investigationRepository.countAllByStatusEquals(QualityNotificationStatusBaseEntity.valueOf(qualityNotificationStatus.name()));
     }
 
-    @Override
-    public Optional<QualityNotification> findByNotificationId(String notificationId) {
-        return investigationRepository.findByNotificationsNotificationId(notificationId)
-                .map(this::toInvestigation);
-    }
-
-    @Override
-    public Optional<QualityNotification> findByNotificationReferenceId(String notificationReferenceId) {
-        return investigationRepository.findByNotificationsNotificationReferenceId(notificationReferenceId)
-                .map(this::toInvestigation);
-    }
 
     @Override
     public Optional<QualityNotification> findByEdcNotificationId(String edcNotificationId) {
@@ -150,16 +138,9 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
                 .map(this::toInvestigation);
     }
 
-    @Override
-    public long countInvestigations(Set<QualityNotificationStatus> statuses) {
-        Set<QualityNotificationStatusBaseEntity> transformedSet = statuses.stream()
-                .map(status -> QualityNotificationStatusBaseEntity.valueOf(status.name())) // Convert using name()
-                .collect(Collectors.toCollection(() -> EnumSet.noneOf(QualityNotificationStatusBaseEntity.class)));
-        return investigationRepository.countAllByStatusIn(transformedSet);
-    }
 
     @Override
-    public long countInvestigations(QualityNotificationSide investigationSide) {
+    public long countQualityNotificationEntitiesBySide(QualityNotificationSide investigationSide) {
         return investigationRepository.countAllBySideEquals(QualityNotificationSideBaseEntity.valueOf(investigationSide.name()));
     }
 

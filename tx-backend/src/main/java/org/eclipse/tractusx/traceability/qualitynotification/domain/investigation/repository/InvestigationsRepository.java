@@ -30,28 +30,24 @@ import org.eclipse.tractusx.traceability.qualitynotification.domain.investigatio
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
-import java.util.Set;
 
 public interface InvestigationsRepository {
-    InvestigationId save(QualityNotification investigation);
 
-    InvestigationId update(QualityNotification investigation);
+    PageResult<QualityNotification> findQualityNotificationsBySide(QualityNotificationSide investigationSide, Pageable pageable);
 
-    PageResult<QualityNotification> getInvestigations(QualityNotificationSide investigationSide, Pageable pageable);
-
-    Optional<QualityNotification> findById(InvestigationId investigationId);
-
-    void update(QualityNotificationMessage notification);
-
-    long countPendingInvestigations();
-
-    Optional<QualityNotification> findByNotificationId(String notificationId);
+    Optional<QualityNotification> findOptionalQualityNotificationById(InvestigationId investigationId);
 
     Optional<QualityNotification> findByEdcNotificationId(String edcNotificationId);
 
-    Optional<QualityNotification> findByNotificationReferenceId(String notificationReferenceId);
+    long countQualityNotificationEntitiesByStatus(QualityNotificationStatus qualityNotificationStatus);
 
-    long countInvestigations(Set<QualityNotificationStatus> statuses);
+    long countQualityNotificationEntitiesBySide(QualityNotificationSide investigationSide);
 
-    long countInvestigations(QualityNotificationSide investigationSide);
+    InvestigationId saveQualityNotificationEntity(QualityNotification investigation);
+
+    InvestigationId updateQualityNotificationEntity(QualityNotification investigation);
+
+    void updateQualityNotificationMessageEntity(QualityNotificationMessage notification);
+
+
 }

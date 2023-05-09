@@ -89,7 +89,7 @@ public class InvestigationsPublisherService {
 
         assetService.setAssetsInvestigationStatus(investigation);
         log.info("Start Investigation {}", investigation);
-        return investigationsRepository.save(investigation);
+        return investigationsRepository.saveQualityNotificationEntity(investigation);
     }
 
     private QualityNotificationMessage createNotification(BPN applicationBpn, String description, Instant targetDate, Severity severity, Map.Entry<String, List<Asset>> asset, QualityNotificationStatus investigationStatus) {
@@ -127,7 +127,7 @@ public class InvestigationsPublisherService {
         BPN applicationBPN = traceabilityProperties.getBpn();
         investigation.cancel(applicationBPN);
         assetService.setAssetsInvestigationStatus(investigation);
-        investigationsRepository.update(investigation);
+        investigationsRepository.updateQualityNotificationEntity(investigation);
     }
 
     /**
@@ -138,7 +138,7 @@ public class InvestigationsPublisherService {
     public void approveInvestigation(QualityNotification investigation) {
         BPN applicationBPN = traceabilityProperties.getBpn();
         investigation.send(applicationBPN);
-        investigationsRepository.update(investigation);
+        investigationsRepository.updateQualityNotificationEntity(investigation);
         // For each asset within investigation a notification was created before
         investigation.getNotifications().forEach(notificationsService::asyncNotificationExecutor);
     }
@@ -171,7 +171,7 @@ public class InvestigationsPublisherService {
             notificationsToSend.add(notificationToSend);
         });
         assetService.setAssetsInvestigationStatus(investigation);
-        investigationsRepository.update(investigation);
+        investigationsRepository.updateQualityNotificationEntity(investigation);
         notificationsToSend.forEach(notificationsService::asyncNotificationExecutor);
     }
 

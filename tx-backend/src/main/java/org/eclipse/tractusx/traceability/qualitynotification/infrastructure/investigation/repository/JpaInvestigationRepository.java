@@ -32,25 +32,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface JpaInvestigationRepository extends JpaRepository<InvestigationEntity, Long> {
-    Page<InvestigationEntity> findAllByStatusInOrderByCreatedDesc(Set<QualityNotificationStatusBaseEntity> statuses, Pageable pageable);
 
     Page<InvestigationEntity> findAllBySideEqualsOrderByCreatedDesc(QualityNotificationSideBaseEntity investigationSide, Pageable pageable);
 
     long countAllByStatusEquals(QualityNotificationStatusBaseEntity status);
 
     long countAllBySideEquals(QualityNotificationSideBaseEntity investigationSide);
-
-    long countAllByStatusIn(Set<QualityNotificationStatusBaseEntity> status);
-
-    @Query("SELECT investigation FROM InvestigationEntity investigation JOIN investigation.notifications notification WHERE notification.id = :notificationId")
-    Optional<InvestigationEntity> findByNotificationsNotificationId(@Param("notificationId") String notificationId);
-
-    @Query("SELECT investigation FROM InvestigationEntity investigation JOIN investigation.notifications notification WHERE notification.notificationReferenceId = :notificationReferenceId")
-    Optional<InvestigationEntity> findByNotificationsNotificationReferenceId(@Param("notificationReferenceId") String notificationReferenceId);
 
     @Query("SELECT investigation FROM InvestigationEntity investigation JOIN investigation.notifications notification WHERE notification.edcNotificationId = :edcNotificationId")
     Optional<InvestigationEntity> findByNotificationsEdcNotificationId(@Param("edcNotificationId") String edcNotificationId);

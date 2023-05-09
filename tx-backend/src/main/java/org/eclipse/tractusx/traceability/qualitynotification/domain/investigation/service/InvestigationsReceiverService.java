@@ -50,7 +50,7 @@ public class InvestigationsReceiverService {
         BPN investigationCreatorBPN = BPN.of(edcNotification.getSenderBPN());
         QualityNotificationMessage notification = notificationMapper.toNotification(edcNotification);
         QualityNotification investigation = investigationMapper.toInvestigation(investigationCreatorBPN, edcNotification.getInformation(), notification);
-        InvestigationId investigationId = investigationsRepository.save(investigation);
+        InvestigationId investigationId = investigationsRepository.saveQualityNotificationEntity(investigation);
         assetService.setAssetsInvestigationStatus(investigation);
         log.info("Stored received edcNotification in investigation with id {}", investigationId);
     }
@@ -69,7 +69,7 @@ public class InvestigationsReceiverService {
         }
         investigation.addNotification(notification);
         assetService.setAssetsInvestigationStatus(investigation);
-        InvestigationId investigationId = investigationsRepository.update(investigation);
+        InvestigationId investigationId = investigationsRepository.updateQualityNotificationEntity(investigation);
         log.info("Stored update edcNotification in investigation with id {}", investigationId);
     }
 }

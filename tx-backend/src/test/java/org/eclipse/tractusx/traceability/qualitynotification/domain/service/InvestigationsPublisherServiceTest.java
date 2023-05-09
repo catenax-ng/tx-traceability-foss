@@ -89,7 +89,7 @@ class InvestigationsPublisherServiceTest {
         // Given
         QualityNotification investigation = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.CLOSED, "bpn123");
         when(assetRepository.getAssetsById(Arrays.asList("asset-1", "asset-2"))).thenReturn(List.of(AssetTestDataFactory.createAssetTestData()));
-        when(repository.save(any(QualityNotification.class))).thenReturn(investigation.getInvestigationId());
+        when(repository.saveQualityNotificationEntity(any(QualityNotification.class))).thenReturn(investigation.getInvestigationId());
         when(bpnRepository.findManufacturerName(anyString())).thenReturn(Optional.empty());
         when(traceabilityProperties.getBpn()).thenReturn(BPN.of("bpn-123"));
         // When
@@ -97,7 +97,7 @@ class InvestigationsPublisherServiceTest {
 
         // Then
         verify(assetRepository).getAssetsById(Arrays.asList("asset-1", "asset-2"));
-        verify(repository).save(any(QualityNotification.class));
+        verify(repository).saveQualityNotificationEntity(any(QualityNotification.class));
 
     }
 
@@ -107,13 +107,13 @@ class InvestigationsPublisherServiceTest {
         BPN bpn = new BPN("bpn123");
         Long id = 1L;
         QualityNotification investigation = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.CREATED, QualityNotificationStatus.CREATED);
-        when(repository.update(investigation)).thenReturn(new InvestigationId(id));
+        when(repository.updateQualityNotificationEntity(investigation)).thenReturn(new InvestigationId(id));
         when(traceabilityProperties.getBpn()).thenReturn(bpn);
         // When
         investigationsPublisherService.cancelInvestigation(investigation);
 
         // Then
-        verify(repository).update(investigation);
+        verify(repository).updateQualityNotificationEntity(investigation);
         assertEquals(QualityNotificationStatus.CANCELED, investigation.getInvestigationStatus());
     }
 
@@ -124,13 +124,13 @@ class InvestigationsPublisherServiceTest {
         final BPN bpn = new BPN("bpn123");
         InvestigationId investigationId = new InvestigationId(1L);
         QualityNotification investigation = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.CREATED, QualityNotificationStatus.CREATED);
-        when(repository.update(investigation)).thenReturn(investigationId);
+        when(repository.updateQualityNotificationEntity(investigation)).thenReturn(investigationId);
         when(traceabilityProperties.getBpn()).thenReturn(bpn);
         // When
         investigationsPublisherService.approveInvestigation(investigation);
 
         // Then
-        verify(repository).update(investigation);
+        verify(repository).updateQualityNotificationEntity(investigation);
         // TODO here is missing the discovery object as mock
         // verify(notificationsService).asyncNotificationExecutor(any());
     }
@@ -214,7 +214,7 @@ class InvestigationsPublisherServiceTest {
         investigationsPublisherService.updateInvestigationPublisher(investigationTestData, status, reason);
 
         // Then
-        Mockito.verify(repository).update(investigationTestData);
+        Mockito.verify(repository).updateQualityNotificationEntity(investigationTestData);
         // TODO here is missing the discovery object as mock
         // Mockito.verify(notificationsService, times(1)).asyncNotificationExecutor(any(Notification.class));
     }
@@ -296,7 +296,7 @@ class InvestigationsPublisherServiceTest {
         investigationsPublisherService.updateInvestigationPublisher(investigationTestData, status, reason);
 
         // Then
-        Mockito.verify(repository).update(investigationTestData);
+        Mockito.verify(repository).updateQualityNotificationEntity(investigationTestData);
         // TODO here is missing the discovery object as mock
         // Mockito.verify(notificationsService, times(1)).asyncNotificationExecutor(any(Notification.class));
     }
@@ -379,7 +379,7 @@ class InvestigationsPublisherServiceTest {
         investigationsPublisherService.updateInvestigationPublisher(investigationTestData, status, reason);
 
         // Then
-        Mockito.verify(repository).update(investigationTestData);
+        Mockito.verify(repository).updateQualityNotificationEntity(investigationTestData);
         // TODO here is missing the discovery object as mock
         //   Mockito.verify(notificationsService, times(1)).asyncNotificationExecutor(any(Notification.class));
     }
@@ -461,7 +461,7 @@ class InvestigationsPublisherServiceTest {
         investigationsPublisherService.updateInvestigationPublisher(investigationTestData, status, reason);
 
         // Then
-        Mockito.verify(repository).update(investigationTestData);
+        Mockito.verify(repository).updateQualityNotificationEntity(investigationTestData);
         // TODO here is missing the discovery object as mock
         // Mockito.verify(notificationsService, times(1)).asyncNotificationExecutor(any(Notification.class));
     }
@@ -513,7 +513,7 @@ class InvestigationsPublisherServiceTest {
         assertThrows(InvestigationIllegalUpdate.class, () -> investigationsPublisherService.updateInvestigationPublisher(investigationTestData, status, reason));
 
         // Then
-        Mockito.verify(repository, never()).update(investigationTestData);
+        Mockito.verify(repository, never()).updateQualityNotificationEntity(investigationTestData);
         Mockito.verify(notificationsService, never()).asyncNotificationExecutor(any(QualityNotificationMessage.class));
     }
 

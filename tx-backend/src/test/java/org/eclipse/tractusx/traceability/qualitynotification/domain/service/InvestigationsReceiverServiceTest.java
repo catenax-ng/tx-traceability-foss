@@ -126,7 +126,7 @@ class InvestigationsReceiverServiceTest {
         // When
         service.handleNotificationReceive(edcNotification);
         // Then
-        Mockito.verify(mockRepository).save(investigationTestData);
+        Mockito.verify(mockRepository).saveQualityNotificationEntity(investigationTestData);
     }
 
     @Test
@@ -187,7 +187,7 @@ class InvestigationsReceiverServiceTest {
         // When
         service.handleNotificationUpdate(edcNotification);
         // Then
-        Mockito.verify(mockRepository).update(investigationTestData);
+        Mockito.verify(mockRepository).updateQualityNotificationEntity(investigationTestData);
     }
 
     @Test
@@ -247,7 +247,7 @@ class InvestigationsReceiverServiceTest {
         // When
         service.handleNotificationUpdate(edcNotification);
         // Then
-        Mockito.verify(mockRepository).update(investigationTestData);
+        Mockito.verify(mockRepository).updateQualityNotificationEntity(investigationTestData);
     }
 
     @Test
@@ -307,7 +307,7 @@ class InvestigationsReceiverServiceTest {
         // When
         service.handleNotificationUpdate(edcNotification);
         // Then
-        Mockito.verify(mockRepository).update(investigationTestData);
+        Mockito.verify(mockRepository).updateQualityNotificationEntity(investigationTestData);
     }
 
     @Test
@@ -367,7 +367,7 @@ class InvestigationsReceiverServiceTest {
         // When
         service.handleNotificationUpdate(edcNotification);
         // Then
-        Mockito.verify(mockRepository).update(investigationTestData);
+        Mockito.verify(mockRepository).updateQualityNotificationEntity(investigationTestData);
     }
 
 }

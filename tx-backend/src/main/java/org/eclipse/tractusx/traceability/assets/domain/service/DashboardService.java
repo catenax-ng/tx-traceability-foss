@@ -25,6 +25,7 @@ import org.eclipse.tractusx.traceability.assets.domain.model.Dashboard;
 import org.eclipse.tractusx.traceability.assets.domain.ports.AssetRepository;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Owner;
 import org.eclipse.tractusx.traceability.common.security.JwtAuthentication;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +45,7 @@ public class DashboardService {
         long ownParts = assetRepository.countAssetsByOwner(Owner.OWN);
         long supplierParts = assetRepository.countAssetsByOwner(Owner.SUPPLIER);
         long totalAssets = customerParts + ownParts + supplierParts;
-        long pendingInvestigations = investigationsRepository.countPendingInvestigations();
+        long pendingInvestigations = investigationsRepository.countQualityNotificationEntitiesByStatus(QualityNotificationStatus.RECEIVED);
         return new Dashboard(ownParts, totalAssets, pendingInvestigations);
     }
 }

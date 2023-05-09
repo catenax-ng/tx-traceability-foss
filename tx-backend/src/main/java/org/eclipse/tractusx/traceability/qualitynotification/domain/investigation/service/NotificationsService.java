@@ -53,7 +53,7 @@ public class NotificationsService {
         emptyIfNull(discovery.getReceiverUrls())
                 .forEach(receiverUrl -> {
                     edcFacade.startEDCTransfer(notification, receiverUrl, senderEdcUrl);
-                    repository.update(notification);
+                    repository.updateQualityNotificationMessageEntity(notification);
                 });
     }
 }

@@ -54,7 +54,7 @@ class InvestigationServiceImplTest {
     @Test
     void testFindNotPresentInvestigationThrowsException() {
         // given
-        when(investigationsRepositoryMock.findById(any(InvestigationId.class))).thenReturn(Optional.empty());
+        when(investigationsRepositoryMock.findOptionalQualityNotificationById(any(InvestigationId.class))).thenReturn(Optional.empty());
 
         // expect
         assertThrows(InvestigationNotFoundException.class, () -> investigationService.findInvestigation(0L));
@@ -63,7 +63,7 @@ class InvestigationServiceImplTest {
     @Test
     void testFindExistingInvestigation() {
         // given
-        when(investigationsRepositoryMock.findById(any(InvestigationId.class))).thenReturn(Optional.of(
+        when(investigationsRepositoryMock.findOptionalQualityNotificationById(any(InvestigationId.class))).thenReturn(Optional.of(
                 InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.ACKNOWLEDGED)
         ));
 
@@ -77,7 +77,7 @@ class InvestigationServiceImplTest {
     @Test
     void testFindCreatedInvestigations() {
         // given
-        when(investigationsRepositoryMock.getInvestigations(any(QualityNotificationSide.class), any(Pageable.class))).thenReturn(new PageResult<>(
+        when(investigationsRepositoryMock.findQualityNotificationsBySide(any(QualityNotificationSide.class), any(Pageable.class))).thenReturn(new PageResult<>(
                 List.of(
                         InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationSide.SENDER),
                         InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationSide.SENDER)
@@ -94,7 +94,7 @@ class InvestigationServiceImplTest {
     @Test
     void testFindReceivedInvestigations() {
         // given
-        when(investigationsRepositoryMock.getInvestigations(any(QualityNotificationSide.class), any(Pageable.class))).thenReturn(new PageResult<>(
+        when(investigationsRepositoryMock.findQualityNotificationsBySide(any(QualityNotificationSide.class), any(Pageable.class))).thenReturn(new PageResult<>(
                 List.of(
                         InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationSide.RECEIVER)
                 )));
@@ -110,7 +110,7 @@ class InvestigationServiceImplTest {
     @Test
     void testLoadNotPresentInvestigationThrowsException() {
         // given
-        when(investigationsRepositoryMock.findById(any(InvestigationId.class))).thenReturn(Optional.empty());
+        when(investigationsRepositoryMock.findOptionalQualityNotificationById(any(InvestigationId.class))).thenReturn(Optional.empty());
 
         // expect
         InvestigationId investigationId = new InvestigationId(0L);
@@ -120,7 +120,7 @@ class InvestigationServiceImplTest {
     @Test
     void testLoadExistingInvestigation() {
         // given
-        when(investigationsRepositoryMock.findById(any(InvestigationId.class))).thenReturn(Optional.of(
+        when(investigationsRepositoryMock.findOptionalQualityNotificationById(any(InvestigationId.class))).thenReturn(Optional.of(
                 InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.ACKNOWLEDGED)
         ));
 
