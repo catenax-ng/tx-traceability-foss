@@ -25,13 +25,13 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationReason;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationSide;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationSide;
 
 import java.util.List;
 
 @Data
 @SuperBuilder
-public class QualityNotificationDTO {
+public class QualityNotificationResponse {
     @ApiModelProperty(example = "66")
     private Long id;
 
@@ -56,7 +56,7 @@ public class QualityNotificationDTO {
     private List<String> assetIds;
 
     @ApiModelProperty(example = "SENDER")
-    private InvestigationSide channel;
+    private QualityNotificationSide channel;
 
     private InvestigationReason reason;
 

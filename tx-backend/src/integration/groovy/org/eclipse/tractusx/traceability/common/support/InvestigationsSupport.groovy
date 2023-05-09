@@ -21,8 +21,7 @@
 
 package org.eclipse.tractusx.traceability.common.support
 
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationSide
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus
+
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationEntity
 
 import java.time.Instant

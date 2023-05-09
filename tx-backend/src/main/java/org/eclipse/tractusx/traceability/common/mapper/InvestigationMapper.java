@@ -21,11 +21,11 @@
 package org.eclipse.tractusx.traceability.common.mapper;
 
 import org.eclipse.tractusx.traceability.common.model.BPN;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationSide;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Investigation;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationSide;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Notification;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;
@@ -48,16 +48,16 @@ public class InvestigationMapper {
      * @param notification the notification associated with the investigation
      * @return an Investigation object representing the investigation received by the receiver
      */
-    public Investigation toInvestigation(BPN bpn, String description, Notification notification) {
+    public QualityNotification toInvestigation(BPN bpn, String description, QualityNotificationMessage notification) {
 
         List<String> assetIds = new ArrayList<>();
         notification.getAffectedParts().stream()
                 .map(AffectedPart::assetId)
                 .forEach(assetIds::add);
-        return Investigation.builder()
+        return QualityNotification.builder()
                 .bpn(bpn)
-                .investigationStatus(InvestigationStatus.RECEIVED)
-                .investigationSide(InvestigationSide.RECEIVER)
+                .investigationStatus(QualityNotificationStatus.RECEIVED)
+                .investigationSide(QualityNotificationSide.RECEIVER)
                 .description(description)
                 .createdAt(clock.instant())
                 .assetIds(assetIds)

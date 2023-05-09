@@ -21,8 +21,8 @@
 
 package org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.repository;
 
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationSide;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationSide;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,15 +36,15 @@ import java.util.Set;
 
 @Repository
 public interface JpaInvestigationRepository extends JpaRepository<InvestigationEntity, Long> {
-    Page<InvestigationEntity> findAllByStatusInOrderByCreatedDesc(Set<InvestigationStatus> statuses, Pageable pageable);
+    Page<InvestigationEntity> findAllByStatusInOrderByCreatedDesc(Set<QualityNotificationStatus> statuses, Pageable pageable);
 
-    Page<InvestigationEntity> findAllBySideEqualsOrderByCreatedDesc(InvestigationSide investigationSide, Pageable pageable);
+    Page<InvestigationEntity> findAllBySideEqualsOrderByCreatedDesc(QualityNotificationSide investigationSide, Pageable pageable);
 
-    long countAllByStatusEquals(InvestigationStatus status);
+    long countAllByStatusEquals(QualityNotificationStatus status);
 
-    long countAllBySideEquals(InvestigationSide investigationSide);
+    long countAllBySideEquals(QualityNotificationSide investigationSide);
 
-    long countAllByStatusIn(Set<InvestigationStatus> status);
+    long countAllByStatusIn(Set<QualityNotificationStatus> status);
 
     @Query("SELECT investigation FROM InvestigationEntity investigation JOIN investigation.notifications notification WHERE notification.id = :notificationId")
     Optional<InvestigationEntity> findByNotificationsNotificationId(@Param("notificationId") String notificationId);

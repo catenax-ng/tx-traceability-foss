@@ -22,26 +22,36 @@
 package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository;
 
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Investigation;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationSide;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationSide;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Notification;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 import java.util.Set;
 
 public interface InvestigationsRepository {
-	InvestigationId save(Investigation investigation);
-	InvestigationId update(Investigation investigation);
-	PageResult<Investigation> getInvestigations(InvestigationSide investigationSide, Pageable pageable);
-	Optional<Investigation> findById(InvestigationId investigationId);
-	void update(Notification notification);
-	long countPendingInvestigations();
-	Optional<Investigation> findByNotificationId(String notificationId);
-    Optional<Investigation> findByEdcNotificationId(String edcNotificationId);
-    Optional<Investigation> findByNotificationReferenceId(String notificationReferenceId);
-	long countInvestigations(Set<InvestigationStatus> statuses);
-	long countInvestigations(InvestigationSide investigationSide);
+    InvestigationId save(QualityNotification investigation);
+
+    InvestigationId update(QualityNotification investigation);
+
+    PageResult<QualityNotification> getInvestigations(QualityNotificationSide investigationSide, Pageable pageable);
+
+    Optional<QualityNotification> findById(InvestigationId investigationId);
+
+    void update(QualityNotificationMessage notification);
+
+    long countPendingInvestigations();
+
+    Optional<QualityNotification> findByNotificationId(String notificationId);
+
+    Optional<QualityNotification> findByEdcNotificationId(String edcNotificationId);
+
+    Optional<QualityNotification> findByNotificationReferenceId(String notificationReferenceId);
+
+    long countInvestigations(Set<QualityNotificationStatus> statuses);
+
+    long countInvestigations(QualityNotificationSide investigationSide);
 }

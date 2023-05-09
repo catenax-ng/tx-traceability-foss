@@ -1,7 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
- * Copyright (c) 2022, 2023 ZF Friedrichshafen AG
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,14 +16,15 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-
-package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model;
+package org.eclipse.tractusx.traceability.qualitynotification.domain.base;
 
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.eclipse.tractusx.traceability.common.model.BPN;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.NotificationStatusTransitionNotAllowed;
 
 import java.time.Instant;
@@ -38,19 +37,19 @@ import java.util.UUID;
 @Getter
 @Setter
 @Data
-public class Notification {
+public class QualityNotificationMessage {
     private final String id;
-    private String notificationReferenceId;
-    private String senderBpnNumber;
     private final String senderManufacturerName;
-    private String receiverBpnNumber;
     private final String receiverManufacturerName;
-    private String edcUrl;
-    private String contractAgreementId;
     @Builder.Default
     private final List<AffectedPart> affectedParts = new ArrayList<>();
+    private String notificationReferenceId;
+    private String senderBpnNumber;
+    private String receiverBpnNumber;
+    private String edcUrl;
+    private String contractAgreementId;
     private String description;
-    private InvestigationStatus investigationStatus;
+    private QualityNotificationStatus investigationStatus;
     private String edcNotificationId;
     private LocalDateTime created;
     private LocalDateTime updated;
@@ -59,45 +58,7 @@ public class Notification {
     private String messageId;
     private Boolean isInitial;
 
-/*    public Notification(String id,
-                        String notificationReferenceId,
-                        String senderBpnNumber,
-                        String senderManufacturerName,
-                        String receiverBpnNumber,
-                        String receiverManufacturerName,
-                        String edcUrl,
-                        String contractAgreementId,
-                        String description,
-                        InvestigationStatus investigationStatus,
-                        List<AffectedPart> affectedParts,
-                        Instant targetDate,
-                        Severity severity,
-                        String edcNotificationId,
-                        LocalDateTime created,
-                        LocalDateTime updated,
-                        String messageId,
-                        Boolean isInitial) {
-        this.id = id;
-        this.notificationReferenceId = notificationReferenceId;
-        this.senderBpnNumber = senderBpnNumber;
-        this.senderManufacturerName = senderManufacturerName;
-        this.receiverBpnNumber = receiverBpnNumber;
-        this.receiverManufacturerName = receiverManufacturerName;
-        this.edcUrl = edcUrl;
-        this.contractAgreementId = contractAgreementId;
-        this.description = description;
-        this.investigationStatus = investigationStatus;
-        this.affectedParts = requireNonNullElseGet(affectedParts, ArrayList::new);
-        this.targetDate = targetDate;
-        this.severity = severity;
-        this.edcNotificationId = edcNotificationId;
-        this.created = created;
-        this.updated = updated;
-        this.messageId = messageId;
-        this.isInitial = isInitial;
-    }*/
-
-    void changeStatusTo(InvestigationStatus to) {
+    void changeStatusTo(QualityNotificationStatus to) {
         boolean transitionAllowed = investigationStatus.transitionAllowed(to);
 
         if (!transitionAllowed) {
@@ -108,7 +69,7 @@ public class Notification {
 
 
     // Important - receiver and sender will be saved in switched order
-    public Notification copyAndSwitchSenderAndReceiver(BPN applicationBpn) {
+    public QualityNotificationMessage copyAndSwitchSenderAndReceiver(BPN applicationBpn) {
         final String notificationId = UUID.randomUUID().toString();
         String receiverBPN = receiverBpnNumber;
         String senderBPN = senderBpnNumber;
@@ -125,7 +86,7 @@ public class Notification {
             receiverName = receiverManufacturerName;
             senderName = senderManufacturerName;
         }
-        return Notification.builder()
+        return QualityNotificationMessage.builder()
                 .id(notificationId)
                 .senderBpnNumber(senderBPN)
                 .senderManufacturerName(senderName)

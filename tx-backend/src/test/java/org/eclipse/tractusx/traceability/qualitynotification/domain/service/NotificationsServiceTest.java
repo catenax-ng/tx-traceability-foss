@@ -22,7 +22,7 @@ package org.eclipse.tractusx.traceability.qualitynotification.domain.service;
 import org.eclipse.tractusx.traceability.discovery.domain.model.Discovery;
 import org.eclipse.tractusx.traceability.discovery.domain.service.DiscoveryService;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.InvestigationsEDCFacade;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Notification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationMessage;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.NotificationsService;
@@ -66,7 +66,7 @@ class NotificationsServiceTest {
         // and
         when(discoveryService.getDiscoveryByBPN(bpn)).thenReturn(discovery);
         // and
-        Notification notification = Notification.builder()
+        QualityNotificationMessage notification = QualityNotificationMessage.builder()
                 .receiverBpnNumber(bpn)
                 .targetDate(Instant.now())
                 .severity(Severity.MINOR)
@@ -97,7 +97,7 @@ class NotificationsServiceTest {
         notificationsService.asyncNotificationExecutor(notification);
 
         // then
-        verify(edcFacade).startEDCTransfer(any(Notification.class), eq(edcReceiverUrl), eq(edcSenderUrl));
+        verify(edcFacade).startEDCTransfer(any(QualityNotificationMessage.class), eq(edcReceiverUrl), eq(edcSenderUrl));
         //	verify(repository).update(any(Notification.class));
     }
 }

@@ -21,11 +21,11 @@ package org.eclipse.tractusx.traceability.qualitynotification.domain.investigati
 
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationDTO;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Investigation;
+import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationSide;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationSide;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationNotFoundException;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
@@ -52,61 +52,61 @@ public class InvestigationServiceImpl implements InvestigationService {
     }
 
     @Override
-    public PageResult<InvestigationDTO> getCreatedInvestigations(Pageable pageable) {
-        return getInvestigationsPageResult(pageable, InvestigationSide.SENDER);
+    public PageResult<InvestigationResponse> getCreatedInvestigations(Pageable pageable) {
+        return getInvestigationsPageResult(pageable, QualityNotificationSide.SENDER);
     }
 
     @Override
-    public PageResult<InvestigationDTO> getReceivedInvestigations(Pageable pageable) {
-        return getInvestigationsPageResult(pageable, InvestigationSide.RECEIVER);
+    public PageResult<InvestigationResponse> getReceivedInvestigations(Pageable pageable) {
+        return getInvestigationsPageResult(pageable, QualityNotificationSide.RECEIVER);
     }
 
     @Override
-    public InvestigationDTO findInvestigation(Long id) {
+    public InvestigationResponse findInvestigation(Long id) {
         InvestigationId investigationId = new InvestigationId(id);
-        Investigation investigation = loadInvestigationOrNotFoundException(investigationId);
+        QualityNotification investigation = loadInvestigationOrNotFoundException(investigationId);
         return investigation.toDTO();
     }
 
     @Override
-    public Investigation loadInvestigationOrNotFoundException(InvestigationId investigationId) {
+    public QualityNotification loadInvestigationOrNotFoundException(InvestigationId investigationId) {
         return investigationsRepository.findById(investigationId)
                 .orElseThrow(() -> new InvestigationNotFoundException(investigationId));
     }
 
     @Override
-    public Investigation loadInvestigationByEdcNotificationIdOrNotFoundException(String edcNotificationId) {
+    public QualityNotification loadInvestigationByEdcNotificationIdOrNotFoundException(String edcNotificationId) {
         return investigationsRepository.findByEdcNotificationId(edcNotificationId)
                 .orElseThrow(() -> new InvestigationNotFoundException(edcNotificationId));
     }
 
     @Override
     public void approveInvestigation(Long investigationId) {
-        Investigation investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
+        QualityNotification investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
         investigationsPublisherService.approveInvestigation(investigation);
     }
 
     @Override
     public void cancelInvestigation(Long investigationId) {
-        Investigation investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
+        QualityNotification investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
         investigationsPublisherService.cancelInvestigation(investigation);
     }
 
     @Override
-    public void updateInvestigation(Long investigationId, InvestigationStatus status, String reason) {
-        Investigation investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
+    public void updateInvestigation(Long investigationId, QualityNotificationStatus status, String reason) {
+        QualityNotification investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
         investigationsPublisherService.updateInvestigationPublisher(investigation, status, reason);
     }
 
-    private PageResult<InvestigationDTO> getInvestigationsPageResult(Pageable pageable, InvestigationSide investigationSide) {
-        List<InvestigationDTO> investigationData = investigationsRepository.getInvestigations(investigationSide, pageable)
+    private PageResult<InvestigationResponse> getInvestigationsPageResult(Pageable pageable, QualityNotificationSide investigationSide) {
+        List<InvestigationResponse> investigationData = investigationsRepository.getInvestigations(investigationSide, pageable)
                 .content()
                 .stream()
-                .sorted(Investigation.COMPARE_BY_NEWEST_INVESTIGATION_CREATION_TIME)
-                .map(Investigation::toDTO)
+                .sorted(QualityNotification.COMPARE_BY_NEWEST_INVESTIGATION_CREATION_TIME)
+                .map(QualityNotification::toDTO)
                 .toList();
 
-        Page<InvestigationDTO> investigationDataPage = new PageImpl<>(investigationData, pageable, investigationsRepository.countInvestigations(investigationSide));
+        Page<InvestigationResponse> investigationDataPage = new PageImpl<>(investigationData, pageable, investigationsRepository.countInvestigations(investigationSide));
 
         return new PageResult<>(investigationDataPage);
     }

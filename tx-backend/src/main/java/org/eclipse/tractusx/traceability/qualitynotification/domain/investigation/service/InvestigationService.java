@@ -19,10 +19,10 @@
 package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service;
 
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationDTO;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Investigation;
+import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
 import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
@@ -31,19 +31,19 @@ import java.util.List;
 public interface InvestigationService {
     InvestigationId startInvestigation(List<String> partIds, String description, Instant targetDate, String severity);
 
-    PageResult<InvestigationDTO> getCreatedInvestigations(Pageable pageable);
+    PageResult<InvestigationResponse> getCreatedInvestigations(Pageable pageable);
 
-    PageResult<InvestigationDTO> getReceivedInvestigations(Pageable pageable);
+    PageResult<InvestigationResponse> getReceivedInvestigations(Pageable pageable);
 
-    InvestigationDTO findInvestigation(Long investigationId);
+    InvestigationResponse findInvestigation(Long investigationId);
 
-    Investigation loadInvestigationOrNotFoundException(InvestigationId investigationId);
+    QualityNotification loadInvestigationOrNotFoundException(InvestigationId investigationId);
 
-    Investigation loadInvestigationByEdcNotificationIdOrNotFoundException(String edcNotificationId);
+    QualityNotification loadInvestigationByEdcNotificationIdOrNotFoundException(String edcNotificationId);
 
     void approveInvestigation(Long investigationId);
 
     void cancelInvestigation(Long investigationId);
 
-    void updateInvestigation(Long investigationId, InvestigationStatus investigationStatus, String reason);
+    void updateInvestigation(Long investigationId, QualityNotificationStatus investigationStatus, String reason);
 }

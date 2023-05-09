@@ -38,9 +38,9 @@ import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.request.CloseInvestigationRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.request.StartInvestigationRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.request.UpdateInvestigationRequest;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationDTO;
+import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.StartInvestigationResponse;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.InvestigationService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
@@ -94,12 +94,12 @@ public class InvestigationsController {
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found for Asset", content = @Content(
             mediaType = "application/json",
-            array = @ArraySchema(arraySchema = @Schema(description = "InvestigationData", implementation = InvestigationDTO.class), maxItems = Integer.MAX_VALUE)
+            array = @ArraySchema(arraySchema = @Schema(description = "InvestigationData", implementation = InvestigationResponse.class), maxItems = Integer.MAX_VALUE)
     )),
             @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @GetMapping("/created")
-    public PageResult<InvestigationDTO> getCreatedInvestigations(Pageable pageable) {
+    public PageResult<InvestigationResponse> getCreatedInvestigations(Pageable pageable) {
         log.info(API_LOG_START + "/created");
         return investigationService.getCreatedInvestigations(pageable);
     }
@@ -111,12 +111,12 @@ public class InvestigationsController {
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found for Asset", content = @Content(
             mediaType = "application/json",
-            array = @ArraySchema(arraySchema = @Schema(description = "InvestigationData", implementation = InvestigationDTO.class), maxItems = Integer.MAX_VALUE)
+            array = @ArraySchema(arraySchema = @Schema(description = "InvestigationData", implementation = InvestigationResponse.class), maxItems = Integer.MAX_VALUE)
     )),
             @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @GetMapping("/received")
-    public PageResult<InvestigationDTO> getReceivedInvestigations(Pageable pageable) {
+    public PageResult<InvestigationResponse> getReceivedInvestigations(Pageable pageable) {
         log.info(API_LOG_START + "/received");
         return investigationService.getReceivedInvestigations(pageable);
     }
@@ -130,7 +130,7 @@ public class InvestigationsController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("/{investigationId}")
-    public InvestigationDTO getInvestigation(@PathVariable Long investigationId) {
+    public InvestigationResponse getInvestigation(@PathVariable Long investigationId) {
         log.info(API_LOG_START + "/{}", investigationId);
         return investigationService.findInvestigation(investigationId);
     }
@@ -178,7 +178,7 @@ public class InvestigationsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void closeInvestigation(@PathVariable Long investigationId, @Valid @RequestBody CloseInvestigationRequest closeInvestigationRequest) {
         log.info(API_LOG_START + "/{}/close with params {}", investigationId, closeInvestigationRequest);
-        investigationService.updateInvestigation(investigationId, InvestigationStatus.CLOSED, closeInvestigationRequest.reason());
+        investigationService.updateInvestigation(investigationId, QualityNotificationStatus.CLOSED, closeInvestigationRequest.reason());
     }
 
     @Operation(operationId = "updateInvestigation",
@@ -195,7 +195,7 @@ public class InvestigationsController {
     public void updateInvestigation(@PathVariable Long investigationId, @Valid @RequestBody UpdateInvestigationRequest updateInvestigationRequest) {
         validate(updateInvestigationRequest);
         log.info(API_LOG_START + "/{}/update with params {}", investigationId, updateInvestigationRequest);
-        investigationService.updateInvestigation(investigationId, InvestigationStatus.fromStringValue(updateInvestigationRequest.status().name()), updateInvestigationRequest.reason());
+        investigationService.updateInvestigation(investigationId, QualityNotificationStatus.fromStringValue(updateInvestigationRequest.status().name()), updateInvestigationRequest.reason());
     }
 }
 

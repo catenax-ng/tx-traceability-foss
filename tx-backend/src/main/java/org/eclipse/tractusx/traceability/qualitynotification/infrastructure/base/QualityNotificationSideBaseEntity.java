@@ -2,5 +2,5 @@ package org.eclipse.tractusx.traceability.qualitynotification.infrastructure.bas
 
 public enum QualityNotificationSideBaseEntity {
     SENDER,
-    RECEIVER
+    RECEIVER;
 }

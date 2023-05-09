@@ -23,8 +23,6 @@ package org.eclipse.tractusx.traceability.common.support
 
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.AssetsConverter
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.AssetEntity
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationSide
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationEntity
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

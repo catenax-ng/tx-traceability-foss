@@ -23,12 +23,12 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
-import org.eclipse.tractusx.traceability.qualitynotification.application.QualityNotificationDTO;
+import org.eclipse.tractusx.traceability.qualitynotification.application.QualityNotificationResponse;
 
 @Data
 @SuperBuilder
 @ArraySchema(arraySchema = @Schema(description = "Investigations"), maxItems = Integer.MAX_VALUE)
-public class InvestigationDTO extends QualityNotificationDTO {
+public class InvestigationResponse extends QualityNotificationResponse {
 
 
 }

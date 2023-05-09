@@ -19,32 +19,31 @@
 
 package org.eclipse.tractusx.traceability.qualitynotification.adapters.rest.model;
 
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-class UpdateInvestigationStatusTest {
+class UpdateQualityNotificationStatusTest {
 
     @Test
     void testToInvestigationStatusACCEPTED() {
         String accepted = "ACCEPTED";
-        InvestigationStatus actualInvestigationStatus = InvestigationStatus.fromStringValue(accepted);
+        QualityNotificationStatus actualInvestigationStatus = QualityNotificationStatus.fromStringValue(accepted);
         assertThat(actualInvestigationStatus.name()).isEqualTo("ACCEPTED");
     }
 
     @Test
     void testToInvestigationStatusACKNOWLEDGED() {
         String acknowledged = "ACKNOWLEDGED";
-        InvestigationStatus actualInvestigationStatus = InvestigationStatus.fromStringValue(acknowledged);
+        QualityNotificationStatus actualInvestigationStatus = QualityNotificationStatus.fromStringValue(acknowledged);
         assertThat(actualInvestigationStatus.name()).isEqualTo("ACKNOWLEDGED");
     }
 
     @Test
     void testToInvestigationStatusDECLINED() {
         String declined = "DECLINED";
-        ;
-        InvestigationStatus actualInvestigationStatus = InvestigationStatus.fromStringValue(declined);
+        QualityNotificationStatus actualInvestigationStatus = QualityNotificationStatus.fromStringValue(declined);
         assertThat(actualInvestigationStatus.name()).isEqualTo("DECLINED");
     }
 

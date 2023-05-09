@@ -21,11 +21,11 @@
 package org.eclipse.tractusx.traceability.common.mapper;
 
 import org.eclipse.tractusx.traceability.common.model.BPN;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationSide;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Investigation;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationSide;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Notification;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,10 +55,10 @@ class InvestigationMapperTest {
         String sender = "BPNL000000000001";
         String receiver = "BPNL000000000002";
         String description = "Test investigation";
-        Notification notification = Notification.builder()
+        QualityNotificationMessage notification = QualityNotificationMessage.builder()
                 .id("1")
                 .notificationReferenceId("Test notification")
-                .investigationStatus(InvestigationStatus.RECEIVED)
+                .investigationStatus(QualityNotificationStatus.RECEIVED)
                 .affectedParts(List.of(new AffectedPart("123")))
                 .senderManufacturerName("senderManufacturerName")
                 .senderBpnNumber(sender)
@@ -89,11 +89,11 @@ class InvestigationMapperTest {
         when(clock.instant()).thenReturn(Instant.parse("2022-03-01T12:00:00Z"));
 
         // When
-        Investigation result = mapper.toInvestigation(new BPN(receiver), description, notification);
+        QualityNotification result = mapper.toInvestigation(new BPN(receiver), description, notification);
 
         // Then
-        assertEquals(InvestigationStatus.RECEIVED, result.getInvestigationStatus());
-        assertEquals(InvestigationSide.RECEIVER, result.getInvestigationSide());
+        assertEquals(QualityNotificationStatus.RECEIVED, result.getInvestigationStatus());
+        assertEquals(QualityNotificationSide.RECEIVER, result.getInvestigationSide());
         assertEquals(description, result.getDescription());
         assertEquals(Instant.parse("2022-03-01T12:00:00Z"), result.getCreatedAt());
         assertEquals(List.of("123"), result.getAssetIds());

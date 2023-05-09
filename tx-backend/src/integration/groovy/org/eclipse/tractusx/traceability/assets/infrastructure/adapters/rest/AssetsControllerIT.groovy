@@ -21,7 +21,6 @@
 
 package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.rest
 
-
 import io.restassured.http.ContentType
 import org.eclipse.tractusx.traceability.IntegrationSpecification
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset
@@ -29,7 +28,6 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.ir
 import org.eclipse.tractusx.traceability.common.support.AssetsSupport
 import org.eclipse.tractusx.traceability.common.support.BpnSupport
 import org.eclipse.tractusx.traceability.common.support.IrsApiSupport
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus
 import org.hamcrest.Matchers
 import spock.util.concurrent.PollingConditions
 

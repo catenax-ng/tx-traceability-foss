@@ -22,7 +22,7 @@ package org.eclipse.tractusx.traceability.common.mapper;
 
 import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Notification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationMessage;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -45,9 +45,9 @@ public class NotificationMapper {
      * @param edcNotification the EDCNotification received by the receiver
      * @return a Notification object representing the notification received by the receiver
      */
-    public Notification toNotification(EDCNotification edcNotification) {
+    public QualityNotificationMessage toNotification(EDCNotification edcNotification) {
         String notificationId = UUID.randomUUID().toString();
-        return Notification.builder()
+        return QualityNotificationMessage.builder()
                 .id(notificationId)
                 .notificationReferenceId(edcNotification.getNotificationId())
                 .senderBpnNumber(edcNotification.getSenderBPN())

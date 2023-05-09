@@ -19,9 +19,9 @@
 
 package org.eclipse.tractusx.traceability.testdata;
 
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Notification;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 
 import java.time.Instant;
@@ -29,10 +29,10 @@ import java.util.List;
 
 public class NotificationTestDataFactory {
 
-    public static Notification createNotificationTestData() {
+    public static QualityNotificationMessage createNotificationTestData() {
         List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
 
-        return Notification.builder()
+        return QualityNotificationMessage.builder()
                 .id("123")
                 .notificationReferenceId("id123")
                 .senderBpnNumber("senderBPN")
@@ -42,7 +42,7 @@ public class NotificationTestDataFactory {
                 .edcUrl("senderAddress")
                 .contractAgreementId("agreement")
                 .description("123")
-                .investigationStatus(InvestigationStatus.ACKNOWLEDGED)
+                .investigationStatus(QualityNotificationStatus.ACKNOWLEDGED)
                 .affectedParts(affectedParts)
                 .severity(Severity.MINOR)
                 .edcNotificationId("123")

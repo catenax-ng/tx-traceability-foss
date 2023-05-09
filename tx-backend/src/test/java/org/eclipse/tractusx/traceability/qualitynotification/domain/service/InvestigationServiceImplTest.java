@@ -19,11 +19,11 @@
 package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service;
 
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationDTO;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Investigation;
+import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationSide;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationSide;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationNotFoundException;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
 import org.eclipse.tractusx.traceability.testdata.InvestigationTestDataFactory;
@@ -64,11 +64,11 @@ class InvestigationServiceImplTest {
     void testFindExistingInvestigation() {
         // given
         when(investigationsRepositoryMock.findById(any(InvestigationId.class))).thenReturn(Optional.of(
-                InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED)
+                InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.ACKNOWLEDGED)
         ));
 
         // expect
-        InvestigationDTO investigationDTO = investigationService.findInvestigation(0L);
+        InvestigationResponse investigationDTO = investigationService.findInvestigation(0L);
 
         // then
         assertThat(investigationDTO).isNotNull();
@@ -77,14 +77,14 @@ class InvestigationServiceImplTest {
     @Test
     void testFindCreatedInvestigations() {
         // given
-        when(investigationsRepositoryMock.getInvestigations(any(InvestigationSide.class), any(Pageable.class))).thenReturn(new PageResult<>(
+        when(investigationsRepositoryMock.getInvestigations(any(QualityNotificationSide.class), any(Pageable.class))).thenReturn(new PageResult<>(
                 List.of(
-                        InvestigationTestDataFactory.createInvestigationTestData(InvestigationSide.SENDER),
-                        InvestigationTestDataFactory.createInvestigationTestData(InvestigationSide.SENDER)
+                        InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationSide.SENDER),
+                        InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationSide.SENDER)
                 )));
 
         // expect
-        PageResult<InvestigationDTO> result = investigationService.getCreatedInvestigations(PageRequest.of(0, 5));
+        PageResult<InvestigationResponse> result = investigationService.getCreatedInvestigations(PageRequest.of(0, 5));
 
         // then
         assertThat(result).isNotNull();
@@ -94,13 +94,13 @@ class InvestigationServiceImplTest {
     @Test
     void testFindReceivedInvestigations() {
         // given
-        when(investigationsRepositoryMock.getInvestigations(any(InvestigationSide.class), any(Pageable.class))).thenReturn(new PageResult<>(
+        when(investigationsRepositoryMock.getInvestigations(any(QualityNotificationSide.class), any(Pageable.class))).thenReturn(new PageResult<>(
                 List.of(
-                        InvestigationTestDataFactory.createInvestigationTestData(InvestigationSide.RECEIVER)
+                        InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationSide.RECEIVER)
                 )));
 
         // expect
-        PageResult<InvestigationDTO> result = investigationService.getReceivedInvestigations(PageRequest.of(0, 5));
+        PageResult<InvestigationResponse> result = investigationService.getReceivedInvestigations(PageRequest.of(0, 5));
 
         // then
         assertThat(result).isNotNull();
@@ -121,11 +121,11 @@ class InvestigationServiceImplTest {
     void testLoadExistingInvestigation() {
         // given
         when(investigationsRepositoryMock.findById(any(InvestigationId.class))).thenReturn(Optional.of(
-                InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED)
+                InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.ACKNOWLEDGED)
         ));
 
         // expect
-        Investigation investigation = investigationService.loadInvestigationOrNotFoundException(new InvestigationId(0L));
+        QualityNotification investigation = investigationService.loadInvestigationOrNotFoundException(new InvestigationId(0L));
 
         // then
         assertThat(investigation).isNotNull();
@@ -144,12 +144,12 @@ class InvestigationServiceImplTest {
     void testLoadPresentInvestigationByEdcNotificationId() {
         // given
         when(investigationsRepositoryMock.findByEdcNotificationId(any())).thenReturn(Optional.of(
-                        InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED)
+                InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.ACKNOWLEDGED)
                 )
         );
 
         // when
-        Investigation investigation = investigationService.loadInvestigationByEdcNotificationIdOrNotFoundException("0");
+        QualityNotification investigation = investigationService.loadInvestigationByEdcNotificationIdOrNotFoundException("0");
 
         // then
         assertThat(investigation).isNotNull();

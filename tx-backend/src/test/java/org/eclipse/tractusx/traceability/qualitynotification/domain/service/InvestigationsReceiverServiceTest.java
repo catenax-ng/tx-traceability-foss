@@ -25,10 +25,10 @@ import org.eclipse.tractusx.traceability.common.mapper.NotificationMapper;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotificationFactory;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Investigation;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Notification;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.InvestigationsReceiverService;
@@ -76,7 +76,7 @@ class InvestigationsReceiverServiceTest {
 
         // Given
         List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
-        Notification notification = Notification.builder()
+        QualityNotificationMessage notification = QualityNotificationMessage.builder()
                 .id("123")
                 .notificationReferenceId("id123")
                 .senderBpnNumber("senderBPN")
@@ -86,7 +86,7 @@ class InvestigationsReceiverServiceTest {
                 .edcUrl("senderAddress")
                 .contractAgreementId("agreement")
                 .description("123")
-                .investigationStatus(InvestigationStatus.SENT)
+                .investigationStatus(QualityNotificationStatus.SENT)
                 .affectedParts(affectedParts)
                 .severity(Severity.MINOR)
                 .edcNotificationId("123")
@@ -115,13 +115,13 @@ class InvestigationsReceiverServiceTest {
                 true
         );*/
 
-        Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.RECEIVED, InvestigationStatus.RECEIVED, "recipientBPN");
-        Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
+        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.RECEIVED, QualityNotificationStatus.RECEIVED, "recipientBPN");
+        QualityNotificationMessage notificationTestData = NotificationTestDataFactory.createNotificationTestData();
         EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
                 "it", notification);
 
         when(mockNotificationMapper.toNotification(edcNotification)).thenReturn(notificationTestData);
-        when(mockInvestigationMapper.toInvestigation(any(BPN.class), anyString(), any(Notification.class))).thenReturn(investigationTestData);
+        when(mockInvestigationMapper.toInvestigation(any(BPN.class), anyString(), any(QualityNotificationMessage.class))).thenReturn(investigationTestData);
 
         // When
         service.handleNotificationReceive(edcNotification);
@@ -156,7 +156,7 @@ class InvestigationsReceiverServiceTest {
                 false
         );*/
 
-        Notification notification = Notification.builder()
+        QualityNotificationMessage notification = QualityNotificationMessage.builder()
                 .id("123")
                 .notificationReferenceId("id123")
                 .senderBpnNumber("senderBPN")
@@ -166,7 +166,7 @@ class InvestigationsReceiverServiceTest {
                 .edcUrl("senderAddress")
                 .contractAgreementId("agreement")
                 .description("123")
-                .investigationStatus(InvestigationStatus.ACKNOWLEDGED)
+                .investigationStatus(QualityNotificationStatus.ACKNOWLEDGED)
                 .affectedParts(affectedParts)
                 .severity(Severity.MINOR)
                 .edcNotificationId("123")
@@ -176,8 +176,8 @@ class InvestigationsReceiverServiceTest {
                 .build();
 
 
-        Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.RECEIVED, InvestigationStatus.RECEIVED, "recipientBPN");
-        Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
+        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.RECEIVED, QualityNotificationStatus.RECEIVED, "recipientBPN");
+        QualityNotificationMessage notificationTestData = NotificationTestDataFactory.createNotificationTestData();
         EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
                 "it", notification);
 
@@ -217,7 +217,7 @@ class InvestigationsReceiverServiceTest {
                 false
         );*/
 
-        Notification notification = Notification.builder()
+        QualityNotificationMessage notification = QualityNotificationMessage.builder()
                 .id("123")
                 .notificationReferenceId("id123")
                 .senderBpnNumber("senderBPN")
@@ -227,7 +227,7 @@ class InvestigationsReceiverServiceTest {
                 .edcUrl("senderAddress")
                 .contractAgreementId("agreement")
                 .description("123")
-                .investigationStatus(InvestigationStatus.DECLINED)
+                .investigationStatus(QualityNotificationStatus.DECLINED)
                 .affectedParts(affectedParts)
                 .severity(Severity.MINOR)
                 .edcNotificationId("123")
@@ -236,8 +236,8 @@ class InvestigationsReceiverServiceTest {
                 .isInitial(false)
                 .build();
 
-        Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED, "recipientBPN");
-        Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
+        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.ACKNOWLEDGED, "recipientBPN");
+        QualityNotificationMessage notificationTestData = NotificationTestDataFactory.createNotificationTestData();
         EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
                 "it", notification);
 
@@ -277,7 +277,7 @@ class InvestigationsReceiverServiceTest {
                 false
         );*/
 
-        Notification notification = Notification.builder()
+        QualityNotificationMessage notification = QualityNotificationMessage.builder()
                 .id("123")
                 .notificationReferenceId("id123")
                 .senderBpnNumber("senderBPN")
@@ -287,7 +287,7 @@ class InvestigationsReceiverServiceTest {
                 .edcUrl("senderAddress")
                 .contractAgreementId("agreement")
                 .description("123")
-                .investigationStatus(InvestigationStatus.ACCEPTED)
+                .investigationStatus(QualityNotificationStatus.ACCEPTED)
                 .affectedParts(affectedParts)
                 .severity(Severity.MINOR)
                 .edcNotificationId("123")
@@ -296,8 +296,8 @@ class InvestigationsReceiverServiceTest {
                 .isInitial(false)
                 .build();
 
-        Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED, "recipientBPN");
-        Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
+        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.ACKNOWLEDGED, "recipientBPN");
+        QualityNotificationMessage notificationTestData = NotificationTestDataFactory.createNotificationTestData();
         EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
                 "it", notification);
 
@@ -337,7 +337,7 @@ class InvestigationsReceiverServiceTest {
                 false
         );*/
 
-        Notification notification = Notification.builder()
+        QualityNotificationMessage notification = QualityNotificationMessage.builder()
                 .id("123")
                 .notificationReferenceId("id123")
                 .senderBpnNumber("senderBPN")
@@ -347,7 +347,7 @@ class InvestigationsReceiverServiceTest {
                 .edcUrl("senderAddress")
                 .contractAgreementId("agreement")
                 .description("123")
-                .investigationStatus(InvestigationStatus.CLOSED)
+                .investigationStatus(QualityNotificationStatus.CLOSED)
                 .affectedParts(affectedParts)
                 .severity(Severity.MINOR)
                 .edcNotificationId("123")
@@ -356,8 +356,8 @@ class InvestigationsReceiverServiceTest {
                 .isInitial(false)
                 .build();
 
-        Investigation investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(InvestigationStatus.ACKNOWLEDGED, InvestigationStatus.ACKNOWLEDGED, "senderBPN");
-        Notification notificationTestData = NotificationTestDataFactory.createNotificationTestData();
+        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.ACKNOWLEDGED, "senderBPN");
+        QualityNotificationMessage notificationTestData = NotificationTestDataFactory.createNotificationTestData();
         EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
                 "it", notification);
 

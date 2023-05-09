@@ -22,17 +22,17 @@
 package org.eclipse.tractusx.traceability.qualitynotification.application.investigation.validation;
 
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.request.UpdateInvestigationRequest;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 
 import java.util.Set;
 
-import static org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus.ACCEPTED;
-import static org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus.ACKNOWLEDGED;
-import static org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus.DECLINED;
+import static org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus.ACCEPTED;
+import static org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus.ACKNOWLEDGED;
+import static org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus.DECLINED;
 
 public class UpdateInvestigationValidator {
 
-    private static final Set<InvestigationStatus> ALLOWED_STATUSES = Set.of(ACKNOWLEDGED, ACCEPTED, DECLINED);
+    private static final Set<QualityNotificationStatus> ALLOWED_STATUSES = Set.of(ACKNOWLEDGED, ACCEPTED, DECLINED);
 
     private static final int MINIMUM_REASON_CHARACTERS_SIZE = 15;
     private static final int MAXIMUM_REASON_CHARACTERS_SIZE = 1000;
@@ -41,7 +41,7 @@ public class UpdateInvestigationValidator {
     }
 
     public static void validate(UpdateInvestigationRequest updateInvestigationRequest) {
-        InvestigationStatus status = InvestigationStatus.fromStringValue(updateInvestigationRequest.status().name());
+        QualityNotificationStatus status = QualityNotificationStatus.fromStringValue(updateInvestigationRequest.status().name());
 
         if (!ALLOWED_STATUSES.contains(status)) {
             throw new UpdateInvestigationValidationException("%s not allowed for update investigation with".formatted(status));

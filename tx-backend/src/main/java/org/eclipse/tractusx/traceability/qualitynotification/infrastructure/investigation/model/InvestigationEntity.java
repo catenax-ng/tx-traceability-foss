@@ -56,4 +56,5 @@ public class InvestigationEntity extends QualityNotificationBaseEntity {
     @OneToMany(mappedBy = "investigation")
     private List<NotificationEntity> notifications;
 
+
 }

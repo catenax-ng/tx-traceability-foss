@@ -29,12 +29,12 @@ import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
 import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationSide;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Investigation;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationSide;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Notification;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
@@ -76,14 +76,14 @@ public class InvestigationsPublisherService {
      */
     public InvestigationId startInvestigation(List<String> assetIds, String description, Instant targetDate, Severity severity) {
         BPN applicationBPN = traceabilityProperties.getBpn();
-        Investigation investigation = Investigation.startInvestigation(clock.instant(), applicationBPN, description);
+        QualityNotification investigation = QualityNotification.startInvestigation(clock.instant(), applicationBPN, description);
 
         Map<String, List<Asset>> assetsByBPN = assetRepository.getAssetsById(assetIds).stream().collect(Collectors.groupingBy(Asset::getManufacturerId));
 
         assetsByBPN
                 .entrySet()
                 .stream()
-                .map(it -> createNotification(applicationBPN, description, targetDate, severity, it, InvestigationStatus.CREATED))
+                .map(it -> createNotification(applicationBPN, description, targetDate, severity, it, QualityNotificationStatus.CREATED))
                 .forEach(investigation::addNotification);
 
         assetService.setAssetsInvestigationStatus(investigation);
@@ -91,10 +91,10 @@ public class InvestigationsPublisherService {
         return investigationsRepository.save(investigation);
     }
 
-    private Notification createNotification(BPN applicationBpn, String description, Instant targetDate, Severity severity, Map.Entry<String, List<Asset>> asset, InvestigationStatus investigationStatus) {
+    private QualityNotificationMessage createNotification(BPN applicationBpn, String description, Instant targetDate, Severity severity, Map.Entry<String, List<Asset>> asset, QualityNotificationStatus investigationStatus) {
         final String notificationId = UUID.randomUUID().toString();
         final String messageId = UUID.randomUUID().toString();
-        return Notification.builder()
+        return QualityNotificationMessage.builder()
                 .id(notificationId)
                 .senderBpnNumber(applicationBpn.value())
                 .senderManufacturerName(getManufacturerName(applicationBpn.value()))
@@ -121,7 +121,7 @@ public class InvestigationsPublisherService {
      *
      * @param investigation the Investigation to cancel
      */
-    public void cancelInvestigation(Investigation investigation) {
+    public void cancelInvestigation(QualityNotification investigation) {
         BPN applicationBPN = traceabilityProperties.getBpn();
         investigation.cancel(applicationBPN);
         assetService.setAssetsInvestigationStatus(investigation);
@@ -133,7 +133,7 @@ public class InvestigationsPublisherService {
      *
      * @param investigation the Investigation to send
      */
-    public void approveInvestigation(Investigation investigation) {
+    public void approveInvestigation(QualityNotification investigation) {
         BPN applicationBPN = traceabilityProperties.getBpn();
         investigation.send(applicationBPN);
         investigationsRepository.update(investigation);
@@ -148,15 +148,15 @@ public class InvestigationsPublisherService {
      * @param status        the InvestigationStatus of the investigation to update
      * @param reason        the reason for update of the investigation
      */
-    public void updateInvestigationPublisher(Investigation investigation, InvestigationStatus status, String reason) {
+    public void updateInvestigationPublisher(QualityNotification investigation, QualityNotificationStatus status, String reason) {
         BPN applicationBPN = traceabilityProperties.getBpn();
         validate(applicationBPN, status, investigation);
 
-        List<Notification> allLatestNotificationForEdcNotificationId = getAllLatestNotificationForEdcNotificationId(investigation);
-        List<Notification> notificationsToSend = new ArrayList<>();
+        List<QualityNotificationMessage> allLatestNotificationForEdcNotificationId = getAllLatestNotificationForEdcNotificationId(investigation);
+        List<QualityNotificationMessage> notificationsToSend = new ArrayList<>();
         log.info("::updateInvestigationPublisher::allLatestNotificationForEdcNotificationId {}", allLatestNotificationForEdcNotificationId);
         allLatestNotificationForEdcNotificationId.forEach(notification -> {
-            Notification notificationToSend = notification.copyAndSwitchSenderAndReceiver(applicationBPN);
+            QualityNotificationMessage notificationToSend = notification.copyAndSwitchSenderAndReceiver(applicationBPN);
             switch (status) {
                 case ACKNOWLEDGED -> investigation.acknowledge(notificationToSend);
                 case ACCEPTED -> investigation.accept(reason, notificationToSend);
@@ -173,10 +173,10 @@ public class InvestigationsPublisherService {
         notificationsToSend.forEach(notificationsService::asyncNotificationExecutor);
     }
 
-    private void validate(BPN applicationBpn, InvestigationStatus status, Investigation investigation) {
+    private void validate(BPN applicationBpn, QualityNotificationStatus status, QualityNotification investigation) {
 
-        final boolean isInvalidAcknowledgeOrAcceptOrDecline = !InvestigationSide.RECEIVER.equals(investigation.getInvestigationSide()) && applicationBpn.value().equals(investigation.getBpn());
-        final boolean isInvalidClose = InvestigationStatus.CLOSED.equals(status) && !applicationBpn.value().equals(investigation.getBpn());
+        final boolean isInvalidAcknowledgeOrAcceptOrDecline = !QualityNotificationSide.RECEIVER.equals(investigation.getInvestigationSide()) && applicationBpn.value().equals(investigation.getBpn());
+        final boolean isInvalidClose = QualityNotificationStatus.CLOSED.equals(status) && !applicationBpn.value().equals(investigation.getBpn());
         switch (status) {
             case ACKNOWLEDGED, ACCEPTED, DECLINED -> {
                 if (isInvalidAcknowledgeOrAcceptOrDecline) {
@@ -192,16 +192,16 @@ public class InvestigationsPublisherService {
         }
     }
 
-    private List<Notification> getAllLatestNotificationForEdcNotificationId(Investigation investigation) {
-        Map<String, List<Notification>> notificationMap = new HashMap<>();
+    private List<QualityNotificationMessage> getAllLatestNotificationForEdcNotificationId(QualityNotification investigation) {
+        Map<String, List<QualityNotificationMessage>> notificationMap = new HashMap<>();
 
-        for (Notification notification : investigation.getNotifications()) {
+        for (QualityNotificationMessage notification : investigation.getNotifications()) {
             String edcNotificationId = notification.getEdcNotificationId();
-            List<Notification> notificationGroup = notificationMap.getOrDefault(edcNotificationId, new ArrayList<>());
+            List<QualityNotificationMessage> notificationGroup = notificationMap.getOrDefault(edcNotificationId, new ArrayList<>());
             if (notificationGroup.isEmpty()) {
                 notificationGroup.add(notification);
             } else {
-                Optional<Notification> latestNotification = notificationGroup.stream().max(Comparator.comparing(Notification::getCreated));
+                Optional<QualityNotificationMessage> latestNotification = notificationGroup.stream().max(Comparator.comparing(QualityNotificationMessage::getCreated));
                 if (latestNotification.isEmpty() || notification.getCreated().isAfter(latestNotification.get().getCreated())) {
                     notificationGroup.clear();
                     notificationGroup.add(notification);
@@ -212,8 +212,8 @@ public class InvestigationsPublisherService {
             notificationMap.put(edcNotificationId, notificationGroup);
         }
 
-        List<Notification> latestNotificationElements = new ArrayList<>();
-        for (List<Notification> notificationGroup : notificationMap.values()) {
+        List<QualityNotificationMessage> latestNotificationElements = new ArrayList<>();
+        for (List<QualityNotificationMessage> notificationGroup : notificationMap.values()) {
             latestNotificationElements.addAll(notificationGroup);
         }
         return latestNotificationElements;

@@ -45,4 +45,5 @@ public class QualityNotificationBaseEntity {
     private Instant updated;
     private QualityNotificationSideBaseEntity side;
     private QualityNotificationStatusBaseEntity status;
+
 }

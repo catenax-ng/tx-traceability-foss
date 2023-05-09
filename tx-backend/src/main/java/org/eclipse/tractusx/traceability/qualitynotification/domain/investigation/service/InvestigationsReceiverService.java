@@ -28,9 +28,9 @@ import org.eclipse.tractusx.traceability.common.mapper.InvestigationMapper;
 import org.eclipse.tractusx.traceability.common.mapper.NotificationMapper;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Investigation;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationMessage;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Notification;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationNotFoundException;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
@@ -48,16 +48,16 @@ public class InvestigationsReceiverService {
 
     public void handleNotificationReceive(EDCNotification edcNotification) {
         BPN investigationCreatorBPN = BPN.of(edcNotification.getSenderBPN());
-        Notification notification = notificationMapper.toNotification(edcNotification);
-        Investigation investigation = investigationMapper.toInvestigation(investigationCreatorBPN, edcNotification.getInformation(), notification);
+        QualityNotificationMessage notification = notificationMapper.toNotification(edcNotification);
+        QualityNotification investigation = investigationMapper.toInvestigation(investigationCreatorBPN, edcNotification.getInformation(), notification);
         InvestigationId investigationId = investigationsRepository.save(investigation);
         assetService.setAssetsInvestigationStatus(investigation);
         log.info("Stored received edcNotification in investigation with id {}", investigationId);
     }
 
     public void handleNotificationUpdate(EDCNotification edcNotification) {
-        Notification notification = notificationMapper.toNotification(edcNotification);
-        Investigation investigation = investigationsRepository.findByEdcNotificationId(edcNotification.getNotificationId())
+        QualityNotificationMessage notification = notificationMapper.toNotification(edcNotification);
+        QualityNotification investigation = investigationsRepository.findByEdcNotificationId(edcNotification.getNotificationId())
                 .orElseThrow(() -> new InvestigationNotFoundException(edcNotification.getNotificationId()));
 
         switch (edcNotification.convertInvestigationStatus()) {

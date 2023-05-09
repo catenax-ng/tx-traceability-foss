@@ -27,7 +27,7 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.config.async.Asse
 import org.eclipse.tractusx.traceability.discovery.domain.model.Discovery;
 import org.eclipse.tractusx.traceability.discovery.domain.service.DiscoveryService;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.InvestigationsEDCFacade;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Notification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationMessage;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,7 @@ public class NotificationsService {
 
 
     @Async(value = AssetsAsyncConfig.UPDATE_NOTIFICATION_EXECUTOR)
-    public void asyncNotificationExecutor(Notification notification) {
+    public void asyncNotificationExecutor(QualityNotificationMessage notification) {
         log.info("::asyncNotificationExecutor::notification {}", notification);
         Discovery discovery = discoveryService.getDiscoveryByBPN(notification.getReceiverBpnNumber());
         String senderEdcUrl = discovery.getSenderUrl();
