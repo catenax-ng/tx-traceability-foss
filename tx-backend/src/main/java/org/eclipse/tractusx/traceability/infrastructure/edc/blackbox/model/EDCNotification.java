@@ -31,7 +31,6 @@ import org.eclipse.tractusx.traceability.qualitynotification.domain.investigatio
 
 import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record EDCNotification(@Valid
@@ -83,8 +82,7 @@ public record EDCNotification(@Valid
     @JsonIgnore
     public List<AffectedPart> getListOfAffectedItems() {
         return content.listOfAffectedItems().stream()
-                .map(AffectedPart::new)
-                .collect(Collectors.toList());
+                .map(AffectedPart::new).toList();
     }
 
     public NotificationType convertNotificationType() {

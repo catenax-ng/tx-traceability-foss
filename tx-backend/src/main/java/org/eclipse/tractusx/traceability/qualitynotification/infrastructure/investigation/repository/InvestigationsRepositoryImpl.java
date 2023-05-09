@@ -266,6 +266,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
                 .builder()
                 .id(notification.getId())
                 .investigation(investigationEntity)
+                .created(notification.getCreated())
                 .senderBpnNumber(notification.getSenderBpnNumber())
                 .senderManufacturerName(notification.getSenderManufacturerName())
                 .receiverBpnNumber(notification.getReceiverBpnNumber())
