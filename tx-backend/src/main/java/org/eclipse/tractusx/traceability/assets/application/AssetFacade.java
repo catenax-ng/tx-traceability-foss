@@ -23,7 +23,7 @@ package org.eclipse.tractusx.traceability.assets.application;
 
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
-import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.rest.assets.UpdateAsset;
+import org.eclipse.tractusx.traceability.assets.application.rest.assets.request.UpdateAssetRequest;
 import org.eclipse.tractusx.traceability.assets.infrastructure.config.async.AssetsAsyncConfig;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -50,8 +50,8 @@ public class AssetFacade {
 		return assetService.getAssetsCountryMap();
 	}
 
-	public Asset updateAsset(String assetId, UpdateAsset updateAsset) {
-		return assetService.updateQualityType(assetId, updateAsset.qualityType());
+	public Asset updateAsset(String assetId, UpdateAssetRequest updateAssetRequest) {
+		return assetService.updateQualityType(assetId, updateAssetRequest.qualityType());
 	}
 
 }

@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.domain.model;
+package org.eclipse.tractusx.traceability.assets.domain.exception;
 
 public class AssetNotFoundException extends RuntimeException {
 

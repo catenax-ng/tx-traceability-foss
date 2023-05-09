@@ -1,8 +1,8 @@
 package org.eclipse.tractusx.traceability.testdata;
 
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
+import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
 import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
-import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Owner;
 
 import java.time.Instant;
 import java.util.ArrayList;

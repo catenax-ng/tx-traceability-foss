@@ -22,9 +22,9 @@
 package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset;
 
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
-import org.eclipse.tractusx.traceability.assets.domain.model.AssetNotFoundException;
-import org.eclipse.tractusx.traceability.assets.domain.ports.AssetRepository;
-import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Owner;
+import org.eclipse.tractusx.traceability.assets.domain.exception.AssetNotFoundException;
+import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
+import org.eclipse.tractusx.traceability.assets.domain.service.repository.AssetRepository;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;

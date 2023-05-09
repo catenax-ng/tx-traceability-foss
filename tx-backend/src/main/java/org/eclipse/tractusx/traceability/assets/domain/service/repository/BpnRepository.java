@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.domain.ports;
+package org.eclipse.tractusx.traceability.assets.domain.service.repository;
 
 import java.util.Map;
 import java.util.Optional;

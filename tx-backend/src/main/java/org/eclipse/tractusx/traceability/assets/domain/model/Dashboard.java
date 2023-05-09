@@ -19,13 +19,10 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets;
-
-
-import io.swagger.annotations.ApiModelProperty;
+package org.eclipse.tractusx.traceability.assets.domain.model;
 
 public record Dashboard(
-        @ApiModelProperty(example = "5") Long myItems,
-        @ApiModelProperty(example = "10") Long otherParts,
-        @ApiModelProperty(example = "15") Long investigations) {
+        Long myItems,
+        Long otherParts,
+        Long investigations) {
 }

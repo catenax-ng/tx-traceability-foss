@@ -19,28 +19,21 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.domain.service;
+package org.eclipse.tractusx.traceability.assets.application.rest.assets.response;
 
-import lombok.RequiredArgsConstructor;
+import io.swagger.annotations.ApiModelProperty;
 import org.eclipse.tractusx.traceability.assets.domain.model.Dashboard;
-import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
-import org.eclipse.tractusx.traceability.assets.domain.service.repository.AssetRepository;
-import org.eclipse.tractusx.traceability.investigations.domain.ports.InvestigationsRepository;
-import org.springframework.stereotype.Component;
 
-@Component
-@RequiredArgsConstructor
-public class DashboardService {
+public record DashboardResponse(
+        @ApiModelProperty(example = "5") Long myItems,
+        @ApiModelProperty(example = "10") Long otherParts,
+        @ApiModelProperty(example = "15") Long investigations) {
 
-	private final AssetRepository assetRepository;
-	private final InvestigationsRepository investigationsRepository;
-
-	public Dashboard getDashboard() {
-        long customerParts = assetRepository.countAssetsByOwner(Owner.CUSTOMER);
-        long ownParts = assetRepository.countAssetsByOwner(Owner.OWN);
-        long supplierParts = assetRepository.countAssetsByOwner(Owner.SUPPLIER);
-		long totalAssets = customerParts + ownParts + supplierParts;
-		long pendingInvestigations = investigationsRepository.countPendingInvestigations();
-		return new Dashboard(ownParts, totalAssets, pendingInvestigations);
-	}
+    public static DashboardResponse from(final Dashboard dashboard) {
+        return new DashboardResponse(
+                dashboard.myItems(),
+                dashboard.otherParts(),
+                dashboard.investigations()
+        );
+    }
 }

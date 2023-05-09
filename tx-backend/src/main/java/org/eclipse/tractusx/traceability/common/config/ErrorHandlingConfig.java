@@ -26,7 +26,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ValidationException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.eclipse.tractusx.traceability.assets.domain.model.AssetNotFoundException;
+import org.eclipse.tractusx.traceability.assets.domain.exception.AssetNotFoundException;
 import org.eclipse.tractusx.traceability.assets.infrastructure.config.openapi.TechnicalUserAuthorizationException;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMappingException;
 import org.eclipse.tractusx.traceability.bpn.mapping.domain.model.BpnEdcMappingNotFoundException;

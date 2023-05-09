@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.rest.dashboard;
+package org.eclipse.tractusx.traceability.assets.application.rest.dashboard;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,6 +28,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.eclipse.tractusx.traceability.assets.application.rest.assets.response.DashboardResponse;
 import org.eclipse.tractusx.traceability.assets.domain.model.Dashboard;
 import org.eclipse.tractusx.traceability.assets.domain.service.DashboardService;
 import org.eclipse.tractusx.traceability.common.security.InjectedJwtAuthentication;
@@ -39,13 +41,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Tag(name = "Dashboard")
 @RequestMapping(path = "/dashboard", produces = "application/json")
+@RequiredArgsConstructor
 public class DashboardController {
 
 	private final DashboardService dashboardService;
-
-	public DashboardController(DashboardService dashboardService) {
-		this.dashboardService = dashboardService;
-	}
 
 	@GetMapping("")
 	@Operation(operationId = "dashboard",
@@ -57,7 +56,7 @@ public class DashboardController {
 		content = {@Content(schema = @Schema(implementation = Dashboard.class))}),
 		@ApiResponse(responseCode = "401", description = "Authorization failed."),
 		@ApiResponse(responseCode = "403", description = "Forbidden.")})
-	public Dashboard dashboard(@InjectedJwtAuthentication JwtAuthentication jwtAuthentication) {
-		return dashboardService.getDashboard(jwtAuthentication);
+	public DashboardResponse dashboard(@InjectedJwtAuthentication JwtAuthentication jwtAuthentication) {
+		return DashboardResponse.from(dashboardService.getDashboard());
 	}
 }

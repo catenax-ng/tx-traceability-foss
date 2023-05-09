@@ -23,8 +23,8 @@ package org.eclipse.tractusx.traceability.assets.domain.service;
 
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
-import org.eclipse.tractusx.traceability.assets.domain.ports.AssetRepository;
-import org.eclipse.tractusx.traceability.assets.domain.ports.IrsRepository;
+import org.eclipse.tractusx.traceability.assets.domain.service.repository.AssetRepository;
+import org.eclipse.tractusx.traceability.assets.domain.service.repository.IrsRepository;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Aspect;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Direction;
 import org.eclipse.tractusx.traceability.assets.infrastructure.config.async.AssetsAsyncConfig;
@@ -117,7 +117,7 @@ public class AssetService {
 
     public Asset updateQualityType(String assetId, QualityType qualityType) {
         Asset foundAsset = assetRepository.getAssetById(assetId);
-        foundAsset.updateQualityType(qualityType);
+        foundAsset.setQualityType(qualityType);
         return assetRepository.save(foundAsset);
     }
 

@@ -24,10 +24,10 @@ package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.i
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
+import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
 import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 import org.eclipse.tractusx.traceability.assets.domain.model.ShellDescriptor;
-import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
-import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
+import org.eclipse.tractusx.traceability.assets.domain.service.repository.BpnRepository;
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,7 +137,7 @@ public class AssetsConverter {
                 shellDescriptor.manufacturerPartId(),
                 null,
                 EMPTY_TEXT,
-                Owner.OWN,
+                IrsOwner.OWN.toDomain(),
                 Collections.emptyList(),
                 Collections.emptyList(),
                 false,
@@ -146,23 +146,26 @@ public class AssetsConverter {
         );
     }
 
-    private Owner getPartOwner(Map<String, List<Relationship>> supplierParts, Map<String, List<Relationship>> customerParts, String catenaXId, Optional<String> manufacturerId) {
+    private Owner getPartOwner(
+            Map<String, List<Relationship>> supplierParts,
+            Map<String, List<Relationship>> customerParts,
+            String catenaXId, Optional<String> manufacturerId) {
 
         if (manufacturerId.isPresent() && traceabilityProperties.getBpn().value().equals(manufacturerId.get())) {
             logger.info("OWNER: BPN MATCH: {}", catenaXId);
-            return Owner.OWN;
+            return IrsOwner.OWN.toDomain();
         }
 
         if (supplierParts.containsKey(catenaXId)) {
             logger.info("OWNER: supplierParts.containsKey(catenaXId): {}", catenaXId);
-            return Owner.SUPPLIER;
+            return IrsOwner.SUPPLIER.toDomain();
         }
         if (customerParts.containsKey(catenaXId)) {
             logger.info("OWNER: customerParts.containsKey(catenaXId): {}", catenaXId);
-            return Owner.CUSTOMER;
+            return IrsOwner.CUSTOMER.toDomain();
         }
         logger.info("OWNER: customerParts.containsKey(catenaXId): {}", catenaXId);
-        return Owner.OWN;
+        return IrsOwner.OWN.toDomain();
     }
 
 

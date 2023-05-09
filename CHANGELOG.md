@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Updated swagger api doc and added collection
 - Updated dev setup documentation
 - Upgraded irs from 5.0.9 to 5.3.0
+- Moved tx-backend asset domain models to tx-model module
 
 ### Removed
 - Not needed enum params in UpdateInvestigationRequest

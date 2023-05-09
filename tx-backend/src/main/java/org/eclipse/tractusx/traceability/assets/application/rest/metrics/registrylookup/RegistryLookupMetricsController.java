@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.rest.metrics.registrylookup;
+package org.eclipse.tractusx.traceability.assets.application.rest.metrics.registrylookup;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -30,6 +30,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Size;
+import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.metrics.RegistryLookupMeterRegistry;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.metrics.RegistryLookupMetric;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
@@ -43,13 +44,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/metrics", produces = "application/json", consumes = "application/json")
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERVISOR')")
 @Tag(name = "Registry")
+@RequiredArgsConstructor
 public class RegistryLookupMetricsController {
 
 	private final RegistryLookupMeterRegistry registryLookupMeterRegistry;
-
-	public RegistryLookupMetricsController(RegistryLookupMeterRegistry registryLookupMeterRegistry) {
-		this.registryLookupMeterRegistry = registryLookupMeterRegistry;
-	}
 
 	@Operation(operationId = "metrics",
 		summary = "Gets Metrics",
@@ -63,7 +61,8 @@ public class RegistryLookupMetricsController {
 		@ApiResponse(responseCode = "401", description = "Authorization failed."),
 		@ApiResponse(responseCode = "403", description = "Forbidden.")})
 	@GetMapping("/registry-lookup")
-	public @Size(max = 1000) @ArraySchema(arraySchema = @Schema(description = "RegistryLookupMetric", implementation = RegistryLookupMetric.class), maxItems = Integer.MAX_VALUE) PageResult<RegistryLookupMetric> metrics(@Size(max = 1000) Pageable pageable) {
+	public @Size(max = 1000) @ArraySchema(arraySchema = @Schema(description = "RegistryLookupMetric", implementation = RegistryLookupMetric.class), maxItems = Integer.MAX_VALUE)
+    PageResult<RegistryLookupMetric> metrics(@Size(max = 1000) Pageable pageable) {
 		return registryLookupMeterRegistry.getMetrics(pageable);
 	}
 }

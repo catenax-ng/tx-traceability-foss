@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.rest.assets;
+package org.eclipse.tractusx.traceability.assets.application.rest.assets;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -31,10 +31,15 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.QueryParam;
+import lombok.RequiredArgsConstructor;
+import org.eclipse.tractusx.traceability.assets.application.rest.assets.request.GetDetailInformationRequest;
+import org.eclipse.tractusx.traceability.assets.application.rest.assets.request.SyncAssetsRequest;
+import org.eclipse.tractusx.traceability.assets.application.rest.assets.request.UpdateAssetRequest;
+import org.eclipse.tractusx.traceability.assets.application.rest.assets.response.AssetResponse;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
 import org.eclipse.tractusx.traceability.assets.application.AssetFacade;
-import org.eclipse.tractusx.traceability.assets.domain.ports.AssetRepository;
+import org.eclipse.tractusx.traceability.assets.domain.service.repository.AssetRepository;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -53,15 +58,11 @@ import java.util.Map;
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERVISOR', 'ROLE_USER')")
 @Tag(name = "Assets")
 @RequestMapping(path = "/assets", produces = "application/json", consumes = "application/json")
+@RequiredArgsConstructor
 public class AssetsController {
 
     private final AssetRepository assetRepository;
     private final AssetFacade assetFacade;
-
-    public AssetsController(AssetRepository assetRepository, AssetFacade assetFacade) {
-        this.assetRepository = assetRepository;
-        this.assetFacade = assetFacade;
-    }
 
     @Operation(operationId = "sync",
             summary = "Synchronizes assets from IRS",
@@ -72,8 +73,8 @@ public class AssetsController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @PostMapping("/sync")
-    public void sync(@Valid @RequestBody SyncAssets syncAssets) {
-        assetFacade.synchronizeAssetsAsync(syncAssets.globalAssetIds());
+    public void sync(@Valid @RequestBody SyncAssetsRequest syncAssetsRequest) {
+        assetFacade.synchronizeAssetsAsync(syncAssetsRequest.globalAssetIds());
     }
 
     @Operation(operationId = "assets",
@@ -88,8 +89,8 @@ public class AssetsController {
             @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
     @GetMapping("")
-    public PageResult<Asset> assets(Pageable pageable, @QueryParam("owner") Owner owner) {
-        return assetRepository.getAssets(pageable, owner);
+    public PageResult<AssetResponse> assets(Pageable pageable, @QueryParam("owner") Owner owner) {
+        return AssetResponse.from(assetRepository.getAssets(pageable, owner));
     }
 
 
@@ -117,8 +118,8 @@ public class AssetsController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("/{assetId}")
-    public Asset asset(@PathVariable String assetId) {
-        return assetRepository.getAssetById(assetId);
+    public AssetResponse asset(@PathVariable String assetId) {
+        return AssetResponse.from(assetRepository.getAssetById(assetId));
     }
 
 
@@ -132,8 +133,8 @@ public class AssetsController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("/{assetId}/children/{childId}")
-    public Asset asset(@PathVariable String assetId, @PathVariable String childId) {
-        return assetRepository.getAssetByChildId(assetId, childId);
+    public AssetResponse asset(@PathVariable String assetId, @PathVariable String childId) {
+        return AssetResponse.from(assetRepository.getAssetByChildId(assetId, childId));
     }
 
     @Operation(operationId = "updateAsset",
@@ -146,8 +147,8 @@ public class AssetsController {
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @PatchMapping("/{assetId}")
-    public Asset updateAsset(@PathVariable String assetId, @Valid @RequestBody UpdateAsset updateAsset) {
-        return assetFacade.updateAsset(assetId, updateAsset);
+    public AssetResponse updateAsset(@PathVariable String assetId, @Valid @RequestBody UpdateAssetRequest updateAssetRequest) {
+        return AssetResponse.from(assetFacade.updateAsset(assetId, updateAssetRequest));
     }
 
     @Operation(operationId = "getDetailInformation",
