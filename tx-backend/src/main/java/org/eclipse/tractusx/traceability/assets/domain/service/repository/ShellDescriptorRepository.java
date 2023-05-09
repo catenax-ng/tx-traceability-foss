@@ -19,46 +19,18 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.common.docs;
+package org.eclipse.tractusx.traceability.assets.domain.ports;
 
-import io.swagger.annotations.ApiParam;
-import org.springframework.lang.Nullable;
 
-public class SwaggerPageable {
+import org.eclipse.tractusx.traceability.assets.domain.model.ShellDescriptor;
 
-	@ApiParam(value = "Number of records per page", example = "0")
-	private Integer size;
+import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.List;
 
-	@ApiParam(value = "Results page you want to retrieve (0..N)", example = "0")
-	private Integer page;
-
-	@ApiParam(value = "Sorting criteria in the format: [property(asc|desc)]. Default sort order is ascending. Multiple sort criteria are supported.", example = "asc")
-	private String sort;
-
-	@Nullable
-	public Integer getSize() {
-		return size;
-	}
-
-	public void setSize(@Nullable Integer size) {
-		this.size = size;
-	}
-
-	@Nullable
-	public Integer getPage() {
-		return page;
-	}
-
-	public void setPage(@Nullable Integer page) {
-		this.page = page;
-	}
-
-	@Nullable
-	public String getSort() {
-		return sort;
-	}
-
-	public void setSort(@Nullable String sort) {
-		this.sort = sort;
-	}
+public interface ShellDescriptorRepository {
+	List<ShellDescriptor> findAll();
+	void update(ShellDescriptor shellDescriptor);
+	void saveAll(Collection<ShellDescriptor> values);
+	void removeDescriptorsByUpdatedBefore(ZonedDateTime now);
 }

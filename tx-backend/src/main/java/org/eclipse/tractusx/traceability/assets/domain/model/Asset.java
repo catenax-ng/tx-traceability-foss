@@ -19,24 +19,23 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.domain.model;
+package org.eclipse.tractusx.traceability.assets;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Size;
-import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
-import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Owner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
+
+@Slf4j
+@AllArgsConstructor
 @ArraySchema(arraySchema = @Schema(description = "Assets"), maxItems = Integer.MAX_VALUE)
 public final class Asset {
-    private static final Logger logger = LoggerFactory.getLogger(Asset.class);
 	@ApiModelProperty(example = "urn:uuid:ceb6b964-5779-49c1-b5e9-0ee70528fcbd")
 	private final String id;
 	@ApiModelProperty(example = "--")
@@ -75,46 +74,6 @@ public final class Asset {
 	private QualityType qualityType;
 	@ApiModelProperty(example = "--")
 	private String van;
-
-	public Asset(
-		String id,
-		String idShort,
-		String nameAtManufacturer,
-		String manufacturerPartId,
-		String partInstanceId,
-		String manufacturerId,
-		String batchId,
-		String manufacturerName,
-		String nameAtCustomer,
-		String customerPartId,
-		Instant manufacturingDate,
-		String manufacturingCountry,
-		Owner owner,
-		List<Descriptions> childDescriptions,
-        List<Descriptions> parentDescriptions,
-		boolean underInvestigation,
-		QualityType qualityType,
-		String van
-	) {
-		this.id = id;
-		this.idShort = idShort;
-		this.nameAtManufacturer = nameAtManufacturer;
-		this.manufacturerPartId = manufacturerPartId;
-		this.partInstanceId = partInstanceId;
-		this.manufacturerId = manufacturerId;
-		this.batchId = batchId;
-		this.manufacturerName = manufacturerName;
-		this.nameAtCustomer = nameAtCustomer;
-		this.customerPartId = customerPartId;
-		this.manufacturingDate = manufacturingDate;
-		this.manufacturingCountry = manufacturingCountry;
-		this.owner = owner;
-		this.childDescriptions = childDescriptions;
-        this.parentDescriptions = parentDescriptions;
-		this.underInvestigation = underInvestigation;
-		this.qualityType = qualityType;
-		this.van = van;
-	}
 
 	public String getBatchId() {
 		return batchId;
@@ -182,7 +141,7 @@ public final class Asset {
 
     public void setParentDescriptions(List<Descriptions> descriptions) {
         this.parentDescriptions = Collections.unmodifiableList(descriptions);
-        logger.info("Asset: setParentDescriptions {}", this.parentDescriptions);
+        log.info("Asset: setParentDescriptions {}", this.parentDescriptions);
     }
 
 	public QualityType getQualityType() {

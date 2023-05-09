@@ -19,31 +19,15 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.domain.ports;
+package org.eclipse.tractusx.traceability.assets.application.rest.assets;
 
-import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
-import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Owner;
-import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.springframework.data.domain.Pageable;
+import io.swagger.annotations.ApiModelProperty;
 
-import java.util.List;
+import jakarta.validation.constraints.NotNull;
+import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 
-public interface AssetRepository {
-	Asset getAssetById(String assetId);
-
-	List<Asset> getAssetsById(List<String> assetIds);
-
-	Asset getAssetByChildId(String assetId, String childId);
-
-	PageResult<Asset> getAssets(Pageable pageable, Owner owner);
-
-	List<Asset> getAssets();
-
-	Asset save(Asset asset);
-
-	List<Asset> saveAll(List<Asset> assets);
-
-    long countAssets();
-
-    long countAssetsByOwner(Owner owner);
+public record UpdateAsset(
+	@NotNull(message = "qualityType must be present")
+    @ApiModelProperty(example = "Ok" )
+    QualityType qualityType) {
 }

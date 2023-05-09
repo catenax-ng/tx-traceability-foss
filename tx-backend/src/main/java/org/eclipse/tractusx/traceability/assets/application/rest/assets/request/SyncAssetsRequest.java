@@ -19,17 +19,15 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.domain.ports;
+package org.eclipse.tractusx.traceability.assets.application.rest.assets;
 
-import org.eclipse.tractusx.traceability.assets.domain.model.ShellDescriptor;
+import io.swagger.annotations.ApiModelProperty;
 
-import java.time.ZonedDateTime;
-import java.util.Collection;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 
-public interface ShellDescriptorRepository {
-	List<ShellDescriptor> findAll();
-	void update(ShellDescriptor shellDescriptor);
-	void saveAll(Collection<ShellDescriptor> values);
-	void removeDescriptorsByUpdatedBefore(ZonedDateTime now);
+public record SyncAssets(
+        @ArraySchema(arraySchema = @Schema(description = "Assets"), maxItems = Integer.MAX_VALUE) @Size(min = 1, max = 100, message = "Specify at least 1 and at most 100 globalAssetIds") @ApiModelProperty(example = "[\"urn:uuid:ceb6b964-5779-49c1-b5e9-0ee70528fcbd\"]") List<String> globalAssetIds) {
 }

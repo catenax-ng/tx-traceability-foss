@@ -19,15 +19,31 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.rest.assets;
+package org.eclipse.tractusx.traceability.assets.domain.ports;
 
-import io.swagger.annotations.ApiModelProperty;
+import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
+import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
+import org.eclipse.tractusx.traceability.common.model.PageResult;
+import org.springframework.data.domain.Pageable;
 
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Size;
 import java.util.List;
 
-public record SyncAssets(
-        @ArraySchema(arraySchema = @Schema(description = "Assets"), maxItems = Integer.MAX_VALUE) @Size(min = 1, max = 100, message = "Specify at least 1 and at most 100 globalAssetIds") @ApiModelProperty(example = "[\"urn:uuid:ceb6b964-5779-49c1-b5e9-0ee70528fcbd\"]") List<String> globalAssetIds) {
+public interface AssetRepository {
+	Asset getAssetById(String assetId);
+
+	List<Asset> getAssetsById(List<String> assetIds);
+
+	Asset getAssetByChildId(String assetId, String childId);
+
+	PageResult<Asset> getAssets(Pageable pageable, Owner owner);
+
+	List<Asset> getAssets();
+
+	Asset save(Asset asset);
+
+	List<Asset> saveAll(List<Asset> assets);
+
+    long countAssets();
+
+    long countAssetsByOwner(Owner owner);
 }

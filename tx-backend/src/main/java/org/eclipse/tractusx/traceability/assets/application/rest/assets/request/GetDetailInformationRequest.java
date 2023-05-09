@@ -19,13 +19,12 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.rest.assets;
+package org.eclipse.tractusx.traceability.assets.application.rest.assets;
 
 import io.swagger.annotations.ApiModelProperty;
-import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.util.List;
 
-public record UpdateAsset(
-	@NotNull(message = "qualityType must be present") @ApiModelProperty(example = "Ok" ) QualityType qualityType) {
+public record GetDetailInformationRequest(@Size(min = 1, max = 50, message = "Specify at least 1 and at most 50 assetIds")  @ApiModelProperty(example = "[\"urn:uuid:ceb6b964-5779-49c1-b5e9-0ee70528fcbd\"]") List<String> assetIds) {
 }
