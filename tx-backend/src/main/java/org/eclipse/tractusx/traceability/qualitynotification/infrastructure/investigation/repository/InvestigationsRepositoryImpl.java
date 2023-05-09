@@ -131,13 +131,11 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
         return investigationRepository.countAllByStatusEquals(QualityNotificationStatusBaseEntity.valueOf(qualityNotificationStatus.name()));
     }
 
-
     @Override
     public Optional<QualityNotification> findByEdcNotificationId(String edcNotificationId) {
         return investigationRepository.findByNotificationsEdcNotificationId(edcNotificationId)
                 .map(this::toInvestigation);
     }
-
 
     @Override
     public long countQualityNotificationEntitiesBySide(QualityNotificationSide investigationSide) {
@@ -208,7 +206,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
                 .build();
     }
 
-    private QualityNotificationMessage toNotification(NotificationEntity notificationEntity) {
+    public QualityNotificationMessage toNotification(NotificationEntity notificationEntity) {
         InvestigationEntity investigation = notificationEntity.getInvestigation();
 
         return QualityNotificationMessage.builder()

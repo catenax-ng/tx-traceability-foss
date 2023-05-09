@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Upgraded @angular-devkit/build-angular to ^15.0.0 (to have the same dependency as @angular-builders/custom-webpack has)
 - Fix sonar bug in minimap.d3.ts
 - Upgraded karma dependencies (use engine.io@^6.4.2 to solve Uncaught Exception vulnerability)
-
+- Refactored investigation class to be qualitynotification to reflect a base class for future extensions
 ### Removed
 - Not needed enum params in UpdateInvestigationRequest
 

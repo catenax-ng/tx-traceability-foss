@@ -60,4 +60,5 @@ public class NotificationEntity extends QualityNotificationMessageBaseEntity {
     )
     private List<AssetEntity> assets;
 
+
 }
