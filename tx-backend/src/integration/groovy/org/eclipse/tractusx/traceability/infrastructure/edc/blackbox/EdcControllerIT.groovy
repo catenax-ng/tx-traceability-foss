@@ -91,6 +91,7 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
                 .builder()
                 .id("1")
                 .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
+                .status(QualityNotificationStatusBaseEntity.CREATED)
                 .build()
 
         InvestigationEntity investigation = InvestigationEntity.builder()
