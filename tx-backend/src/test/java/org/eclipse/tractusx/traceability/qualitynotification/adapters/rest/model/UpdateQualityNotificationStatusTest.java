@@ -19,7 +19,7 @@
 
 package org.eclipse.tractusx.traceability.qualitynotification.adapters.rest.model;
 
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;

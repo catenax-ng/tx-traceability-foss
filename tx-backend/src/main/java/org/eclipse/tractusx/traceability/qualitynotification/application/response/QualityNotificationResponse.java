@@ -16,7 +16,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-package org.eclipse.tractusx.traceability.qualitynotification.application;
+package org.eclipse.tractusx.traceability.qualitynotification.application.response;
 
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -24,8 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationReason;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationSide;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSide;
 
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class QualityNotificationResponse {
     @ApiModelProperty(example = "SENDER")
     private QualityNotificationSide channel;
 
-    private InvestigationReason reason;
+    private QualityNotificationReasonResponse reason;
 
     @ApiModelProperty(example = "BPNL00000003AYRE")
     private String sendTo;

@@ -22,11 +22,11 @@
 package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository;
 
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotification;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationMessage;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationSide;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSide;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;

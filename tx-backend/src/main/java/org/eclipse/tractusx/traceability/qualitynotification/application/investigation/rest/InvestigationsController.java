@@ -35,13 +35,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.common.config.FeatureFlags;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.request.CloseInvestigationRequest;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.request.StartInvestigationRequest;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.request.UpdateInvestigationRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.StartInvestigationResponse;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
+import org.eclipse.tractusx.traceability.qualitynotification.application.request.CloseQualityNotificationRequest;
+import org.eclipse.tractusx.traceability.qualitynotification.application.request.StartQualityNotificationRequest;
+import org.eclipse.tractusx.traceability.qualitynotification.application.request.UpdateQualityNotificationRequest;
+import org.eclipse.tractusx.traceability.qualitynotification.application.response.QualityNotificationIdResponse;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.InvestigationService;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -55,7 +55,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.eclipse.tractusx.traceability.qualitynotification.application.investigation.validation.UpdateInvestigationValidator.validate;
+import static org.eclipse.tractusx.traceability.qualitynotification.application.validation.UpdateQualityNotificationValidator.validate;
 
 @Profile(FeatureFlags.NOTIFICATIONS_ENABLED_PROFILES)
 @RestController
@@ -81,10 +81,10 @@ public class InvestigationsController {
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public StartInvestigationResponse investigateAssets(@RequestBody @Valid StartInvestigationRequest request) {
+    public QualityNotificationIdResponse investigateAssets(@RequestBody @Valid StartQualityNotificationRequest request) {
         log.info(API_LOG_START + " with params: {}", request);
-        return new StartInvestigationResponse(investigationService.startInvestigation(
-                request.partIds(), request.description(), request.targetDate(), request.severity()).value());
+        return new QualityNotificationIdResponse(investigationService.startInvestigation(
+                request.getPartIds(), request.getDescription(), request.getTargetDate(), request.getSeverity()).value());
     }
 
     @Operation(operationId = "getCreatedInvestigations",
@@ -176,9 +176,9 @@ public class InvestigationsController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERVISOR')")
     @PostMapping("/{investigationId}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void closeInvestigation(@PathVariable Long investigationId, @Valid @RequestBody CloseInvestigationRequest closeInvestigationRequest) {
+    public void closeInvestigation(@PathVariable Long investigationId, @Valid @RequestBody CloseQualityNotificationRequest closeInvestigationRequest) {
         log.info(API_LOG_START + "/{}/close with params {}", investigationId, closeInvestigationRequest);
-        investigationService.updateInvestigation(investigationId, QualityNotificationStatus.CLOSED, closeInvestigationRequest.reason());
+        investigationService.updateInvestigation(investigationId, QualityNotificationStatus.CLOSED, closeInvestigationRequest.getReason());
     }
 
     @Operation(operationId = "updateInvestigation",
@@ -192,10 +192,10 @@ public class InvestigationsController {
     @PreAuthorize("hasAnyRole('ROLE_SUPERVISOR')")
     @PostMapping("/{investigationId}/update")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateInvestigation(@PathVariable Long investigationId, @Valid @RequestBody UpdateInvestigationRequest updateInvestigationRequest) {
+    public void updateInvestigation(@PathVariable Long investigationId, @Valid @RequestBody UpdateQualityNotificationRequest updateInvestigationRequest) {
         validate(updateInvestigationRequest);
         log.info(API_LOG_START + "/{}/update with params {}", investigationId, updateInvestigationRequest);
-        investigationService.updateInvestigation(investigationId, QualityNotificationStatus.fromStringValue(updateInvestigationRequest.status().name()), updateInvestigationRequest.reason());
+        investigationService.updateInvestigation(investigationId, QualityNotificationStatus.fromStringValue(updateInvestigationRequest.getStatus().name()), updateInvestigationRequest.getReason());
     }
 }
 

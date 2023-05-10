@@ -21,40 +21,38 @@
 
 package org.eclipse.tractusx.traceability.qualitynotification.adapters.rest.validation;
 
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.request.UpdateInvestigationRequest;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.request.UpdateInvestigationStatus;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.validation.UpdateInvestigationValidationException;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.validation.UpdateInvestigationValidator;
+import org.eclipse.tractusx.traceability.qualitynotification.application.request.UpdateQualityNotificationRequest;
+import org.eclipse.tractusx.traceability.qualitynotification.application.request.UpdateQualityNotificationStatusRequest;
+import org.eclipse.tractusx.traceability.qualitynotification.application.validation.UpdateQualityNotificationValidationException;
+import org.eclipse.tractusx.traceability.qualitynotification.application.validation.UpdateQualityNotificationValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
-class UpdateInvestigationValidatorTest {
+class UpdateQualityNotificationValidatorTest {
 
     @InjectMocks
-    UpdateInvestigationValidator updateInvestigationValidator;
-
-    @Mock
-    UpdateInvestigationRequest mockRequest;
+    UpdateQualityNotificationValidator updateInvestigationValidator;
 
 
     @Test
     @DisplayName("No Validation Success for invalid Reason")
     void testUnsuccessfulValidationForInvalidReason() {
 
-        UpdateInvestigationStatus acknowledged = UpdateInvestigationStatus.ACKNOWLEDGED;
+        UpdateQualityNotificationStatusRequest acknowledged = UpdateQualityNotificationStatusRequest.ACKNOWLEDGED;
         String reason = "some-reason-for-update";
         String errorMessage = "Update investigation reason can't be present for ACKNOWLEDGED status";
 
-        UpdateInvestigationRequest request = new UpdateInvestigationRequest(acknowledged, reason);
-        UpdateInvestigationValidationException exception = assertThrows(UpdateInvestigationValidationException.class, () -> UpdateInvestigationValidator.validate(request));
+        UpdateQualityNotificationRequest request = new UpdateQualityNotificationRequest();
+        request.setReason(reason);
+        request.setStatus(acknowledged);
+        UpdateQualityNotificationValidationException exception = assertThrows(UpdateQualityNotificationValidationException.class, () -> UpdateQualityNotificationValidator.validate(request));
         assertEquals(errorMessage, exception.getMessage());
 
     }
@@ -62,9 +60,11 @@ class UpdateInvestigationValidatorTest {
     @Test
     @DisplayName("Execute Validation successfully")
     void testSuccessfulValidation() {
-        UpdateInvestigationStatus accepted = UpdateInvestigationStatus.ACCEPTED;
-        UpdateInvestigationRequest request = new UpdateInvestigationRequest(accepted, "abcdefg12313212321123");
-        UpdateInvestigationValidator.validate(request);
+        UpdateQualityNotificationStatusRequest accepted = UpdateQualityNotificationStatusRequest.ACCEPTED;
+        UpdateQualityNotificationRequest request = new UpdateQualityNotificationRequest();
+        request.setReason("abcdefg12313212321123");
+        request.setStatus(accepted);
+        UpdateQualityNotificationValidator.validate(request);
 
     }
 }

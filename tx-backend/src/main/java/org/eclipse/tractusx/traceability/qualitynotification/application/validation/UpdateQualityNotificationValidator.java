@@ -19,48 +19,48 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.application.investigation.validation;
+package org.eclipse.tractusx.traceability.qualitynotification.application.validation;
 
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.request.UpdateInvestigationRequest;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
+import org.eclipse.tractusx.traceability.qualitynotification.application.request.UpdateQualityNotificationRequest;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 
 import java.util.Set;
 
-import static org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus.ACCEPTED;
-import static org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus.ACKNOWLEDGED;
-import static org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus.DECLINED;
+import static org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus.ACCEPTED;
+import static org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus.ACKNOWLEDGED;
+import static org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus.DECLINED;
 
-public class UpdateInvestigationValidator {
+public class UpdateQualityNotificationValidator {
 
     private static final Set<QualityNotificationStatus> ALLOWED_STATUSES = Set.of(ACKNOWLEDGED, ACCEPTED, DECLINED);
 
     private static final int MINIMUM_REASON_CHARACTERS_SIZE = 15;
     private static final int MAXIMUM_REASON_CHARACTERS_SIZE = 1000;
 
-    private UpdateInvestigationValidator() {
+    private UpdateQualityNotificationValidator() {
     }
 
-    public static void validate(UpdateInvestigationRequest updateInvestigationRequest) {
-        QualityNotificationStatus status = QualityNotificationStatus.fromStringValue(updateInvestigationRequest.status().name());
+    public static void validate(UpdateQualityNotificationRequest updateInvestigationRequest) {
+        QualityNotificationStatus status = QualityNotificationStatus.fromStringValue(updateInvestigationRequest.getStatus().name());
 
         if (!ALLOWED_STATUSES.contains(status)) {
-            throw new UpdateInvestigationValidationException("%s not allowed for update investigation with".formatted(status));
+            throw new UpdateQualityNotificationValidationException("%s not allowed for update investigation with".formatted(status));
         }
 
-        String reason = updateInvestigationRequest.reason();
+        String reason = updateInvestigationRequest.getReason();
 
         if (status == ACKNOWLEDGED && (reason != null && !reason.isBlank())) {
-                throw new UpdateInvestigationValidationException("Update investigation reason can't be present for %s status".formatted(ACKNOWLEDGED));
+            throw new UpdateQualityNotificationValidationException("Update investigation reason can't be present for %s status".formatted(ACKNOWLEDGED));
 
         }
 
         if (status != ACKNOWLEDGED) {
             if (reason == null || reason.isBlank()) {
-                throw new UpdateInvestigationValidationException("Update investigation reason must be present");
+                throw new UpdateQualityNotificationValidationException("Update investigation reason must be present");
             }
 
             if (reason.length() < MINIMUM_REASON_CHARACTERS_SIZE || reason.length() > MAXIMUM_REASON_CHARACTERS_SIZE) {
-                throw new UpdateInvestigationValidationException("Reason should have at least %d characters and at most %d characters".formatted(MINIMUM_REASON_CHARACTERS_SIZE, MAXIMUM_REASON_CHARACTERS_SIZE));
+                throw new UpdateQualityNotificationValidationException("Reason should have at least %d characters and at most %d characters".formatted(MINIMUM_REASON_CHARACTERS_SIZE, MAXIMUM_REASON_CHARACTERS_SIZE));
             }
         }
     }

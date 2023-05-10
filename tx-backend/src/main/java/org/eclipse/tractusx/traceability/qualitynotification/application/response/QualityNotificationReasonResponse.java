@@ -19,7 +19,12 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response;
+package org.eclipse.tractusx.traceability.qualitynotification.application.response;
 
-public record StartInvestigationResponse(Long id) {
+import io.swagger.annotations.ApiModelProperty;
+
+public record QualityNotificationReasonResponse(
+        @ApiModelProperty(example = "description of closing reason") String close,
+        @ApiModelProperty(example = "description of accepting reason") String accept,
+        @ApiModelProperty(example = "description of declining reason") String decline) {
 }

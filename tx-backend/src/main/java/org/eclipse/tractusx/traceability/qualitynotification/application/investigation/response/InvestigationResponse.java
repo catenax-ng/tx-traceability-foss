@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
-import org.eclipse.tractusx.traceability.qualitynotification.application.QualityNotificationResponse;
+import org.eclipse.tractusx.traceability.qualitynotification.application.response.QualityNotificationResponse;
 
 @Data
 @SuperBuilder

@@ -16,13 +16,13 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-package org.eclipse.tractusx.traceability.qualitynotification.domain.base;
+package org.eclipse.tractusx.traceability.qualitynotification.domain.model;
 
 import lombok.Builder;
 import lombok.Data;
 import org.eclipse.tractusx.traceability.common.model.BPN;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationReason;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
+import org.eclipse.tractusx.traceability.qualitynotification.application.response.QualityNotificationReasonResponse;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
@@ -129,7 +129,7 @@ public class QualityNotification {
                 .createdDate(createdAt.toString())
                 .assetIds(Collections.unmodifiableList(assetIds))
                 .channel(investigationSide)
-                .reason(new InvestigationReason(
+                .reason(new QualityNotificationReasonResponse(
                         closeReason,
                         acceptReason,
                         declineReason

@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.application.investigation.request;
+package org.eclipse.tractusx.traceability.qualitynotification.application.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,15 +27,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Schema(description = "The UpdateInvestigationStatus")
-public enum UpdateInvestigationStatus {
+public enum UpdateQualityNotificationStatusRequest {
     ACKNOWLEDGED,
     ACCEPTED,
     DECLINED;
 
 
     @JsonCreator
-    public static UpdateInvestigationStatus fromValue(final String value) {
-        return Stream.of(UpdateInvestigationStatus.values())
+    public static UpdateQualityNotificationStatusRequest fromValue(final String value) {
+        return Stream.of(UpdateQualityNotificationStatusRequest.values())
                 .filter(updateInvestigationStatus -> updateInvestigationStatus.name().equals(value))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("Unsupported UpdateInvestigationStatus: " + value
@@ -43,7 +43,7 @@ public enum UpdateInvestigationStatus {
     }
 
     private static String supportedUpdateInvestigationStatus() {
-        return Stream.of(UpdateInvestigationStatus.values()).map(Enum::name).collect(Collectors.joining(", "));
+        return Stream.of(UpdateQualityNotificationStatusRequest.values()).map(Enum::name).collect(Collectors.joining(", "));
     }
 
 }

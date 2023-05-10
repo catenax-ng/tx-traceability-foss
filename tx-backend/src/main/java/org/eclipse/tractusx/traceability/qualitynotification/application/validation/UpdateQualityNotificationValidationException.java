@@ -19,11 +19,11 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.application.investigation.validation;
+package org.eclipse.tractusx.traceability.qualitynotification.application.validation;
 
-public class UpdateInvestigationValidationException extends RuntimeException {
+public class UpdateQualityNotificationValidationException extends RuntimeException {
 
-	public UpdateInvestigationValidationException(String message) {
-		super(message);
-	}
+    public UpdateQualityNotificationValidationException(String message) {
+        super(message);
+    }
 }

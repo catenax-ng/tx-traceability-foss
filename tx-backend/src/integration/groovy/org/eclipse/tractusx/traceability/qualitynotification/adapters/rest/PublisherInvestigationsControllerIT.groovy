@@ -29,11 +29,11 @@ import org.eclipse.tractusx.traceability.common.security.JwtRole
 import org.eclipse.tractusx.traceability.common.support.*
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotificationFactory
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationMessage
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.InvestigationsReceiverService
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus
 import org.hamcrest.Matchers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional

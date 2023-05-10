@@ -19,32 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.application.investigation.validation;
+package org.eclipse.tractusx.traceability.qualitynotification.application.response;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
-
-public class SeverityValidatorImpl implements ConstraintValidator<ValidSeverity, String> {
-
-    @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
-        // do not validate notNull
-        if (value == null) {
-            return true;
-        }
-
-        try {
-            Severity[] severities = Severity.values();
-            for (Severity severity : severities) {
-                if (severity.getRealName().equals(value)) {
-                    return true;
-                }
-            }
-            Severity.valueOf(value);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
+public record QualityNotificationIdResponse(Long id) {
 }

@@ -19,12 +19,17 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.application.investigation.request;
+package org.eclipse.tractusx.traceability.qualitynotification.application.request;
 
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
-public record UpdateInvestigationRequest(
-        @NotNull(message = "status must be present") @ApiModelProperty(example = "ACKNOWLEDGED") UpdateInvestigationStatus status,
-        @ApiModelProperty(example = "The reason.") String reason) {
+@Setter
+@Getter
+public class CloseQualityNotificationRequest {
+    @Size(min = 15, max = 1000, message = "Close reason should have at least 15 characters and at most 1000 characters")
+    @ApiModelProperty(example = "The reason.")
+    private String reason;
 }

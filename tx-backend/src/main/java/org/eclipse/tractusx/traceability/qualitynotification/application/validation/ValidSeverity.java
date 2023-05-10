@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.application.investigation.validation;
+package org.eclipse.tractusx.traceability.qualitynotification.application.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

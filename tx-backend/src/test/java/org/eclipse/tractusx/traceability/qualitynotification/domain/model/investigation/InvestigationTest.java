@@ -22,13 +22,13 @@
 package org.eclipse.tractusx.traceability.qualitynotification.domain.model.investigation;
 
 import org.eclipse.tractusx.traceability.common.model.BPN;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotification;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationMessage;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationSide;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationStatusTransitionNotAllowed;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSide;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.testdata.NotificationTestDataFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,14 +41,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Instant;
 import java.util.stream.Stream;
 
-import static org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus.ACCEPTED;
-import static org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus.ACKNOWLEDGED;
-import static org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus.CANCELED;
-import static org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus.CLOSED;
-import static org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus.CREATED;
-import static org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus.DECLINED;
-import static org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus.RECEIVED;
-import static org.eclipse.tractusx.traceability.qualitynotification.domain.base.QualityNotificationStatus.SENT;
+import static org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus.ACCEPTED;
+import static org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus.ACKNOWLEDGED;
+import static org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus.CANCELED;
+import static org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus.CLOSED;
+import static org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus.CREATED;
+import static org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus.DECLINED;
+import static org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus.RECEIVED;
+import static org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus.SENT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

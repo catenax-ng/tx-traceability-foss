@@ -1,4 +1,4 @@
-package org.eclipse.tractusx.traceability.qualitynotification.domain.base;
+package org.eclipse.tractusx.traceability.qualitynotification.domain.model;
 
 import java.util.Arrays;
 import java.util.Map;
