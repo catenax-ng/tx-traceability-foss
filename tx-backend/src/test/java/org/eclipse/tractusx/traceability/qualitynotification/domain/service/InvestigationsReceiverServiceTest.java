@@ -115,7 +115,7 @@ class InvestigationsReceiverServiceTest {
                 true
         );*/
 
-        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.RECEIVED, QualityNotificationStatus.RECEIVED, "recipientBPN");
+        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.RECEIVED, "recipientBPN");
         QualityNotificationMessage notificationTestData = NotificationTestDataFactory.createNotificationTestData();
         EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
                 "it", notification);
@@ -176,7 +176,7 @@ class InvestigationsReceiverServiceTest {
                 .build();
 
 
-        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.RECEIVED, QualityNotificationStatus.RECEIVED, "recipientBPN");
+        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.RECEIVED, "recipientBPN");
         QualityNotificationMessage notificationTestData = NotificationTestDataFactory.createNotificationTestData();
         EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
                 "it", notification);
@@ -236,7 +236,7 @@ class InvestigationsReceiverServiceTest {
                 .isInitial(false)
                 .build();
 
-        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.ACKNOWLEDGED, "recipientBPN");
+        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, "recipientBPN");
         QualityNotificationMessage notificationTestData = NotificationTestDataFactory.createNotificationTestData();
         EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
                 "it", notification);
@@ -296,7 +296,7 @@ class InvestigationsReceiverServiceTest {
                 .isInitial(false)
                 .build();
 
-        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.ACKNOWLEDGED, "recipientBPN");
+        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, "recipientBPN");
         QualityNotificationMessage notificationTestData = NotificationTestDataFactory.createNotificationTestData();
         EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
                 "it", notification);
@@ -356,7 +356,7 @@ class InvestigationsReceiverServiceTest {
                 .isInitial(false)
                 .build();
 
-        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.ACKNOWLEDGED, "senderBPN");
+        QualityNotification investigationTestData = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, "senderBPN");
         QualityNotificationMessage notificationTestData = NotificationTestDataFactory.createNotificationTestData();
         EDCNotification edcNotification = EDCNotificationFactory.createQualityInvestigation(
                 "it", notification);

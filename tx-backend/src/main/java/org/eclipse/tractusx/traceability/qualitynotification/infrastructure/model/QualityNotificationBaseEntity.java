@@ -16,44 +16,34 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-package org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base;
+package org.eclipse.tractusx.traceability.qualitynotification.infrastructure.model;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PreUpdate;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSeverity;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @SuperBuilder
 @NoArgsConstructor
 @Data
 @MappedSuperclass
-public class QualityNotificationMessageBaseEntity {
+public class QualityNotificationBaseEntity {
     @Id
-    private String id;
-    private String senderBpnNumber;
-    private String senderManufacturerName;
-    private String receiverBpnNumber;
-    private String receiverManufacturerName;
-    private String edcUrl;
-    private String contractAgreementId;
-    private String notificationReferenceId;
-    private Instant targetDate;
-    private QualityNotificationSeverity severity;
-    private String edcNotificationId;
-    private LocalDateTime created;
-    private LocalDateTime updated;
-    private String messageId;
-    private Boolean isInitial;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String bpn;
+    private String closeReason;
+    private String acceptReason;
+    private String declineReason;
+    private String description;
+    private Instant created;
+    private Instant updated;
+    private QualityNotificationSideBaseEntity side;
     private QualityNotificationStatusBaseEntity status;
 
-    @PreUpdate
-    public void preUpdate() {
-        this.updated = LocalDateTime.now();
-    }
 }

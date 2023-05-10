@@ -68,24 +68,7 @@ class InvestigationMapperTest {
                 .isInitial(false)
                 .messageId("1")
                 .build();
-/*        Notification notification = new Notification("1",
-                "Test notification",
-                sender, ""senderManufacturerName"",
-                receiver,
-                "receiverManufacturerName",
-                "",
-                "",
-                "",
-                InvestigationStatus.RECEIVED,
-                List.of(new AffectedPart("123")),
-                Instant.parse("2022-03-01T12:00:00Z"),
-                Severity.MINOR,
-                "1",
-                null,
-                null,
-                "messageId",
-                false
-        );*/
+
         when(clock.instant()).thenReturn(Instant.parse("2022-03-01T12:00:00Z"));
 
         // When

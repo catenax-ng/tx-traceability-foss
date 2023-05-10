@@ -207,5 +207,4 @@ public class QualityNotification {
             return this;
         }
     }
-
 }

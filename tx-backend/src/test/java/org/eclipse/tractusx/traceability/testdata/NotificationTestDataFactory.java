@@ -50,25 +50,5 @@ public class NotificationTestDataFactory {
                 .messageId("messageId")
                 .isInitial(true)
                 .build();
-       /* return new Notification(
-                "123",
-                "id123",
-                "senderBPN",
-                "senderManufacturerName",
-                "recipientBPN",
-                "receiverManufacturerName",
-                "senderAddress",
-                "agreement",
-                "information",
-                InvestigationStatus.ACKNOWLEDGED,
-                affectedParts,
-                Instant.parse("2022-03-01T12:00:00Z"),
-                Severity.MINOR,
-                "123",
-                null,
-                null,
-                "messageId",
-                true
-        );*/
     }
 }

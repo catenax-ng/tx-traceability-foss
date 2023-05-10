@@ -32,7 +32,7 @@ import java.time.Instant;
 import java.util.List;
 
 public class InvestigationTestDataFactory {
-    public static QualityNotification createInvestigationTestData(QualityNotificationStatus investigationStatus, QualityNotificationStatus notificationInvestigationStatus, final String bpnString) {
+    public static QualityNotification createInvestigationTestData(QualityNotificationStatus investigationStatus, final String bpnString) {
         QualityNotificationId investigationId = new QualityNotificationId(1L);
         BPN bpn = new BPN(bpnString);
         QualityNotificationSide investigationSide = QualityNotificationSide.SENDER;
@@ -59,27 +59,6 @@ public class InvestigationTestDataFactory {
                 .isInitial(true)
                 .build();
         List<QualityNotificationMessage> notifications = List.of(notification);
-/*
-		List<Notification> notifications = List.of(new Notification(
-                "1",
-                "notificationId",
-                "senderBPN",
-                "senderManufacturerName",
-                "recipientBPN",
-                "receiverManufacturerName",
-                "senderAddress",
-                "agreement",
-                "Test Notification",
-                notificationInvestigationStatus,
-                List.of(new AffectedPart("part123")),
-                Instant.now(),
-                Severity.MINOR,
-                "1",
-                null,
-                null,
-                "messageId",
-                true
-		));*/
 
         return QualityNotification.builder()
                 .investigationId(investigationId)
@@ -141,27 +120,6 @@ public class InvestigationTestDataFactory {
                 .build();
         List<QualityNotificationMessage> notifications = List.of(notification);
 
-/*		List<Notification> notifications = List.of(new Notification(
-                "1",
-                "notificationId",
-                "senderBPN",
-                "senderManufacturerName",
-                "recipientBPN",
-                "receiverManufacturerName",
-                "senderAddress",
-                "agreement",
-                "Test Notification",
-                notificationInvestigationStatus,
-                List.of(new AffectedPart("part123")),
-                Instant.now(),
-                Severity.MINOR,
-                "123",
-                null,
-                null,
-                "messageId",
-                true
-		));*/
-
         return QualityNotification.builder()
                 .investigationId(investigationId)
                 .bpn(bpn)
@@ -177,9 +135,6 @@ public class InvestigationTestDataFactory {
     public static QualityNotification createInvestigationTestData(QualityNotificationSide investigationSide) {
         QualityNotificationId investigationId = new QualityNotificationId(1L);
         BPN bpn = new BPN("bpn123");
-        String closeReason = null;
-        String acceptReason = null;
-        String declineReason = null;
         String description = "Test Investigation";
         Instant createdAt = Instant.now();
         List<String> assetIds = List.of("asset123", "asset456");
@@ -203,27 +158,6 @@ public class InvestigationTestDataFactory {
                 .isInitial(true)
                 .build();
         List<QualityNotificationMessage> notifications = List.of(notification);
-
-/*        List<Notification> notifications = List.of(new Notification(
-                "1",
-                "notificationId",
-                "senderBPN",
-                "senderManufacturerName",
-                "recipientBPN",
-                "receiverManufacturerName",
-                "senderAddress",
-                "agreement",
-                "Test Notification",
-                InvestigationStatus.ACKNOWLEDGED,
-                List.of(new AffectedPart("part123")),
-                Instant.now(),
-                Severity.MINOR,
-                "123",
-                null,
-                null,
-                "messageId",
-                true
-        ));*/
 
         return QualityNotification.builder()
                 .investigationId(investigationId)

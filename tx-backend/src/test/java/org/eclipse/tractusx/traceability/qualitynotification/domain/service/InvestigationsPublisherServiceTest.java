@@ -57,6 +57,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -79,14 +80,13 @@ class InvestigationsPublisherServiceTest {
     private EdcNotificationService notificationsService;
     @Mock
     private BpnRepository bpnRepository;
-
     @Mock
     private TraceabilityProperties traceabilityProperties;
 
     @Test
     void testStartInvestigationSuccessful() {
         // Given
-        QualityNotification investigation = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.CLOSED, "bpn123");
+        QualityNotification investigation = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, "bpn123");
         when(assetRepository.getAssetsById(Arrays.asList("asset-1", "asset-2"))).thenReturn(List.of(AssetTestDataFactory.createAssetTestData()));
         when(repository.saveQualityNotificationEntity(any(QualityNotification.class))).thenReturn(investigation.getInvestigationId());
         when(bpnRepository.findManufacturerName(anyString())).thenReturn(Optional.empty());
@@ -119,19 +119,18 @@ class InvestigationsPublisherServiceTest {
     @Test
     void testSendInvestigationSuccessful() {
         // Given
-        final long id = 1L;
         final BPN bpn = new BPN("bpn123");
         QualityNotificationId investigationId = new QualityNotificationId(1L);
         QualityNotification investigation = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.CREATED, QualityNotificationStatus.CREATED);
         when(repository.updateQualityNotificationEntity(investigation)).thenReturn(investigationId);
         when(traceabilityProperties.getBpn()).thenReturn(bpn);
+
         // When
         investigationsPublisherService.approveInvestigation(investigation);
 
         // Then
         verify(repository).updateQualityNotificationEntity(investigation);
-        // TODO here is missing the discovery object as mock
-        // verify(notificationsService).asyncNotificationExecutor(any());
+        verify(notificationsService).asyncNotificationExecutor(any());
     }
 
     @Test
@@ -140,7 +139,6 @@ class InvestigationsPublisherServiceTest {
 
         // Given
         BPN bpn = BPN.of("senderBPN");
-        Long investigationIdRaw = 1L;
         QualityNotificationStatus status = QualityNotificationStatus.ACKNOWLEDGED;
         String reason = "the update reason";
 
@@ -154,27 +152,6 @@ class InvestigationsPublisherServiceTest {
                 .affectedParts(affectedParts)
                 .build();
 
- /*       Notification notification = new Notification(
-                "123",
-                "id123",
-                "senderBPN",
-                "senderManufacturerName",
-                "recipientBPN",
-                "receiverManufacturerName",
-                "senderAddress",
-                "agreement",
-                "information",
-                InvestigationStatus.CREATED,
-                affectedParts,
-                Instant.now(),
-                Severity.MINOR,
-                "123",
-                LocalDateTime.now(),
-                null,
-                "messageId",
-                false
-        );*/
-
         QualityNotificationMessage notification2 = QualityNotificationMessage.builder()
                 .id("456")
                 .notificationReferenceId("id123")
@@ -183,26 +160,6 @@ class InvestigationsPublisherServiceTest {
                 .isInitial(false)
                 .build();
 
-      /*  Notification notification2 = new Notification(
-                "456",
-                "id123",
-                "senderBPN",
-                "senderManufacturerName",
-                "recipientBPN",
-                "receiverManufacturerName",
-                "senderAddress",
-                "agreement",
-                "information",
-                InvestigationStatus.SENT,
-                affectedParts,
-                Instant.now(),
-                Severity.MINOR,
-                "123",
-                LocalDateTime.now().plusSeconds(10),
-                null,
-                "messageId",
-                false
-        );*/
         List<QualityNotificationMessage> notifications = new ArrayList<>();
         notifications.add(notification);
         notifications.add(notification2);
@@ -214,8 +171,7 @@ class InvestigationsPublisherServiceTest {
 
         // Then
         Mockito.verify(repository).updateQualityNotificationEntity(investigationTestData);
-        // TODO here is missing the discovery object as mock
-        // Mockito.verify(notificationsService, times(1)).asyncNotificationExecutor(any(Notification.class));
+        Mockito.verify(notificationsService, times(1)).asyncNotificationExecutor(any(QualityNotificationMessage.class));
     }
 
     @Test
@@ -224,7 +180,6 @@ class InvestigationsPublisherServiceTest {
 
         // Given
         BPN bpn = BPN.of("senderBPN");
-        Long investigationIdRaw = 1L;
         QualityNotificationStatus status = QualityNotificationStatus.ACCEPTED;
         String reason = "the update reason";
 
@@ -237,26 +192,7 @@ class InvestigationsPublisherServiceTest {
                 .investigationStatus(QualityNotificationStatus.CREATED)
                 .affectedParts(affectedParts)
                 .build();
-      /*  Notification notification = new Notification(
-                "123",
-                "id123",
-                "senderBPN",
-                "senderManufacturerName",
-                "recipientBPN",
-                "receiverManufacturerName",
-                "senderAddress",
-                "agreement",
-                "information",
-                InvestigationStatus.CREATED,
-                affectedParts,
-                Instant.now(),
-                Severity.MINOR,
-                "123",
-                LocalDateTime.now(),
-                null,
-                "messageId",
-                false
-        );*/
+
         QualityNotificationMessage notification2 = QualityNotificationMessage.builder()
                 .id("456")
                 .notificationReferenceId("id123")
@@ -265,26 +201,7 @@ class InvestigationsPublisherServiceTest {
                 .investigationStatus(QualityNotificationStatus.CREATED)
                 .affectedParts(affectedParts)
                 .build();
-       /* Notification notification2 = new Notification(
-                "456",
-                "id123",
-                "senderBPN",
-                "senderManufacturerName",
-                "recipientBPN",
-                "receiverManufacturerName",
-                "senderAddress",
-                "agreement",
-                "information",
-                InvestigationStatus.SENT,
-                affectedParts,
-                Instant.now(),
-                Severity.MINOR,
-                "123",
-                LocalDateTime.now().plusSeconds(10),
-                null,
-                "messageId",
-                false
-        );*/
+
         List<QualityNotificationMessage> notifications = new ArrayList<>();
         notifications.add(notification);
         notifications.add(notification2);
@@ -296,8 +213,7 @@ class InvestigationsPublisherServiceTest {
 
         // Then
         Mockito.verify(repository).updateQualityNotificationEntity(investigationTestData);
-        // TODO here is missing the discovery object as mock
-        // Mockito.verify(notificationsService, times(1)).asyncNotificationExecutor(any(Notification.class));
+        Mockito.verify(notificationsService, times(1)).asyncNotificationExecutor(any(QualityNotificationMessage.class));
     }
 
     @Test
@@ -318,26 +234,6 @@ class InvestigationsPublisherServiceTest {
                 .investigationStatus(QualityNotificationStatus.CREATED)
                 .affectedParts(affectedParts)
                 .build();
-       /* Notification notification = new Notification(
-                "123",
-                "id123",
-                "senderBPN",
-                "senderManufacturerName",
-                "recipientBPN",
-                "receiverManufacturerName",
-                "senderAddress",
-                "agreement",
-                "information",
-                InvestigationStatus.CREATED,
-                affectedParts,
-                Instant.now(),
-                Severity.MINOR,
-                "123",
-                LocalDateTime.now(),
-                null,
-                "messageId",
-                false
-        );*/
 
         QualityNotificationMessage notification2 = QualityNotificationMessage.builder()
                 .id("456")
@@ -347,26 +243,7 @@ class InvestigationsPublisherServiceTest {
                 .created(LocalDateTime.now().plusSeconds(10))
                 .targetDate(Instant.now())
                 .build();
-      /*  Notification notification2 = new Notification(
-                "456",
-                "id123",
-                "senderBPN",
-                "senderManufacturerName",
-                "recipientBPN",
-                "receiverManufacturerName",
-                "senderAddress",
-                "agreement",
-                "information",
-                InvestigationStatus.SENT,
-                affectedParts,
-                Instant.now(),
-                Severity.MINOR,
-                "123",
-                LocalDateTime.now().plusSeconds(10),
-                null,
-                "messageId",
-                false
-        );*/
+
         List<QualityNotificationMessage> notifications = new ArrayList<>();
         notifications.add(notification);
         notifications.add(notification2);
@@ -379,8 +256,7 @@ class InvestigationsPublisherServiceTest {
 
         // Then
         Mockito.verify(repository).updateQualityNotificationEntity(investigationTestData);
-        // TODO here is missing the discovery object as mock
-        //   Mockito.verify(notificationsService, times(1)).asyncNotificationExecutor(any(Notification.class));
+        Mockito.verify(notificationsService, times(1)).asyncNotificationExecutor(any(QualityNotificationMessage.class));
     }
 
     @Test
@@ -409,47 +285,7 @@ class InvestigationsPublisherServiceTest {
                 .investigationStatus(QualityNotificationStatus.CREATED)
                 .affectedParts(affectedParts)
                 .build();
-      /*  Notification notification = new Notification(
-                "123",
-                "id123",
-                "senderBPN",
-                "senderManufacturerName",
-                "recipientBPN",
-                "receiverManufacturerName",
-                "senderAddress",
-                "agreement",
-                "information",
-                InvestigationStatus.CREATED,
-                affectedParts,
-                Instant.now(),
-                Severity.MINOR,
-                "123",
-                LocalDateTime.now(),
-                null,
-                "messageId",
-                false
-        );
 
-        Notification notification2 = new Notification(
-                "456",
-                "id123",
-                "senderBPN",
-                "senderManufacturerName",
-                "recipientBPN",
-                "receiverManufacturerName",
-                "senderAddress",
-                "agreement",
-                "information",
-                InvestigationStatus.SENT,
-                affectedParts,
-                Instant.now(),
-                Severity.MINOR,
-                "123",
-                LocalDateTime.now().plusSeconds(10),
-                null,
-                "messageId",
-                false
-        );*/
         List<QualityNotificationMessage> notifications = new ArrayList<>();
         notifications.add(notification);
         notifications.add(notification2);
@@ -461,8 +297,7 @@ class InvestigationsPublisherServiceTest {
 
         // Then
         Mockito.verify(repository).updateQualityNotificationEntity(investigationTestData);
-        // TODO here is missing the discovery object as mock
-        // Mockito.verify(notificationsService, times(1)).asyncNotificationExecutor(any(Notification.class));
+        Mockito.verify(notificationsService, times(1)).asyncNotificationExecutor(any(QualityNotificationMessage.class));
     }
 
     @Test
@@ -482,26 +317,6 @@ class InvestigationsPublisherServiceTest {
                 .investigationStatus(QualityNotificationStatus.CREATED)
                 .affectedParts(affectedParts)
                 .build();
-/*        Notification notification = new Notification(
-                "123",
-                "id123",
-                "senderBPN",
-                "senderManufacturerName",
-                "recipientBPN",
-                "receiverManufacturerName",
-                "senderAddress",
-                "agreement",
-                "information",
-                InvestigationStatus.CREATED,
-                affectedParts,
-                Instant.now(),
-                Severity.MINOR,
-                "123",
-                null,
-                null,
-                "messageId",
-                false
-        );*/
 
         List<QualityNotificationMessage> notifications = new ArrayList<>();
         notifications.add(notification);

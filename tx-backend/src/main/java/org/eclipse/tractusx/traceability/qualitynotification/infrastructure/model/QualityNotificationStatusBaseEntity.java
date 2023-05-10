@@ -16,7 +16,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-package org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base;
+package org.eclipse.tractusx.traceability.qualitynotification.infrastructure.model;
 
 
 import java.util.Arrays;

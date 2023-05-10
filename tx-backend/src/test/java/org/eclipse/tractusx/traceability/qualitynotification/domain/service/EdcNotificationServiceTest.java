@@ -71,32 +71,11 @@ class EdcNotificationServiceTest {
                 .severity(QualityNotificationSeverity.MINOR)
                 .isInitial(false)
                 .build();
-      /*  Notification notification = new Notification(
-                null,
-                null,
-                null,
-                null,
-                bpn,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                Instant.now(),
-                Severity.MINOR,
-                null,
-                null,
-                null,
-                null,
-                false
-        );*/
 
         // when
         notificationsService.asyncNotificationExecutor(notification);
 
         // then
         verify(edcFacade).startEDCTransfer(any(QualityNotificationMessage.class), eq(edcReceiverUrl), eq(edcSenderUrl));
-        //	verify(repository).update(any(Notification.class));
     }
 }

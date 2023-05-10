@@ -27,7 +27,6 @@ import org.springframework.data.domain.Pageable;
 import java.time.Instant;
 import java.util.List;
 
-// todo do not return response return domain
 public interface QualityNotificationService {
     QualityNotificationId startInvestigation(List<String> partIds, String description, Instant targetDate, String severity);
 
