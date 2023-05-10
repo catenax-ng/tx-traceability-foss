@@ -20,11 +20,11 @@
 package org.eclipse.tractusx.traceability.testdata;
 
 import org.eclipse.tractusx.traceability.common.model.BPN;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationAffectedPart;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationId;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSeverity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSide;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 
@@ -33,7 +33,7 @@ import java.util.List;
 
 public class InvestigationTestDataFactory {
     public static QualityNotification createInvestigationTestData(QualityNotificationStatus investigationStatus, QualityNotificationStatus notificationInvestigationStatus, final String bpnString) {
-        InvestigationId investigationId = new InvestigationId(1L);
+        QualityNotificationId investigationId = new QualityNotificationId(1L);
         BPN bpn = new BPN(bpnString);
         QualityNotificationSide investigationSide = QualityNotificationSide.SENDER;
         String description = "Test Investigation";
@@ -51,9 +51,9 @@ public class InvestigationTestDataFactory {
                 .contractAgreementId("agreement")
                 .description(description)
                 .investigationStatus(investigationStatus)
-                .affectedParts(List.of(new AffectedPart("part123")))
+                .affectedParts(List.of(new QualityNotificationAffectedPart("part123")))
                 .targetDate(Instant.now())
-                .severity(Severity.MINOR)
+                .severity(QualityNotificationSeverity.MINOR)
                 .edcNotificationId("1")
                 .messageId("messageId")
                 .isInitial(true)
@@ -95,7 +95,7 @@ public class InvestigationTestDataFactory {
 
 
     public static QualityNotification createInvestigationTestDataWithNotificationList(QualityNotificationStatus investigationStatus, String bpnString, List<QualityNotificationMessage> notifications) {
-        InvestigationId investigationId = new InvestigationId(1L);
+        QualityNotificationId investigationId = new QualityNotificationId(1L);
         BPN bpn = new BPN(bpnString);
         QualityNotificationSide investigationSide = QualityNotificationSide.SENDER;
         String description = "Test Investigation";
@@ -115,7 +115,7 @@ public class InvestigationTestDataFactory {
     }
 
     public static QualityNotification createInvestigationTestData(QualityNotificationStatus investigationStatus, QualityNotificationStatus notificationInvestigationStatus) {
-        InvestigationId investigationId = new InvestigationId(1L);
+        QualityNotificationId investigationId = new QualityNotificationId(1L);
         BPN bpn = new BPN("bpn123");
         QualityNotificationSide investigationSide = QualityNotificationSide.SENDER;
         String description = "Test Investigation";
@@ -133,8 +133,8 @@ public class InvestigationTestDataFactory {
                 .contractAgreementId("agreement")
                 .description(description)
                 .investigationStatus(notificationInvestigationStatus)
-                .affectedParts(List.of(new AffectedPart("part123")))
-                .severity(Severity.MINOR)
+                .affectedParts(List.of(new QualityNotificationAffectedPart("part123")))
+                .severity(QualityNotificationSeverity.MINOR)
                 .edcNotificationId("123")
                 .messageId("messageId")
                 .isInitial(true)
@@ -175,7 +175,7 @@ public class InvestigationTestDataFactory {
     }
 
     public static QualityNotification createInvestigationTestData(QualityNotificationSide investigationSide) {
-        InvestigationId investigationId = new InvestigationId(1L);
+        QualityNotificationId investigationId = new QualityNotificationId(1L);
         BPN bpn = new BPN("bpn123");
         String closeReason = null;
         String acceptReason = null;
@@ -196,8 +196,8 @@ public class InvestigationTestDataFactory {
                 .contractAgreementId("agreement")
                 .description(description)
                 .investigationStatus(QualityNotificationStatus.ACKNOWLEDGED)
-                .affectedParts(List.of(new AffectedPart("part123")))
-                .severity(Severity.MINOR)
+                .affectedParts(List.of(new QualityNotificationAffectedPart("part123")))
+                .severity(QualityNotificationSeverity.MINOR)
                 .edcNotificationId("123")
                 .messageId("messageId")
                 .isInitial(true)

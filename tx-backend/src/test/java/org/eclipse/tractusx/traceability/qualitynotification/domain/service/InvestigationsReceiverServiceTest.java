@@ -25,12 +25,12 @@ import org.eclipse.tractusx.traceability.common.mapper.NotificationMapper;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotificationFactory;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.InvestigationsReceiverService;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationAffectedPart;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSeverity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.testdata.InvestigationTestDataFactory;
 import org.eclipse.tractusx.traceability.testdata.NotificationTestDataFactory;
@@ -55,7 +55,7 @@ import static org.mockito.Mockito.when;
 class InvestigationsReceiverServiceTest {
 
     @Mock
-    private InvestigationsRepository mockRepository;
+    private InvestigationRepository mockRepository;
 
     @Mock
     private NotificationMapper mockNotificationMapper;
@@ -75,7 +75,7 @@ class InvestigationsReceiverServiceTest {
     void testHandleNotificationReceiveValidSentNotification() {
 
         // Given
-        List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
+        List<QualityNotificationAffectedPart> affectedParts = List.of(new QualityNotificationAffectedPart("partId"));
         QualityNotificationMessage notification = QualityNotificationMessage.builder()
                 .id("123")
                 .notificationReferenceId("id123")
@@ -88,7 +88,7 @@ class InvestigationsReceiverServiceTest {
                 .description("123")
                 .investigationStatus(QualityNotificationStatus.SENT)
                 .affectedParts(affectedParts)
-                .severity(Severity.MINOR)
+                .severity(QualityNotificationSeverity.MINOR)
                 .edcNotificationId("123")
                 .targetDate(Instant.now())
                 .messageId("messageId")
@@ -134,7 +134,7 @@ class InvestigationsReceiverServiceTest {
     void testHandleNotificationUpdateValidAcknowledgeNotificationTransition() {
 
         // Given
-        List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
+        List<QualityNotificationAffectedPart> affectedParts = List.of(new QualityNotificationAffectedPart("partId"));
        /* Notification notification = new Notification(
                 "123",
                 "id123",
@@ -168,7 +168,7 @@ class InvestigationsReceiverServiceTest {
                 .description("123")
                 .investigationStatus(QualityNotificationStatus.ACKNOWLEDGED)
                 .affectedParts(affectedParts)
-                .severity(Severity.MINOR)
+                .severity(QualityNotificationSeverity.MINOR)
                 .edcNotificationId("123")
                 .targetDate(Instant.now())
                 .messageId("messageId")
@@ -195,7 +195,7 @@ class InvestigationsReceiverServiceTest {
     void testHandleNotificationUpdateValidDeclineNotificationTransition() {
 
         // Given
-        List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
+        List<QualityNotificationAffectedPart> affectedParts = List.of(new QualityNotificationAffectedPart("partId"));
  /*       Notification notification = new Notification(
                 "123",
                 "id123",
@@ -229,7 +229,7 @@ class InvestigationsReceiverServiceTest {
                 .description("123")
                 .investigationStatus(QualityNotificationStatus.DECLINED)
                 .affectedParts(affectedParts)
-                .severity(Severity.MINOR)
+                .severity(QualityNotificationSeverity.MINOR)
                 .edcNotificationId("123")
                 .targetDate(Instant.now())
                 .messageId("messageId")
@@ -255,7 +255,7 @@ class InvestigationsReceiverServiceTest {
     void testHandleNotificationUpdateValidAcceptedNotificationTransition() {
 
         // Given
-        List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
+        List<QualityNotificationAffectedPart> affectedParts = List.of(new QualityNotificationAffectedPart("partId"));
 /*        Notification notification = new Notification(
                 "123",
                 "id123",
@@ -289,7 +289,7 @@ class InvestigationsReceiverServiceTest {
                 .description("123")
                 .investigationStatus(QualityNotificationStatus.ACCEPTED)
                 .affectedParts(affectedParts)
-                .severity(Severity.MINOR)
+                .severity(QualityNotificationSeverity.MINOR)
                 .edcNotificationId("123")
                 .targetDate(Instant.now())
                 .messageId("messageId")
@@ -315,7 +315,7 @@ class InvestigationsReceiverServiceTest {
     void testHandleNotificationUpdateValidCloseNotificationTransition() {
 
         // Given
-        List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
+        List<QualityNotificationAffectedPart> affectedParts = List.of(new QualityNotificationAffectedPart("partId"));
  /*       Notification notification = new Notification(
                 "123",
                 "id123",
@@ -349,7 +349,7 @@ class InvestigationsReceiverServiceTest {
                 .description("123")
                 .investigationStatus(QualityNotificationStatus.CLOSED)
                 .affectedParts(affectedParts)
-                .severity(Severity.MINOR)
+                .severity(QualityNotificationSeverity.MINOR)
                 .edcNotificationId("123")
                 .targetDate(Instant.now())
                 .messageId("messageId")

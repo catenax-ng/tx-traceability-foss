@@ -22,10 +22,10 @@
 package org.eclipse.tractusx.traceability.qualitynotification.domain.model.investigation;
 
 import org.eclipse.tractusx.traceability.common.model.BPN;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationStatusTransitionNotAllowed;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationId;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSide;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
@@ -222,7 +222,7 @@ class InvestigationTest {
     private QualityNotification investigationWithStatus(BPN bpn, QualityNotificationStatus status, QualityNotificationSide side) {
 
         return QualityNotification.builder()
-                .investigationId(new InvestigationId(1L))
+                .investigationId(new QualityNotificationId(1L))
                 .bpn(bpn)
                 .investigationStatus(status)
                 .investigationSide(side)
@@ -344,7 +344,7 @@ class InvestigationTest {
     private QualityNotification investigationWithStatus(QualityNotificationStatus status, QualityNotificationSide side) {
         BPN bpn = new BPN("BPNL000000000001");
         return QualityNotification.builder()
-                .investigationId(new InvestigationId(1L))
+                .investigationId(new QualityNotificationId(1L))
                 .bpn(bpn)
                 .investigationStatus(status)
                 .investigationSide(side)

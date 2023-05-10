@@ -20,10 +20,10 @@ package org.eclipse.tractusx.traceability.qualitynotification.domain.investigati
 
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationNotFoundException;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationId;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSide;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.testdata.InvestigationTestDataFactory;
@@ -47,14 +47,14 @@ import static org.mockito.Mockito.when;
 class InvestigationServiceImplTest {
 
     @Mock
-    private InvestigationsRepository investigationsRepositoryMock;
+    private InvestigationRepository investigationsRepositoryMock;
     @InjectMocks
     private InvestigationServiceImpl investigationService;
 
     @Test
     void testFindNotPresentInvestigationThrowsException() {
         // given
-        when(investigationsRepositoryMock.findOptionalQualityNotificationById(any(InvestigationId.class))).thenReturn(Optional.empty());
+        when(investigationsRepositoryMock.findOptionalQualityNotificationById(any(QualityNotificationId.class))).thenReturn(Optional.empty());
 
         // expect
         assertThrows(InvestigationNotFoundException.class, () -> investigationService.findInvestigation(0L));
@@ -63,7 +63,7 @@ class InvestigationServiceImplTest {
     @Test
     void testFindExistingInvestigation() {
         // given
-        when(investigationsRepositoryMock.findOptionalQualityNotificationById(any(InvestigationId.class))).thenReturn(Optional.of(
+        when(investigationsRepositoryMock.findOptionalQualityNotificationById(any(QualityNotificationId.class))).thenReturn(Optional.of(
                 InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.ACKNOWLEDGED)
         ));
 
@@ -110,22 +110,22 @@ class InvestigationServiceImplTest {
     @Test
     void testLoadNotPresentInvestigationThrowsException() {
         // given
-        when(investigationsRepositoryMock.findOptionalQualityNotificationById(any(InvestigationId.class))).thenReturn(Optional.empty());
+        when(investigationsRepositoryMock.findOptionalQualityNotificationById(any(QualityNotificationId.class))).thenReturn(Optional.empty());
 
         // expect
-        InvestigationId investigationId = new InvestigationId(0L);
+        QualityNotificationId investigationId = new QualityNotificationId(0L);
         assertThrows(InvestigationNotFoundException.class, () -> investigationService.loadInvestigationOrNotFoundException(investigationId));
     }
 
     @Test
     void testLoadExistingInvestigation() {
         // given
-        when(investigationsRepositoryMock.findOptionalQualityNotificationById(any(InvestigationId.class))).thenReturn(Optional.of(
+        when(investigationsRepositoryMock.findOptionalQualityNotificationById(any(QualityNotificationId.class))).thenReturn(Optional.of(
                 InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.ACKNOWLEDGED, QualityNotificationStatus.ACKNOWLEDGED)
         ));
 
         // expect
-        QualityNotification investigation = investigationService.loadInvestigationOrNotFoundException(new InvestigationId(0L));
+        QualityNotification investigation = investigationService.loadInvestigationOrNotFoundException(new QualityNotificationId(0L));
 
         // then
         assertThat(investigation).isNotNull();

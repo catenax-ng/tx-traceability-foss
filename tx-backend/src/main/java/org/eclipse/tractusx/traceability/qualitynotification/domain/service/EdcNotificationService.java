@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service;
+package org.eclipse.tractusx.traceability.qualitynotification.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +27,8 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.config.async.Asse
 import org.eclipse.tractusx.traceability.discovery.domain.model.Discovery;
 import org.eclipse.tractusx.traceability.discovery.domain.service.DiscoveryService;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.InvestigationsEDCFacade;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.repository.QualityNotificationRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -37,10 +37,10 @@ import static org.apache.commons.collections4.ListUtils.emptyIfNull;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class NotificationsService {
+public class EdcNotificationService {
 
     private final InvestigationsEDCFacade edcFacade;
-    private final InvestigationsRepository repository;
+    private final QualityNotificationRepository repository;
     private final DiscoveryService discoveryService;
 
 

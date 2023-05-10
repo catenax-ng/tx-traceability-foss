@@ -18,32 +18,8 @@
  ********************************************************************************/
 package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service;
 
-import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
-import org.springframework.data.domain.Pageable;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.service.QualityNotificationService;
 
-import java.time.Instant;
-import java.util.List;
+public interface InvestigationService extends QualityNotificationService {
 
-public interface InvestigationService {
-    InvestigationId startInvestigation(List<String> partIds, String description, Instant targetDate, String severity);
-
-    PageResult<InvestigationResponse> getCreatedInvestigations(Pageable pageable);
-
-    PageResult<InvestigationResponse> getReceivedInvestigations(Pageable pageable);
-
-    InvestigationResponse findInvestigation(Long investigationId);
-
-    QualityNotification loadInvestigationOrNotFoundException(InvestigationId investigationId);
-
-    QualityNotification loadInvestigationByEdcNotificationIdOrNotFoundException(String edcNotificationId);
-
-    void approveInvestigation(Long investigationId);
-
-    void cancelInvestigation(Long investigationId);
-
-    void updateInvestigation(Long investigationId, QualityNotificationStatus investigationStatus, String reason);
 }

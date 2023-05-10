@@ -20,9 +20,9 @@
  ********************************************************************************/
 package org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model;
 
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationAffectedPart;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSeverity;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class EDCNotificationFactory {
                 senderEDC,
                 notification.getReceiverBpnNumber(),
                 NotificationType.QMINVESTIGATION.getValue(),
-                notification.getSeverity() != null ? notification.getSeverity().getRealName() : Severity.MINOR.getRealName(),
+                notification.getSeverity() != null ? notification.getSeverity().getRealName() : QualityNotificationSeverity.MINOR.getRealName(),
                 notification.getNotificationReferenceId(),
                 notification.getInvestigationStatus().name(),
                 targetDate,
@@ -59,7 +59,7 @@ public class EDCNotificationFactory {
 
     private static List<String> extractAssetIds(QualityNotificationMessage notification) {
         return notification.getAffectedParts().stream()
-                .map(AffectedPart::assetId).toList();
+                .map(QualityNotificationAffectedPart::assetId).toList();
     }
 }
 

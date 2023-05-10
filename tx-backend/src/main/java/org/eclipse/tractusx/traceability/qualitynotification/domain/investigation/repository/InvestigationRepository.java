@@ -19,17 +19,10 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception;
+package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository;
 
-import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationId;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.repository.QualityNotificationRepository;
 
-public class InvestigationNotFoundException extends RuntimeException {
+public interface InvestigationRepository extends QualityNotificationRepository {
 
-    public InvestigationNotFoundException(QualityNotificationId investigationId) {
-        super("Investigation not found for %s id".formatted(investigationId.value()));
-    }
-
-	public InvestigationNotFoundException(String notificationId) {
-		super("Investigation not found for %s notification id".formatted(notificationId));
-	}
 }

@@ -19,11 +19,11 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository;
+package org.eclipse.tractusx.traceability.qualitynotification.domain.repository;
 
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationId;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSide;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
@@ -31,11 +31,11 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-public interface InvestigationsRepository {
+public interface QualityNotificationRepository {
 
     PageResult<QualityNotification> findQualityNotificationsBySide(QualityNotificationSide investigationSide, Pageable pageable);
 
-    Optional<QualityNotification> findOptionalQualityNotificationById(InvestigationId investigationId);
+    Optional<QualityNotification> findOptionalQualityNotificationById(QualityNotificationId investigationId);
 
     Optional<QualityNotification> findByEdcNotificationId(String edcNotificationId);
 
@@ -43,9 +43,9 @@ public interface InvestigationsRepository {
 
     long countQualityNotificationEntitiesBySide(QualityNotificationSide investigationSide);
 
-    InvestigationId saveQualityNotificationEntity(QualityNotification investigation);
+    QualityNotificationId saveQualityNotificationEntity(QualityNotification investigation);
 
-    InvestigationId updateQualityNotificationEntity(QualityNotification investigation);
+    QualityNotificationId updateQualityNotificationEntity(QualityNotification investigation);
 
     void updateQualityNotificationMessageEntity(QualityNotificationMessage notification);
 

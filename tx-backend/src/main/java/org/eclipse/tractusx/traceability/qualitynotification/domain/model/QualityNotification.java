@@ -23,9 +23,6 @@ import lombok.Data;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
 import org.eclipse.tractusx.traceability.qualitynotification.application.response.QualityNotificationReasonResponse;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationStatusTransitionNotAllowed;
 
@@ -60,7 +57,7 @@ public class QualityNotification {
         return -1;
     };
     private BPN bpn;
-    private InvestigationId investigationId;
+    private QualityNotificationId investigationId;
     private QualityNotificationStatus investigationStatus;
     private String description;
     private Instant createdAt;
@@ -136,7 +133,7 @@ public class QualityNotification {
                 ))
                 .sendTo(getReceiverBPN(notifications.values()))
                 .sendToName(getReceiverName(notifications.values()))
-                .severity(notifications.entrySet().stream().findFirst().map(Map.Entry::getValue).map(QualityNotificationMessage::getSeverity).orElse(Severity.MINOR).getRealName())
+                .severity(notifications.entrySet().stream().findFirst().map(Map.Entry::getValue).map(QualityNotificationMessage::getSeverity).orElse(QualityNotificationSeverity.MINOR).getRealName())
                 .targetDate(notifications.entrySet().stream().findFirst().map(Map.Entry::getValue).map(QualityNotificationMessage::getTargetDate).map(Instant::toString).orElse(null)).build();
     }
 
@@ -250,7 +247,7 @@ public class QualityNotification {
 
         List<String> newAssetIds = new ArrayList<>(assetIds); // create a mutable copy of assetIds
         notification.getAffectedParts().stream()
-                .map(AffectedPart::assetId)
+                .map(QualityNotificationAffectedPart::assetId)
                 .forEach(newAssetIds::add);
 
         assetIds = Collections.unmodifiableList(newAssetIds); //

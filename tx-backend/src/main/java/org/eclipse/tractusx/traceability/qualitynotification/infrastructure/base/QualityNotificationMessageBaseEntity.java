@@ -24,7 +24,7 @@ import jakarta.persistence.PreUpdate;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSeverity;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -44,7 +44,7 @@ public class QualityNotificationMessageBaseEntity {
     private String contractAgreementId;
     private String notificationReferenceId;
     private Instant targetDate;
-    private Severity severity;
+    private QualityNotificationSeverity severity;
     private String edcNotificationId;
     private LocalDateTime created;
     private LocalDateTime updated;

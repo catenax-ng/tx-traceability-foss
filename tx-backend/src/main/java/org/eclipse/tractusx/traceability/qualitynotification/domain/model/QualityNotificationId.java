@@ -19,13 +19,13 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model;
+package org.eclipse.tractusx.traceability.qualitynotification.domain.model;
 
 import java.util.Objects;
 
-public record InvestigationId(Long value) {
+public record QualityNotificationId(Long value) {
 
-    public InvestigationId {
+    public QualityNotificationId {
         if (Objects.isNull(value)) {
             throw new IllegalArgumentException("Investigation id must be present");
         }

@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model;
+package org.eclipse.tractusx.traceability.qualitynotification.domain.model;
 
-public record AffectedPart(String assetId) {
+public record QualityNotificationAffectedPart(String assetId) {
 }

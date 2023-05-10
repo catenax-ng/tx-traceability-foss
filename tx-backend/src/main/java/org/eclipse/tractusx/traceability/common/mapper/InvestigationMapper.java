@@ -21,8 +21,8 @@
 package org.eclipse.tractusx.traceability.common.mapper;
 
 import org.eclipse.tractusx.traceability.common.model.BPN;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationAffectedPart;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSide;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
@@ -52,7 +52,7 @@ public class InvestigationMapper {
 
         List<String> assetIds = new ArrayList<>();
         notification.getAffectedParts().stream()
-                .map(AffectedPart::assetId)
+                .map(QualityNotificationAffectedPart::assetId)
                 .forEach(assetIds::add);
         return QualityNotification.builder()
                 .bpn(bpn)

@@ -23,8 +23,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.eclipse.tractusx.traceability.common.model.BPN;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.NotificationStatusTransitionNotAllowed;
 
 import java.time.Instant;
@@ -42,7 +40,7 @@ public class QualityNotificationMessage {
     private final String senderManufacturerName;
     private final String receiverManufacturerName;
     @Builder.Default
-    private final List<AffectedPart> affectedParts = new ArrayList<>();
+    private final List<QualityNotificationAffectedPart> affectedParts = new ArrayList<>();
     private String notificationReferenceId;
     private String senderBpnNumber;
     private String receiverBpnNumber;
@@ -54,7 +52,7 @@ public class QualityNotificationMessage {
     private LocalDateTime created;
     private LocalDateTime updated;
     private Instant targetDate;
-    private Severity severity;
+    private QualityNotificationSeverity severity;
     private String messageId;
     private Boolean isInitial;
 

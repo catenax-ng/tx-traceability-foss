@@ -22,11 +22,11 @@ package org.eclipse.tractusx.traceability.qualitynotification.domain.investigati
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationNotFoundException;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationId;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSeverity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSide;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.springframework.data.domain.Page;
@@ -43,12 +43,12 @@ public class InvestigationServiceImpl implements InvestigationService {
 
     private final InvestigationsPublisherService investigationsPublisherService;
 
-    private final InvestigationsRepository investigationsRepository;
+    private final InvestigationRepository investigationsRepository;
 
 
     @Override
-    public InvestigationId startInvestigation(List<String> partIds, String description, Instant targetDate, String severity) {
-        return investigationsPublisherService.startInvestigation(partIds, description, targetDate, Severity.fromString(severity));
+    public QualityNotificationId startInvestigation(List<String> partIds, String description, Instant targetDate, String severity) {
+        return investigationsPublisherService.startInvestigation(partIds, description, targetDate, QualityNotificationSeverity.fromString(severity));
     }
 
     @Override
@@ -63,13 +63,13 @@ public class InvestigationServiceImpl implements InvestigationService {
 
     @Override
     public InvestigationResponse findInvestigation(Long id) {
-        InvestigationId investigationId = new InvestigationId(id);
+        QualityNotificationId investigationId = new QualityNotificationId(id);
         QualityNotification investigation = loadInvestigationOrNotFoundException(investigationId);
         return investigation.toDTO();
     }
 
     @Override
-    public QualityNotification loadInvestigationOrNotFoundException(InvestigationId investigationId) {
+    public QualityNotification loadInvestigationOrNotFoundException(QualityNotificationId investigationId) {
         return investigationsRepository.findOptionalQualityNotificationById(investigationId)
                 .orElseThrow(() -> new InvestigationNotFoundException(investigationId));
     }
@@ -82,19 +82,19 @@ public class InvestigationServiceImpl implements InvestigationService {
 
     @Override
     public void approveInvestigation(Long investigationId) {
-        QualityNotification investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
+        QualityNotification investigation = loadInvestigationOrNotFoundException(new QualityNotificationId(investigationId));
         investigationsPublisherService.approveInvestigation(investigation);
     }
 
     @Override
     public void cancelInvestigation(Long investigationId) {
-        QualityNotification investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
+        QualityNotification investigation = loadInvestigationOrNotFoundException(new QualityNotificationId(investigationId));
         investigationsPublisherService.cancelInvestigation(investigation);
     }
 
     @Override
     public void updateInvestigation(Long investigationId, QualityNotificationStatus status, String reason) {
-        QualityNotification investigation = loadInvestigationOrNotFoundException(new InvestigationId(investigationId));
+        QualityNotification investigation = loadInvestigationOrNotFoundException(new QualityNotificationId(investigationId));
         investigationsPublisherService.updateInvestigationPublisher(investigation, status, reason);
     }
 

@@ -21,10 +21,10 @@
 package org.eclipse.tractusx.traceability.common.mapper;
 
 import org.eclipse.tractusx.traceability.common.model.BPN;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationAffectedPart;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSeverity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSide;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.junit.jupiter.api.Test;
@@ -59,12 +59,12 @@ class InvestigationMapperTest {
                 .id("1")
                 .notificationReferenceId("Test notification")
                 .investigationStatus(QualityNotificationStatus.RECEIVED)
-                .affectedParts(List.of(new AffectedPart("123")))
+                .affectedParts(List.of(new QualityNotificationAffectedPart("123")))
                 .senderManufacturerName("senderManufacturerName")
                 .senderBpnNumber(sender)
                 .receiverBpnNumber(receiver)
                 .receiverManufacturerName("receiverManufacturerName")
-                .severity(Severity.MINOR)
+                .severity(QualityNotificationSeverity.MINOR)
                 .isInitial(false)
                 .messageId("1")
                 .build();

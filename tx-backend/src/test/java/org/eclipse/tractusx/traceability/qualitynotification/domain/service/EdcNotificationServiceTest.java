@@ -22,10 +22,9 @@ package org.eclipse.tractusx.traceability.qualitynotification.domain.service;
 import org.eclipse.tractusx.traceability.discovery.domain.model.Discovery;
 import org.eclipse.tractusx.traceability.discovery.domain.service.DiscoveryService;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.InvestigationsEDCFacade;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.NotificationsService;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSeverity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,16 +40,16 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class NotificationsServiceTest {
+class EdcNotificationServiceTest {
 
     @InjectMocks
-    private NotificationsService notificationsService;
+    private EdcNotificationService notificationsService;
 
     @Mock
     private InvestigationsEDCFacade edcFacade;
 
     @Mock
-    private InvestigationsRepository repository;
+    private InvestigationRepository repository;
 
     @Mock
     private DiscoveryService discoveryService;
@@ -69,7 +68,7 @@ class NotificationsServiceTest {
         QualityNotificationMessage notification = QualityNotificationMessage.builder()
                 .receiverBpnNumber(bpn)
                 .targetDate(Instant.now())
-                .severity(Severity.MINOR)
+                .severity(QualityNotificationSeverity.MINOR)
                 .isInitial(false)
                 .build();
       /*  Notification notification = new Notification(

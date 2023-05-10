@@ -29,15 +29,16 @@ import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
 import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationIllegalUpdate;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationAffectedPart;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationId;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSeverity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSide;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.service.EdcNotificationService;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
@@ -58,8 +59,8 @@ import java.util.stream.Collectors;
 public class InvestigationsPublisherService {
 
     private final TraceabilityProperties traceabilityProperties;
-    private final NotificationsService notificationsService;
-    private final InvestigationsRepository investigationsRepository;
+    private final EdcNotificationService notificationsService;
+    private final InvestigationRepository investigationsRepository;
     private final AssetRepository assetRepository;
     private final AssetService assetService;
     private final BpnRepository bpnRepository;
@@ -75,7 +76,7 @@ public class InvestigationsPublisherService {
      * @param severity    the severity of the investigation
      * @return the ID of the newly created investigation
      */
-    public InvestigationId startInvestigation(List<String> assetIds, String description, Instant targetDate, Severity severity) {
+    public QualityNotificationId startInvestigation(List<String> assetIds, String description, Instant targetDate, QualityNotificationSeverity severity) {
         BPN applicationBPN = traceabilityProperties.getBpn();
         QualityNotification investigation = QualityNotification.startInvestigation(clock.instant(), applicationBPN, description);
 
@@ -92,7 +93,7 @@ public class InvestigationsPublisherService {
         return investigationsRepository.saveQualityNotificationEntity(investigation);
     }
 
-    private QualityNotificationMessage createNotification(BPN applicationBpn, String description, Instant targetDate, Severity severity, Map.Entry<String, List<Asset>> asset, QualityNotificationStatus investigationStatus) {
+    private QualityNotificationMessage createNotification(BPN applicationBpn, String description, Instant targetDate, QualityNotificationSeverity severity, Map.Entry<String, List<Asset>> asset, QualityNotificationStatus investigationStatus) {
         final String notificationId = UUID.randomUUID().toString();
         final String messageId = UUID.randomUUID().toString();
         return QualityNotificationMessage.builder()
@@ -104,7 +105,7 @@ public class InvestigationsPublisherService {
                 .receiverManufacturerName(getManufacturerName(asset.getKey()))
                 .description(description)
                 .investigationStatus(investigationStatus)
-                .affectedParts(asset.getValue().stream().map(Asset::getId).map(AffectedPart::new).toList())
+                .affectedParts(asset.getValue().stream().map(Asset::getId).map(QualityNotificationAffectedPart::new).toList())
                 .targetDate(targetDate)
                 .severity(severity)
                 .edcNotificationId(notificationId)

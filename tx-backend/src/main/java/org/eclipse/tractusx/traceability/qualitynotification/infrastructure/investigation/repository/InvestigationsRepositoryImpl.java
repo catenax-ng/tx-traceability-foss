@@ -27,10 +27,10 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asse
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.JpaAssetsRepository;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationAffectedPart;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationId;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSide;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
@@ -53,7 +53,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class InvestigationsRepositoryImpl implements InvestigationsRepository {
+public class InvestigationsRepositoryImpl implements InvestigationRepository {
 
     private final JpaInvestigationRepository investigationRepository;
 
@@ -72,7 +72,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
     }
 
     @Override
-    public InvestigationId updateQualityNotificationEntity(QualityNotification investigation) {
+    public QualityNotificationId updateQualityNotificationEntity(QualityNotification investigation) {
         InvestigationEntity investigationEntity = investigationRepository.findById(investigation.getInvestigationId().value())
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Investigation with id %s not found!", investigation.getInvestigationId().value())));
 
@@ -89,7 +89,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
     }
 
     @Override
-    public InvestigationId saveQualityNotificationEntity(QualityNotification investigation) {
+    public QualityNotificationId saveQualityNotificationEntity(QualityNotification investigation) {
 
         List<AssetEntity> assetEntities = getAssetEntitiesByInvestigation(investigation);
 
@@ -108,7 +108,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
             investigation.getNotifications()
                     .forEach(notification -> handleNotificationCreate(investigationEntity, notification, assetEntities));
 
-            return new InvestigationId(investigationEntity.getId());
+            return new QualityNotificationId(investigationEntity.getId());
         } else {
             throw new IllegalArgumentException("No assets found for %s asset ids".formatted(String.join(", ", investigation.getAssetIds())));
         }
@@ -121,7 +121,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
     }
 
     @Override
-    public Optional<QualityNotification> findOptionalQualityNotificationById(InvestigationId investigationId) {
+    public Optional<QualityNotification> findOptionalQualityNotificationById(QualityNotificationId investigationId) {
         return investigationRepository.findById(investigationId.value())
                 .map(this::toInvestigation);
     }
@@ -192,7 +192,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
                 .toList();
 
         return QualityNotification.builder()
-                .investigationId(new InvestigationId(investigationEntity.getId()))
+                .investigationId(new QualityNotificationId(investigationEntity.getId()))
                 .bpn(BPN.of(investigationEntity.getBpn()))
                 .investigationStatus(QualityNotificationStatus.fromStringValue(investigationEntity.getStatus().name()))
                 .investigationSide(QualityNotificationSide.valueOf(investigationEntity.getSide().name()))
@@ -221,7 +221,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
                 .contractAgreementId(notificationEntity.getContractAgreementId())
                 .investigationStatus(QualityNotificationStatus.fromStringValue(notificationEntity.getStatus().name()))
                 .affectedParts(notificationEntity.getAssets().stream()
-                        .map(asset -> new AffectedPart(asset.getId()))
+                        .map(asset -> new QualityNotificationAffectedPart(asset.getId()))
                         .toList())
                 .targetDate(notificationEntity.getTargetDate())
                 .severity(notificationEntity.getSeverity())
@@ -263,7 +263,7 @@ public class InvestigationsRepositoryImpl implements InvestigationsRepository {
 
     private List<AssetEntity> filterNotificationAssets(QualityNotificationMessage notification, List<AssetEntity> assets) {
         Set<String> notificationAffectedAssetIds = notification.getAffectedParts().stream()
-                .map(AffectedPart::assetId)
+                .map(QualityNotificationAffectedPart::assetId)
                 .collect(Collectors.toSet());
 
         return assets.stream()

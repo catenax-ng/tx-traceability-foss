@@ -22,8 +22,8 @@ package org.eclipse.tractusx.traceability.common.mapper;
 
 import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSeverity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -61,7 +61,7 @@ public class NotificationMapper {
                 .investigationStatus(edcNotification.convertInvestigationStatus())
                 .affectedParts(edcNotification.getListOfAffectedItems())
                 .targetDate(edcNotification.getTargetDate())
-                .severity(Severity.fromString(edcNotification.getSeverity()))
+                .severity(QualityNotificationSeverity.fromString(edcNotification.getSeverity()))
                 .edcNotificationId(edcNotification.getNotificationId())
                 .messageId(edcNotification.getMessageId())
                 .isInitial(false)

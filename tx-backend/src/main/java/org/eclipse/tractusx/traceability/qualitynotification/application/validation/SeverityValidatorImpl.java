@@ -23,7 +23,7 @@ package org.eclipse.tractusx.traceability.qualitynotification.application.valida
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSeverity;
 
 public class SeverityValidatorImpl implements ConstraintValidator<ValidSeverity, String> {
 
@@ -35,13 +35,13 @@ public class SeverityValidatorImpl implements ConstraintValidator<ValidSeverity,
         }
 
         try {
-            Severity[] severities = Severity.values();
-            for (Severity severity : severities) {
+            QualityNotificationSeverity[] severities = QualityNotificationSeverity.values();
+            for (QualityNotificationSeverity severity : severities) {
                 if (severity.getRealName().equals(value)) {
                     return true;
                 }
             }
-            Severity.valueOf(value);
+            QualityNotificationSeverity.valueOf(value);
             return true;
         } catch (IllegalArgumentException e) {
             return false;

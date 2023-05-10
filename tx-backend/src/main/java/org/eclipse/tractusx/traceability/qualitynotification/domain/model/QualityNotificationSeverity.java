@@ -1,17 +1,17 @@
-package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model;
+package org.eclipse.tractusx.traceability.qualitynotification.domain.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "Describes the criticality of a notification")
-public enum Severity {
+public enum QualityNotificationSeverity {
     MINOR("MINOR"),
     MAJOR("MAJOR"),
     CRITICAL("CRITICAL"),
     @ApiModelProperty(name = "LIFE-THREATENING")
     LIFE_THREATENING("LIFE-THREATENING");
 
-    Severity(String realName) {
+    QualityNotificationSeverity(String realName) {
         this.realName = realName;
     }
 
@@ -21,12 +21,12 @@ public enum Severity {
 
     private final String realName;
 
-    public static Severity fromString(String str) {
-        for (Severity s : Severity.values()) {
+    public static QualityNotificationSeverity fromString(String str) {
+        for (QualityNotificationSeverity s : QualityNotificationSeverity.values()) {
             if (s.realName.equalsIgnoreCase(str)) {
                 return s;
             }
         }
-        throw new IllegalArgumentException("No enum constant " + Severity.class.getCanonicalName() + "." + str);
+        throw new IllegalArgumentException("No enum constant " + QualityNotificationSeverity.class.getCanonicalName() + "." + str);
     }
 }

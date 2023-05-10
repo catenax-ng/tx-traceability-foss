@@ -24,16 +24,15 @@ import org.eclipse.tractusx.traceability.assets.domain.ports.BpnRepository;
 import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.AffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationId;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Severity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationIllegalUpdate;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.InvestigationService;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.InvestigationsPublisherService;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.NotificationsService;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationAffectedPart;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationId;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSeverity;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.testdata.AssetTestDataFactory;
 import org.eclipse.tractusx.traceability.testdata.InvestigationTestDataFactory;
@@ -67,7 +66,7 @@ class InvestigationsPublisherServiceTest {
     private InvestigationsPublisherService investigationsPublisherService;
 
     @Mock
-    private InvestigationsRepository repository;
+    private InvestigationRepository repository;
     @Mock
     private AssetRepository assetRepository;
     @Mock
@@ -77,7 +76,7 @@ class InvestigationsPublisherServiceTest {
     @Mock
     private InvestigationService investigationService;
     @Mock
-    private NotificationsService notificationsService;
+    private EdcNotificationService notificationsService;
     @Mock
     private BpnRepository bpnRepository;
 
@@ -93,7 +92,7 @@ class InvestigationsPublisherServiceTest {
         when(bpnRepository.findManufacturerName(anyString())).thenReturn(Optional.empty());
         when(traceabilityProperties.getBpn()).thenReturn(BPN.of("bpn-123"));
         // When
-        investigationsPublisherService.startInvestigation(Arrays.asList("asset-1", "asset-2"), "Test investigation", Instant.parse("2022-03-01T12:00:00Z"), Severity.MINOR);
+        investigationsPublisherService.startInvestigation(Arrays.asList("asset-1", "asset-2"), "Test investigation", Instant.parse("2022-03-01T12:00:00Z"), QualityNotificationSeverity.MINOR);
 
         // Then
         verify(assetRepository).getAssetsById(Arrays.asList("asset-1", "asset-2"));
@@ -107,7 +106,7 @@ class InvestigationsPublisherServiceTest {
         BPN bpn = new BPN("bpn123");
         Long id = 1L;
         QualityNotification investigation = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.CREATED, QualityNotificationStatus.CREATED);
-        when(repository.updateQualityNotificationEntity(investigation)).thenReturn(new InvestigationId(id));
+        when(repository.updateQualityNotificationEntity(investigation)).thenReturn(new QualityNotificationId(id));
         when(traceabilityProperties.getBpn()).thenReturn(bpn);
         // When
         investigationsPublisherService.cancelInvestigation(investigation);
@@ -122,7 +121,7 @@ class InvestigationsPublisherServiceTest {
         // Given
         final long id = 1L;
         final BPN bpn = new BPN("bpn123");
-        InvestigationId investigationId = new InvestigationId(1L);
+        QualityNotificationId investigationId = new QualityNotificationId(1L);
         QualityNotification investigation = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.CREATED, QualityNotificationStatus.CREATED);
         when(repository.updateQualityNotificationEntity(investigation)).thenReturn(investigationId);
         when(traceabilityProperties.getBpn()).thenReturn(bpn);
@@ -145,7 +144,7 @@ class InvestigationsPublisherServiceTest {
         QualityNotificationStatus status = QualityNotificationStatus.ACKNOWLEDGED;
         String reason = "the update reason";
 
-        List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
+        List<QualityNotificationAffectedPart> affectedParts = List.of(new QualityNotificationAffectedPart("partId"));
         QualityNotificationMessage notification = QualityNotificationMessage.builder()
                 .id("123")
                 .notificationReferenceId("id123")
@@ -229,7 +228,7 @@ class InvestigationsPublisherServiceTest {
         QualityNotificationStatus status = QualityNotificationStatus.ACCEPTED;
         String reason = "the update reason";
 
-        List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
+        List<QualityNotificationAffectedPart> affectedParts = List.of(new QualityNotificationAffectedPart("partId"));
         QualityNotificationMessage notification = QualityNotificationMessage.builder()
                 .id("123")
                 .notificationReferenceId("id123")
@@ -310,7 +309,7 @@ class InvestigationsPublisherServiceTest {
         QualityNotificationStatus status = QualityNotificationStatus.DECLINED;
         String reason = "the update reason";
 
-        List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
+        List<QualityNotificationAffectedPart> affectedParts = List.of(new QualityNotificationAffectedPart("partId"));
         QualityNotificationMessage notification = QualityNotificationMessage.builder()
                 .id("123")
                 .notificationReferenceId("id123")
@@ -394,7 +393,7 @@ class InvestigationsPublisherServiceTest {
         QualityNotificationStatus status = QualityNotificationStatus.CLOSED;
         String reason = "the update reason";
 
-        List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
+        List<QualityNotificationAffectedPart> affectedParts = List.of(new QualityNotificationAffectedPart("partId"));
         QualityNotificationMessage notification = QualityNotificationMessage.builder()
                 .id("123")
                 .notificationReferenceId("id123")
@@ -476,7 +475,7 @@ class InvestigationsPublisherServiceTest {
         QualityNotificationStatus status = QualityNotificationStatus.CREATED;
         String reason = "the update reason";
 
-        List<AffectedPart> affectedParts = List.of(new AffectedPart("partId"));
+        List<QualityNotificationAffectedPart> affectedParts = List.of(new QualityNotificationAffectedPart("partId"));
         QualityNotificationMessage notification = QualityNotificationMessage.builder()
                 .id("123")
                 .notificationReferenceId("id123")
