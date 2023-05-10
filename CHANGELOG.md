@@ -5,8 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased - x.x.x]
-### Changed
+
+### Added
 - Added logic to push image to docker hub for eclipse-tractusx repository
+- Added testdata to database to ensure working notification flow
+
+### Changed
+- Updated Publish documentation workflow to convert and deploy documentation as markdown (.md)
+- Bumped cypress-io/github-action from 5.6.1 to 5.6.2
+- Bumped veracode/veracode-uploadandscan-action@0.2.5 to 0.2.6
+- Updated catena links from readme to reflext tractusx links
+- Updated path of digital twin registry for dev environment
+- Updated swagger api doc and added collection
+- Updated dev setup documentation
+- Changed logic of investigations to be more extensible for alerts
+- Upgraded irs from 5.0.9 to 5.3.0
+- Upgraded @angular-devkit/build-angular to ^15.0.0 (to have the same dependency as @angular-builders/custom-webpack has)
+- Fix sonar bug in minimap.d3.ts
+- Upgraded karma dependencies (use engine.io@^6.4.2 to solve Uncaught Exception vulnerability)
+
+### Removed
+- Not needed enum params in UpdateInvestigationRequest
+
 ## [3.3.0] - 2023-05-02
 ### Added
 - Added tx-root pom for maven multi module project
