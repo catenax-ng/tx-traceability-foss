@@ -91,7 +91,7 @@ class AssetServiceTest {
                 .thenReturn(combinedAssetList);
 
         // when
-        assetService.synchronizeAssets(globalAssetId);
+        assetService.synchronizeAssetsAsync(globalAssetId);
 
         // then
         verify(irsRepository).findAssets(globalAssetId, Direction.DOWNWARD, Aspect.downwardAspects());

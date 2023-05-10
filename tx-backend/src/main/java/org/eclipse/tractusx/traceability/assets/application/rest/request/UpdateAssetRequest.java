@@ -19,15 +19,15 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.application.rest.assets.request;
+package org.eclipse.tractusx.traceability.assets.application.rest.request;
 
 import io.swagger.annotations.ApiModelProperty;
 
 import jakarta.validation.constraints.NotNull;
-import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
+import org.eclipse.tractusx.traceability.assets.application.rest.response.QualityTypeRequestResponse;
 
 public record UpdateAssetRequest(
 	@NotNull(message = "qualityType must be present")
     @ApiModelProperty(example = "Ok" )
-    QualityType qualityType) {
+    QualityTypeRequestResponse qualityType) {
 }

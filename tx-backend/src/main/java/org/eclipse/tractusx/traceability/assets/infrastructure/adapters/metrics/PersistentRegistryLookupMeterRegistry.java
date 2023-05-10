@@ -74,7 +74,7 @@ public class PersistentRegistryLookupMeterRegistry implements RegistryLookupMete
 		return index == registryLookupMetrics.size() - 1;
 	}
 
-	private RegistryLookupMetric toDTO(RegistryLookupMetricEntity entity) {
+	private RegistryLookupMetric toDTO(final RegistryLookupMetricEntity entity) {
 		return new RegistryLookupMetric(
 			entity.getStartDate(),
 			entity.getStatus(),

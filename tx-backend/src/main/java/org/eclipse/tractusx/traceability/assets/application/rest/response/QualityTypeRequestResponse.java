@@ -19,21 +19,43 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.application.rest.assets.response;
 
+package org.eclipse.tractusx.traceability.assets.application.rest.response;
+
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.eclipse.tractusx.traceability.assets.domain.model.Dashboard;
+import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 
-public record DashboardResponse(
-        @ApiModelProperty(example = "5") Long myItems,
-        @ApiModelProperty(example = "10") Long otherParts,
-        @ApiModelProperty(example = "15") Long investigations) {
+@ApiModel(description = "Quality types")
+public enum QualityTypeRequestResponse {
+    @ApiModelProperty("Ok")
+    OK("Ok"),
+    @ApiModelProperty("Minor")
+    MINOR("Minor"),
+    @ApiModelProperty("Major")
+    MAJOR("Major"),
+    @ApiModelProperty("Critical")
+    CRITICAL("Critical"),
+    @ApiModelProperty("Life-threatening")
+    LIFE_THREATENING("LifeThreatening");
 
-    public static DashboardResponse from(final Dashboard dashboard) {
-        return new DashboardResponse(
-                dashboard.myItems(),
-                dashboard.otherParts(),
-                dashboard.investigations()
-        );
+    private final String description;
+
+    QualityTypeRequestResponse(String description) {
+        this.description = description;
+    }
+
+    public static QualityTypeRequestResponse from(final QualityType qualityType) {
+        return QualityTypeRequestResponse.valueOf(qualityType.name());
+    }
+
+    public QualityType toDomain() {
+        return QualityType.valueOf(this.name());
+    }
+
+    @JsonValue
+    public String getDescription() {
+        return description;
     }
 }

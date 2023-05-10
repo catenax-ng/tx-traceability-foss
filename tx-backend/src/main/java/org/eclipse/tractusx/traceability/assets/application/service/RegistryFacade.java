@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.application;
+package org.eclipse.tractusx.traceability.assets.application.service;
 
 import org.eclipse.tractusx.traceability.assets.domain.model.ShellDescriptor;
 import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
@@ -59,7 +59,7 @@ public class RegistryFacade {
     private void synchronizeAssetsByDescriptors(List<ShellDescriptor> descriptors) {
         descriptors.stream()
             .map(ShellDescriptor::globalAssetId)
-            .forEach(assetService::synchronizeAssets);
+            .forEach(assetService::synchronizeAssetsAsync);
     }
 
     private List<ShellDescriptor> updateOwnShellDescriptors() {

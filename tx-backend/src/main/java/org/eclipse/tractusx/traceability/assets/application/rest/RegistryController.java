@@ -19,14 +19,15 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.application.rest.assets;
+package org.eclipse.tractusx.traceability.assets.application.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.eclipse.tractusx.traceability.assets.application.RegistryFacade;
+import lombok.RequiredArgsConstructor;
+import org.eclipse.tractusx.traceability.assets.application.service.RegistryFacade;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,13 +35,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Tag(name = "Registry")
 @RequestMapping(path = "/registry", produces = "application/json")
+@RequiredArgsConstructor
 public class RegistryController {
 
 	private final RegistryFacade registryFacade;
-
-	public RegistryController(RegistryFacade registryFacade) {
-		this.registryFacade = registryFacade;
-	}
 
 	@Operation(operationId = "reload",
 		summary = "Triggers reload of shell descriptors",

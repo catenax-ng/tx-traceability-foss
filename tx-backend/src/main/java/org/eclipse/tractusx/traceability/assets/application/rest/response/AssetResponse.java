@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.application.rest.assets.response;
+package org.eclipse.tractusx.traceability.assets.application.rest.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
@@ -30,8 +30,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
-import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
-import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 
 import java.time.Instant;
@@ -69,7 +67,7 @@ public final class AssetResponse {
     @ApiModelProperty(example = "DEU")
     private final String manufacturingCountry;
     @ApiModelProperty(example = "CUSTOMER")
-    private final Owner owner;
+    private final OwnerResponse owner;
 
     @ArraySchema(arraySchema = @Schema(description = "Child relationships"), maxItems = Integer.MAX_VALUE)
     private List<DescriptionsResponse> childDescriptions;
@@ -78,7 +76,7 @@ public final class AssetResponse {
     @ApiModelProperty(example = "false")
     private boolean underInvestigation;
     @ApiModelProperty(example = "Ok")
-    private QualityType qualityType;
+    private QualityTypeRequestResponse qualityType;
     @ApiModelProperty(example = "--")
     private String van;
 
@@ -96,7 +94,7 @@ public final class AssetResponse {
                 .customerPartId(asset.getCustomerPartId())
                 .manufacturingDate(asset.getManufacturingDate())
                 .manufacturingCountry(asset.getManufacturingCountry())
-                .owner(asset.getOwner())
+                .owner(OwnerResponse.from(asset.getOwner()))
                 .childDescriptions(
                         asset.getChildDescriptions().stream()
                                 .map(DescriptionsResponse::from)
@@ -106,7 +104,9 @@ public final class AssetResponse {
                                 .map(DescriptionsResponse::from)
                                 .toList())
                 .underInvestigation(asset.isUnderInvestigation())
-                .qualityType(asset.getQualityType())
+                .qualityType(
+                        QualityTypeRequestResponse.from(asset.getQualityType())
+                )
                 .van(asset.getVan())
                 .build();
     }
