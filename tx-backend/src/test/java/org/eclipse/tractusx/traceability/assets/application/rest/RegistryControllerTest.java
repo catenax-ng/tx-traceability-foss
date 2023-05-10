@@ -19,17 +19,33 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.domain.model;
+package org.eclipse.tractusx.traceability.assets.application.rest;
 
-import lombok.Builder;
+import org.eclipse.tractusx.traceability.assets.application.service.RegistryFacade;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@Builder
-public record ShellDescriptor(
-	String shellDescriptorId,
-	String globalAssetId,
-	String idShort,
-	String partInstanceId,
-	String manufacturerPartId,
-	String manufacturerId,
-	String batchId
-) {}
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+@ExtendWith(MockitoExtension.class)
+class RegistryControllerTest {
+
+    @Mock
+    private RegistryFacade registryFacade;
+
+    @InjectMocks
+    private RegistryController registryController;
+
+    @Test
+    void givenController_whenReload_thenCallFacade() {
+        // when
+        registryController.reload();
+
+        // then
+        verify(registryFacade, times(1)).updateShellDescriptorAndSynchronizeAssets();
+    }
+}

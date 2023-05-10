@@ -19,17 +19,37 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.domain.model;
+package org.eclipse.tractusx.traceability.assets.application.rest;
 
-import lombok.Builder;
+import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.metrics.RegistryLookupMeterRegistry;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 
-@Builder
-public record ShellDescriptor(
-	String shellDescriptorId,
-	String globalAssetId,
-	String idShort,
-	String partInstanceId,
-	String manufacturerPartId,
-	String manufacturerId,
-	String batchId
-) {}
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+@ExtendWith(MockitoExtension.class)
+class RegistryLookupMetricsControllerTest {
+
+    @Mock
+    private RegistryLookupMeterRegistry registryLookupMeterRegistry;
+
+    @InjectMocks
+    private RegistryLookupMetricsController controller;
+
+    @Test
+    void givenRequest_whenMetrics_thenCallRegistry() {
+        // given
+        final Pageable request = Pageable.ofSize(1);
+
+        // when
+        controller.metrics(request);
+
+        // then
+        verify(registryLookupMeterRegistry, times(1)).getMetrics(request);
+    }
+}
