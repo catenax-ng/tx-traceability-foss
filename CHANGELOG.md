@@ -60,7 +60,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Moved Investigation JPA implementation to the correct folder structure
 - Moved Notification JPA implementation to the correct folder structure
 - Fixed bug to reflect investigation status on assets
-- Added Documentation on the usage of testdata
+- Added documentation on the usage of testdata
 
 ### Removed
 - Removed usage of add-license-header script in FE hook
