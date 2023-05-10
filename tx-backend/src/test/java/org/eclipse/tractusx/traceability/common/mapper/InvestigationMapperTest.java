@@ -30,24 +30,17 @@ import org.eclipse.tractusx.traceability.qualitynotification.domain.model.Qualit
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Clock;
-import java.time.Instant;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class InvestigationMapperTest {
 
     @InjectMocks
     private InvestigationMapper mapper;
-
-    @Mock
-    private Clock clock;
 
     @Test
     void testToReceiverInvestigation() {
@@ -69,7 +62,6 @@ class InvestigationMapperTest {
                 .messageId("1")
                 .build();
 
-        when(clock.instant()).thenReturn(Instant.parse("2022-03-01T12:00:00Z"));
 
         // When
         QualityNotification result = mapper.toInvestigation(new BPN(receiver), description, notification);
@@ -78,7 +70,6 @@ class InvestigationMapperTest {
         assertEquals(QualityNotificationStatus.RECEIVED, result.getInvestigationStatus());
         assertEquals(QualityNotificationSide.RECEIVER, result.getInvestigationSide());
         assertEquals(description, result.getDescription());
-        assertEquals(Instant.parse("2022-03-01T12:00:00Z"), result.getCreatedAt());
         assertEquals(List.of("123"), result.getAssetIds());
         assertEquals(List.of(notification), result.getNotifications());
     }

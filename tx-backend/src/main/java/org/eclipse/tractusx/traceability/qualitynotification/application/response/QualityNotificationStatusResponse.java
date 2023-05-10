@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 import static java.util.Collections.emptySet;
 import static java.util.Set.of;
 
-// TODO
 public enum QualityNotificationStatusResponse {
     CREATED(QualityNotificationSideResponse.SENDER, emptySet()),
     SENT(QualityNotificationSideResponse.SENDER, Set.of(QualityNotificationSideResponse.SENDER)),

@@ -85,6 +85,7 @@ public class QualityNotificationMessage {
             senderName = senderManufacturerName;
         }
         return QualityNotificationMessage.builder()
+                .created(LocalDateTime.now())
                 .id(notificationId)
                 .senderBpnNumber(senderBPN)
                 .senderManufacturerName(senderName)

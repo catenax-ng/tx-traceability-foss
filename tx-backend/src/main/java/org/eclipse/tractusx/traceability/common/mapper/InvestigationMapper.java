@@ -20,6 +20,7 @@
  ********************************************************************************/
 package org.eclipse.tractusx.traceability.common.mapper;
 
+import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationAffectedPart;
@@ -28,17 +29,13 @@ import org.eclipse.tractusx.traceability.qualitynotification.domain.model.Qualit
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.springframework.stereotype.Component;
 
-import java.time.Clock;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Component
 public class InvestigationMapper {
-    private final Clock clock;
-
-    public InvestigationMapper(Clock clock) {
-        this.clock = clock;
-    }
 
     /**
      * Creates an Investigation object representing the investigation received by the receiver for a given notification.
@@ -59,7 +56,7 @@ public class InvestigationMapper {
                 .investigationStatus(QualityNotificationStatus.RECEIVED)
                 .investigationSide(QualityNotificationSide.RECEIVER)
                 .description(description)
-                .createdAt(clock.instant())
+                .createdAt(Instant.now())
                 .assetIds(assetIds)
                 .notifications(List.of(notification))
                 .build();
