@@ -108,4 +108,5 @@ public class InvestigationServiceImpl implements InvestigationService {
 
         return new PageResult<>(investigationDataPage);
     }
+
 }

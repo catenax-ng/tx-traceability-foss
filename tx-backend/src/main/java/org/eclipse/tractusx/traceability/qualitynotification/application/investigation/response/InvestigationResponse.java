@@ -74,7 +74,8 @@ public class InvestigationResponse extends QualityNotificationResponse {
         int pageNumber = qualityNotificationPageResult.page();
         int pageSize = qualityNotificationPageResult.pageSize();
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<InvestigationResponse> investigationDataPage = new PageImpl<>(investigationResponses, pageable, investigationResponses.size());
+
+        Page<InvestigationResponse> investigationDataPage = new PageImpl<>(investigationResponses, pageable, qualityNotificationPageResult.totalItems());
         return new PageResult<>(investigationDataPage);
     }
 

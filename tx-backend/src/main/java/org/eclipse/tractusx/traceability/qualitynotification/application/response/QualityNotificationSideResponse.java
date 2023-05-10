@@ -25,6 +25,6 @@ public enum QualityNotificationSideResponse {
     RECEIVER;
 
     public static QualityNotificationSideResponse from(QualityNotificationSide side) {
-        return QualityNotificationSideResponse.from(side);
+        return QualityNotificationSideResponse.valueOf(side.name());
     }
 }
