@@ -19,7 +19,6 @@
 package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service;
 
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationNotFoundException;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
@@ -68,10 +67,10 @@ class InvestigationServiceImplTest {
         ));
 
         // expect
-        InvestigationResponse investigationDTO = investigationService.findInvestigation(0L);
+        QualityNotification investigation = investigationService.findInvestigation(0L);
 
         // then
-        assertThat(investigationDTO).isNotNull();
+        assertThat(investigation).isNotNull();
     }
 
     @Test
@@ -84,7 +83,7 @@ class InvestigationServiceImplTest {
                 )));
 
         // expect
-        PageResult<InvestigationResponse> result = investigationService.getCreatedInvestigations(PageRequest.of(0, 5));
+        PageResult<QualityNotification> result = investigationService.getCreatedInvestigations(PageRequest.of(0, 5));
 
         // then
         assertThat(result).isNotNull();
@@ -100,7 +99,7 @@ class InvestigationServiceImplTest {
                 )));
 
         // expect
-        PageResult<InvestigationResponse> result = investigationService.getReceivedInvestigations(PageRequest.of(0, 5));
+        PageResult<QualityNotification> result = investigationService.getReceivedInvestigations(PageRequest.of(0, 5));
 
         // then
         assertThat(result).isNotNull();

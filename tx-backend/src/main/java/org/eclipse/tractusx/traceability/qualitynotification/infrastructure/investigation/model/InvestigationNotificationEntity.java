@@ -29,12 +29,17 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.asset.AssetEntity;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationAffectedPart;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationMessageBaseEntity;
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationStatusBaseEntity;
 
 import java.util.List;
 
@@ -43,6 +48,7 @@ import java.util.List;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name = "investigation_notification")
 public class InvestigationNotificationEntity extends QualityNotificationMessageBaseEntity {
@@ -59,5 +65,53 @@ public class InvestigationNotificationEntity extends QualityNotificationMessageB
     )
     private List<AssetEntity> assets;
 
+
+    public static QualityNotificationMessage toDomain(InvestigationNotificationEntity investigationNotificationEntity) {
+        return QualityNotificationMessage.builder()
+                .id(investigationNotificationEntity.getId())
+                .notificationReferenceId(investigationNotificationEntity.getNotificationReferenceId())
+                .senderBpnNumber(investigationNotificationEntity.getSenderBpnNumber())
+                .senderManufacturerName(investigationNotificationEntity.getSenderManufacturerName())
+                .receiverBpnNumber(investigationNotificationEntity.getReceiverBpnNumber())
+                .receiverManufacturerName(investigationNotificationEntity.getReceiverManufacturerName())
+                .description(investigationNotificationEntity.getInvestigation().getDescription())
+                .edcUrl(investigationNotificationEntity.getEdcUrl())
+                .contractAgreementId(investigationNotificationEntity.getContractAgreementId())
+                .investigationStatus(QualityNotificationStatus.fromStringValue(investigationNotificationEntity.getStatus().name()))
+                .affectedParts(investigationNotificationEntity.getAssets().stream()
+                        .map(asset -> new QualityNotificationAffectedPart(asset.getId()))
+                        .toList())
+                .targetDate(investigationNotificationEntity.getTargetDate())
+                .severity(investigationNotificationEntity.getSeverity())
+                .edcNotificationId(investigationNotificationEntity.getEdcNotificationId())
+                .messageId(investigationNotificationEntity.getMessageId())
+                .created(investigationNotificationEntity.getCreated())
+                .updated(investigationNotificationEntity.getUpdated())
+                .isInitial(investigationNotificationEntity.getIsInitial())
+                .build();
+    }
+
+    public static InvestigationNotificationEntity from(InvestigationEntity investigationEntity,
+                                                       QualityNotificationMessage qualityNotificationMessage,
+                                                       List<AssetEntity> notificationAssets) {
+        return InvestigationNotificationEntity
+                .builder()
+                .id(qualityNotificationMessage.getId())
+                .investigation(investigationEntity)
+                .created(qualityNotificationMessage.getCreated())
+                .senderBpnNumber(qualityNotificationMessage.getSenderBpnNumber())
+                .senderManufacturerName(qualityNotificationMessage.getSenderManufacturerName())
+                .receiverBpnNumber(qualityNotificationMessage.getReceiverBpnNumber())
+                .receiverManufacturerName(qualityNotificationMessage.getReceiverManufacturerName())
+                .assets(notificationAssets)
+                .notificationReferenceId(qualityNotificationMessage.getNotificationReferenceId())
+                .targetDate(qualityNotificationMessage.getTargetDate())
+                .severity(qualityNotificationMessage.getSeverity())
+                .edcNotificationId(qualityNotificationMessage.getEdcNotificationId())
+                .status(QualityNotificationStatusBaseEntity.fromStringValue(qualityNotificationMessage.getInvestigationStatus().name()))
+                .messageId(qualityNotificationMessage.getMessageId())
+                .isInitial(qualityNotificationMessage.getIsInitial())
+                .build();
+    }
 
 }

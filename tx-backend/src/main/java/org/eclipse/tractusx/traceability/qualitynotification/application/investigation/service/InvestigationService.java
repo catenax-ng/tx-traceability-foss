@@ -16,9 +16,9 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-package org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service;
+package org.eclipse.tractusx.traceability.qualitynotification.application.investigation.service;
 
-import org.eclipse.tractusx.traceability.qualitynotification.domain.service.QualityNotificationService;
+import org.eclipse.tractusx.traceability.qualitynotification.application.service.QualityNotificationService;
 
 public interface InvestigationService extends QualityNotificationService {
 

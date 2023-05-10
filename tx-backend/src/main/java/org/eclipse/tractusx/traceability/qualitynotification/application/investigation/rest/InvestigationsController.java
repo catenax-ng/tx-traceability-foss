@@ -36,12 +36,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.common.config.FeatureFlags;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
+import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.service.InvestigationService;
 import org.eclipse.tractusx.traceability.qualitynotification.application.request.CloseQualityNotificationRequest;
+import org.eclipse.tractusx.traceability.qualitynotification.application.request.QualityNotificationStatusRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.request.StartQualityNotificationRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.request.UpdateQualityNotificationRequest;
+import org.eclipse.tractusx.traceability.qualitynotification.application.request.UpdateQualityNotificationStatusRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.response.QualityNotificationIdResponse;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.InvestigationService;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -101,7 +102,7 @@ public class InvestigationsController {
     @GetMapping("/created")
     public PageResult<InvestigationResponse> getCreatedInvestigations(Pageable pageable) {
         log.info(API_LOG_START + "/created");
-        return investigationService.getCreatedInvestigations(pageable);
+        return InvestigationResponse.fromAsPageResult(investigationService.getCreatedInvestigations(pageable));
     }
 
     @Operation(operationId = "getReceivedInvestigations",
@@ -118,7 +119,7 @@ public class InvestigationsController {
     @GetMapping("/received")
     public PageResult<InvestigationResponse> getReceivedInvestigations(Pageable pageable) {
         log.info(API_LOG_START + "/received");
-        return investigationService.getReceivedInvestigations(pageable);
+        return InvestigationResponse.fromAsPageResult(investigationService.getReceivedInvestigations(pageable));
     }
 
     @Operation(operationId = "getInvestigation",
@@ -132,7 +133,7 @@ public class InvestigationsController {
     @GetMapping("/{investigationId}")
     public InvestigationResponse getInvestigation(@PathVariable Long investigationId) {
         log.info(API_LOG_START + "/{}", investigationId);
-        return investigationService.findInvestigation(investigationId);
+        return InvestigationResponse.from(investigationService.findInvestigation(investigationId));
     }
 
     @Operation(operationId = "approveInvestigation",
@@ -178,7 +179,7 @@ public class InvestigationsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void closeInvestigation(@PathVariable Long investigationId, @Valid @RequestBody CloseQualityNotificationRequest closeInvestigationRequest) {
         log.info(API_LOG_START + "/{}/close with params {}", investigationId, closeInvestigationRequest);
-        investigationService.updateInvestigation(investigationId, QualityNotificationStatus.CLOSED, closeInvestigationRequest.getReason());
+        investigationService.updateInvestigation(investigationId, QualityNotificationStatusRequest.toDomain(QualityNotificationStatusRequest.CLOSED), closeInvestigationRequest.getReason());
     }
 
     @Operation(operationId = "updateInvestigation",
@@ -195,7 +196,7 @@ public class InvestigationsController {
     public void updateInvestigation(@PathVariable Long investigationId, @Valid @RequestBody UpdateQualityNotificationRequest updateInvestigationRequest) {
         validate(updateInvestigationRequest);
         log.info(API_LOG_START + "/{}/update with params {}", investigationId, updateInvestigationRequest);
-        investigationService.updateInvestigation(investigationId, QualityNotificationStatus.fromStringValue(updateInvestigationRequest.getStatus().name()), updateInvestigationRequest.getReason());
+        investigationService.updateInvestigation(investigationId, UpdateQualityNotificationStatusRequest.toDomain(updateInvestigationRequest.getStatus()), updateInvestigationRequest.getReason());
     }
 }
 

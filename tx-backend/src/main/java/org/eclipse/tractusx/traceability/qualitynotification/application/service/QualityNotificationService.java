@@ -16,10 +16,9 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-package org.eclipse.tractusx.traceability.qualitynotification.domain.service;
+package org.eclipse.tractusx.traceability.qualitynotification.application.service;
 
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationId;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
@@ -28,14 +27,15 @@ import org.springframework.data.domain.Pageable;
 import java.time.Instant;
 import java.util.List;
 
+// todo do not return response return domain
 public interface QualityNotificationService {
     QualityNotificationId startInvestigation(List<String> partIds, String description, Instant targetDate, String severity);
 
-    PageResult<InvestigationResponse> getCreatedInvestigations(Pageable pageable);
+    PageResult<QualityNotification> getCreatedInvestigations(Pageable pageable);
 
-    PageResult<InvestigationResponse> getReceivedInvestigations(Pageable pageable);
+    PageResult<QualityNotification> getReceivedInvestigations(Pageable pageable);
 
-    InvestigationResponse findInvestigation(Long investigationId);
+    QualityNotification findInvestigation(Long investigationId);
 
     QualityNotification loadInvestigationOrNotFoundException(QualityNotificationId investigationId);
 

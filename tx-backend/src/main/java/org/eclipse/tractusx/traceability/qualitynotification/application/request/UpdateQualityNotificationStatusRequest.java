@@ -21,6 +21,7 @@ package org.eclipse.tractusx.traceability.qualitynotification.application.reques
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -44,6 +45,10 @@ public enum UpdateQualityNotificationStatusRequest {
 
     private static String supportedUpdateInvestigationStatus() {
         return Stream.of(UpdateQualityNotificationStatusRequest.values()).map(Enum::name).collect(Collectors.joining(", "));
+    }
+
+    public static QualityNotificationStatus toDomain(UpdateQualityNotificationStatusRequest qualityNotificationStatusRequest) {
+        return QualityNotificationStatus.fromStringValue(qualityNotificationStatusRequest.name());
     }
 
 }

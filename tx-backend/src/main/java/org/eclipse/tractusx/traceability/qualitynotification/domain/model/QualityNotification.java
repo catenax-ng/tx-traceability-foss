@@ -21,14 +21,11 @@ package org.eclipse.tractusx.traceability.qualitynotification.domain.model;
 import lombok.Builder;
 import lombok.Data;
 import org.eclipse.tractusx.traceability.common.model.BPN;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
-import org.eclipse.tractusx.traceability.qualitynotification.application.response.QualityNotificationReasonResponse;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationIllegalUpdate;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationStatusTransitionNotAllowed;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -83,58 +80,8 @@ public class QualityNotification {
 
     }
 
-    private static String getSenderBPN(Collection<QualityNotificationMessage> notifications) {
-        return notifications.stream()
-                .findFirst()
-                .map(QualityNotificationMessage::getSenderBpnNumber)
-                .orElse(null);
-    }
-
-    private static String getReceiverBPN(Collection<QualityNotificationMessage> notifications) {
-        return notifications.stream()
-                .findFirst()
-                .map(QualityNotificationMessage::getReceiverBpnNumber)
-                .orElse(null);
-    }
-
-    private static String getSenderName(Collection<QualityNotificationMessage> notifications) {
-        return notifications.stream()
-                .findFirst()
-                .map(QualityNotificationMessage::getSenderManufacturerName)
-                .orElse(null);
-    }
-
-    private static String getReceiverName(Collection<QualityNotificationMessage> notifications) {
-        return notifications.stream()
-                .findFirst()
-                .map(QualityNotificationMessage::getReceiverManufacturerName)
-                .orElse(null);
-    }
-
     public List<String> getAssetIds() {
         return Collections.unmodifiableList(assetIds);
-    }
-
-    public InvestigationResponse toDTO() {
-        return InvestigationResponse
-                .builder()
-                .id(investigationId.value())
-                .status(investigationStatus.name())
-                .description(description)
-                .createdBy(getSenderBPN(notifications.values()))
-                .createdByName(getSenderName(notifications.values()))
-                .createdDate(createdAt.toString())
-                .assetIds(Collections.unmodifiableList(assetIds))
-                .channel(investigationSide)
-                .reason(new QualityNotificationReasonResponse(
-                        closeReason,
-                        acceptReason,
-                        declineReason
-                ))
-                .sendTo(getReceiverBPN(notifications.values()))
-                .sendToName(getReceiverName(notifications.values()))
-                .severity(notifications.entrySet().stream().findFirst().map(Map.Entry::getValue).map(QualityNotificationMessage::getSeverity).orElse(QualityNotificationSeverity.MINOR).getRealName())
-                .targetDate(notifications.entrySet().stream().findFirst().map(Map.Entry::getValue).map(QualityNotificationMessage::getTargetDate).map(Instant::toString).orElse(null)).build();
     }
 
     public String getBpn() {

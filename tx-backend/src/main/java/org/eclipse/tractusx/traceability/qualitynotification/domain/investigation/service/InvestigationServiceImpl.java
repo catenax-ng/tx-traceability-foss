@@ -21,7 +21,7 @@ package org.eclipse.tractusx.traceability.qualitynotification.domain.investigati
 
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.response.InvestigationResponse;
+import org.eclipse.tractusx.traceability.qualitynotification.application.investigation.service.InvestigationService;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.exception.InvestigationNotFoundException;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
@@ -52,20 +52,19 @@ public class InvestigationServiceImpl implements InvestigationService {
     }
 
     @Override
-    public PageResult<InvestigationResponse> getCreatedInvestigations(Pageable pageable) {
+    public PageResult<QualityNotification> getCreatedInvestigations(Pageable pageable) {
         return getInvestigationsPageResult(pageable, QualityNotificationSide.SENDER);
     }
 
     @Override
-    public PageResult<InvestigationResponse> getReceivedInvestigations(Pageable pageable) {
+    public PageResult<QualityNotification> getReceivedInvestigations(Pageable pageable) {
         return getInvestigationsPageResult(pageable, QualityNotificationSide.RECEIVER);
     }
 
     @Override
-    public InvestigationResponse findInvestigation(Long id) {
+    public QualityNotification findInvestigation(Long id) {
         QualityNotificationId investigationId = new QualityNotificationId(id);
-        QualityNotification investigation = loadInvestigationOrNotFoundException(investigationId);
-        return investigation.toDTO();
+        return loadInvestigationOrNotFoundException(investigationId);
     }
 
     @Override
@@ -98,15 +97,14 @@ public class InvestigationServiceImpl implements InvestigationService {
         investigationsPublisherService.updateInvestigationPublisher(investigation, status, reason);
     }
 
-    private PageResult<InvestigationResponse> getInvestigationsPageResult(Pageable pageable, QualityNotificationSide investigationSide) {
-        List<InvestigationResponse> investigationData = investigationsRepository.findQualityNotificationsBySide(investigationSide, pageable)
+    private PageResult<QualityNotification> getInvestigationsPageResult(Pageable pageable, QualityNotificationSide investigationSide) {
+        List<QualityNotification> investigationData = investigationsRepository.findQualityNotificationsBySide(investigationSide, pageable)
                 .content()
                 .stream()
                 .sorted(QualityNotification.COMPARE_BY_NEWEST_INVESTIGATION_CREATION_TIME)
-                .map(QualityNotification::toDTO)
                 .toList();
 
-        Page<InvestigationResponse> investigationDataPage = new PageImpl<>(investigationData, pageable, investigationsRepository.countQualityNotificationEntitiesBySide(investigationSide));
+        Page<QualityNotification> investigationDataPage = new PageImpl<>(investigationData, pageable, investigationsRepository.countQualityNotificationEntitiesBySide(investigationSide));
 
         return new PageResult<>(investigationDataPage);
     }

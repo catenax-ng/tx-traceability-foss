@@ -24,7 +24,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSide;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class QualityNotificationResponse {
     private Long id;
 
     @ApiModelProperty(example = "CREATED")
-    private String status;
+    private QualityNotificationStatusResponse status;
 
     @ApiModelProperty(example = "DescriptionText")
     private String description;
@@ -55,7 +54,7 @@ public class QualityNotificationResponse {
     private List<String> assetIds;
 
     @ApiModelProperty(example = "SENDER")
-    private QualityNotificationSide channel;
+    private QualityNotificationSideResponse channel;
 
     private QualityNotificationReasonResponse reason;
 
@@ -66,7 +65,7 @@ public class QualityNotificationResponse {
     private String sendToName;
 
     @ApiModelProperty(example = "MINOR")
-    private String severity;
+    private QualityNotificationSeverityResponse severity;
 
     @ApiModelProperty(example = "2099-02-21T21:27:10.734950Z")
     private String targetDate;
