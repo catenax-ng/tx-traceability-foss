@@ -29,7 +29,7 @@ import org.eclipse.tractusx.traceability.common.support.NotificationsSupport
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationSideBaseEntity
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationStatusBaseEntity
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationEntity
-import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.NotificationEntity
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationNotificationEntity
 import org.hamcrest.Matchers
 import spock.lang.Unroll
 
@@ -135,35 +135,35 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
         and:
 
         storedNotifications(
-                NotificationEntity
+                InvestigationNotificationEntity
                         .builder()
                         .id("1")
                         .investigation(firstInvestigation)
                         .status(QualityNotificationStatusBaseEntity.CREATED)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
-                NotificationEntity
+                InvestigationNotificationEntity
                         .builder()
                         .status(QualityNotificationStatusBaseEntity.CREATED)
                         .id("2")
                         .investigation(secondInvestigation)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
-                NotificationEntity
+                InvestigationNotificationEntity
                         .builder()
                         .status(QualityNotificationStatusBaseEntity.CREATED)
                         .id("3")
                         .investigation(thirdInvestigation)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
-                NotificationEntity
+                InvestigationNotificationEntity
                         .builder()
                         .status(QualityNotificationStatusBaseEntity.CREATED)
                         .id("4")
                         .investigation(fourthInvestigation)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
-                NotificationEntity
+                InvestigationNotificationEntity
                         .builder()
                         .status(QualityNotificationStatusBaseEntity.CREATED)
                         .id("5")
@@ -242,7 +242,7 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
 
             InvestigationEntity investigation = storedInvestigationFullObject(investigationEntity)
 
-            NotificationEntity notificationEntity = NotificationEntity
+            InvestigationNotificationEntity notificationEntity = InvestigationNotificationEntity
                     .builder()
                     .id(UUID.randomUUID().toString())
                     .investigation(investigation)
@@ -254,7 +254,7 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                     .messageId("messageId")
                     .build()
 
-            NotificationEntity persistedNotification = storedNotification(notificationEntity)
+            InvestigationNotificationEntity persistedNotification = storedNotification(notificationEntity)
             persistedNotification.setInvestigation(investigation);
             storedNotification(persistedNotification)
         }
@@ -328,35 +328,35 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
 
         and:
         storedNotifications(
-                NotificationEntity
+                InvestigationNotificationEntity
                         .builder()
                         .id("1")
                         .investigation(firstInvestigation)
                         .status(QualityNotificationStatusBaseEntity.CREATED)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
-                NotificationEntity
+                InvestigationNotificationEntity
                         .builder()
                         .id("2")
                         .investigation(secondInvestigation)
                         .status(QualityNotificationStatusBaseEntity.CREATED)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
-                NotificationEntity
+                InvestigationNotificationEntity
                         .builder()
                         .id("3")
                         .investigation(thirdInvestigation)
                         .status(QualityNotificationStatusBaseEntity.CREATED)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
-                NotificationEntity
+                InvestigationNotificationEntity
                         .builder()
                         .id("4")
                         .investigation(fourthInvestigation)
                         .status(QualityNotificationStatusBaseEntity.CREATED)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build(),
-                NotificationEntity
+                InvestigationNotificationEntity
                         .builder()
                         .id("5")
                         .investigation(fifthInvestigation)
@@ -418,8 +418,8 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
 
         InvestigationEntity persistedInvestigation = storedInvestigationFullObject(investigationEntity)
         and:
-        NotificationEntity notificationEntity = storedNotification(
-                NotificationEntity
+        InvestigationNotificationEntity notificationEntity = storedNotification(
+                InvestigationNotificationEntity
                         .builder()
                         .id("1")
                         .investigation(persistedInvestigation)

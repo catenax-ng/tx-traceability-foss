@@ -44,8 +44,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "notification")
-public class NotificationEntity extends QualityNotificationMessageBaseEntity {
+@Table(name = "investigation_notification")
+public class InvestigationNotificationEntity extends QualityNotificationMessageBaseEntity {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "investigation_id")

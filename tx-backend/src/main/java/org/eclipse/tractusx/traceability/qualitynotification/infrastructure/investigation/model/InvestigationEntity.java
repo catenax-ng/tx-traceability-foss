@@ -54,7 +54,7 @@ public class InvestigationEntity extends QualityNotificationBaseEntity {
     private List<AssetEntity> assets;
 
     @OneToMany(mappedBy = "investigation")
-    private List<NotificationEntity> notifications;
+    private List<InvestigationNotificationEntity> notifications;
 
 
 }

@@ -32,7 +32,7 @@ import org.eclipse.tractusx.traceability.qualitynotification.domain.model.Qualit
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationSideBaseEntity
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.base.QualityNotificationStatusBaseEntity
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationEntity
-import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.NotificationEntity
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationNotificationEntity
 import org.springframework.beans.factory.annotation.Autowired
 
 import java.time.Instant
@@ -87,7 +87,7 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
     def "should add a notification to an existing investigation on API callback /qualitynotifications/update success"() {
         given:
         defaultAssetsStored()
-        NotificationEntity notification = NotificationEntity
+        InvestigationNotificationEntity notification = InvestigationNotificationEntity
                 .builder()
                 .id("1")
                 .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
@@ -104,9 +104,9 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
 
         InvestigationEntity persistedInvestigation = storedInvestigationFullObject(investigation)
 
-        NotificationEntity notificationEntity = storedNotification(notification)
+        InvestigationNotificationEntity notificationEntity = storedNotification(notification)
         notificationEntity.setInvestigation(persistedInvestigation);
-        NotificationEntity persistedNotification = storedNotification(notificationEntity)
+        InvestigationNotificationEntity persistedNotification = storedNotification(notificationEntity)
 
         investigation.setNotifications(List.of(persistedNotification))
 
@@ -137,7 +137,7 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
     def "should throw bad request because edcNotification Method is not supported /qualitynotifications/receive"() {
         given:
         defaultAssetsStored()
-        NotificationEntity notification = NotificationEntity
+        InvestigationNotificationEntity notification = InvestigationNotificationEntity
                 .builder()
                 .id("1")
                 .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
@@ -154,9 +154,9 @@ class EdcControllerIT extends IntegrationSpecification implements TestDataSuppor
 
         InvestigationEntity persistedInvestigation = storedInvestigationFullObject(investigation)
 
-        NotificationEntity notificationEntity = storedNotification(notification)
+        InvestigationNotificationEntity notificationEntity = storedNotification(notification)
         notificationEntity.setInvestigation(persistedInvestigation);
-        NotificationEntity persistedNotification = storedNotification(notificationEntity)
+        InvestigationNotificationEntity persistedNotification = storedNotification(notificationEntity)
 
         investigation.setNotifications(List.of(persistedNotification))
 
