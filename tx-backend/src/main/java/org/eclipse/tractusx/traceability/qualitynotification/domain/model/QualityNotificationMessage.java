@@ -99,8 +99,6 @@ public class QualityNotificationMessage {
                 .targetDate(targetDate)
                 .severity(severity)
                 .edcNotificationId(edcNotificationId)
-                .created(created)
-                .updated(updated)
                 .messageId(UUID.randomUUID().toString())
                 .isInitial(false)
                 .build();
