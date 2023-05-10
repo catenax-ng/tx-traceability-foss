@@ -25,22 +25,23 @@ import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.assets.domain.model.Dashboard;
 import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
 import org.eclipse.tractusx.traceability.assets.domain.service.repository.AssetRepository;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationsRepository;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.repository.InvestigationRepository;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class DashboardService {
 
-	private final AssetRepository assetRepository;
-	private final InvestigationsRepository investigationsRepository;
+    private final AssetRepository assetRepository;
+    private final InvestigationRepository investigationsRepository;
 
 	public Dashboard getDashboard() {
         long customerParts = assetRepository.countAssetsByOwner(Owner.CUSTOMER);
         long ownParts = assetRepository.countAssetsByOwner(Owner.OWN);
         long supplierParts = assetRepository.countAssetsByOwner(Owner.SUPPLIER);
-		long totalAssets = customerParts + ownParts + supplierParts;
-		long pendingInvestigations = investigationsRepository.countPendingInvestigations();
-		return new Dashboard(ownParts, totalAssets, pendingInvestigations);
-	}
+        long totalAssets = customerParts + ownParts + supplierParts;
+        long pendingInvestigations = investigationsRepository.countQualityNotificationEntitiesByStatus(QualityNotificationStatus.RECEIVED);
+        return new Dashboard(ownParts, totalAssets, pendingInvestigations);
+    }
 }

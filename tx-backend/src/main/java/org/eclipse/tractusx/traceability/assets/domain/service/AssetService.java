@@ -31,8 +31,8 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.ir
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.Direction;
 import org.eclipse.tractusx.traceability.assets.infrastructure.config.async.AssetsAsyncConfig;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.Investigation;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.model.InvestigationStatus;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -109,10 +109,10 @@ public class AssetService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public void setAssetsInvestigationStatus(Investigation investigation) {
+    public void setAssetsInvestigationStatus(QualityNotification investigation) {
         assetRepository.getAssetsById(investigation.getAssetIds()).forEach(asset -> {
             // Assets in status closed will be false, others true
-            asset.setUnderInvestigation(!investigation.getInvestigationStatus().equals(InvestigationStatus.CLOSED));
+            asset.setUnderInvestigation(!investigation.getInvestigationStatus().equals(QualityNotificationStatus.CLOSED));
             assetRepository.save(asset);
         });
 
