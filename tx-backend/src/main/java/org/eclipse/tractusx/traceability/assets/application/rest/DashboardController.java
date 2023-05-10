@@ -30,7 +30,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.assets.application.rest.response.DashboardResponse;
-import org.eclipse.tractusx.traceability.assets.domain.model.Dashboard;
 import org.eclipse.tractusx.traceability.assets.domain.service.DashboardService;
 import org.eclipse.tractusx.traceability.common.security.InjectedJwtAuthentication;
 import org.eclipse.tractusx.traceability.common.security.JwtAuthentication;
@@ -53,7 +52,7 @@ public class DashboardController {
 		description = "The endpoint can return limited data based on the user role",
 		security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns dashboard data",
-		content = {@Content(schema = @Schema(implementation = Dashboard.class))}),
+		content = {@Content(schema = @Schema(implementation = DashboardResponse.class))}),
 		@ApiResponse(responseCode = "401", description = "Authorization failed."),
 		@ApiResponse(responseCode = "403", description = "Forbidden.")})
 	public DashboardResponse dashboard(@InjectedJwtAuthentication JwtAuthentication jwtAuthentication) {

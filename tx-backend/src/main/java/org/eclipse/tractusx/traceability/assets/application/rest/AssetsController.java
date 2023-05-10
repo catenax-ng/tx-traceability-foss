@@ -36,7 +36,6 @@ import org.eclipse.tractusx.traceability.assets.application.rest.request.GetDeta
 import org.eclipse.tractusx.traceability.assets.application.rest.request.SyncAssetsRequest;
 import org.eclipse.tractusx.traceability.assets.application.rest.request.UpdateAssetRequest;
 import org.eclipse.tractusx.traceability.assets.application.rest.response.AssetResponse;
-import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
 import org.eclipse.tractusx.traceability.assets.domain.service.AssetService;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
@@ -82,7 +81,7 @@ public class AssetsController {
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found for Asset", content = @Content(
             mediaType = "application/json",
-            array = @ArraySchema(arraySchema = @Schema(description = "Assets", implementation = Asset.class), maxItems = Integer.MAX_VALUE)
+            array = @ArraySchema(arraySchema = @Schema(description = "Assets", implementation = AssetResponse.class), maxItems = Integer.MAX_VALUE)
     )),
             @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
@@ -112,7 +111,7 @@ public class AssetsController {
             description = "The endpoint returns an asset filtered by id .",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the assets found",
-            content = {@Content(schema = @Schema(implementation = Asset.class))}),
+            content = {@Content(schema = @Schema(implementation = AssetResponse.class))}),
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("/{assetId}")
@@ -127,7 +126,7 @@ public class AssetsController {
             description = "The endpoint returns an asset filtered by child id.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the asset by childId",
-            content = {@Content(schema = @Schema(implementation = Asset.class))}),
+            content = {@Content(schema = @Schema(implementation = AssetResponse.class))}),
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @GetMapping("/{assetId}/children/{childId}")
@@ -141,7 +140,7 @@ public class AssetsController {
             description = "The endpoint updates asset by provided quality type.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the updated asset",
-            content = {@Content(schema = @Schema(implementation = Asset.class))}),
+            content = {@Content(schema = @Schema(implementation = AssetResponse.class))}),
             @ApiResponse(responseCode = "401", description = "Authorization failed."),
             @ApiResponse(responseCode = "403", description = "Forbidden.")})
     @PatchMapping("/{assetId}")
@@ -158,7 +157,7 @@ public class AssetsController {
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found for Asset", content = @Content(
             mediaType = "application/json",
-            array = @ArraySchema(arraySchema = @Schema(description = "Assets", implementation = Asset.class), maxItems = Integer.MAX_VALUE)
+            array = @ArraySchema(arraySchema = @Schema(description = "Assets", implementation = AssetResponse.class), maxItems = Integer.MAX_VALUE)
     )),
             @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
             @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
