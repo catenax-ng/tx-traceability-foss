@@ -167,27 +167,6 @@ public class Policy {
                 Objects.equals(inheritsFrom, policy.inheritsFrom) && Objects.equals(assigner, policy.assigner) && Objects.equals(assignee, policy.assignee) && Objects.equals(target, policy.target) && type == policy.type;
     }
 
-
-    /**
-     * Returns a copy of this policy with the specified target.
-     *
-     * @param target the target.
-     * @return a copy with the specified target.
-     */
-    public Policy withTarget(String target) {
-        return Builder.newInstance()
-                .prohibitions(prohibitions.stream().map(p -> p.withTarget(target)).collect(Collectors.toList()))
-                .permissions(permissions.stream().map(p -> p.withTarget(target)).collect(Collectors.toList()))
-                .duties(obligations.stream().map(o -> o.withTarget(target)).collect(Collectors.toList()))
-                .assigner(assigner)
-                .assignee(assignee)
-                .inheritsFrom(inheritsFrom)
-                .type(type)
-                .extensibleProperties(extensibleProperties)
-                .target(target)
-                .build();
-    }
-
     public interface Visitor<R> {
         R visitPolicy(Policy policy);
     }

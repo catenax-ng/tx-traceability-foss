@@ -24,7 +24,6 @@ package org.eclipse.tractusx.traceability.assets.infrastructure.rest;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.apache.groovy.util.Maps;
-import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.Constants;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.asset.Asset;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.cache.EndpointDataReference;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.cache.InMemoryEndpointDataReferenceCache;
@@ -54,6 +53,7 @@ import java.util.List;
 @RequestMapping("/edc/")
 public class EDCReceiverController {
 
+    private static final String ASSET_KEY_NOTIFICATION_TYPE = "asset:prop:notificationtype";
 	private static final Logger logger = LoggerFactory.getLogger(EDCReceiverController.class);
 
 	private final TestRestTemplate restTemplate;
@@ -77,7 +77,7 @@ public class EDCReceiverController {
 				.id("contract-id")
 				.asset(Asset.Builder.newInstance()
 					.id("asset-id")
-					.property(Constants.ASSET_KEY_NOTIFICATION_TYPE, Constants.ASSET_VALUE_QUALITY_INVESTIGATION)
+					.property(ASSET_KEY_NOTIFICATION_TYPE, Asset.ASSET_VALUE_QUALITY_INVESTIGATION)
 					.build()
 				).policy(Policy.Builder.newInstance()
 					.build()

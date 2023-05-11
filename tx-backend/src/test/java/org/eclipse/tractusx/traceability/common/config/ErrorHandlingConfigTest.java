@@ -44,6 +44,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.mock.http.MockHttpInputMessage;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -54,8 +55,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.OutputStream;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -223,6 +222,7 @@ class ErrorHandlingConfigTest {
             super("msg");
         }
     }
+
     @RestController
     private static class DummyController {
 
@@ -240,7 +240,10 @@ class ErrorHandlingConfigTest {
 
         @GetMapping("/httpMessageNotReadableException")
         public void httpMessageNotReadableException() {
-            throw new HttpMessageNotReadableException("");
+            byte[] message = new byte[]{};
+            throw new HttpMessageNotReadableException(
+                    "",
+                    new MockHttpInputMessage(message));
         }
 
         @GetMapping("/assetNotFoundException")

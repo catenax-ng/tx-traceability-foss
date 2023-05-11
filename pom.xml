@@ -89,12 +89,8 @@
 
         <sonar.exclusions>
             org/eclipse/tractusx/traceability/TraceabilityApplication.java,
-            org/eclipse/tractusx/traceability/infrastructure/edc/blackbox/agreement/ContractAgreement.java,
-            org/eclipse/tractusx/traceability/infrastructure/edc/blackbox/agreement/ContractAgreementRequest.java,
-            org/eclipse/tractusx/traceability/infrastructure/edc/blackbox/model/**/*.java,
             org/eclipse/tractusx/traceability/infrastructure/edc/blackbox/negotiation/**/*.java,
             org/eclipse/tractusx/traceability/infrastructure/edc/blackbox/policy/**/*.java,
-            org/eclipse/tractusx/traceability/infrastructure/edc/blackbox/Constants.java,
             org/eclipse/tractusx/traceability/infrastructure/edc/blackbox/EdcService.java,
             org/eclipse/tractusx/traceability/infrastructure/edc/blackbox/HttpCallService.java,
             org/eclipse/tractusx/traceability/infrastructure/jpa/notification/NotificationEntity.java,
