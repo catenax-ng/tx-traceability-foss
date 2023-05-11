@@ -32,8 +32,8 @@ class BadRequestExceptionTest {
     @Test
     void givenBadRequestException_thenShouldHaveProperMessage() {
         // given
-        val message = "message";
-        val exception = new BadRequestException(message);
+        String message = "message";
+        BadRequestException exception = new BadRequestException(message);
 
         // then
         assertThat(exception.getMessage()).isEqualTo(message);
