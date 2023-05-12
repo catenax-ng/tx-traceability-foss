@@ -53,7 +53,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class EdcService {
 
-    private static final MediaType JSON = MediaType.get("application/json");
+    public static final MediaType JSON = MediaType.get("application/json");
 
     private final HttpCallService httpCallService;
     private final ObjectMapper objectMapper;
@@ -149,7 +149,6 @@ public class EdcService {
         var request = new Request.Builder().url(url).post(requestBody);
 
         headers.forEach(request::addHeader);
-        request.build();
         TransferId negotiationId = (TransferId) httpCallService.sendRequest(request.build(), TransferId.class);
         log.info(":::: Method [initiateNegotiation] Negotiation Id :{}", negotiationId.getId());
         return negotiationId.getId();
