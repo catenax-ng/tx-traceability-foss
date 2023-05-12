@@ -19,42 +19,23 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.metrics.registrylookup;
+package org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.metrics.RegistryLookupStatus;
+import org.junit.jupiter.api.Test;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.time.Instant;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@Entity
-@Table(name = "registry_lookup_metrics")
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
-@Getter
-@Builder
-public class RegistryLookupMetricEntity {
+class PolicyTest {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Test
+    void givenPolicyWithNoPermissions_whenHasTracePolicy_thenReturnFalse() {
+        // given
+        final Policy policy = Policy.Builder.newInstance().build();
 
-	private Instant startDate;
+        // when
+        final Boolean result = policy.hasTracePolicy();
 
-	private RegistryLookupStatus status;
-
-	private Long successShellDescriptorsFetchCount;
-
-	private Long failedShellDescriptorsFetchCount;
-
-	private Instant endDate;
+        //then
+        assertThat(result).isFalse();
+    }
 }

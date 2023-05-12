@@ -28,32 +28,14 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.agreement.ContractAgreement;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.offer.ContractOffer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static java.lang.String.format;
-import static java.util.stream.Collectors.joining;
-import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.negotiation.ContractNegotiationStates.CONFIRMED;
-import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.negotiation.ContractNegotiationStates.CONFIRMING;
-import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.negotiation.ContractNegotiationStates.CONSUMER_APPROVED;
-import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.negotiation.ContractNegotiationStates.CONSUMER_APPROVING;
-import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.negotiation.ContractNegotiationStates.CONSUMER_OFFERED;
-import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.negotiation.ContractNegotiationStates.CONSUMER_OFFERING;
-import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.negotiation.ContractNegotiationStates.DECLINED;
-import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.negotiation.ContractNegotiationStates.DECLINING;
-import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.negotiation.ContractNegotiationStates.INITIAL;
-import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.negotiation.ContractNegotiationStates.PROVIDER_OFFERED;
-import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.negotiation.ContractNegotiationStates.PROVIDER_OFFERING;
-import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.negotiation.ContractNegotiationStates.REQUESTED;
-import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.negotiation.ContractNegotiationStates.REQUESTING;
 import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.negotiation.ContractNegotiationStates.UNSAVED;
 
 /**

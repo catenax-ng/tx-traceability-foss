@@ -19,42 +19,40 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.jpa.metrics.registrylookup;
+package org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.metrics.RegistryLookupStatus;
+import org.junit.jupiter.api.Test;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.time.Instant;
+import java.util.List;
 
-@Entity
-@Table(name = "registry_lookup_metrics")
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
-@Getter
-@Builder
-public class RegistryLookupMetricEntity {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+class AndConstraintTest {
 
-	private Instant startDate;
+    @Test
+    void create() {
+        // given
+        final AndConstraint toTest = AndConstraint.Builder.newInstance().build();
+        final List<Constraint> constraints = List.of(AndConstraint.Builder.newInstance().build());
 
-	private RegistryLookupStatus status;
+        // when
+        final AndConstraint result = toTest.create(constraints);
 
-	private Long successShellDescriptorsFetchCount;
+        // then
+        assertThat(result.getConstraints()).hasSize(1);
+    }
 
-	private Long failedShellDescriptorsFetchCount;
+    @Test
+    void toStringMethod() {
+        // given
+        final AndConstraint toTest = AndConstraint.Builder.newInstance()
+                .build();
 
-	private Instant endDate;
+        // when
+        final String result = toTest.toString();
+
+        // then
+        assertThat(result).isEqualTo("And constraint: []");
+    }
+
 }
