@@ -25,23 +25,26 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ProhibitionTest {
+class IdentifiableTest {
 
     @Test
-    void givenProhibition_whenToString_thenProperString() {
+    void givenClass_hasIdentifiableField() {
         // given
-        final Prohibition prohibition = Prohibition.Builder.newInstance()
-                .constraint(
-                        OrConstraint.Builder
-                                .newInstance()
-                                .build()
-                )
-                .build();
-
-        // when
-        final String result = prohibition.toString();
+        final TestClass test = new TestClass();
 
         // then
-        assertThat(result).isEqualTo("Prohibition constraints: [Or constraint: []]");
+        assertThat(test)
+                .hasFieldOrProperty("uid")
+                .extracting(TestClass::getUid)
+                .isEqualTo("uid_value");
+
+    }
+
+
+    private class TestClass extends Identifiable {
+
+        TestClass() {
+            this.uid = "uid_value";
+        }
     }
 }
