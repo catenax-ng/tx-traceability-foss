@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased - x.x.x]
 
+### Added
+
+- E2E A env profile configuration
+- E2E B env profile configuration
+
 ## [3.4.0] - 2023-05-11
 
 ### Added
