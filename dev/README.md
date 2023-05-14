@@ -22,7 +22,7 @@ python transform-and-upload.py -f CX_Testdata_v1.4.1-AsBuilt-reduced-with-asPlan
 Sample invocation (E2E A & E2E B)
 
 ```
-python transform-and-upload.py -f CX_Testdata_MessagingTest_v0.0.1 -s https://tracex-submodel-server-e2e.dev.demo.catena-x.net https://tracex-submodel-server-e2e.dev.demo.catena-x.net -edc https://trace-x-test-edc.dev.demo.catena-x.net https://trace-x-edc.dev.demo.catena-x.net -a https://trace-x-registry-e2e.dev.demo.catena-x.net/semantics/registry -k apiKey
+python transform-and-upload.py -f CX_Testdata_MessagingTest_v0.0.1.json -s https://tracex-submodel-server-e2e.dev.demo.catena-x.net https://tracex-submodel-server-e2e.dev.demo.catena-x.net -edc https://trace-x-edc-e2e-a.dev.demo.catena-x.net https://trace-x-edc-e2e-b.dev.demo.catena-x.net -a https://trace-x-registry-e2e.dev.demo.catena-x.net/semantics/registry -k apiKey
 ```
 
 where:
