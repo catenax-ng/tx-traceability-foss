@@ -101,17 +101,6 @@ class EdcServiceTest {
         properties.put(PROPERTY_NOTIFICATION_TYPE, "qualityinvestigation");
         properties.put(PROPERTY_NOTIFICATION_METHOD, "receive");
 
-        Permission permission = Permission.Builder.newInstance()
-                .constraint(AtomicConstraint.Builder.newInstance()
-                        .leftExpression(new LiteralExpression("idsc:PURPOSE"))
-                        .rightExpression(new LiteralExpression("ID 3.0 Trace"))
-                        .operator(Operator.EQ)
-                        .build()
-                )
-                .build();
-        Policy policy = Policy.Builder.newInstance().permission(permission).build();
-        Asset asset = Builder.newInstance().properties(properties).build();
-        ContractOffer expectedContractOffer = ContractOffer.Builder.newInstance().id("123").policy(policy).asset(asset).build();
         Catalog catalog = Catalog.Builder.newInstance().id("234").contractOffers(emptyList()).build();
 
 

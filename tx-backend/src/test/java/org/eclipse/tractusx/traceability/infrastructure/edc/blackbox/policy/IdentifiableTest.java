@@ -40,8 +40,7 @@ class IdentifiableTest {
 
     }
 
-
-    private class TestClass extends Identifiable {
+    private static class TestClass extends Identifiable {
 
         TestClass() {
             this.uid = "uid_value";

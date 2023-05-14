@@ -11,14 +11,7 @@ class PermissionTest {
     @Test
     void builder() {
         // given
-        final Permission permission = Permission.Builder
-                .newInstance().build();
         final Duty duty1 = Duty.Builder.newInstance().build();
-
-        final Duty duty2 = Duty.Builder.newInstance()
-                .parentPermission(permission)
-                .consequence(duty1)
-                .build();
 
         // when
         final Permission result = Permission.Builder
