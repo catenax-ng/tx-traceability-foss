@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -41,6 +42,7 @@ import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.Cons
  * The {@link Asset} contains the metadata and describes the data itself or a collection of data.
  */
 @Slf4j
+@ToString
 @JsonDeserialize(builder = Asset.Builder.class)
 public class Asset {
 
