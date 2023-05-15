@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +40,7 @@ import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.Cons
 /**
  * The {@link Asset} contains the metadata and describes the data itself or a collection of data.
  */
+@Slf4j
 @JsonDeserialize(builder = Asset.Builder.class)
 public class Asset {
 
@@ -93,11 +95,13 @@ public class Asset {
 
     @JsonIgnore
     public boolean isQualityInvestigationReceive() {
+        log.info("Notification type: {} Notification receive method: {}, evaluation isQualityInvestigationReceive {}", this.getPropertyNotificationType(), this.getPropertyNotificationMethod(), ASSET_VALUE_QUALITY_INVESTIGATION.equals(this.getPropertyNotificationType()) && ASSET_VALUE_NOTIFICATION_METHOD_RECEIVE.equals(this.getPropertyNotificationMethod()));
         return ASSET_VALUE_QUALITY_INVESTIGATION.equals(this.getPropertyNotificationType()) && ASSET_VALUE_NOTIFICATION_METHOD_RECEIVE.equals(this.getPropertyNotificationMethod());
     }
 
     @JsonIgnore
     public boolean isQualityInvestigationUpdate() {
+        log.info("Notification type: {} Notification update method: {}, evaluation isQualityInvestigationReceive {}", this.getPropertyNotificationType(), this.getPropertyNotificationMethod(), ASSET_VALUE_QUALITY_INVESTIGATION.equals(this.getPropertyNotificationType()) && ASSET_VALUE_NOTIFICATION_METHOD_UPDATE.equals(this.getPropertyNotificationMethod()));
         return ASSET_VALUE_QUALITY_INVESTIGATION.equals(this.getPropertyNotificationType()) && ASSET_VALUE_NOTIFICATION_METHOD_UPDATE.equals(this.getPropertyNotificationMethod());
     }
 
