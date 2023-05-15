@@ -73,8 +73,6 @@ public class HttpCallService {
             Map<String, String> headers
     ) throws IOException {
         var url = consumerEdcDataManagementUrl + edcProperties.getCatalogPath();
-        log.info("getCatalogFromProvider url {}", url);
-        log.info("catalogRequestDTO provider Url {}", providerConnectorControlPlaneIDSUrl);
         MediaType mediaType = MediaType.parse("application/json");
         CatalogRequestDTO catalogRequestDTO = new CatalogRequestDTO(providerConnectorControlPlaneIDSUrl);
         var request = new Request.Builder().url(url).post(RequestBody.create(mediaType, objectMapper.writeValueAsString(catalogRequestDTO)));

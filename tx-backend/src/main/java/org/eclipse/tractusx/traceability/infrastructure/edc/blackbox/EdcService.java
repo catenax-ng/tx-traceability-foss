@@ -81,13 +81,11 @@ public class EdcService {
         log.info(":::: Find Notification contract method[findNotificationContractOffer] total catalog ::{}", catalog.getContractOffers().size());
 
         if (isInitialNotification) {
-            log.info("Is receive notification filter");
             return catalog.getContractOffers().stream()
                     .filter(it -> it.getAsset().isQualityInvestigationReceive())
                     .filter(this::hasTracePolicy)
                     .findAny();
         } else {
-            log.info("Is update notification filter");
             return catalog.getContractOffers().stream()
                     .filter(it -> it.getAsset().isQualityInvestigationUpdate())
                     .filter(this::hasTracePolicy)
@@ -96,9 +94,6 @@ public class EdcService {
     }
 
     private boolean hasTracePolicy(ContractOffer contractOffer) {
-        if (contractOffer.getPolicy() != null) {
-            log.info(":::: ContractOffer {} hasTracePolicy {}", contractOffer, contractOffer.getPolicy().hasTracePolicy());
-        }
         return contractOffer.getPolicy() != null && contractOffer.getPolicy().hasTracePolicy();
     }
 
