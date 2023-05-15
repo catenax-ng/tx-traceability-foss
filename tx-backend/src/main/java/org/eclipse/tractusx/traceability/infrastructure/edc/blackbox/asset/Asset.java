@@ -95,12 +95,14 @@ public class Asset {
 
     @JsonIgnore
     public boolean isQualityInvestigationReceive() {
+        log.info("ASSET: {}", this);
         log.info("Notification type: {} Notification receive method: {}, evaluation isQualityInvestigationReceive {}", this.getPropertyNotificationType(), this.getPropertyNotificationMethod(), ASSET_VALUE_QUALITY_INVESTIGATION.equals(this.getPropertyNotificationType()) && ASSET_VALUE_NOTIFICATION_METHOD_RECEIVE.equals(this.getPropertyNotificationMethod()));
         return ASSET_VALUE_QUALITY_INVESTIGATION.equals(this.getPropertyNotificationType()) && ASSET_VALUE_NOTIFICATION_METHOD_RECEIVE.equals(this.getPropertyNotificationMethod());
     }
 
     @JsonIgnore
     public boolean isQualityInvestigationUpdate() {
+        log.info("ASSET: {}", this);
         log.info("Notification type: {} Notification update method: {}, evaluation isQualityInvestigationReceive {}", this.getPropertyNotificationType(), this.getPropertyNotificationMethod(), ASSET_VALUE_QUALITY_INVESTIGATION.equals(this.getPropertyNotificationType()) && ASSET_VALUE_NOTIFICATION_METHOD_UPDATE.equals(this.getPropertyNotificationMethod()));
         return ASSET_VALUE_QUALITY_INVESTIGATION.equals(this.getPropertyNotificationType()) && ASSET_VALUE_NOTIFICATION_METHOD_UPDATE.equals(this.getPropertyNotificationMethod());
     }
