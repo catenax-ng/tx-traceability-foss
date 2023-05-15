@@ -17,28 +17,29 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.infrastructure.test.support;
+package org.eclipse.tractusx.traceability.assets.application.rest.response;
 
-import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.agreement.ContractAgreement;
-import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.Policy;
 
-public class ContractAgreementMother {
-    public static ContractAgreement getContractAgreement(final Policy policy) {
-        return ContractAgreement.Builder
-                .newInstance()
-                .id("id")
-                .providerAgentId("providerAgentId")
-                .consumerAgentId("consumerAgentId")
-                .contractSigningDate(1)
-                .contractStartDate(2)
-                .contractEndDate(3)
-                .assetId("assetId")
-                .policy(policy)
-                .build();
+import org.eclipse.tractusx.traceability.assets.domain.model.Descriptions;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class DescriptionsResponseTest {
+
+    @Test
+    void givenDescriptionsResponse_whenFrom_thenMapCorrectly() {
+        // given
+        final String id = "identifier";
+        final String shortId = "shortIdentifier";
+        final Descriptions response = new Descriptions(id, shortId);
+
+        // when
+        final DescriptionsResponse result = DescriptionsResponse.from(response);
+
+        // then
+        assertThat(result).usingRecursiveComparison()
+                .isEqualTo(response);
     }
 
-    public static Policy getPolicy() {
-        return Policy.Builder.newInstance()
-                .build();
-    }
 }

@@ -92,17 +92,7 @@ class EdcServiceTest {
     @Test
     void givenEmptyCatalogContractOffers_whenFindNotificationContractOffer_thenThrowBadRequestException() throws IOException {
         // given
-        Map<String, Object> properties = new HashMap<>();
-        properties.put(PROPERTY_ID, 123);
-        properties.put(PROPERTY_NAME, "My Asset");
-        properties.put(PROPERTY_DESCRIPTION, "This is a description of my asset.");
-        properties.put(PROPERTY_VERSION, 1.0);
-        properties.put(PROPERTY_CONTENT_TYPE, "image/jpeg");
-        properties.put(PROPERTY_NOTIFICATION_TYPE, "qualityinvestigation");
-        properties.put(PROPERTY_NOTIFICATION_METHOD, "receive");
-
         Catalog catalog = Catalog.Builder.newInstance().id("234").contractOffers(emptyList()).build();
-
 
         Map<String, String> header = new HashMap<>();
         when(httpCallService.getCatalogFromProvider(CONSUMER_EDC_DATA_MANAGEMENT_URL, PROVIDER_CONNECTOR_CONTROL_PLANE_IDS_URL, header)).thenReturn(catalog);

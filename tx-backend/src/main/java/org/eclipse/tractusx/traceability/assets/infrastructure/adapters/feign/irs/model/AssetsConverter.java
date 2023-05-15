@@ -24,6 +24,7 @@ package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.i
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
+import org.eclipse.tractusx.traceability.assets.domain.model.Descriptions;
 import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
 import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 import org.eclipse.tractusx.traceability.assets.domain.model.ShellDescriptor;
@@ -137,7 +138,7 @@ public class AssetsConverter {
                 shellDescriptor.manufacturerPartId(),
                 null,
                 EMPTY_TEXT,
-                IrsOwner.OWN.toDomain(),
+                Owner.OWN,
                 Collections.emptyList(),
                 Collections.emptyList(),
                 false,
@@ -153,19 +154,19 @@ public class AssetsConverter {
 
         if (manufacturerId.isPresent() && traceabilityProperties.getBpn().value().equals(manufacturerId.get())) {
             logger.info("OWNER: BPN MATCH: {}", catenaXId);
-            return IrsOwner.OWN.toDomain();
+            return Owner.OWN;
         }
 
         if (supplierParts.containsKey(catenaXId)) {
             logger.info("OWNER: supplierParts.containsKey(catenaXId): {}", catenaXId);
-            return IrsOwner.SUPPLIER.toDomain();
+            return Owner.SUPPLIER;
         }
         if (customerParts.containsKey(catenaXId)) {
             logger.info("OWNER: customerParts.containsKey(catenaXId): {}", catenaXId);
-            return IrsOwner.CUSTOMER.toDomain();
+            return Owner.CUSTOMER;
         }
         logger.info("OWNER: customerParts.containsKey(catenaXId): {}", catenaXId);
-        return IrsOwner.OWN.toDomain();
+        return Owner.OWN;
     }
 
 
@@ -219,12 +220,12 @@ public class AssetsConverter {
         return value;
     }
 
-    private List<Asset.Descriptions> getPartsFromRelationships(Map<String, List<Relationship>> relationships, Map<String, String> shortIds, String catenaXId) {
-       logger.info("getPartsFromRelationships: catenaXiD {} with relationships {} and shortIds {}", catenaXId, relationships, shortIds);
+    private List<Descriptions> getPartsFromRelationships(Map<String, List<Relationship>> relationships, Map<String, String> shortIds, String catenaXId) {
+        logger.info("getPartsFromRelationships: catenaXiD {} with relationships {} and shortIds {}", catenaXId, relationships, shortIds);
         return Optional.ofNullable(relationships.get(catenaXId))
                 .orElse(Collections.emptyList())
                 .stream()
-                .map(child -> new Asset.Descriptions(child.catenaXId(), shortIds.get(child.catenaXId())))
+                .map(child -> new Descriptions(child.catenaXId(), shortIds.get(child.catenaXId())))
                 .toList();
     }
 

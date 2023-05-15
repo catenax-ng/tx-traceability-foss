@@ -54,7 +54,7 @@ class PersistentBpnEdcMappingRepositoryTest {
         String bpn = "123";
         when(jpaBpnEdcRepository.findById(bpn)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> mappingRepository.findById(bpn))
+        assertThatThrownBy(() -> mappingRepository.findByIdOrThrowNotFoundException(bpn))
                 .isInstanceOf(BpnEdcMappingNotFoundException.class)
                 .hasMessage("EDC URL mapping with BPN %s was not found.", bpn);
     }

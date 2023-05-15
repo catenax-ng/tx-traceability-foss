@@ -51,9 +51,4 @@ public final class Asset {
     private boolean underInvestigation;
     private QualityType qualityType;
     private String van;
-
-    public record Descriptions(
-            String id,
-            String idShort) {
-    }
 }

@@ -17,28 +17,19 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.infrastructure.test.support;
+package org.eclipse.tractusx.traceability.assets.application.rest.response;
 
-import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.agreement.ContractAgreement;
-import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.policy.Policy;
+import io.swagger.annotations.ApiModelProperty;
+import org.eclipse.tractusx.traceability.assets.domain.model.Descriptions;
 
-public class ContractAgreementMother {
-    public static ContractAgreement getContractAgreement(final Policy policy) {
-        return ContractAgreement.Builder
-                .newInstance()
-                .id("id")
-                .providerAgentId("providerAgentId")
-                .consumerAgentId("consumerAgentId")
-                .contractSigningDate(1)
-                .contractStartDate(2)
-                .contractEndDate(3)
-                .assetId("assetId")
-                .policy(policy)
-                .build();
-    }
+public record DescriptionsResponse(
+        @ApiModelProperty(example = "urn:uuid:a4a26b9c-9460-4cc5-8645-85916b86adb0") String id,
+        @ApiModelProperty(example = "null") String idShort) {
 
-    public static Policy getPolicy() {
-        return Policy.Builder.newInstance()
-                .build();
+    public static DescriptionsResponse from(final Descriptions descriptions) {
+        return new DescriptionsResponse(
+                descriptions.id(),
+                descriptions.idShort()
+        );
     }
 }

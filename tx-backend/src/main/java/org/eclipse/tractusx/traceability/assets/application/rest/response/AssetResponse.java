@@ -1,7 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
- * Copyright (c) 2022, 2023 ZF Friedrichshafen AG
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -76,7 +74,7 @@ public final class AssetResponse {
     @ApiModelProperty(example = "false")
     private boolean underInvestigation;
     @ApiModelProperty(example = "Ok")
-    private QualityTypeRequestResponse qualityType;
+    private QualityTypeResponse qualityType;
     @ApiModelProperty(example = "--")
     private String van;
 
@@ -105,7 +103,7 @@ public final class AssetResponse {
                                 .toList())
                 .underInvestigation(asset.isUnderInvestigation())
                 .qualityType(
-                        QualityTypeRequestResponse.from(asset.getQualityType())
+                        QualityTypeResponse.from(asset.getQualityType())
                 )
                 .van(asset.getVan())
                 .build();
@@ -126,17 +124,5 @@ public final class AssetResponse {
         return assets.stream()
                 .map(AssetResponse::from)
                 .toList();
-    }
-
-    public record DescriptionsResponse(
-            @ApiModelProperty(example = "urn:uuid:a4a26b9c-9460-4cc5-8645-85916b86adb0") String id,
-            @ApiModelProperty(example = "null") String idShort) {
-
-        public static DescriptionsResponse from(final Asset.Descriptions descriptions) {
-            return new DescriptionsResponse(
-                    descriptions.id(),
-                    descriptions.idShort()
-            );
-        }
     }
 }

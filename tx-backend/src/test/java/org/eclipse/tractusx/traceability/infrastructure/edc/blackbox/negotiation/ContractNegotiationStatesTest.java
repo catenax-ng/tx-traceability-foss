@@ -1,7 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
- * Copyright (c) 2022, 2023 ZF Friedrichshafen AG
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -46,7 +44,7 @@ import static org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.nego
 
 class ContractNegotiationStatesTest {
 
-    private static int NON_EXISTENT_CODE = 69;
+    private final static int NON_EXISTENT_CODE = 69;
 
     @ParameterizedTest
     @MethodSource("provideContractNegotiationStates")

@@ -35,7 +35,7 @@ public class PersistentBpnEdcMappingRepository implements BpnEdcMappingRepositor
     private final JpaBpnEdcRepository jpaBpnEdcRepository;
 
     @Override
-    public BpnEdcMapping findById(String bpn) {
+    public BpnEdcMapping findByIdOrThrowNotFoundException(String bpn) {
         return jpaBpnEdcRepository.findById(bpn)
                 .map(this::toDTO)
                 .orElseThrow(() -> new BpnEdcMappingNotFoundException("EDC URL mapping with BPN %s was not found."

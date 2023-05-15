@@ -68,16 +68,17 @@ public class ShellDescriptorEntity {
 
     public static ShellDescriptorEntity newEntityFrom(final ShellDescriptor descriptor) {
         ZonedDateTime now = ZonedDateTime.now();
-        return new ShellDescriptorEntity(
-                null,
-                now,
-                now,
-                descriptor.shellDescriptorId(),
-                descriptor.globalAssetId(),
-                descriptor.idShort(),
-                descriptor.partInstanceId(),
-                descriptor.manufacturerPartId(),
-                descriptor.batchId(),
-                descriptor.manufacturerId());
+        return ShellDescriptorEntity.builder()
+                .id(null)
+                .created(now)
+                .updated(now)
+                .shellDescriptorId(descriptor.shellDescriptorId())
+                .globalAssetId(descriptor.globalAssetId())
+                .idShort(descriptor.idShort())
+                .partInstanceId(descriptor.partInstanceId())
+                .manufacturerPartId(descriptor.manufacturerPartId())
+                .batchId(descriptor.batchId())
+                .manufacturerId(descriptor.manufacturerId())
+                .build();
     }
 }

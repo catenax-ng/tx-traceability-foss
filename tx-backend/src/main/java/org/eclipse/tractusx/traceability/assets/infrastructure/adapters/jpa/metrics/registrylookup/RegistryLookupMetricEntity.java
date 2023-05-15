@@ -25,7 +25,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.metrics.RegistryLookupMetric;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.metrics.RegistryLookupStatus;
 
 import jakarta.persistence.Entity;
@@ -37,11 +39,11 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "registry_lookup_metrics")
-@NoArgsConstructor
-@AllArgsConstructor
 @Setter
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RegistryLookupMetricEntity {
 
 	@Id
