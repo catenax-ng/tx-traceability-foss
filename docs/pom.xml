@@ -32,12 +32,12 @@
                     <dependency>
                         <groupId>org.asciidoctor</groupId>
                         <artifactId>asciidoctorj</artifactId>
-                        <version>${asciidoctorj.version}</version>
+                        <version>${ascii-dcotor-j.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.asciidoctor</groupId>
                         <artifactId>asciidoctorj-diagram</artifactId>
-                        <version>${asciidoctorj.diagram.version}</version>
+                        <version>${ascii-doctor-j-diagram.version}</version>
                     </dependency>
                 </dependencies>
                 <configuration>
