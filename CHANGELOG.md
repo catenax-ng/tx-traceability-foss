@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased - x.x.x]
 
+### Added
+
+- Added tests for SonarQube exclusions
+
+### Removed
+
+- Removed classes: AssetFacade, Constants, Command, ContractAgreementRequest, ContractOfferRequest, AssetFacadeTest
+
 ## [3.4.0] - 2023-05-11
 
 ### Added
