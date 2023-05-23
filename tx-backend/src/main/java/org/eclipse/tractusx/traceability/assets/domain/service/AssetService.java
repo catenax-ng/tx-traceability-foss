@@ -95,20 +95,24 @@ public class AssetService {
      */
     public List<Asset> combineAssetsAndMergeParentDescriptionIntoDownwardAssets(List<Asset> downwardAssets, List<Asset> upwardAssets) {
 
+
+        List<Asset> combinedList = new ArrayList<>(downwardAssets);
+
         Map<String, Asset> downwardAssetsMap = emptyIfNull(downwardAssets).stream()
                 .collect(Collectors.toMap(Asset::getId, Function.identity()));
 
-        return emptyIfNull(upwardAssets).stream()
-                .map(parentAsset -> {
-                    Asset matchingChildAsset = downwardAssetsMap.get(parentAsset.getId());
-                    if (matchingChildAsset == null) {
-                        return parentAsset;
-                    } else {
-                        matchingChildAsset.setParentDescriptions(parentAsset.getParentDescriptions());
-                        return matchingChildAsset;
+        for (Asset upwardAsset : upwardAssets) {
+            if (downwardAssetsMap.get(upwardAsset.getId()) != null) {
+                for (Asset byId : combinedList) {
+                    if (byId.getId().equals(upwardAsset.getId())) {
+                        byId.getParentDescriptions().addAll(upwardAsset.getParentDescriptions());
                     }
-                })
-                .collect(Collectors.toCollection(ArrayList::new));
+                }
+            } else {
+                combinedList.add(upwardAsset);
+            }
+        }
+        return combinedList;
     }
 
     public void setAssetsInvestigationStatus(QualityNotification investigation) {
