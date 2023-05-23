@@ -94,8 +94,6 @@ public class AssetService {
      * @return a new list of {@link Asset} objects that contains the combined assets with merged parent descriptions
      */
     public List<Asset> combineAssetsAndMergeParentDescriptionIntoDownwardAssets(List<Asset> downwardAssets, List<Asset> upwardAssets) {
-
-
         List<Asset> combinedList = new ArrayList<>(downwardAssets);
 
         Map<String, Asset> downwardAssetsMap = emptyIfNull(downwardAssets).stream()
@@ -106,6 +104,7 @@ public class AssetService {
                 for (Asset byId : combinedList) {
                     if (byId.getId().equals(upwardAsset.getId())) {
                         byId.setParentDescriptions(upwardAsset.getParentDescriptions());
+                        byId.setChildDescriptions(downwardAssetsMap.get(upwardAsset.getId()).getChildDescriptions());
                     }
                 }
             } else {

@@ -51,7 +51,7 @@ public class RegistryFacade {
 	public void updateShellDescriptorAndSynchronizeAssets() {
 		List<ShellDescriptor> ownShellDescriptors = updateOwnShellDescriptors();
 
-		assetService.saveAssets(assetsConverter.convertAssets(ownShellDescriptors));
+		assetService.saveAssets(assetsConverter.convertDefaultAsset(ownShellDescriptors));
 
         synchronizeAssetsByDescriptors(ownShellDescriptors);
     }

@@ -77,7 +77,7 @@ public class AssetsConverter {
         }
     }
 
-    public List<Asset> convertAssets(List<ShellDescriptor> items) {
+    public List<Asset> convertDefaultAsset(List<ShellDescriptor> items) {
         return items.stream()
                 .map(this::toAsset)
                 .toList();
@@ -106,51 +106,51 @@ public class AssetsConverter {
                 .collect(Collectors.groupingBy(Relationship::childCatenaXId, Collectors.toList()));
         log.info("customerPartsMap: {}", customerPartsMap);
         return allParts.stream()
-                .map(part -> new Asset(
-                        part.catenaXId(),
-                        defaultValue(shortIds.get(part.catenaXId())),
-                        defaultValue(part.partTypeInformation().nameAtManufacturer()),
-                        defaultValue(part.partTypeInformation().manufacturerPartId()),
-                        partInstanceId(part),
-                        manufacturerId(part),
-                        batchId(part),
-                        manufacturerName(part),
-                        defaultValue(part.partTypeInformation().nameAtCustomer()),
-                        defaultValue(part.partTypeInformation().customerPartId()),
-                        manufacturingDate(part),
-                        manufacturingCountry(part),
-                        getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId(), part.getLocalId(LocalIdKey.MANUFACTURER_ID)),
-                        getPartsFromRelationships(supplierPartsMap, shortIds, part.catenaXId()),
-                        getPartsFromRelationships(customerPartsMap, shortIds, part.catenaXId()),
-                        false,
-                        QualityType.OK,
-                        van(part)
-                )).toList();
+                .map(part ->
+                        Asset.builder()
+                                .id(part.catenaXId())
+                                .idShort(defaultValue(shortIds.get(part.catenaXId())))
+                                .nameAtManufacturer(defaultValue(part.partTypeInformation().nameAtManufacturer()))
+                                .manufacturerPartId(defaultValue(part.partTypeInformation().manufacturerPartId()))
+                                .partInstanceId(partInstanceId(part))
+                                .manufacturerId(manufacturerId(part))
+                                .batchId(batchId(part))
+                                .manufacturerName(manufacturerName(part))
+                                .nameAtCustomer(defaultValue(part.partTypeInformation().nameAtCustomer()))
+                                .customerPartId(defaultValue(part.partTypeInformation().customerPartId()))
+                                .manufacturingDate(manufacturingDate(part))
+                                .manufacturingCountry(manufacturingCountry(part))
+                                .owner(getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId(), part.getLocalId(LocalIdKey.MANUFACTURER_ID)))
+                                .childDescriptions(getPartsFromRelationships(supplierPartsMap, shortIds, part.catenaXId()))
+                                .parentDescriptions(getPartsFromRelationships(customerPartsMap, shortIds, part.catenaXId()))
+                                .underInvestigation(false)
+                                .qualityType(QualityType.OK)
+                                .van(van(part))
+                                .build()).toList();
     }
 
     private Asset toAsset(ShellDescriptor shellDescriptor) {
         String manufacturerId = shellDescriptor.manufacturerId();
         String manufacturerName = bpnRepository.findManufacturerName(manufacturerId).orElse(EMPTY_TEXT);
-        return new Asset(
-                shellDescriptor.globalAssetId(),
-                shellDescriptor.idShort(),
-                shellDescriptor.idShort(),
-                defaultValue(shellDescriptor.manufacturerPartId()),
-                defaultValue(shellDescriptor.partInstanceId()),
-                defaultValue(manufacturerId),
-                defaultValue(shellDescriptor.batchId()),
-                manufacturerName,
-                shellDescriptor.idShort(),
-                shellDescriptor.manufacturerPartId(),
-                null,
-                EMPTY_TEXT,
-                Owner.OWN,
-                Collections.emptyList(),
-                Collections.emptyList(),
-                false,
-                QualityType.OK,
-                EMPTY_TEXT
-        );
+        return Asset.builder()
+                .id(shellDescriptor.globalAssetId())
+                .idShort(shellDescriptor.idShort())
+                .nameAtManufacturer(shellDescriptor.idShort())
+                .manufacturerPartId(defaultValue(shellDescriptor.manufacturerPartId()))
+                .partInstanceId(defaultValue(shellDescriptor.partInstanceId()))
+                .manufacturerId(defaultValue(manufacturerId))
+                .batchId(defaultValue(shellDescriptor.batchId()))
+                .manufacturerName(manufacturerName)
+                .nameAtCustomer(shellDescriptor.idShort())
+                .customerPartId(shellDescriptor.manufacturerPartId())
+                .manufacturingCountry(EMPTY_TEXT)
+                .owner(Owner.OWN)
+                .childDescriptions(Collections.emptyList())
+                .parentDescriptions(Collections.emptyList())
+                .underInvestigation(false)
+                .qualityType(QualityType.OK)
+                .van(EMPTY_TEXT)
+                .build();
     }
 
     private Owner getPartOwner(
