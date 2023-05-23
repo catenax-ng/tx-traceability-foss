@@ -21,7 +21,7 @@
 
 feign:
   irsApi:
-    url: https://tracex-test-irs.dev.demo.catena-x.net
+    url: https://tracex-irs-test.dev.demo.catena-x.net
   registryApi:
     url: https://trace-x-registry.dev.demo.catena-x.net/semantics/registry
   portalApi:
