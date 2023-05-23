@@ -76,7 +76,9 @@ public class AssetService {
             List<Asset> upwardAssets = irsRepository.findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects());
             List<Asset> combinedAssetList = combineAssetsAndMergeParentDescriptionIntoDownwardAssets(downwardAssets, upwardAssets);
             assetRepository.saveAll(combinedAssetList);
-            log.info("Assets {} for globalAssetId {} successfully saved.", combinedAssetList, globalAssetId);
+            log.info("downwardAssets {} for globalAssetId {} successfully saved.", downwardAssets, globalAssetId);
+            log.info("upwardAssets {} for globalAssetId {} successfully saved.", upwardAssets, globalAssetId);
+            log.info("combinedAssetList {} for globalAssetId {} successfully saved.", combinedAssetList, globalAssetId);
         } catch (Exception e) {
             log.warn("Exception during assets synchronization for globalAssetId: {}. Message: {}.", globalAssetId, e.getMessage(), e);
         }
