@@ -105,7 +105,7 @@ public class AssetService {
             if (downwardAssetsMap.get(upwardAsset.getId()) != null) {
                 for (Asset byId : combinedList) {
                     if (byId.getId().equals(upwardAsset.getId())) {
-                        byId.getParentDescriptions().addAll(upwardAsset.getParentDescriptions());
+                        byId.setParentDescriptions(upwardAsset.getParentDescriptions());
                     }
                 }
             } else {
