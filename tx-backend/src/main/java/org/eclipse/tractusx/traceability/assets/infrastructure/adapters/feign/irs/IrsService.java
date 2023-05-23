@@ -21,6 +21,7 @@
 
 package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs;
 
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.service.repository.BpnRepository;
 import org.eclipse.tractusx.traceability.assets.domain.service.repository.IrsRepository;
@@ -30,17 +31,14 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.ir
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.JobStatus;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.StartJobRequest;
 import org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.irs.model.StartJobResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @Service
 public class IrsService implements IrsRepository {
-
-    private static final Logger logger = LoggerFactory.getLogger(IrsService.class);
 
     private final IRSApiClient irsClient;
     private final AssetsConverter assetsConverter;
@@ -59,11 +57,11 @@ public class IrsService implements IrsRepository {
 
         JobStatus jobStatus = jobResponse.jobStatus();
         long runtime = (jobStatus.lastModifiedOn().getTime() - jobStatus.startedOn().getTime()) / 1000;
-        logger.info("IRS call for globalAssetId: {} finished with status: {}, runtime {} s.", globalAssetId, jobStatus.state(), runtime);
+        log.info("IRS call for globalAssetId: {} finished with status: {}, runtime {} s.", globalAssetId, jobStatus.state(), runtime);
 
         if (jobResponse.isCompleted()) {
             bpnRepository.updateManufacturers(jobResponse.bpns());
-            return assetsConverter.convertAssets(jobResponse);
+            return assetsConverter.convertAssetsAndLog(jobResponse, globalAssetId);
         }
 
         return Collections.emptyList();

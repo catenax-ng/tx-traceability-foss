@@ -23,6 +23,7 @@ package org.eclipse.tractusx.traceability.assets.infrastructure.adapters.feign.i
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.model.Descriptions;
 import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
@@ -30,8 +31,6 @@ import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 import org.eclipse.tractusx.traceability.assets.domain.model.ShellDescriptor;
 import org.eclipse.tractusx.traceability.assets.domain.service.repository.BpnRepository;
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -46,8 +45,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class AssetsConverter {
-    private static final Logger logger = LoggerFactory.getLogger(AssetsConverter.class);
+
     public static final String EMPTY_TEXT = "--";
 
     private final BpnRepository bpnRepository;
@@ -83,7 +83,13 @@ public class AssetsConverter {
                 .toList();
     }
 
+    public List<Asset> convertAssetsAndLog(JobResponse response, String id) {
+        log.info("CONVERT ASSETS for GlobalAssetId: {}", id);
+        return this.convertAssets(response);
+    }
+
     public List<Asset> convertAssets(JobResponse response) {
+
         List<SerialPartTypization> allParts = response.serialPartTypizations();
 
         Map<String, String> shortIds = response.shells().stream()
@@ -92,13 +98,13 @@ public class AssetsConverter {
         Map<String, List<Relationship>> supplierPartsMap = response.relationships().stream()
                 .filter(relationship -> ASSEMBLY_PART_RELATIONSHIP.equals(relationship.aspectType().getAspectName()))
                 .collect(Collectors.groupingBy(Relationship::childCatenaXId, Collectors.toList()));
-        logger.info("SupplierPartsMap: {}", supplierPartsMap);
+        log.info("SupplierPartsMap: {}", supplierPartsMap);
 
 
         Map<String, List<Relationship>> customerPartsMap = response.relationships().stream()
                 .filter(relationship -> SINGLE_LEVEL_USAGE_AS_BUILT.equals(relationship.aspectType().getAspectName()))
                 .collect(Collectors.groupingBy(Relationship::childCatenaXId, Collectors.toList()));
-        logger.info("customerPartsMap: {}", customerPartsMap);
+        log.info("customerPartsMap: {}", customerPartsMap);
         return allParts.stream()
                 .map(part -> new Asset(
                         part.catenaXId(),
@@ -153,19 +159,19 @@ public class AssetsConverter {
             String catenaXId, Optional<String> manufacturerId) {
 
         if (manufacturerId.isPresent() && traceabilityProperties.getBpn().value().equals(manufacturerId.get())) {
-            logger.info("OWNER: BPN MATCH: {}", catenaXId);
+            log.info("OWNER: BPN MATCH: {}", catenaXId);
             return Owner.OWN;
         }
 
         if (supplierParts.containsKey(catenaXId)) {
-            logger.info("OWNER: supplierParts.containsKey(catenaXId): {}", catenaXId);
+            log.info("OWNER: supplierParts.containsKey(catenaXId): {}", catenaXId);
             return Owner.SUPPLIER;
         }
         if (customerParts.containsKey(catenaXId)) {
-            logger.info("OWNER: customerParts.containsKey(catenaXId): {}", catenaXId);
+            log.info("OWNER: customerParts.containsKey(catenaXId): {}", catenaXId);
             return Owner.CUSTOMER;
         }
-        logger.info("OWNER: customerParts.containsKey(catenaXId): {}", catenaXId);
+        log.info("OWNER: customerParts.containsKey(catenaXId): {}", catenaXId);
         return Owner.OWN;
     }
 
@@ -221,7 +227,7 @@ public class AssetsConverter {
     }
 
     private List<Descriptions> getPartsFromRelationships(Map<String, List<Relationship>> relationships, Map<String, String> shortIds, String catenaXId) {
-        logger.info("getPartsFromRelationships: catenaXiD {} with relationships {} and shortIds {}", catenaXId, relationships, shortIds);
+        log.info("getPartsFromRelationships: catenaXiD {} with relationships {} and shortIds {}", catenaXId, relationships, shortIds);
         return Optional.ofNullable(relationships.get(catenaXId))
                 .orElse(Collections.emptyList())
                 .stream()
