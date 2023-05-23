@@ -340,7 +340,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .get("/api/assets")
                 .then()
                 .statusCode(200)
-                .body("totalItems", equalTo(3))
+                .body("totalItems", equalTo(2))
     }
 
     def "should return all assets"() {
@@ -368,7 +368,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .body("content[0]", hasEntry("customerPartId", "--"))
                 .body("content[0]", hasEntry("manufacturingDate", "2014-11-18T08:23:55Z"))
                 .body("content[0]", hasEntry("manufacturingCountry", "DEU"))
-                .body("content[0]", hasEntry("owner", "OWN"))
+                .body("content[0]", hasEntry("owner", "UNKNOWN"))
                 .body("content[0]", hasEntry("underInvestigation", false))
                 .body("content[0]", hasEntry("qualityType", "Ok"))
                 .body("content[0]", hasEntry("van", "OMA-TGFAYUHXFLHHUQQMPLTE"))
@@ -392,9 +392,10 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
 
         where:
         ownerValue || totalItemsValue
-        "OWN"      || 3
+        "OWN"     || 2
         "CUSTOMER" || 0
         "SUPPLIER" || 10
+        "UNKNOWN" || 1
     }
 
     def "should return assets country map"() {
