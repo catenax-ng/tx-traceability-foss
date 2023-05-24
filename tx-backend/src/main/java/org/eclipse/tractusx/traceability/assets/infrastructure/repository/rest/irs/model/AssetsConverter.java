@@ -227,7 +227,7 @@ public class AssetsConverter {
         return Optional.ofNullable(relationships.get(catenaXId))
                 .orElse(Collections.emptyList())
                 .stream()
-                .map(child -> new Descriptions(child.catenaXId(), shortIds.get(child.catenaXId())))
+                .map(child -> new Descriptions(child.childCatenaXId(), shortIds.get(child.childCatenaXId())))
                 .toList();
     }
 
