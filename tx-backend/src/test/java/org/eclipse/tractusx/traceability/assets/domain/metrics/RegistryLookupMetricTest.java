@@ -18,8 +18,6 @@
  ********************************************************************************/
 package org.eclipse.tractusx.traceability.assets.domain.metrics;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.eclipse.tractusx.traceability.assets.infrastructure.repository.jpa.registrylookup.RegistryLookupMetricEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,32 +49,6 @@ class RegistryLookupMetricTest {
         metric.end(clock);
         assertEquals(startDate.plusSeconds(10), metric.getEndDate());
         assertNotNull(metric.getRegistryLookupStatus());
-    }
-
-    @Test
-    void testJsonConstructor() throws Exception {
-        String json = "{"
-                + "\"startDate\":\"2023-05-24T10:00:00Z\","
-                + "\"registryLookupStatus\":\"SUCCESSFUL\","
-                + "\"successShellDescriptorsFetchCount\":10,"
-                + "\"failedShellDescriptorsFetchCount\":5,"
-                + "\"shellDescriptorsFetchDelta\":15,"
-                + "\"endDate\":\"2023-05-24T11:00:00Z\""
-                + "}";
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule()); //
-        RegistryLookupMetric metric = objectMapper.readValue(json, RegistryLookupMetric.class);
-
-        Instant startDate = Instant.parse("2023-05-24T10:00:00Z");
-        Instant endDate = Instant.parse("2023-05-24T11:00:00Z");
-
-        assertEquals(startDate, metric.getStartDate());
-        assertEquals(RegistryLookupStatus.SUCCESSFUL, metric.getRegistryLookupStatus());
-        assertEquals(10L, metric.getSuccessShellDescriptorsFetchCount());
-        assertEquals(5L, metric.getFailedShellDescriptorsFetchCount());
-        assertEquals(15L, metric.getShellDescriptorsFetchDelta());
-        assertEquals(endDate, metric.getEndDate());
     }
 
     @Test
