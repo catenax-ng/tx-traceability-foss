@@ -323,7 +323,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .get("/api/assets")
                 .then()
                 .statusCode(200)
-                .body("totalItems", equalTo(10))
+                .body("totalItems", equalTo(6))
     }
 
     // Deprecated please remove once controller has been removed
@@ -355,7 +355,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .get("/api/assets",)
                 .then()
                 .statusCode(200)
-                .body("totalItems", equalTo(13))
+                .body("totalItems", equalTo(6))
                 .body("content[0]", hasEntry("id", "urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"))
                 .body("content[0]", hasEntry("idShort", "vehicle_hybrid.asm"))
                 .body("content[0]", hasEntry("nameAtManufacturer", "Vehicle Hybrid"))
@@ -368,7 +368,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .body("content[0]", hasEntry("customerPartId", "--"))
                 .body("content[0]", hasEntry("manufacturingDate", "2014-11-18T08:23:55Z"))
                 .body("content[0]", hasEntry("manufacturingCountry", "DEU"))
-                .body("content[0]", hasEntry("owner", "UNKNOWN"))
+                .body("content[0]", hasEntry("owner", "SUPPLIER"))
                 .body("content[0]", hasEntry("underInvestigation", false))
                 .body("content[0]", hasEntry("qualityType", "Ok"))
                 .body("content[0]", hasEntry("van", "OMA-TGFAYUHXFLHHUQQMPLTE"))
@@ -392,10 +392,10 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
 
         where:
         ownerValue || totalItemsValue
-        "OWN"     || 2
+        "OWN"      || 2
         "CUSTOMER" || 0
-        "SUPPLIER" || 10
-        "UNKNOWN" || 1
+        "SUPPLIER" || 6
+        "UNKNOWN"  || 5
     }
 
     def "should return assets country map"() {

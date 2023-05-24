@@ -96,8 +96,6 @@ class IrsServiceTest {
         );
     }
 
-    ;
-
     @ParameterizedTest
     @MethodSource("provideDirections")
     void testFindAssetsDownward_uncompletedJob_returnsEmptyListOfAssets(Direction direction) {
