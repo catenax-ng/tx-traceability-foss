@@ -31,6 +31,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.eclipse.tractusx.traceability.assets.domain.metrics.RegistryLookupMetric;
 import org.eclipse.tractusx.traceability.assets.domain.metrics.RegistryLookupStatus;
 
 import java.time.Instant;
@@ -48,13 +49,23 @@ public class RegistryLookupMetricEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Instant startDate;
+    private Instant startDate;
 
-	private RegistryLookupStatus status;
+    private RegistryLookupStatus status;
 
-	private Long successShellDescriptorsFetchCount;
+    private Long successShellDescriptorsFetchCount;
 
-	private Long failedShellDescriptorsFetchCount;
+    private Long failedShellDescriptorsFetchCount;
 
-	private Instant endDate;
+    private Instant endDate;
+
+    public static RegistryLookupMetric toDomain(final RegistryLookupMetricEntity entity) {
+        return new RegistryLookupMetric(
+                entity.getStartDate(),
+                entity.getStatus(),
+                entity.getSuccessShellDescriptorsFetchCount(),
+                entity.getFailedShellDescriptorsFetchCount(),
+                entity.getEndDate()
+        );
+    }
 }

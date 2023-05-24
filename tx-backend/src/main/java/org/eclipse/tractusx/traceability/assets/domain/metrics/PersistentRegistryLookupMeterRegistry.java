@@ -50,7 +50,7 @@ public class PersistentRegistryLookupMeterRegistry implements RegistryLookupMete
 		Pageable pageableWithSorting = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "startDate"));
 
 		List<RegistryLookupMetric> registryLookupMetrics = jpaRegistryLookupMetricRepository.findAll(pageableWithSorting).stream()
-			.map(this::toDomain)
+                .map(RegistryLookupMetricEntity::toDomain)
 			.toList();
 
 		for (int i = 0; i < registryLookupMetrics.size(); i++) {
@@ -72,13 +72,5 @@ public class PersistentRegistryLookupMeterRegistry implements RegistryLookupMete
 		return index == registryLookupMetrics.size() - 1;
 	}
 
-	private RegistryLookupMetric toDomain(final RegistryLookupMetricEntity entity) {
-		return new RegistryLookupMetric(
-			entity.getStartDate(),
-			entity.getStatus(),
-			entity.getSuccessShellDescriptorsFetchCount(),
-			entity.getFailedShellDescriptorsFetchCount(),
-			entity.getEndDate()
-		);
-	}
+
 }
