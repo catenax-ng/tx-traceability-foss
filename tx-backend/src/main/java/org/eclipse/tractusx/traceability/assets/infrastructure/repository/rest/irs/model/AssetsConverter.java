@@ -95,10 +95,12 @@ public class AssetsConverter {
         Map<String, String> shortIds = response.shells().stream()
                 .collect(Collectors.toMap(Shell::identification, Shell::idShort));
 
+        // The Relationship on supplierPart catenaXId contains the id of the asset which has a relationship
         Map<String, List<Relationship>> supplierPartsMap = response.relationships().stream()
                 .filter(relationship -> ASSEMBLY_PART_RELATIONSHIP.equals(relationship.aspectType().getAspectName()))
                 .collect(Collectors.groupingBy(Relationship::catenaXId, Collectors.toList()));
 
+        // The Relationship on customerPart childCatenaXId contains the id of the asset which has a relationship
         Map<String, List<Relationship>> customerPartsMap = response.relationships().stream()
                 .filter(relationship -> SINGLE_LEVEL_USAGE_AS_BUILT.equals(relationship.aspectType().getAspectName()))
                 .collect(Collectors.groupingBy(Relationship::childCatenaXId, Collectors.toList()));
@@ -119,8 +121,8 @@ public class AssetsConverter {
                                 .manufacturingDate(manufacturingDate(part))
                                 .manufacturingCountry(manufacturingCountry(part))
                                 .owner(getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId(), part.getLocalId(LocalIdKey.MANUFACTURER_ID)))
-                                .childDescriptions(getPartsFromRelationships(supplierPartsMap, shortIds, part.catenaXId()))
-                                .parentDescriptions(getPartsFromRelationships(customerPartsMap, shortIds, part.catenaXId()))
+                                .childDescriptions(getChildParts(supplierPartsMap, shortIds, part.catenaXId()))
+                                .parentDescriptions(getParentParts(customerPartsMap, shortIds, part.catenaXId()))
                                 .underInvestigation(false)
                                 .qualityType(QualityType.OK)
                                 .van(van(part))
@@ -220,8 +222,17 @@ public class AssetsConverter {
         return value;
     }
 
-    private List<Descriptions> getPartsFromRelationships(Map<String, List<Relationship>> relationships, Map<String, String> shortIds, String catenaXId) {
-        log.info("getPartsFromRelationships: catenaXiD {} with relationships {} and shortIds {}", catenaXId, relationships, shortIds);
+    private List<Descriptions> getChildParts(Map<String, List<Relationship>> relationships, Map<String, String> shortIds, String catenaXId) {
+        log.info("Child Parts Mapping: catenaXiD {} with relationships {} and shortIds {}", catenaXId, relationships, shortIds);
+        return Optional.ofNullable(relationships.get(catenaXId))
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(child -> new Descriptions(child.catenaXId(), shortIds.get(child.catenaXId())))
+                .toList();
+    }
+
+    private List<Descriptions> getParentParts(Map<String, List<Relationship>> relationships, Map<String, String> shortIds, String catenaXId) {
+        log.info("Parent Parts Mapping: catenaXiD {} with relationships {} and shortIds {}", catenaXId, relationships, shortIds);
         return Optional.ofNullable(relationships.get(catenaXId))
                 .orElse(Collections.emptyList())
                 .stream()

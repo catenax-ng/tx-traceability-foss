@@ -35,6 +35,7 @@ import org.eclipse.tractusx.traceability.assets.domain.metrics.RegistryLookupMet
 import org.eclipse.tractusx.traceability.assets.domain.metrics.RegistryLookupMetric;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,17 +53,18 @@ public class RegistryLookupMetricsController {
 	@Operation(operationId = "metrics",
 		summary = "Gets Metrics",
 		tags = {"Registry"},
-		description = "The endpoint gets metrics for database.",
-		security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
+            description = "The endpoint gets metrics for database.",
+            security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the paged result found for Asset", content = @Content(
             mediaType = "application/json",
             array = @ArraySchema(arraySchema = @Schema(description = "RegistryLookupMetric", implementation = RegistryLookupMetric.class), maxItems = Integer.MAX_VALUE)
     )),
-		@ApiResponse(responseCode = "401", description = "Authorization failed."),
-		@ApiResponse(responseCode = "403", description = "Forbidden.")})
-	@GetMapping("/registry-lookup")
-	public @Size(max = 1000) @ArraySchema(arraySchema = @Schema(description = "RegistryLookupMetric", implementation = RegistryLookupMetric.class), maxItems = Integer.MAX_VALUE)
-    PageResult<RegistryLookupMetric> metrics(@Size(max = 1000) Pageable pageable) {
-		return registryLookupMeterRegistry.getMetrics(pageable);
-	}
+            @ApiResponse(responseCode = "401", description = "Authorization failed."),
+            @ApiResponse(responseCode = "403", description = "Forbidden.")})
+    @GetMapping("/registry-lookup")
+    public @Size(max = 1000)
+    @ArraySchema(arraySchema = @Schema(description = "RegistryLookupMetric", implementation = RegistryLookupMetric.class), maxItems = Integer.MAX_VALUE)
+    PageResult<RegistryLookupMetric> metrics(@PageableDefault(value = Integer.MAX_VALUE) Pageable pageable) {
+        return registryLookupMeterRegistry.getMetrics(pageable);
+    }
 }
