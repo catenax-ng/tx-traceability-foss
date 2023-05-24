@@ -355,7 +355,7 @@ class AssetsControllerIT extends IntegrationSpecification implements IrsApiSuppo
                 .get("/api/assets",)
                 .then()
                 .statusCode(200)
-                .body("totalItems", equalTo(6))
+                .body("totalItems", equalTo(13))
                 .body("content[0]", hasEntry("id", "urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb"))
                 .body("content[0]", hasEntry("idShort", "vehicle_hybrid.asm"))
                 .body("content[0]", hasEntry("nameAtManufacturer", "Vehicle Hybrid"))
