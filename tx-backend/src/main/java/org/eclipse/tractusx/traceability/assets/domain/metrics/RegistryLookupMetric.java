@@ -26,102 +26,105 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import org.eclipse.tractusx.traceability.assets.infrastructure.repository.jpa.registrylookup.RegistryLookupMetricEntity;
 
 import java.time.Clock;
 import java.time.Instant;
+
+@Data
 @ArraySchema(arraySchema = @Schema(description = "RegistryLookupMetric", implementation = RegistryLookupMetric.class), maxItems = Integer.MAX_VALUE)
 public class RegistryLookupMetric {
 
-	private final Instant startDate;
+    private final Instant startDate;
 
-	private RegistryLookupStatus registryLookupStatus;
+    private RegistryLookupStatus registryLookupStatus;
 
-	private Long successShellDescriptorsFetchCount;
+    private Long successShellDescriptorsFetchCount;
 
-	private Long failedShellDescriptorsFetchCount;
+    private Long failedShellDescriptorsFetchCount;
 
-	private Long shellDescriptorsFetchDelta;
+    private Long shellDescriptorsFetchDelta;
 
-	private Instant endDate;
+    private Instant endDate;
 
-	@JsonCreator
+    @JsonCreator
     public RegistryLookupMetric(@JsonFormat(shape = JsonFormat.Shape.STRING) @JsonProperty("startDate") Instant startDate,
-								@JsonProperty("registryLookupStatus") RegistryLookupStatus registryLookupStatus,
-								@JsonProperty("successShellDescriptorsFetchCount") Long successShellDescriptorsFetchCount,
-								@JsonProperty("failedShellDescriptorsFetchCount") Long failedShellDescriptorsFetchCount,
-								@JsonProperty("shellDescriptorsFetchDelta") Long shellDescriptorsFetchDelta,
-								@JsonFormat(shape = JsonFormat.Shape.STRING) @JsonProperty("endDate") Instant endDate) {
-		this.startDate = startDate;
-		this.registryLookupStatus = registryLookupStatus;
-		this.successShellDescriptorsFetchCount = successShellDescriptorsFetchCount;
-		this.failedShellDescriptorsFetchCount = failedShellDescriptorsFetchCount;
-		this.shellDescriptorsFetchDelta = shellDescriptorsFetchDelta;
-		this.endDate = endDate;
-	}
+                                @JsonProperty("registryLookupStatus") RegistryLookupStatus registryLookupStatus,
+                                @JsonProperty("successShellDescriptorsFetchCount") Long successShellDescriptorsFetchCount,
+                                @JsonProperty("failedShellDescriptorsFetchCount") Long failedShellDescriptorsFetchCount,
+                                @JsonProperty("shellDescriptorsFetchDelta") Long shellDescriptorsFetchDelta,
+                                @JsonFormat(shape = JsonFormat.Shape.STRING) @JsonProperty("endDate") Instant endDate) {
+        this.startDate = startDate;
+        this.registryLookupStatus = registryLookupStatus;
+        this.successShellDescriptorsFetchCount = successShellDescriptorsFetchCount;
+        this.failedShellDescriptorsFetchCount = failedShellDescriptorsFetchCount;
+        this.shellDescriptorsFetchDelta = shellDescriptorsFetchDelta;
+        this.endDate = endDate;
+    }
 
-	private RegistryLookupMetric(Instant startDate) {
-		this.startDate = startDate;
-		this.successShellDescriptorsFetchCount = 0L;
-		this.failedShellDescriptorsFetchCount = 0L;
-	}
+    public RegistryLookupMetric(Instant startDate) {
+        this.startDate = startDate;
+        this.successShellDescriptorsFetchCount = 0L;
+        this.failedShellDescriptorsFetchCount = 0L;
+    }
 
-	public static RegistryLookupMetric start(Clock clock) {
-		return new RegistryLookupMetric(clock.instant());
-	}
+    public static RegistryLookupMetric start(Clock clock) {
+        return new RegistryLookupMetric(clock.instant());
+    }
 
-	public RegistryLookupMetric(Instant startDate,
-								RegistryLookupStatus registryLookupStatus,
-								Long successShellDescriptorsFetchCount,
-								Long failedShellDescriptorsFetchCount,
-								Instant endDate) {
-		this.startDate = startDate;
-		this.registryLookupStatus = registryLookupStatus;
-		this.successShellDescriptorsFetchCount = successShellDescriptorsFetchCount;
-		this.failedShellDescriptorsFetchCount = failedShellDescriptorsFetchCount;
-		this.endDate = endDate;
-	}
+    public RegistryLookupMetric(Instant startDate,
+                                RegistryLookupStatus registryLookupStatus,
+                                Long successShellDescriptorsFetchCount,
+                                Long failedShellDescriptorsFetchCount,
+                                Instant endDate) {
+        this.startDate = startDate;
+        this.registryLookupStatus = registryLookupStatus;
+        this.successShellDescriptorsFetchCount = successShellDescriptorsFetchCount;
+        this.failedShellDescriptorsFetchCount = failedShellDescriptorsFetchCount;
+        this.endDate = endDate;
+    }
 
-	public void incrementSuccessShellDescriptorsFetchCount() {
-		this.successShellDescriptorsFetchCount += 1;
-	}
+    public void incrementSuccessShellDescriptorsFetchCount() {
+        this.successShellDescriptorsFetchCount += 1;
+    }
 
-	public void incrementFailedShellDescriptorsFetchCount() {
-		this.failedShellDescriptorsFetchCount += 1;
-	}
+    public void incrementFailedShellDescriptorsFetchCount() {
+        this.failedShellDescriptorsFetchCount += 1;
+    }
 
-	public void end(Clock clock) {
-		if (this.endDate != null) {
-			throw new IllegalStateException("RegistryLookupMetric already finished");
-		}
+    public void end(Clock clock) {
+        if (this.endDate != null) {
+            throw new IllegalStateException("RegistryLookupMetric already finished");
+        }
 
-		this.endDate = clock.instant();
-		setStatus();
-	}
+        this.endDate = clock.instant();
+        setStatus();
+    }
 
-	private void setStatus() {
-		if (failedShellDescriptorsFetchCount == 0) {
-			this.registryLookupStatus = RegistryLookupStatus.SUCCESSFUL;
+    public void setStatus() {
+        if (failedShellDescriptorsFetchCount == 0) {
+            this.registryLookupStatus = RegistryLookupStatus.SUCCESSFUL;
 
-			return;
-		}
+            return;
+        }
 
-		if (failedShellDescriptorsFetchCount > 0 && successShellDescriptorsFetchCount == 0) {
-			this.registryLookupStatus = RegistryLookupStatus.ERROR;
+        if (failedShellDescriptorsFetchCount > 0 && successShellDescriptorsFetchCount == 0) {
+            this.registryLookupStatus = RegistryLookupStatus.ERROR;
 
-			return;
-		}
+            return;
+        }
 
-		if (failedShellDescriptorsFetchCount > 0 && successShellDescriptorsFetchCount > 0) {
-			this.registryLookupStatus = RegistryLookupStatus.PARTIALLY_SUCCESS;
+        if (failedShellDescriptorsFetchCount > 0 && successShellDescriptorsFetchCount > 0) {
+            this.registryLookupStatus = RegistryLookupStatus.PARTIALLY_SUCCESS;
 
-			return;
-		}
+            return;
+        }
 
-		this.registryLookupStatus = RegistryLookupStatus.SUCCESSFUL;
-	}
+        this.registryLookupStatus = RegistryLookupStatus.SUCCESSFUL;
+    }
 
-	public RegistryLookupMetricEntity toEntity() {
+    public RegistryLookupMetricEntity toEntity() {
         return RegistryLookupMetricEntity.builder()
                 .startDate(startDate)
                 .status(registryLookupStatus)
@@ -129,37 +132,14 @@ public class RegistryLookupMetric {
                 .failedShellDescriptorsFetchCount(failedShellDescriptorsFetchCount)
                 .endDate(endDate)
                 .build();
-	}
+    }
 
-	public void firstElementDelta() {
-		this.shellDescriptorsFetchDelta = successShellDescriptorsFetchCount;
-	}
+    public void firstElementDelta() {
+        this.shellDescriptorsFetchDelta = successShellDescriptorsFetchCount;
+    }
 
-	public void addDelta(RegistryLookupMetric previousMetric) {
-		this.shellDescriptorsFetchDelta = previousMetric.successShellDescriptorsFetchCount;
-	}
+    public void addDelta(RegistryLookupMetric previousMetric) {
+        this.shellDescriptorsFetchDelta = previousMetric.successShellDescriptorsFetchCount;
+    }
 
-	public Instant getStartDate() {
-		return startDate;
-	}
-
-	public RegistryLookupStatus getRegistryLookupStatus() {
-		return registryLookupStatus;
-	}
-
-	public Long getSuccessShellDescriptorsFetchCount() {
-		return successShellDescriptorsFetchCount;
-	}
-
-	public Long getFailedShellDescriptorsFetchCount() {
-		return failedShellDescriptorsFetchCount;
-	}
-
-	public Long getShellDescriptorsFetchDelta() {
-		return shellDescriptorsFetchDelta;
-	}
-
-	public Instant getEndDate() {
-		return endDate;
-	}
 }
