@@ -101,11 +101,7 @@ public class PersistentAssetsRepository implements AssetRepository {
         List<Asset> saved = new ArrayList<>();
         for (Asset asset : assetList) {
             if (exists(asset.getId())) {
-                if (asset.getOwner().equals(Owner.UNKNOWN)) {
-                    saved.add(updateParentDescriptionsAndOwner(asset.getId(), asset.getParentDescriptions(), asset.getOwner()));
-                } else {
-                    saved.add(updateParentDescriptions(asset.getId(), asset.getParentDescriptions()));
-                }
+                saved.add(updateParentDescriptionsAndOwner(asset.getId(), asset.getParentDescriptions(), asset.getOwner()));
             } else {
                 saved.add(save(asset));
             }
@@ -116,8 +112,10 @@ public class PersistentAssetsRepository implements AssetRepository {
     @Transactional
     public Asset updateParentDescriptionsAndOwner(final String assetId, List<Descriptions> parentDescriptions, Owner owner) {
         Asset assetById = this.getAssetById(assetId);
+        if (assetById.getOwner().equals(Owner.UNKNOWN)) {
+            assetById.setOwner(owner);
+        }
         assetById.setParentDescriptions(parentDescriptions);
-        assetById.setOwner(owner);
         return save(assetById);
     }
 
