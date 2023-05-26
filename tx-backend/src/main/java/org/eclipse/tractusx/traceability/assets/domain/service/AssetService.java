@@ -23,6 +23,7 @@ package org.eclipse.tractusx.traceability.assets.domain.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
+import org.eclipse.tractusx.traceability.assets.domain.model.Descriptions;
 import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
 import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 import org.eclipse.tractusx.traceability.assets.domain.service.repository.AssetRepository;
@@ -31,6 +32,7 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.config.async.Asse
 import org.eclipse.tractusx.traceability.assets.infrastructure.repository.rest.irs.model.Aspect;
 import org.eclipse.tractusx.traceability.assets.infrastructure.repository.rest.irs.model.Direction;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
+import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.springframework.data.domain.Pageable;
@@ -51,10 +53,12 @@ public class AssetService {
 
     private final AssetRepository assetRepository;
     private final IrsRepository irsRepository;
+    private final TraceabilityProperties traceabilityProperties;
 
-    public AssetService(AssetRepository assetRepository, IrsRepository irsRepository) {
+    public AssetService(AssetRepository assetRepository, IrsRepository irsRepository, TraceabilityProperties traceabilityProperties) {
         this.assetRepository = assetRepository;
         this.irsRepository = irsRepository;
+        this.traceabilityProperties = traceabilityProperties;
     }
 
     @Async(value = AssetsAsyncConfig.SYNCHRONIZE_ASSETS_EXECUTOR)
@@ -114,6 +118,16 @@ public class AssetService {
                     if (byId.getId().equals(upwardAsset.getId())) {
                         byId.setParentDescriptions(upwardAsset.getParentDescriptions());
                         byId.setChildDescriptions(downwardAssetsMap.get(upwardAsset.getId()).getChildDescriptions());
+                        if (byId.getOwner().equals(Owner.UNKNOWN)) {
+                            if (traceabilityProperties.getBpn().value().equals(byId.getManufacturerId())) {
+                                byId.setOwner(Owner.OWN);
+                            }
+                            for (Descriptions descriptions : byId.getParentDescriptions()) {
+                                if (descriptions.id().contains(byId.getId())) {
+                                    byId.setOwner(Owner.CUSTOMER);
+                                }
+                            }
+                        }
                     }
                 }
             } else {
