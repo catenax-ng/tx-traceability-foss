@@ -23,6 +23,7 @@ package org.eclipse.tractusx.traceability.assets.infrastructure.repository.jpa;
 
 import org.eclipse.tractusx.traceability.assets.domain.exception.AssetNotFoundException;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
+import org.eclipse.tractusx.traceability.assets.domain.model.Descriptions;
 import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
 import org.eclipse.tractusx.traceability.assets.domain.service.repository.AssetRepository;
 import org.eclipse.tractusx.traceability.assets.infrastructure.model.AssetEntity;
@@ -31,6 +32,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -87,6 +89,23 @@ public class PersistentAssetsRepository implements AssetRepository {
     @Transactional
     public List<Asset> saveAll(List<Asset> assets) {
         return AssetEntity.toDomainList(assetsRepository.saveAll(AssetEntity.fromList(assets)));
+    }
+
+    @Transactional
+    public List<Asset> updateAllParentDescriptionsAndOwner(final List<Asset> assetList) {
+        List<Asset> saved = new ArrayList<>();
+        for (Asset asset : assetList) {
+            saved.add(updateParentDescriptionsAndOwner(asset.getId(), asset.getParentDescriptions(), asset.getOwner()));
+        }
+        return saved;
+    }
+
+    @Transactional
+    public Asset updateParentDescriptionsAndOwner(final String assetId, List<Descriptions> parentDescriptions, Owner owner) {
+        Asset assetById = this.getAssetById(assetId);
+        assetById.setParentDescriptions(parentDescriptions);
+        assetById.setOwner(owner);
+        return save(assetById);
     }
 
     @Override

@@ -22,6 +22,7 @@
 package org.eclipse.tractusx.traceability.assets.domain.service.repository;
 
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
+import org.eclipse.tractusx.traceability.assets.domain.model.Descriptions;
 import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.springframework.data.domain.Pageable;
@@ -33,15 +34,19 @@ public interface AssetRepository {
 
 	List<Asset> getAssetsById(List<String> assetIds);
 
-	Asset getAssetByChildId(String assetId, String childId);
+    Asset getAssetByChildId(String assetId, String childId);
 
-	PageResult<Asset> getAssets(Pageable pageable, Owner owner);
+    PageResult<Asset> getAssets(Pageable pageable, Owner owner);
 
-	List<Asset> getAssets();
+    List<Asset> getAssets();
 
-	Asset save(Asset asset);
+    Asset save(Asset asset);
 
-	List<Asset> saveAll(List<Asset> assets);
+    List<Asset> saveAll(List<Asset> assets);
+
+    Asset updateParentDescriptionsAndOwner(final String assetId, List<Descriptions> parentDescriptions, Owner owner);
+
+    List<Asset> updateAllParentDescriptionsAndOwner(final List<Asset> assetList);
 
     long countAssets();
 
