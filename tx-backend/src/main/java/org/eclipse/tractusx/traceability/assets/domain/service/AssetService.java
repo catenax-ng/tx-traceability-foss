@@ -103,7 +103,8 @@ public class AssetService {
             List<Asset> unsyncedUpwardAssets = upwardAssets.stream().filter(asset -> !asset.getId().equals(globalAssetId)).toList();
             List<Asset> unsyncedAssets = new ArrayList<>(unsyncedDownwardAssets);
             unsyncedAssets.addAll(unsyncedUpwardAssets);
-            unsyncedAssets.forEach(asset -> synchronizeAssetsAsync(asset.getId()));
+            List<Asset> assets = unsyncedAssets.stream().filter(asset -> !asset.getOwner().equals(Owner.UNKNOWN)).toList();
+            assets.forEach(asset -> synchronizeAssetsAsync(asset.getId()));
 
         } catch (Exception e) {
             log.warn("Exception during assets synchronization for globalAssetId: {}. Message: {}.", globalAssetId, e.getMessage(), e);
