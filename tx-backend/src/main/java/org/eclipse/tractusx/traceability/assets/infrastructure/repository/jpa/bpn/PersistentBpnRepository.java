@@ -32,26 +32,26 @@ import java.util.Optional;
 @Component
 public class PersistentBpnRepository implements BpnRepository {
 
-	private JpaBpnRepository repository;
+    private JpaBpnRepository repository;
 
-	public PersistentBpnRepository(JpaBpnRepository repository) {
-		this.repository = repository;
-	}
+    public PersistentBpnRepository(JpaBpnRepository repository) {
+        this.repository = repository;
+    }
 
-	@Override
-	public Optional<String> findManufacturerName(String manufacturerId) {
-		return repository.findById(manufacturerId)
-			.map(BpnEntity::getManufacturerName);
-	}
+    @Override
+    public Optional<String> findManufacturerName(String manufacturerId) {
+        return repository.findById(manufacturerId).map(BpnEntity::getManufacturerName);
+    }
 
-	@Override
-	@Transactional
-	public void updateManufacturers(Map<String, String> bpns) {
-		List<BpnEntity> entities = bpns.entrySet().stream()
-			.map(entry -> new BpnEntity(entry.getKey(), entry.getValue()))
-			.toList();
+    @Override
+    @Transactional
+    public void updateManufacturers(Map<String, String> bpns) {
+        List<BpnEntity> entities = bpns.entrySet().stream().map(entry -> {
+            repository.deleteById(entry.getKey());
+            return new BpnEntity(entry.getKey(), entry.getValue());
+        }).toList();
 
-		repository.saveAll(entities);
-	}
+        repository.saveAll(entities);
+    }
 
 }
