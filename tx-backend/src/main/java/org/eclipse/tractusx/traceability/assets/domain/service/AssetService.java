@@ -85,7 +85,8 @@ public class AssetService {
             });
             log.info("###########Downward Asset loop ended!");
             List<Asset> upwardAssets = irsRepository.findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects());
-            assetRepository.updateAllParentDescriptionsAndOwner(upwardAssets);
+
+            assetRepository.updateOrCreateParentDescriptionsIncludingOwner(upwardAssets);
             log.info("$$$$$$$$$$$Upward Asset loop start with size {} for globalAssetId {}", upwardAssets.size(), globalAssetId);
             upwardAssets.forEach(asset -> {
                 log.info("Asset with id {} has parents {} with id {} has childs {} with id {}", asset.getId(), asset.getParentDescriptions().size(), asset.getParentDescriptions(), asset.getChildDescriptions().size(), asset.getChildDescriptions());

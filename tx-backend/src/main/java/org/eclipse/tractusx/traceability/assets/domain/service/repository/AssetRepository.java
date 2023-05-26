@@ -46,7 +46,7 @@ public interface AssetRepository {
 
     Asset updateParentDescriptionsAndOwner(final String assetId, List<Descriptions> parentDescriptions, Owner owner);
 
-    List<Asset> updateAllParentDescriptionsAndOwner(final List<Asset> assetList);
+    List<Asset> updateOrCreateParentDescriptionsIncludingOwner(final List<Asset> assetList);
 
     long countAssets();
 

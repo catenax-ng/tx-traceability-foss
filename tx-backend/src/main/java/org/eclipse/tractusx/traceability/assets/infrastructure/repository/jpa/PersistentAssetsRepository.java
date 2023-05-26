@@ -91,11 +91,20 @@ public class PersistentAssetsRepository implements AssetRepository {
         return AssetEntity.toDomainList(assetsRepository.saveAll(AssetEntity.fromList(assets)));
     }
 
+
+    private boolean exists(String assetId) {
+        return assetsRepository.findById(assetId).isPresent();
+    }
+
     @Transactional
-    public List<Asset> updateAllParentDescriptionsAndOwner(final List<Asset> assetList) {
+    public List<Asset> updateOrCreateParentDescriptionsIncludingOwner(final List<Asset> assetList) {
         List<Asset> saved = new ArrayList<>();
         for (Asset asset : assetList) {
-            saved.add(updateParentDescriptionsAndOwner(asset.getId(), asset.getParentDescriptions(), asset.getOwner()));
+            if (exists(asset.getId())) {
+                saved.add(updateParentDescriptionsAndOwner(asset.getId(), asset.getParentDescriptions(), asset.getOwner()));
+            } else {
+                saved.add(save(asset));
+            }
         }
         return saved;
     }
