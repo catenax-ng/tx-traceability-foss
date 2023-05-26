@@ -102,9 +102,9 @@ public class PersistentAssetsRepository implements AssetRepository {
         for (Asset asset : assetList) {
             if (exists(asset.getId())) {
                 if (asset.getOwner().equals(Owner.UNKNOWN)) {
-                    saved.add(updateParentDescriptions(asset.getId(), asset.getParentDescriptions()));
-                } else {
                     saved.add(updateParentDescriptionsAndOwner(asset.getId(), asset.getParentDescriptions(), asset.getOwner()));
+                } else {
+                    saved.add(updateParentDescriptions(asset.getId(), asset.getParentDescriptions()));
                 }
             } else {
                 saved.add(save(asset));
