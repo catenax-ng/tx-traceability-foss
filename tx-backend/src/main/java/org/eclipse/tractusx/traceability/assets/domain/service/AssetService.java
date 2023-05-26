@@ -77,25 +77,34 @@ public class AssetService {
         log.info("Synchronizing assets for globalAssetId: {}", globalAssetId);
         try {
             List<Asset> downwardAssets = irsRepository.findAssets(globalAssetId, Direction.DOWNWARD, Aspect.downwardAspects());
-            assetRepository.saveAll(downwardAssets);
+            List<Asset> syncedDownwardAssets = downwardAssets.stream().filter(asset -> asset.getId().equals(globalAssetId)).toList();
+            assetRepository.saveAll(syncedDownwardAssets);
 
-            log.info("###########Downward Asset loop start with size {} for globalAssetId {}", downwardAssets.size(), globalAssetId);
+         /*   log.info("###########Downward Asset loop start with size {} for globalAssetId {}", downwardAssets.size(), globalAssetId);
             downwardAssets.forEach(asset -> {
                 log.info("Asset with id {} has parents {} with id {} has childs {} with id {}", asset.getId(), asset.getParentDescriptions().size(), asset.getParentDescriptions(), asset.getChildDescriptions().size(), asset.getChildDescriptions());
             });
-            log.info("###########Downward Asset loop ended!");
+            log.info("###########Downward Asset loop ended!");*/
             List<Asset> upwardAssets = irsRepository.findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects());
-
-            assetRepository.updateOrCreateParentDescriptionsIncludingOwner(upwardAssets);
-            log.info("$$$$$$$$$$$Upward Asset loop start with size {} for globalAssetId {}", upwardAssets.size(), globalAssetId);
+            List<Asset> syncedUpwardAssets = upwardAssets.stream().filter(asset -> asset.getId().equals(globalAssetId)).toList();
+            assetRepository.updateOrCreateParentDescriptionsIncludingOwner(syncedUpwardAssets);
+          /*  log.info("$$$$$$$$$$$Upward Asset loop start with size {} for globalAssetId {}", upwardAssets.size(), globalAssetId);
             upwardAssets.forEach(asset -> {
                 log.info("Asset with id {} has parents {} with id {} has childs {} with id {}", asset.getId(), asset.getParentDescriptions().size(), asset.getParentDescriptions(), asset.getChildDescriptions().size(), asset.getChildDescriptions());
             });
-            log.info("$$$$$$$$$$$Downward Asset loop ended!");
+            log.info("$$$$$$$$$$$Downward Asset loop ended!");*/
 
           /*  List<Asset> combinedAssetList = combineAssetsAndMergeParentDescriptionIntoDownwardAssets(downwardAssets, upwardAssets);
 
             log.info("Assets {} for globalAssetId {} successfully saved.", combinedAssetList, globalAssetId);*/
+
+
+            List<Asset> unsyncedDownwardAssets = downwardAssets.stream().filter(asset -> !asset.getId().equals(globalAssetId)).toList();
+            List<Asset> unsyncedUpwardAssets = upwardAssets.stream().filter(asset -> !asset.getId().equals(globalAssetId)).toList();
+            List<Asset> unsyncedAssets = new ArrayList<>(unsyncedDownwardAssets);
+            unsyncedAssets.addAll(unsyncedUpwardAssets);
+            unsyncedAssets.forEach(asset -> synchronizeAssetsAsync(asset.getId()));
+
         } catch (Exception e) {
             log.warn("Exception during assets synchronization for globalAssetId: {}. Message: {}.", globalAssetId, e.getMessage(), e);
         }
