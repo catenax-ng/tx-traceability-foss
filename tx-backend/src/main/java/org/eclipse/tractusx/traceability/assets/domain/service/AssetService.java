@@ -73,7 +73,18 @@ public class AssetService {
         log.info("Synchronizing assets for globalAssetId: {}", globalAssetId);
         try {
             List<Asset> downwardAssets = irsRepository.findAssets(globalAssetId, Direction.DOWNWARD, Aspect.downwardAspects());
+            log.info("###########Downward Asset loop start with size {} for globalAssetId {}", downwardAssets.size(), globalAssetId);
+            downwardAssets.forEach(asset -> {
+                log.info("Asset with id {} has parents {} with id {} has childs {} with id {}", asset.getId(), asset.getParentDescriptions().size(), asset.getParentDescriptions(), asset.getChildDescriptions().size(), asset.getChildDescriptions());
+            });
+            log.info("###########Downward Asset loop ended!");
             List<Asset> upwardAssets = irsRepository.findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects());
+            log.info("$$$$$$$$$$$Upward Asset loop start with size {} for globalAssetId {}", upwardAssets.size(), globalAssetId);
+            upwardAssets.forEach(asset -> {
+                log.info("Asset with id {} has parents {} with id {} has childs {} with id {}", asset.getId(), asset.getParentDescriptions().size(), asset.getParentDescriptions(), asset.getChildDescriptions().size(), asset.getChildDescriptions());
+            });
+            log.info("$$$$$$$$$$$Downward Asset loop ended!");
+
             List<Asset> combinedAssetList = combineAssetsAndMergeParentDescriptionIntoDownwardAssets(downwardAssets, upwardAssets);
             assetRepository.saveAll(combinedAssetList);
             log.info("Assets {} for globalAssetId {} successfully saved.", combinedAssetList, globalAssetId);
