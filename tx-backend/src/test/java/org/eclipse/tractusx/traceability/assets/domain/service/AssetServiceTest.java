@@ -25,6 +25,8 @@ import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
 import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 import org.eclipse.tractusx.traceability.assets.domain.service.repository.AssetRepository;
 import org.eclipse.tractusx.traceability.assets.domain.service.repository.IrsRepository;
+import org.eclipse.tractusx.traceability.assets.infrastructure.repository.rest.irs.model.Aspect;
+import org.eclipse.tractusx.traceability.assets.infrastructure.repository.rest.irs.model.Direction;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,7 +38,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AssetServiceTest {
@@ -50,25 +55,8 @@ class AssetServiceTest {
     @Mock
     private AssetRepository assetRepository;
 
+
     @Test
-    void combineAssetsAndMergeParentDescriptionIntoDownwardAssets() {
-
-        // given
-        List<Descriptions> parentDescriptionsList = provideParentDescriptions();
-        List<Descriptions> childDescriptionList = provideChildDescriptions();
-        Asset asset = provideTestAsset(childDescriptionList, Collections.emptyList());
-        Asset asset2 = provideTestAsset(Collections.emptyList(), parentDescriptionsList);
-
-        // when
-        List<Asset> assets = assetService.combineAssetsAndMergeParentDescriptionIntoDownwardAssets(List.of(asset), List.of(asset2));
-
-        // then
-        assertThat(assets).hasSize(1);
-        assertThat(assets.get(0).getChildDescriptions()).hasSize(2);
-        assertThat(assets.get(0).getParentDescriptions()).hasSize(2);
-    }
-
-   /* @Test
     void synchronizeAssets_shouldSaveCombinedAssets_whenNoException() {
         // given
         List<Descriptions> parentDescriptionsList = provideParentDescriptions();
@@ -93,7 +81,7 @@ class AssetServiceTest {
         verify(irsRepository).findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects());
         verify(assetRepository).saveAll(any());
         verifyNoMoreInteractions(irsRepository, assetRepository);
-    }*/
+    }
 
 
     private List<Descriptions> provideChildDescriptions() {
