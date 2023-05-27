@@ -32,7 +32,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -91,40 +90,31 @@ public class PersistentAssetsRepository implements AssetRepository {
         return AssetEntity.toDomainList(assetsRepository.saveAll(AssetEntity.fromList(assets)));
     }
 
-
     private boolean exists(String assetId) {
         return assetsRepository.findById(assetId).isPresent();
     }
 
     @Transactional
-    public List<Asset> updateOrCreateParentDescriptionsIncludingOwner(final List<Asset> assetList) {
-        List<Asset> saved = new ArrayList<>();
+    @Override
+    public void updateOrCreateParentDescriptionsIncludingOwner(final List<Asset> assetList) {
         for (Asset asset : assetList) {
             if (exists(asset.getId())) {
-                saved.add(updateParentDescriptionsAndOwner(asset.getId(), asset.getParentDescriptions(), asset.getOwner()));
+                updateParentDescriptionsAndOwner(asset.getId(), asset.getParentDescriptions(), asset.getOwner());
             } else {
-                saved.add(save(asset));
+                save(asset);
             }
         }
-        return saved;
     }
 
-    @Transactional
-    public Asset updateParentDescriptionsAndOwner(final String assetId, List<Descriptions> parentDescriptions, Owner owner) {
+    private void updateParentDescriptionsAndOwner(final String assetId, List<Descriptions> parentDescriptions, Owner owner) {
         Asset assetById = this.getAssetById(assetId);
         if (assetById.getOwner().equals(Owner.UNKNOWN)) {
             assetById.setOwner(owner);
         }
         assetById.setParentDescriptions(parentDescriptions);
-        return save(assetById);
+        save(assetById);
     }
 
-    @Transactional
-    public Asset updateParentDescriptions(final String assetId, List<Descriptions> parentDescriptions) {
-        Asset assetById = this.getAssetById(assetId);
-        assetById.setParentDescriptions(parentDescriptions);
-        return save(assetById);
-    }
 
     @Override
     public long countAssets() {

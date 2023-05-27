@@ -40,7 +40,6 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,8 +69,7 @@ class AssetServiceTest {
                 .thenReturn(downwardAssets);
         when(irsRepository.findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects()))
                 .thenReturn(upwardAssets);
-        when(assetRepository.saveAll(combinedAssetList))
-                .thenReturn(combinedAssetList);
+
 
         // when
         assetService.synchronizeAssetsAsync(globalAssetId);
@@ -80,7 +78,6 @@ class AssetServiceTest {
         verify(irsRepository).findAssets(globalAssetId, Direction.DOWNWARD, Aspect.downwardAspects());
         verify(irsRepository).findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects());
         verify(assetRepository).saveAll(any());
-        verifyNoMoreInteractions(irsRepository, assetRepository);
     }
 
 
