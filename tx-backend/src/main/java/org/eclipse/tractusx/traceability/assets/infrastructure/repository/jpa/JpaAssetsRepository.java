@@ -42,6 +42,4 @@ public interface JpaAssetsRepository extends JpaRepository<AssetEntity, String> 
 
     @Query("SELECT COUNT(asset) FROM AssetEntity asset WHERE asset.owner = :owner")
     long countAssetsByOwner(@Param("owner") Owner owner);
-
-    boolean existsAssetEntityById(String id);
 }

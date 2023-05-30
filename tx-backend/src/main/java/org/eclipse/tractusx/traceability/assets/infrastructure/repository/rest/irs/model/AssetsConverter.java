@@ -23,6 +23,7 @@ package org.eclipse.tractusx.traceability.assets.infrastructure.repository.rest.
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.model.Descriptions;
@@ -44,6 +45,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Component
 @Slf4j
 public class AssetsConverter {
@@ -58,10 +60,6 @@ public class AssetsConverter {
 
     private static final String SINGLE_LEVEL_USAGE_AS_BUILT = "SingleLevelUsageAsBuilt";
     private static final String ASSEMBLY_PART_RELATIONSHIP = "AssemblyPartRelationship";
-
-    public AssetsConverter(BpnRepository bpnRepository) {
-        this.bpnRepository = bpnRepository;
-    }
 
     public List<Asset> readAndConvertAssets() {
         try {
@@ -80,29 +78,23 @@ public class AssetsConverter {
                 .toList();
     }
 
-    public List<Asset> convertAssetsAndLog(JobResponse response, String id) {
-        log.info("CONVERT ASSETS for GlobalAssetId: {}", id);
-        return this.convertAssets(response);
-    }
-
     public List<Asset> convertAssets(JobResponse response) {
 
         Map<String, String> shortIds = response.shells().stream()
                 .collect(Collectors.toMap(Shell::identification, Shell::idShort));
 
-        List<Asset> assets = new ArrayList<>();
         List<Asset> ownParts = mapToOwnParts(response, shortIds);
         List<Asset> otherParts = new ArrayList<>();
-
 
         if (isSupplierDirection(response)) {
             otherParts.addAll(mapToOtherParts(response, shortIds, Owner.SUPPLIER));
         } else {
             otherParts.addAll(mapToOtherParts(response, shortIds, Owner.CUSTOMER));
         }
-        assets.addAll(ownParts);
-        assets.addAll(otherParts);
-        return assets;
+        List<Asset> convertedAssets = new ArrayList<>();
+        convertedAssets.addAll(ownParts);
+        convertedAssets.addAll(otherParts);
+        return convertedAssets;
     }
 
     private boolean isSupplierDirection(JobResponse response) {

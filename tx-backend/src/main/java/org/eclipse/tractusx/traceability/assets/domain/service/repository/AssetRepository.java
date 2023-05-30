@@ -47,7 +47,5 @@ public interface AssetRepository {
 
     void updateParentDescriptionsAndOwner(final Asset asset);
 
-    long countAssets();
-
     long countAssetsByOwner(Owner owner);
 }

@@ -32,7 +32,6 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.config.async.Asse
 import org.eclipse.tractusx.traceability.assets.infrastructure.repository.rest.irs.model.Aspect;
 import org.eclipse.tractusx.traceability.assets.infrastructure.repository.rest.irs.model.Direction;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
-import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotification;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +49,6 @@ public class AssetService {
 
     private final AssetRepository assetRepository;
     private final IrsRepository irsRepository;
-    private final TraceabilityProperties traceabilityProperties;
 
     @Async(value = AssetsAsyncConfig.SYNCHRONIZE_ASSETS_EXECUTOR)
     public void synchronizeAssetsAsync(List<String> globalAssetIds) {
@@ -78,7 +76,6 @@ public class AssetService {
                     assetRepository.save(asset);
                 }
             });
-
 
         } catch (Exception e) {
             log.warn("Exception during assets synchronization for globalAssetId: {}. Message: {}.", globalAssetId, e.getMessage(), e);

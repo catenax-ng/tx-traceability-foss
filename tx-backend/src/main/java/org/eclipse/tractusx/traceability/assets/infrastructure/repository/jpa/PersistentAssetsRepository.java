@@ -21,6 +21,7 @@
 
 package org.eclipse.tractusx.traceability.assets.infrastructure.repository.jpa;
 
+import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.assets.domain.exception.AssetNotFoundException;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
 import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
@@ -33,14 +34,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Component
 public class PersistentAssetsRepository implements AssetRepository {
 
     private final JpaAssetsRepository assetsRepository;
-
-    public PersistentAssetsRepository(JpaAssetsRepository assetsRepository) {
-        this.assetsRepository = assetsRepository;
-    }
 
     @Override
     @Transactional
@@ -94,7 +92,6 @@ public class PersistentAssetsRepository implements AssetRepository {
         return AssetEntity.toDomainList(assetsRepository.saveAll(AssetEntity.fromList(assets)));
     }
 
-
     @Transactional
     @Override
     public void updateParentDescriptionsAndOwner(final Asset asset) {
@@ -104,12 +101,6 @@ public class PersistentAssetsRepository implements AssetRepository {
         }
         assetById.setParentDescriptions(asset.getParentDescriptions());
         save(assetById);
-    }
-
-
-    @Override
-    public long countAssets() {
-        return assetsRepository.count();
     }
 
     @Override
