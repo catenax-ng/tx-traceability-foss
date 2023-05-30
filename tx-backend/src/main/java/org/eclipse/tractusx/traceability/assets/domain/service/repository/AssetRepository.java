@@ -45,7 +45,7 @@ public interface AssetRepository {
 
     List<Asset> saveAll(List<Asset> assets);
 
-    void updateOrCreateParentDescriptionsIncludingOwner(final List<Asset> assetList);
+    void updateParentDescriptionsAndOwner(final Asset asset);
 
     long countAssets();
 

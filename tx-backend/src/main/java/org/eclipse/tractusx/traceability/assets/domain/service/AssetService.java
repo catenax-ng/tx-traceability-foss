@@ -73,7 +73,7 @@ public class AssetService {
             List<Asset> upwardAssets = irsRepository.findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects());
             upwardAssets.forEach(asset -> {
                 if (assetRepository.existsById(asset.getId())) {
-                    assetRepository.updateOrCreateParentDescriptionsIncludingOwner(upwardAssets);
+                    assetRepository.updateParentDescriptionsAndOwner(asset);
                 } else {
                     assetRepository.save(asset);
                 }

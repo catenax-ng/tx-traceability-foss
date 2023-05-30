@@ -23,7 +23,6 @@ package org.eclipse.tractusx.traceability.assets.infrastructure.repository.jpa;
 
 import org.eclipse.tractusx.traceability.assets.domain.exception.AssetNotFoundException;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
-import org.eclipse.tractusx.traceability.assets.domain.model.Descriptions;
 import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
 import org.eclipse.tractusx.traceability.assets.domain.service.repository.AssetRepository;
 import org.eclipse.tractusx.traceability.assets.infrastructure.model.AssetEntity;
@@ -95,28 +94,15 @@ public class PersistentAssetsRepository implements AssetRepository {
         return AssetEntity.toDomainList(assetsRepository.saveAll(AssetEntity.fromList(assets)));
     }
 
-    private boolean exists(String assetId) {
-        return assetsRepository.findById(assetId).isPresent();
-    }
 
     @Transactional
     @Override
-    public void updateOrCreateParentDescriptionsIncludingOwner(final List<Asset> assetList) {
-        for (Asset asset : assetList) {
-            if (exists(asset.getId())) {
-                updateParentDescriptionsAndOwner(asset.getId(), asset.getParentDescriptions(), asset.getOwner());
-            } else {
-                save(asset);
-            }
-        }
-    }
-
-    private void updateParentDescriptionsAndOwner(final String assetId, List<Descriptions> parentDescriptions, Owner owner) {
-        Asset assetById = this.getAssetById(assetId);
+    public void updateParentDescriptionsAndOwner(final Asset asset) {
+        Asset assetById = this.getAssetById(asset.getId());
         if (assetById.getOwner().equals(Owner.UNKNOWN)) {
-            assetById.setOwner(owner);
+            assetById.setOwner(asset.getOwner());
         }
-        assetById.setParentDescriptions(parentDescriptions);
+        assetById.setParentDescriptions(asset.getParentDescriptions());
         save(assetById);
     }
 
