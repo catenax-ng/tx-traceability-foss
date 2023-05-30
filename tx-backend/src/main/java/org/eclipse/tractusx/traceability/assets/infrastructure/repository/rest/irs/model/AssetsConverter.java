@@ -37,6 +37,7 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -89,12 +90,82 @@ public class AssetsConverter {
     }
 
     public List<Asset> convertAssets(JobResponse response) {
-
-        // Contains the global asset id part and the relationship part
-        List<SerialPartTypization> allParts = response.serialPartTypizations();
+        List<Asset> assets = new ArrayList<>();
+        List<Asset> ownParts = mapToOwnParts(response, shortIds);
+        List<Asset> otherParts = new ArrayList<>();
 
         Map<String, String> shortIds = response.shells().stream()
                 .collect(Collectors.toMap(Shell::identification, Shell::idShort));
+
+        if (isSupplierDirection(response)) {
+            otherParts.addAll(mapToSupplierParts(response, shortIds));
+        } else {
+            otherParts.addAll(mapToCustomerParts(response, shortIds));
+        }
+        assets.addAll(ownParts);
+        assets.addAll(otherParts);
+        return assets;
+    }
+
+    private boolean isSupplierDirection(JobResponse response) {
+        return response.jobStatus().parameter().direction().equals("downward");
+    }
+
+    private List<Asset> mapToCustomerParts(JobResponse response, Map<String, String> shortIds) {
+        List<SerialPartTypization> customerParts = response.serialPartTypizations().stream().filter(serialPartTypization -> !serialPartTypization.catenaXId().equals(response.jobStatus().globalAssetId())).toList();
+        return customerParts.stream()
+                .map(part ->
+                        Asset.builder()
+                                .id(part.catenaXId())
+                                .idShort(defaultValue(shortIds.get(part.catenaXId())))
+                                .nameAtManufacturer(defaultValue(part.partTypeInformation().nameAtManufacturer()))
+                                .manufacturerPartId(defaultValue(part.partTypeInformation().manufacturerPartId()))
+                                .partInstanceId(partInstanceId(part))
+                                .manufacturerId(manufacturerId(part))
+                                .batchId(batchId(part))
+                                .manufacturerName(manufacturerName(part))
+                                .nameAtCustomer(defaultValue(part.partTypeInformation().nameAtCustomer()))
+                                .customerPartId(defaultValue(part.partTypeInformation().customerPartId()))
+                                .manufacturingDate(manufacturingDate(part))
+                                .manufacturingCountry(manufacturingCountry(part))
+                                .owner(getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId(), part.getLocalId(LocalIdKey.MANUFACTURER_ID)))
+                                .childDescriptions(getChildParts(supplierPartsMap, shortIds, part.catenaXId()))
+                                .parentDescriptions(getParentParts(customerPartsMap, shortIds, part.catenaXId()))
+                                .underInvestigation(false)
+                                .qualityType(QualityType.OK)
+                                .van(van(part))
+                                .build()).toList()
+    }
+
+    private List<Asset> mapToSupplierParts(JobResponse response) {
+        return ownParts.stream()
+                .map(part ->
+                        Asset.builder()
+                                .id(part.catenaXId())
+                                .idShort(defaultValue(shortIds.get(part.catenaXId())))
+                                .nameAtManufacturer(defaultValue(part.partTypeInformation().nameAtManufacturer()))
+                                .manufacturerPartId(defaultValue(part.partTypeInformation().manufacturerPartId()))
+                                .partInstanceId(partInstanceId(part))
+                                .manufacturerId(manufacturerId(part))
+                                .batchId(batchId(part))
+                                .manufacturerName(manufacturerName(part))
+                                .nameAtCustomer(defaultValue(part.partTypeInformation().nameAtCustomer()))
+                                .customerPartId(defaultValue(part.partTypeInformation().customerPartId()))
+                                .manufacturingDate(manufacturingDate(part))
+                                .manufacturingCountry(manufacturingCountry(part))
+                                .owner(getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId(), part.getLocalId(LocalIdKey.MANUFACTURER_ID)))
+                                .childDescriptions(getChildParts(supplierPartsMap, shortIds, part.catenaXId()))
+                                .parentDescriptions(getParentParts(customerPartsMap, shortIds, part.catenaXId()))
+                                .underInvestigation(false)
+                                .qualityType(QualityType.OK)
+                                .van(van(part))
+                                .build()).toList()
+    }
+
+    private List<Asset> mapToOwnParts(JobResponse response) {
+
+        List<SerialPartTypization> ownParts = response.serialPartTypizations().stream().filter(serialPartTypization -> serialPartTypization.catenaXId().equals(response.jobStatus().globalAssetId())).toList();
+
 
         // The Relationship on supplierPart catenaXId contains the id of the asset which has a relationship
         Map<String, List<Relationship>> supplierPartsMap = response.relationships().stream()
@@ -106,7 +177,7 @@ public class AssetsConverter {
                 .filter(relationship -> SINGLE_LEVEL_USAGE_AS_BUILT.equals(relationship.aspectType().getAspectName()))
                 .collect(Collectors.groupingBy(Relationship::childCatenaXId, Collectors.toList()));
 
-        return allParts.stream()
+        return ownParts.stream()
                 .map(part ->
                         Asset.builder()
                                 .id(part.catenaXId())
