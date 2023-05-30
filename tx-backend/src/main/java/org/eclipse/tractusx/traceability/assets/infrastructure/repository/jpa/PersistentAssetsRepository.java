@@ -52,6 +52,11 @@ public class PersistentAssetsRepository implements AssetRepository {
     }
 
     @Override
+    public boolean existsById(String globalAssetId) {
+        return assetsRepository.existsById(globalAssetId);
+    }
+
+    @Override
     public List<Asset> getAssetsById(List<String> assetIds) {
         return assetsRepository.findByIdIn(assetIds).stream()
                 .map(AssetEntity::toDomain)

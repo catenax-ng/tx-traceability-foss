@@ -71,15 +71,15 @@ public class AssetService {
             assetRepository.saveAll(downwardAssets);
 
             List<Asset> upwardAssets = irsRepository.findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects());
-            assetRepository.updateOrCreateParentDescriptionsIncludingOwner(upwardAssets);
+            upwardAssets.forEach(asset -> {
+                if (assetRepository.existsById(asset.getId())) {
+                    assetRepository.updateOrCreateParentDescriptionsIncludingOwner(upwardAssets);
+                } else {
+                    assetRepository.save(asset);
+                }
+            });
 
-          /*  List<Asset> unsyncedDownwardAssets = downwardAssets.stream().filter(asset -> !asset.getId().equals(globalAssetId)).toList();
-            List<Asset> unsyncedUpwardAssets = upwardAssets.stream().filter(asset -> !asset.getId().equals(globalAssetId)).toList();
-            List<Asset> unsyncedAssets = new ArrayList<>(unsyncedDownwardAssets);
-            unsyncedAssets.addAll(unsyncedUpwardAssets);
-            List<Asset> assets = unsyncedAssets.stream().filter(asset -> asset.getOwner().equals(Owner.UNKNOWN)).toList();
-            assets.forEach(asset -> synchronizeAssetsAsync(asset.getId()));*/
-//
+
         } catch (Exception e) {
             log.warn("Exception during assets synchronization for globalAssetId: {}. Message: {}.", globalAssetId, e.getMessage(), e);
         }
