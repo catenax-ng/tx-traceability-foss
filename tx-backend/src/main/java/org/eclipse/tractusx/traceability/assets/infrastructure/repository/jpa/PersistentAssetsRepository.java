@@ -107,10 +107,10 @@ public class PersistentAssetsRepository implements AssetRepository {
     @Override
     public long countAssets() {
         return assetsRepository.count();
-
-        @Override
-        public long countAssetsByOwner (Owner owner){
-            return assetsRepository.countAssetsByOwner(owner);
-        }
-
     }
+
+    @Override
+    public long countAssetsByOwner(Owner owner) {
+        return assetsRepository.countAssetsByOwner(owner);
+    }
+}
