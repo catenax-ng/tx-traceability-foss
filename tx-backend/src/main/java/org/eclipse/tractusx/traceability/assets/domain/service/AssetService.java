@@ -39,7 +39,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -76,12 +75,12 @@ public class AssetService {
             List<Asset> syncedAssetByUpward = upwardAssets.stream().filter(asset -> asset.getId().equals(globalAssetId)).toList();
             assetRepository.updateOrCreateParentDescriptionsIncludingOwner(syncedAssetByUpward);
 
-            List<Asset> unsyncedDownwardAssets = downwardAssets.stream().filter(asset -> !asset.getId().equals(globalAssetId)).toList();
+          /*  List<Asset> unsyncedDownwardAssets = downwardAssets.stream().filter(asset -> !asset.getId().equals(globalAssetId)).toList();
             List<Asset> unsyncedUpwardAssets = upwardAssets.stream().filter(asset -> !asset.getId().equals(globalAssetId)).toList();
             List<Asset> unsyncedAssets = new ArrayList<>(unsyncedDownwardAssets);
             unsyncedAssets.addAll(unsyncedUpwardAssets);
             List<Asset> assets = unsyncedAssets.stream().filter(asset -> asset.getOwner().equals(Owner.UNKNOWN)).toList();
-            assets.forEach(asset -> synchronizeAssetsAsync(asset.getId()));
+            assets.forEach(asset -> synchronizeAssetsAsync(asset.getId()));*/
 //
         } catch (Exception e) {
             log.warn("Exception during assets synchronization for globalAssetId: {}. Message: {}.", globalAssetId, e.getMessage(), e);
