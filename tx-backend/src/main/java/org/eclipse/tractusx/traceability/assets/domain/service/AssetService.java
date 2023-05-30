@@ -68,12 +68,10 @@ public class AssetService {
         log.info("Synchronizing assets for globalAssetId: {}", globalAssetId);
         try {
             List<Asset> downwardAssets = irsRepository.findAssets(globalAssetId, Direction.DOWNWARD, Aspect.downwardAspects());
-            List<Asset> syncedAssetByDownward = downwardAssets.stream().filter(asset -> asset.getId().equals(globalAssetId)).toList();
-            assetRepository.saveAll(syncedAssetByDownward);
+            assetRepository.saveAll(downwardAssets);
 
             List<Asset> upwardAssets = irsRepository.findAssets(globalAssetId, Direction.UPWARD, Aspect.upwardAspects());
-            List<Asset> syncedAssetByUpward = upwardAssets.stream().filter(asset -> asset.getId().equals(globalAssetId)).toList();
-            assetRepository.updateOrCreateParentDescriptionsIncludingOwner(syncedAssetByUpward);
+            assetRepository.updateOrCreateParentDescriptionsIncludingOwner(upwardAssets);
 
           /*  List<Asset> unsyncedDownwardAssets = downwardAssets.stream().filter(asset -> !asset.getId().equals(globalAssetId)).toList();
             List<Asset> unsyncedUpwardAssets = upwardAssets.stream().filter(asset -> !asset.getId().equals(globalAssetId)).toList();

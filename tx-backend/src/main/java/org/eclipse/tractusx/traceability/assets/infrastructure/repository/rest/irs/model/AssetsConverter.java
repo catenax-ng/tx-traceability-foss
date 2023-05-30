@@ -90,6 +90,7 @@ public class AssetsConverter {
 
     public List<Asset> convertAssets(JobResponse response) {
 
+        // Contains the global asset id part and the relationship part
         List<SerialPartTypization> allParts = response.serialPartTypizations();
 
         Map<String, String> shortIds = response.shells().stream()
