@@ -82,7 +82,7 @@ public class AssetService {
             unsyncedAssets.addAll(unsyncedUpwardAssets);
             List<Asset> assets = unsyncedAssets.stream().filter(asset -> asset.getOwner().equals(Owner.UNKNOWN)).toList();
             assets.forEach(asset -> synchronizeAssetsAsync(asset.getId()));
-
+//
         } catch (Exception e) {
             log.warn("Exception during assets synchronization for globalAssetId: {}. Message: {}.", globalAssetId, e.getMessage(), e);
         }
