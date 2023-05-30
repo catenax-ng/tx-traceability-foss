@@ -30,7 +30,6 @@ import org.eclipse.tractusx.traceability.assets.domain.model.Owner;
 import org.eclipse.tractusx.traceability.assets.domain.model.QualityType;
 import org.eclipse.tractusx.traceability.assets.domain.model.ShellDescriptor;
 import org.eclipse.tractusx.traceability.assets.domain.service.repository.BpnRepository;
-import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -53,8 +52,6 @@ public class AssetsConverter {
 
     private final BpnRepository bpnRepository;
 
-    private final TraceabilityProperties traceabilityProperties;
-
     private final ObjectMapper mapper = new ObjectMapper()
             .configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE, false)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -62,9 +59,8 @@ public class AssetsConverter {
     private static final String SINGLE_LEVEL_USAGE_AS_BUILT = "SingleLevelUsageAsBuilt";
     private static final String ASSEMBLY_PART_RELATIONSHIP = "AssemblyPartRelationship";
 
-    public AssetsConverter(BpnRepository bpnRepository, TraceabilityProperties traceabilityProperties) {
+    public AssetsConverter(BpnRepository bpnRepository) {
         this.bpnRepository = bpnRepository;
-        this.traceabilityProperties = traceabilityProperties;
     }
 
     public List<Asset> readAndConvertAssets() {
@@ -90,17 +86,19 @@ public class AssetsConverter {
     }
 
     public List<Asset> convertAssets(JobResponse response) {
-        List<Asset> assets = new ArrayList<>();
-        List<Asset> ownParts = mapToOwnParts(response, shortIds);
-        List<Asset> otherParts = new ArrayList<>();
 
         Map<String, String> shortIds = response.shells().stream()
                 .collect(Collectors.toMap(Shell::identification, Shell::idShort));
 
+        List<Asset> assets = new ArrayList<>();
+        List<Asset> ownParts = mapToOwnParts(response, shortIds);
+        List<Asset> otherParts = new ArrayList<>();
+
+
         if (isSupplierDirection(response)) {
-            otherParts.addAll(mapToSupplierParts(response, shortIds));
+            otherParts.addAll(mapToOtherParts(response, shortIds, Owner.SUPPLIER));
         } else {
-            otherParts.addAll(mapToCustomerParts(response, shortIds));
+            otherParts.addAll(mapToOtherParts(response, shortIds, Owner.CUSTOMER));
         }
         assets.addAll(ownParts);
         assets.addAll(otherParts);
@@ -111,7 +109,7 @@ public class AssetsConverter {
         return response.jobStatus().parameter().direction().equals("downward");
     }
 
-    private List<Asset> mapToCustomerParts(JobResponse response, Map<String, String> shortIds) {
+    private List<Asset> mapToOtherParts(JobResponse response, Map<String, String> shortIds, Owner owner) {
         List<SerialPartTypization> customerParts = response.serialPartTypizations().stream().filter(serialPartTypization -> !serialPartTypization.catenaXId().equals(response.jobStatus().globalAssetId())).toList();
         return customerParts.stream()
                 .map(part ->
@@ -128,44 +126,16 @@ public class AssetsConverter {
                                 .customerPartId(defaultValue(part.partTypeInformation().customerPartId()))
                                 .manufacturingDate(manufacturingDate(part))
                                 .manufacturingCountry(manufacturingCountry(part))
-                                .owner(getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId(), part.getLocalId(LocalIdKey.MANUFACTURER_ID)))
-                                .childDescriptions(getChildParts(supplierPartsMap, shortIds, part.catenaXId()))
-                                .parentDescriptions(getParentParts(customerPartsMap, shortIds, part.catenaXId()))
+                                .owner(owner)
                                 .underInvestigation(false)
                                 .qualityType(QualityType.OK)
                                 .van(van(part))
-                                .build()).toList()
+                                .build()).toList();
     }
 
-    private List<Asset> mapToSupplierParts(JobResponse response) {
-        return ownParts.stream()
-                .map(part ->
-                        Asset.builder()
-                                .id(part.catenaXId())
-                                .idShort(defaultValue(shortIds.get(part.catenaXId())))
-                                .nameAtManufacturer(defaultValue(part.partTypeInformation().nameAtManufacturer()))
-                                .manufacturerPartId(defaultValue(part.partTypeInformation().manufacturerPartId()))
-                                .partInstanceId(partInstanceId(part))
-                                .manufacturerId(manufacturerId(part))
-                                .batchId(batchId(part))
-                                .manufacturerName(manufacturerName(part))
-                                .nameAtCustomer(defaultValue(part.partTypeInformation().nameAtCustomer()))
-                                .customerPartId(defaultValue(part.partTypeInformation().customerPartId()))
-                                .manufacturingDate(manufacturingDate(part))
-                                .manufacturingCountry(manufacturingCountry(part))
-                                .owner(getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId(), part.getLocalId(LocalIdKey.MANUFACTURER_ID)))
-                                .childDescriptions(getChildParts(supplierPartsMap, shortIds, part.catenaXId()))
-                                .parentDescriptions(getParentParts(customerPartsMap, shortIds, part.catenaXId()))
-                                .underInvestigation(false)
-                                .qualityType(QualityType.OK)
-                                .van(van(part))
-                                .build()).toList()
-    }
-
-    private List<Asset> mapToOwnParts(JobResponse response) {
+    private List<Asset> mapToOwnParts(JobResponse response, Map<String, String> shortIds) {
 
         List<SerialPartTypization> ownParts = response.serialPartTypizations().stream().filter(serialPartTypization -> serialPartTypization.catenaXId().equals(response.jobStatus().globalAssetId())).toList();
-
 
         // The Relationship on supplierPart catenaXId contains the id of the asset which has a relationship
         Map<String, List<Relationship>> supplierPartsMap = response.relationships().stream()
@@ -192,7 +162,7 @@ public class AssetsConverter {
                                 .customerPartId(defaultValue(part.partTypeInformation().customerPartId()))
                                 .manufacturingDate(manufacturingDate(part))
                                 .manufacturingCountry(manufacturingCountry(part))
-                                .owner(getPartOwner(supplierPartsMap, customerPartsMap, part.catenaXId(), part.getLocalId(LocalIdKey.MANUFACTURER_ID)))
+                                .owner(Owner.OWN)
                                 .childDescriptions(getChildParts(supplierPartsMap, shortIds, part.catenaXId()))
                                 .parentDescriptions(getParentParts(customerPartsMap, shortIds, part.catenaXId()))
                                 .underInvestigation(false)
@@ -225,25 +195,6 @@ public class AssetsConverter {
                 .build();
     }
 
-    private Owner getPartOwner(
-            Map<String, List<Relationship>> supplierParts,
-            Map<String, List<Relationship>> customerParts,
-            String catenaXId, Optional<String> manufacturerId) {
-
-        if (manufacturerId.isPresent() && traceabilityProperties.getBpn().value().equals(manufacturerId.get())) {
-            return Owner.OWN;
-        }
-
-        if (supplierParts.containsKey(catenaXId)) {
-            return Owner.SUPPLIER;
-        }
-        if (customerParts.containsKey(catenaXId)) {
-            return Owner.CUSTOMER;
-        }
-        return Owner.UNKNOWN;
-    }
-
-
     private String manufacturerName(SerialPartTypization part) {
         String manufacturerId = manufacturerId(part);
 
@@ -252,11 +203,6 @@ public class AssetsConverter {
 
     private String manufacturerId(SerialPartTypization part) {
         return part.getLocalId(LocalIdKey.MANUFACTURER_ID)
-                .orElse(EMPTY_TEXT);
-    }
-
-    private String manufacturerPartId(SerialPartTypization part) {
-        return part.getLocalId(LocalIdKey.MANUFACTURER_PART_ID)
                 .orElse(EMPTY_TEXT);
     }
 
