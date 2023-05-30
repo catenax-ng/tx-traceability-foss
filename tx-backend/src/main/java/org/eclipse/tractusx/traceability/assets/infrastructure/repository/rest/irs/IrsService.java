@@ -58,7 +58,7 @@ public class IrsService implements IrsRepository {
 
         if (jobResponse.isCompleted()) {
             try {
-                bpnRepository.updateManufacturers(jobResponse.bpns());
+            //    bpnRepository.updateManufacturers(jobResponse.bpns());
             } catch (Exception e) {
                 log.info("Exception thrown in bpnRepo update", e);
             }
