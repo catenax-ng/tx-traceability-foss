@@ -45,7 +45,7 @@ python transform-and-upload.py -f CX_Testdata_MessagingTest_v0.0.1.json -s https
 Sample invocation (E2E B)
 
 ```
-python transform-and-upload.py -f CX_Testdata_MessagingTest_v0.0.1.json -s https://tracex-submodel-server-e2e.dev.demo.catena-x.net https://tracex-submodel-server-e2e.dev.demo.catena-x.net -edc https://trace-x-edc-e2e-a.dev.demo.catena-x.net https://trace-x-edc-e2e-b.dev.demo.catena-x.net -a https://trace-x-registry-e2e.dev.demo.catena-x.net/semantics/registry -k apiKey
+python transform-and-upload.py -f CX_Testdata_MessagingTest_v0.0.1.json -s https://tracex-submodel-server-e2e-b.dev.demo.catena-x.net -edc https://trace-x-edc-e2e-b.dev.demo.catena-x.net -a https://trace-x-registry-e2e-b.dev.demo.catena-x.net/semantics/registry -p id-3.0-trace -k <apiKey>
 ```
 
 where:
@@ -54,11 +54,11 @@ where:
 * -s submodel server url(s)
 * -edc edc url(s) to upload data to
 * -a aas url(s)
+* -p policies to add to the data
 * -k edc api key (value from <path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value> vault path)
 
 optional:
 
-* -p policies to add to the data
 * -bpns upload data only from a list of BPN
 
 ## 3) Prepare trace-x
