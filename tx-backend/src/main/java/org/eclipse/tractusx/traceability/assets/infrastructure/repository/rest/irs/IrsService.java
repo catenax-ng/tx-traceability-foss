@@ -24,6 +24,7 @@ package org.eclipse.tractusx.traceability.assets.infrastructure.repository.rest.
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
+import org.eclipse.tractusx.traceability.assets.domain.service.repository.BpnRepository;
 import org.eclipse.tractusx.traceability.assets.domain.service.repository.IrsRepository;
 import org.eclipse.tractusx.traceability.assets.infrastructure.repository.rest.irs.model.AssetsConverter;
 import org.eclipse.tractusx.traceability.assets.infrastructure.repository.rest.irs.model.Direction;
@@ -43,6 +44,7 @@ public class IrsService implements IrsRepository {
 
     private final IRSApiClient irsClient;
     private final AssetsConverter assetsConverter;
+    private final BpnRepository bpnRepository;
 
     @Override
     public List<Asset> findAssets(String globalAssetId, Direction direction, List<String> aspects) {
@@ -54,6 +56,7 @@ public class IrsService implements IrsRepository {
         log.info("IRS call for globalAssetId: {} finished with status: {}, runtime {} s.", globalAssetId, jobStatus.state(), runtime);
 
         if (jobResponse.isCompleted()) {
+            bpnRepository.updateManufacturers(jobResponse.bpns());
             return assetsConverter.convertAssets(jobResponse);
         }
         return Collections.emptyList();
