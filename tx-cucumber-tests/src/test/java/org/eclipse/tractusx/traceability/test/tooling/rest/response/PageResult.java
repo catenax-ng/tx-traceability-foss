@@ -19,33 +19,13 @@
 
 package org.eclipse.tractusx.traceability.test.tooling.rest.response;
 
-import org.springframework.beans.support.PagedListHolder;
-import org.springframework.data.domain.Page;
-
 import java.util.List;
-import java.util.function.Function;
 
 public record PageResult<T>(
-	List<T> content,
-	Integer page,
-	Integer pageCount,
-	Integer pageSize,
-	Long totalItems
+        List<T> content,
+        Integer page,
+        Integer pageCount,
+        Integer pageSize,
+        Long totalItems
 ) {
-
-	public PageResult(List<T> data) {
-		this(new PagedListHolder<>(data));
-	}
-
-	public PageResult(PagedListHolder<T> pagedListHolder) {
-		this(pagedListHolder.getPageList(), pagedListHolder.getPage(), pagedListHolder.getPageSize(), pagedListHolder.getPageSize(), (long)pagedListHolder.getNrOfElements());
-	}
-
-	public PageResult(Page<T> page) {
-		this(page, Function.identity());
-	}
-
-	public <R> PageResult(Page<R> page, Function<R, T> mapping) {
-		this(page.getContent().stream().map(mapping).toList(), page.getPageable().getPageNumber(), page.getTotalPages(), page.getPageable().getPageSize(), page.getTotalElements());
-	}
 }

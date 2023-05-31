@@ -31,13 +31,13 @@ public class EnvVariablesResolver {
 
     public static String getKeycloakHost() {
         return System.getenv("KEYCLOAK_HOST");
-       }
+    }
 
     public static String getTX_A_Host() {
-        return System.getenv("TXA_HOST");
+        return System.getenv("E2E_TXA_HOST");
     }
 
     public static String getTX_B_Host() {
-        return System.getenv("TXB_HOST");
+        return System.getenv("E2E_TXB_HOST");
     }
 }

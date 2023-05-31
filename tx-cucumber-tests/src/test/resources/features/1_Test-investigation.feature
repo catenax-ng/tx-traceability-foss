@@ -9,3 +9,4 @@ Feature: Investigation notification
     And I am logged into TRACE_X_B application
     And I wait for transfer
     Then I can see notification was received
+

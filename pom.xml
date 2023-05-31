@@ -20,6 +20,7 @@
 
     <properties>
         <springboot.version>3.0.6</springboot.version>
+        <spring-core.version>6.0.8</spring-core.version>
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -68,6 +69,8 @@
         <rest-assured.version>5.3.0</rest-assured.version>
         <spock-core.version>2.4-M1-groovy-4.0</spock-core.version>
         <springdoc.version>2.0.4</springdoc.version>
+        <assertj.version>3.24.2</assertj.version>
+        <lombok.version>1.18.26</lombok.version>
 
         <!-- Sonar related properties -->
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -118,6 +121,28 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <!-- Test Dependencies -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <pluginRepositories>
         <pluginRepository>
