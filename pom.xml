@@ -70,6 +70,7 @@
         <spock-core.version>2.4-M1-groovy-4.0</spock-core.version>
         <springdoc.version>2.0.4</springdoc.version>
         <assertj.version>3.24.2</assertj.version>
+        <commons-logging.version>1.2</commons-logging.version>
         <lombok.version>1.18.26</lombok.version>
         <json-unit-assertj.version>2.37.0</json-unit-assertj.version>
         <cucumber.version>7.11.1</cucumber.version>
