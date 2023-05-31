@@ -51,9 +51,7 @@ public class PersistentBpnRepository implements BpnRepository {
         entities.forEach(bpnEntity -> repository.findById(bpnEntity.getManufacturerId()).ifPresentOrElse(persistedBpnEntity -> {
             persistedBpnEntity.setManufacturerName(bpnEntity.getManufacturerName());
             repository.save(persistedBpnEntity);
-        }, () -> {
-            repository.save(bpnEntity);
-        }));
+        }, () -> repository.save(bpnEntity)));
 
     }
 
