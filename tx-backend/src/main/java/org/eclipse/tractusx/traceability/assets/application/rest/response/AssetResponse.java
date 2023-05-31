@@ -27,8 +27,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.tractusx.traceability.assets.domain.model.Asset;
-import org.eclipse.tractusx.traceability.common.model.PageResult;
 
 import java.time.Instant;
 import java.util.List;
@@ -77,52 +75,4 @@ public final class AssetResponse {
     private QualityTypeResponse qualityType;
     @ApiModelProperty(example = "--")
     private String van;
-
-    public static AssetResponse from(final Asset asset) {
-        return AssetResponse.builder()
-                .id(asset.getId())
-                .idShort(asset.getIdShort())
-                .nameAtManufacturer(asset.getNameAtManufacturer())
-                .manufacturerPartId(asset.getManufacturerPartId())
-                .partInstanceId(asset.getPartInstanceId())
-                .manufacturerId(asset.getManufacturerId())
-                .batchId(asset.getBatchId())
-                .manufacturerName(asset.getManufacturerName())
-                .nameAtCustomer(asset.getNameAtCustomer())
-                .customerPartId(asset.getCustomerPartId())
-                .manufacturingDate(asset.getManufacturingDate())
-                .manufacturingCountry(asset.getManufacturingCountry())
-                .owner(OwnerResponse.from(asset.getOwner()))
-                .childDescriptions(
-                        asset.getChildDescriptions().stream()
-                                .map(DescriptionsResponse::from)
-                                .toList())
-                .parentDescriptions(
-                        asset.getParentDescriptions().stream()
-                                .map(DescriptionsResponse::from)
-                                .toList())
-                .underInvestigation(asset.isUnderInvestigation())
-                .qualityType(
-                        QualityTypeResponse.from(asset.getQualityType())
-                )
-                .van(asset.getVan())
-                .build();
-    }
-
-    public static PageResult<AssetResponse> from(final PageResult<Asset> assetPageResult) {
-        return new PageResult<>(
-                assetPageResult.content().stream()
-                        .map(AssetResponse::from).toList(),
-                assetPageResult.page(),
-                assetPageResult.pageCount(),
-                assetPageResult.pageSize(),
-                assetPageResult.totalItems()
-        );
-    }
-
-    public static List<AssetResponse> from(final List<Asset> assets) {
-        return assets.stream()
-                .map(AssetResponse::from)
-                .toList();
-    }
 }
