@@ -58,7 +58,7 @@ describe('D3 Minimap', () => {
   it('should render minimap status colors', async () => {
     const component = await renderTree();
     component.detectChanges();
-    expect((await waitFor(() => screen.getAllByTestId('tree--element__circle-done'))).length).toBe(2);
+    expect((await waitFor(() => screen.getAllByTestId('tree--element__circle-SERIALPARTTYPIZATION'))).length).toBe(2);
     expect((await waitFor(() => screen.getAllByTestId('tree--element__circle-BATCH'))).length).toBe(1);
   });
 
