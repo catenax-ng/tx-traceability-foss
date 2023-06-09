@@ -106,9 +106,10 @@ describe('PartsAssembler', () => {
     const productionDate = 'productionDate';
     const qualityType = 'qualityType';
     const serialNumber = 'serialNumber';
+    const semanticDataModel = 'semanticDataModel';
 
     it('should clean up data for part view', () => {
-      const data = { productionDate, qualityType, serialNumber, test: '' } as unknown as Part;
+      const data = { productionDate, qualityType, serialNumber, semanticDataModel, test: '' } as unknown as Part;
       expect(PartsAssembler.filterPartForView({ data })).toEqual({
         data: { name: undefined, productionDate, serialNumber } as unknown as Part,
       });
