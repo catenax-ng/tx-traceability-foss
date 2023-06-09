@@ -160,7 +160,7 @@ module.exports = {
       severityLifeThreatening: '#E5231D',
 
       semanticDataModelSerialPartTypization: '#3db014',
-      semanticDataModelBatch: '#ffe168'
+      semanticDataModelBatch: '#ffd21d'
     },
     screens: {
       sm: '640px',
