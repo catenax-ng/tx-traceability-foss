@@ -22,6 +22,7 @@
 import { Injectable } from '@angular/core';
 import { Pagination } from '@core/model/pagination.model';
 import { Part } from '@page/parts/model/parts.model';
+import { PartsAssembler } from '@shared/assembler/parts.assembler';
 import { State } from '@shared/model/state';
 import { View } from '@shared/model/view.model';
 import { Observable } from 'rxjs';
@@ -40,12 +41,14 @@ export class OtherPartsState {
   }
 
   public set customerParts({ data, loader, error }: View<Pagination<Part>>) {
-    const partsView: View<Pagination<Part>> = { data, loader, error };
+    const formattedData = PartsAssembler.formatSemanticDataModelInPageToProperCase(data);
+    const partsView: View<Pagination<Part>> = { data: formattedData, loader, error };
     this._customerParts$.update(partsView);
   }
 
   public set supplierParts({ data, loader, error }: View<Pagination<Part>>) {
-    const partsView: View<Pagination<Part>> = { data, loader, error };
+    const formattedData = PartsAssembler.formatSemanticDataModelInPageToProperCase(data);
+    const partsView: View<Pagination<Part>> = { data: formattedData, loader, error };
     this._supplierParts$.update(partsView);
   }
 
