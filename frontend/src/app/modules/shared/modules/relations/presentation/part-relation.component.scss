@@ -196,6 +196,14 @@
       @apply fill-qualityTypeOk;
     }
 
+    &-Batch {
+      @apply fill-semanticDataModelBatch
+    }
+
+    &-Serialparttypization {
+      @apply fill-semanticDataModelSerialPartTypization
+    }
+
     &-BATCH {
       @apply fill-semanticDataModelBatch
     }

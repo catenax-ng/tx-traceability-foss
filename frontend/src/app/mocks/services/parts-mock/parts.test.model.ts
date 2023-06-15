@@ -37,7 +37,7 @@ export const MOCK_part_5 = {
   specificAssetIds: { key: 'value' },
   childDescriptions: [],
   parentDescriptions: [],
-  semanticDataModel: SemanticDataModel.SerialPartTypization
+  semanticDataModel: SemanticDataModel.SERIALPARTTYPIZATION
 };
 
 export const MOCK_part_4 = {
@@ -56,7 +56,7 @@ export const MOCK_part_4 = {
   specificAssetIds: { key: 'value' },
   childDescriptions: [],
   parentDescriptions: [],
-  semanticDataModel: SemanticDataModel.SerialPartTypization
+  semanticDataModel: SemanticDataModel.SERIALPARTTYPIZATION
 };
 
 export const MOCK_part_3 = {
@@ -75,7 +75,7 @@ export const MOCK_part_3 = {
   specificAssetIds: { key: 'value' },
   childDescriptions: [{ id: MOCK_part_5.id, idShort: MOCK_part_5.idShort }],
   parentDescriptions: [],
-  semanticDataModel: SemanticDataModel.SerialPartTypization
+  semanticDataModel: SemanticDataModel.SERIALPARTTYPIZATION
 };
 
 export const MOCK_part_2 = {
@@ -94,7 +94,7 @@ export const MOCK_part_2 = {
   specificAssetIds: { key: 'value' },
   childDescriptions: [{ id: MOCK_part_4.id, idShort: MOCK_part_4.idShort }],
   parentDescriptions: [],
-  semanticDataModel: SemanticDataModel.SerialPartTypization
+  semanticDataModel: SemanticDataModel.SERIALPARTTYPIZATION
 };
 
 export const MOCK_part_1 = {
@@ -116,7 +116,7 @@ export const MOCK_part_1 = {
     { id: MOCK_part_3.id, idShort: MOCK_part_3.idShort },
   ],
   parentDescriptions: [{ id: MOCK_part_4.id, idShort: MOCK_part_4.idShort }],
-  semanticDataModel: SemanticDataModel.Batch
+  semanticDataModel: SemanticDataModel.BATCH
 };
 
 export const mockAssets: PartsResponse = {

@@ -32,8 +32,8 @@ export enum QualityType {
 }
 
 export enum SemanticDataModel {
-  Batch= 'BATCH',
-  SerialPartTypization = 'SERIALPARTTYPIZATION'
+  BATCH= 'BATCH',
+  SERIALPARTTYPIZATION = 'SERIALPARTTYPIZATION'
 }
 
 export interface Part {

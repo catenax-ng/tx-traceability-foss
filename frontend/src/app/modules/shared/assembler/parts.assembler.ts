@@ -22,7 +22,7 @@
 import { CalendarDateModel } from '@core/model/calendar-date.model';
 import { Pagination, PaginationResponse } from '@core/model/pagination.model';
 import { PaginationAssembler } from '@core/pagination/pagination.assembler';
-import { Part, PartResponse, QualityType, SemanticDataModel } from '@page/parts/model/parts.model';
+import { Part, PartResponse, QualityType } from '@page/parts/model/parts.model';
 import { TableHeaderSort } from '@shared/components/table/table.model';
 import { View } from '@shared/model/view.model';
 import { OperatorFunction } from 'rxjs';
@@ -107,29 +107,6 @@ export class PartsAssembler {
       const { nameAtCustomer, customerPartId } = viewData.data;
       return { data: { nameAtCustomer, customerPartId } as Part };
     });
-  }
-
-  public static formatSemanticDataModelInPageToProperCase(data: Pagination<Part>): Pagination<Part> {
-    const formattedContent = data.content.map(part => {
-      if('semanticDataModel' in part) {
-        return {
-          ...part,
-          semanticDataModel: this.capitalizeFirstLetter(part.semanticDataModel) as SemanticDataModel,
-        } as Part;
-      } else {
-        return part;
-      }
-
-    });
-
-    return { ...data, content: formattedContent };
-  }
-
-  public static capitalizeFirstLetter(str: string): string {
-    if(str && str.length > 0) {
-      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-    }
-    return str;
   }
 
   public static mapSortToApiSort(sorting: TableHeaderSort): string {
