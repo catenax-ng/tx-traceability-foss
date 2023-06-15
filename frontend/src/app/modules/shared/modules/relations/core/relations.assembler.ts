@@ -27,7 +27,7 @@ export class RelationsAssembler {
   public static assemblePartForRelation(part: Part, idFallback?: string): TreeElement {
     const { id, name: text = idFallback, serialNumber, semanticDataModel, children, parents } = part || {};
 
-    const mapBatchToState = (type: SemanticDataModel) => {
+    const mapBatchToState = (type: SemanticDataModel): SemanticDataModel | string => {
       if(type && (type.toString().toLowerCase() === "serialparttypization" || type.toString().toLowerCase() === "batch")) {
         return type;
       }
@@ -35,7 +35,7 @@ export class RelationsAssembler {
     }
     const loadingOrErrorStatus = id ? 'loading' : 'error';
 
-    const mappedOrFallbackStatus = mapBatchToState(semanticDataModel) || 'done';
+    const mappedOrFallbackStatus = mapBatchToState(semanticDataModel);
     const state = !!children ? mappedOrFallbackStatus : loadingOrErrorStatus;
 
     const title = `${text || '--'} | ${serialNumber || id}`;

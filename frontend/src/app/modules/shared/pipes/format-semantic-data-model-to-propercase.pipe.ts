@@ -11,20 +11,20 @@ export class FormatSemanticDataModelToProperCasePipe implements PipeTransform {
       return value;
     }
 
-    const transformedContent = value.content.map(item => {
-      if (!item.semanticDataModel || typeof item.semanticDataModel !== 'string') {
+    const transformedContent = value.content.map(part => {
+      if (!part.semanticDataModel || typeof part.semanticDataModel !== 'string') {
         console.error(`Invalid input for property 'semanticDataModel'. Expected a string.`);
-        return item;
+        return part;
       }
 
-      if (item.semanticDataModel.length === 0) {
-        return item;
+      if (part.semanticDataModel.length === 0) {
+        return part;
       }
 
-      const firstLetter = item.semanticDataModel.charAt(0).toUpperCase();
-      const restOfString = item.semanticDataModel.slice(1).toLowerCase();
+      const firstLetter = part.semanticDataModel.charAt(0).toUpperCase();
+      const restOfString = part.semanticDataModel.slice(1).toLowerCase();
       return {
-        ...item,
+        ...part,
         semanticDataModel: firstLetter + restOfString
       };
     });
