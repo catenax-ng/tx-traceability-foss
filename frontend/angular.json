@@ -72,6 +72,14 @@
                 }
               ]
             },
+            "test": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test.ts"
+                }
+              ]
+            },
             "authLocal": {
               "fileReplacements": [
                 {
@@ -149,6 +157,9 @@
             },
             "auth": {
               "browserTarget": "trace-x:build:dev,auth"
+            },
+            "test": {
+              "browserTarget": "trace-x:build:dev,test"
             },
             "authLocal": {
               "browserTarget": "trace-x:build:dev,authLocal"
