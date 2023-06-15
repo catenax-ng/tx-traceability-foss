@@ -28,7 +28,6 @@ export class RelationsAssembler {
     const { id, name: text = idFallback, serialNumber, semanticDataModel, children, parents } = part || {};
 
     const mapBatchToState = (type: SemanticDataModel) => {
-      console.log("mapping: " + type);
       if(type && (type.toString().toLowerCase() === "serialparttypization" || type.toString().toLowerCase() === "batch")) {
         return type;
       }
