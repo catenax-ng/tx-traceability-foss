@@ -187,29 +187,29 @@ irs-helm:
   enabled: true
   bpn: BPNL000000ATRACE
 
-  nameOverride: "tracex-irs-int-a"
-  fullnameOverride: "tracex-irs-int-a"
+  nameOverride: "tracex-irs-stable-b"
+  fullnameOverride: "tracex-irs-stable-b"
 
   namespace: product-traceability-foss
 
   springprofile: dev
 
-  irsUrl: "https://tracex-irs-int-a.int.demo.catena-x.net"
+  irsUrl: "https://tracex-irs-stable-b.stable.demo.catena-x.net"
 
   ingress:
     enabled: true
     hosts:
-      - host: "tracex-irs-int-a.int.demo.catena-x.net"
+      - host: "tracex-irs-stable-b.stable.demo.catena-x.net"
         paths:
           - path: /
             pathType: ImplementationSpecific
     tls:
       - hosts:
-          - "tracex-irs-int-a.dev.demo.catena-x.net"
+          - "tracex-irs-stable-b.stable.demo.catena-x.net"
         secretName: tls-secret
   # is dtr url correct ?
   digitalTwinRegistry:
-    url: https://trace-x-registry-int-a.int.demo.catena-x.net/semantics/registry
+    url: https://trace-x-registry-int.int.demo.catena-x.net/semantics/registry
   semanticshub:
     url: https://semantics.int.demo.catena-x.net/hub/api/v1/models
   bpdm:
@@ -380,7 +380,7 @@ irs-edc-consumer:
 
     ingresses:
       - enabled: true
-        hostname: "tracex-consumer-dataplane-stable-a.stable.demo.catena-x.net"
+        hostname: "tracex-consumer-dataplane-stable-b.stable.demo.catena-x.net"
         annotations:
           nginx.ingress.kubernetes.io/ssl-passthrough: "false"
           nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
