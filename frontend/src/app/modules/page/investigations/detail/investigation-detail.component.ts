@@ -193,5 +193,4 @@ export class InvestigationDetailComponent implements AfterViewInit, OnDestroy {
       )
       .subscribe();
   }
-
 }
