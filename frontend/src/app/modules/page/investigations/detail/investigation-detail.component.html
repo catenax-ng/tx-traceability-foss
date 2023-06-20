@@ -23,7 +23,7 @@ SPDX-License-Identifier: Apache-2.0
   <div>
     <app-button
       *ngIf="helperService.showApproveButton(selectedInvestigation)"
-      (click)="approveModal?.show(selectedInvestigation, 'commonInvestigation')"
+      (click)="approveModal?.show(selectedInvestigation, TranslationContext.COMMONINVESTIGATION)"
       [color]="'primary'"
     >
       <div class="flex justify-between items-center">
@@ -33,7 +33,7 @@ SPDX-License-Identifier: Apache-2.0
     </app-button>
     <app-button
       *ngIf="helperService.showCancelButton(selectedInvestigation)"
-      (click)="cancelModal?.show(selectedInvestigation, 'commonInvestigation')"
+      (click)="cancelModal?.show(selectedInvestigation, TranslationContext.COMMONINVESTIGATION)"
       [color]="'primary'"
     >
       <div class="flex justify-between items-center">
@@ -43,7 +43,7 @@ SPDX-License-Identifier: Apache-2.0
     </app-button>
     <app-button
       *ngIf="helperService.showCloseButton(selectedInvestigation)"
-      (click)="closeModal?.show(selectedInvestigation, 'commonInvestigation')"
+      (click)="closeModal?.show(selectedInvestigation, TranslationContext.COMMONINVESTIGATION)"
       [color]="'primary'"
     >
       <div class="flex justify-between items-center">
@@ -54,7 +54,7 @@ SPDX-License-Identifier: Apache-2.0
 
     <app-button
       *ngIf="helperService.showAcceptButton(selectedInvestigation)"
-      (click)="acceptModal?.show(selectedInvestigation, 'commonInvestigation')"
+      (click)="acceptModal?.show(selectedInvestigation, TranslationContext.COMMONINVESTIGATION)"
       [color]="'primary'"
     >
       <div class="flex justify-between items-center">
@@ -65,7 +65,7 @@ SPDX-License-Identifier: Apache-2.0
 
     <app-button
       *ngIf="helperService.showAcknowledgeButton(selectedInvestigation)"
-      (click)="acknowledgeModal?.show(selectedInvestigation, 'commonInvestigation')"
+      (click)="acknowledgeModal?.show(selectedInvestigation, TranslationContext.COMMONINVESTIGATION)"
       [color]="'primary'"
     >
       <div class="flex justify-between items-center">
@@ -76,7 +76,7 @@ SPDX-License-Identifier: Apache-2.0
 
     <app-button
       *ngIf="helperService.showDeclineButton(selectedInvestigation)"
-      (click)="declineModal?.show(selectedInvestigation, 'commonInvestigation')"
+      (click)="declineModal?.show(selectedInvestigation, TranslationContext.COMMONINVESTIGATION)"
       [color]="'primary'"
     >
       <div class="flex justify-between items-center">

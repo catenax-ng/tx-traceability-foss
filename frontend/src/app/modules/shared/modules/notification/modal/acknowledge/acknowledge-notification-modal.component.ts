@@ -22,6 +22,7 @@
 import { Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from '@angular/core';
 import { ToastService } from '@shared/components/toasts/toast.service';
 import { Notification } from '@shared/model/notification.model';
+import { TranslationContext } from '@shared/model/translation-context.model';
 import { ModalData } from '@shared/modules/modal/core/modal.model';
 import { ModalService } from '@shared/modules/modal/core/modal.service';
 import { Observable } from 'rxjs';
@@ -33,16 +34,23 @@ import { Observable } from 'rxjs';
 export class AcknowledgeNotificationModalComponent {
   @ViewChild('Modal') modal: TemplateRef<unknown>;
   @Input() acknowledgeCall: (id: string) => Observable<void>;
-  @Input() translationContext: 'commonInvestigation' | 'commonAlert';
+  @Input() translationContext: string;
   @Output() confirmActionCompleted = new EventEmitter<void>();
 
   public notification: Notification;
 
   constructor(private readonly toastService: ToastService, private readonly confirmModalService: ModalService) {}
 
-  public show(notification: Notification, translationContext: 'commonInvestigation' | 'commonAlert'): void {
+  public show(notification: Notification, translationContext: TranslationContext): void {
     this.notification = notification;
-    this.translationContext = translationContext;
+
+    if(translationContext === TranslationContext.COMMONINVESTIGATION) {
+      this.translationContext = "commonInvestigation";
+    }
+    if(translationContext === TranslationContext.COMMONALERT) {
+      this.translationContext = "commonAlert";
+    }
+
 
     const onConfirm = (isConfirmed: boolean) => {
       if (!isConfirmed) return;

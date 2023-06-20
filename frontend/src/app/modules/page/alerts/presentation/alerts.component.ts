@@ -22,6 +22,7 @@ import { AlertHelperService } from '@page/alerts/core/alert-helper.service';
 import { AlertsFacade } from '@page/alerts/core/alerts.facade';
 import { MenuActionConfig, TableEventConfig } from '@shared/components/table/table.model';
 import { Notification } from '@shared/model/notification.model';
+import { TranslationContext } from '@shared/model/translation-context.model';
 import { AcceptNotificationModalComponent } from '@shared/modules/notification/modal/accept/accept-notification-modal.component';
 import { AcknowledgeNotificationModalComponent } from '@shared/modules/notification/modal/acknowledge/acknowledge-notification-modal.component';
 import { ApproveNotificationModalComponent } from '@shared/modules/notification/modal/approve/approve-notification-modal.component';
@@ -68,37 +69,37 @@ export class AlertsComponent {
       {
         label: 'actions.close',
         icon: 'close',
-        action: data => this.closeModal.show(data, 'commonAlert'),
+        action: data => this.closeModal.show(data, TranslationContext.COMMONALERT),
         condition: data => this.helperService.showCloseButton(data),
       },
       {
         label: 'actions.approve',
         icon: 'share',
-        action: data => this.approveModal.show(data, 'commonAlert'),
+        action: data => this.approveModal.show(data, TranslationContext.COMMONALERT),
         condition: data => this.helperService.showApproveButton(data),
       },
       {
         label: 'actions.cancel',
         icon: 'cancel',
-        action: data => this.cancelModal.show(data, 'commonAlert'),
+        action: data => this.cancelModal.show(data, TranslationContext.COMMONALERT),
         condition: data => this.helperService.showCancelButton(data),
       },
       {
         label: 'actions.acknowledge',
         icon: 'work',
-        action: data => this.acknowledgeModal.show(data, 'commonAlert'),
+        action: data => this.acknowledgeModal.show(data, TranslationContext.COMMONALERT),
         condition: data => this.helperService.showAcknowledgeButton(data),
       },
       {
         label: 'actions.accept',
         icon: 'assignment_turned_in',
-        action: data => this.acceptModal.show(data, 'commonAlert'),
+        action: data => this.acceptModal.show(data, TranslationContext.COMMONALERT),
         condition: data => this.helperService.showAcceptButton(data),
       },
       {
         label: 'actions.decline',
         icon: 'assignment_late',
-        action: data => this.declineModal.show(data, 'commonAlert'),
+        action: data => this.declineModal.show(data, TranslationContext.COMMONALERT),
         condition: data => this.helperService.showDeclineButton(data),
       },
     ];

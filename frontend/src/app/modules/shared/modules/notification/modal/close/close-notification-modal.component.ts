@@ -23,6 +23,7 @@ import { Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from '
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ToastService } from '@shared/components/toasts/toast.service';
 import { Notification } from '@shared/model/notification.model';
+import { TranslationContext } from '@shared/model/translation-context.model';
 import { ModalData } from '@shared/modules/modal/core/modal.model';
 import { ModalService } from '@shared/modules/modal/core/modal.service';
 import { Observable } from 'rxjs';
@@ -34,7 +35,7 @@ import { Observable } from 'rxjs';
 export class CloseNotificationModalComponent {
   @ViewChild('Modal') modal: TemplateRef<unknown>;
   @Input() closeCall: (id: string, reason: string) => Observable<void>;
-  @Input() translationContext: 'commonInvestigation' | 'commonAlert';
+  @Input() translationContext: string;
   @Output() confirmActionCompleted = new EventEmitter<void>();
 
   public notification: Notification;
@@ -45,8 +46,13 @@ export class CloseNotificationModalComponent {
     this.formGroup = new UntypedFormGroup({ reason: this.textAreaControl });
   }
 
-  public show(notification: Notification, translationContext: 'commonInvestigation' | 'commonAlert'): void {
-    this.translationContext = translationContext;
+  public show(notification: Notification, translationContext: TranslationContext): void {
+    if(translationContext === TranslationContext.COMMONINVESTIGATION) {
+      this.translationContext = "commonInvestigation";
+    }
+    if(translationContext === TranslationContext.COMMONALERT) {
+      this.translationContext = "commonAlert";
+    }
     this.notification = notification;
     this.textAreaControl.setValidators([Validators.required, Validators.maxLength(1000), Validators.minLength(15)]);
 

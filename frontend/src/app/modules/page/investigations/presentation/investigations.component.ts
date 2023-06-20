@@ -26,6 +26,7 @@ import { InvestigationDetailFacade } from '@page/investigations/core/investigati
 import { InvestigationHelperService } from '@page/investigations/core/investigation-helper.service';
 import { MenuActionConfig, TableEventConfig } from '@shared/components/table/table.model';
 import { Notification } from '@shared/model/notification.model';
+import { TranslationContext } from '@shared/model/translation-context.model';
 import { AcceptNotificationModalComponent } from '@shared/modules/notification/modal/accept/accept-notification-modal.component';
 import { AcknowledgeNotificationModalComponent } from '@shared/modules/notification/modal/acknowledge/acknowledge-notification-modal.component';
 import { ApproveNotificationModalComponent } from '@shared/modules/notification/modal/approve/approve-notification-modal.component';
@@ -74,37 +75,37 @@ export class InvestigationsComponent implements OnInit, OnDestroy, AfterContentI
       {
         label: 'actions.close',
         icon: 'close',
-        action: data => this.closeModal.show(data, 'commonInvestigation'),
+        action: data => this.closeModal.show(data, TranslationContext.COMMONINVESTIGATION),
         condition: data => this.helperService.showCloseButton(data),
       },
       {
         label: 'actions.approve',
         icon: 'share',
-        action: data => this.approveModal.show(data, 'commonInvestigation'),
+        action: data => this.approveModal.show(data, TranslationContext.COMMONINVESTIGATION),
         condition: data => this.helperService.showApproveButton(data),
       },
       {
         label: 'actions.cancel',
         icon: 'cancel',
-        action: data => this.cancelModal.show(data, 'commonInvestigation'),
+        action: data => this.cancelModal.show(data, TranslationContext.COMMONINVESTIGATION),
         condition: data => this.helperService.showCancelButton(data),
       },
       {
         label: 'actions.acknowledge',
         icon: 'work',
-        action: data => this.acknowledgeModal.show(data, 'commonInvestigation'),
+        action: data => this.acknowledgeModal.show(data, TranslationContext.COMMONINVESTIGATION),
         condition: data => this.helperService.showAcknowledgeButton(data),
       },
       {
         label: 'actions.accept',
         icon: 'assignment_turned_in',
-        action: data => this.acceptModal.show(data, 'commonInvestigation'),
+        action: data => this.acceptModal.show(data, TranslationContext.COMMONINVESTIGATION),
         condition: data => this.helperService.showAcceptButton(data),
       },
       {
         label: 'actions.decline',
         icon: 'assignment_late',
-        action: data => this.declineModal.show(data, 'commonInvestigation'),
+        action: data => this.declineModal.show(data, TranslationContext.COMMONINVESTIGATION),
         condition: data => this.helperService.showDeclineButton(data),
       },
     ];
