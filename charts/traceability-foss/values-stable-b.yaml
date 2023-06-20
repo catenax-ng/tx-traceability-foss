@@ -30,13 +30,13 @@ global:
 frontend:
   image:
     tag: $ARGOCD_APP_REVISION
-    CATENAX_PORTAL_API_URL: 'https://traceability-stable-a.stable.demo.catena-x.net/api'
+    CATENAX_PORTAL_API_URL: 'https://traceability-stable-b.stable.demo.catena-x.net/api'
     CATENAX_PORTAL_KEYCLOAK_URL: 'https://centralidp.stable.demo.catena-x.net/auth'
     CATENAX_PORTAL_BACKEND_DOMAIN: 'catena-x.net'
     CATENAX_PORTAL_URL: 'https://portal.stable.demo.catena-x.net/'
 
-  nameOverride: "traceability-foss-stable-a-frontend"
-  fullnameOverride: "traceability-foss-stable-a-frontend"
+  nameOverride: "traceability-foss-stable-b-frontend"
+  fullnameOverride: "traceability-foss-stable-b-frontend"
 
   ingress:
     enabled: true
@@ -44,14 +44,14 @@ frontend:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
-      - host: "traceability-portal-stable-a.stable.demo.catena-x.net"
+      - host: "traceability-portal-stable-b.stable.demo.catena-x.net"
         paths:
           - path: /
             pathType: ImplementationSpecific
     tls:
       - hosts:
-          - "traceability-portal-stable-a.stable.demo.catena-x.net"
-        secretName: "traceability-portal-stable-a.stable.demo.catena-x.net-tls"
+          - "traceability-portal-stable-b.stable.demo.catena-x.net"
+        secretName: "traceability-portal-stable-b.stable.demo.catena-x.net-tls"
 
 #########################
 # Backend Chart Values configuration     #
@@ -61,8 +61,8 @@ backend:
     repository: ghcr.io/catenax-ng/tx-traceability-foss
     tag: $ARGOCD_APP_REVISION
 
-  nameOverride: "traceability-foss-backend-stable-a"
-  fullnameOverride: "traceability-foss-backend-stable-a"
+  nameOverride: "traceability-foss-backend-stable-b"
+  fullnameOverride: "traceability-foss-backend-stable-b"
 
   podSecurityContext:
     runAsUser: 10001
@@ -99,21 +99,21 @@ backend:
     annotations:
       nginx.ingress.kubernetes.io/backend-protocol: HTTP
     hosts:
-      - host: "traceability-stable-a.stable.demo.catena-x.net"
+      - host: "traceability-stable-b.stable.demo.catena-x.net"
         paths:
           - path: /
             pathType: ImplementationSpecific
     tls:
       - hosts:
-          - "traceability-stable-a.stable.demo.catena-x.net"
+          - "traceability-stable-b.stable.demo.catena-x.net"
         secretName: tls-secret
 
   traceability:
     bpn: "BPNL000000ATRACE"
-    url: "https://traceability-stable-a.stable.demo.catena-x.net"
+    url: "https://traceability-stable-b.stable.demo.catena-x.net"
 
   datasource:
-    url: jdbc:postgresql://traceability-foss-backend-stable-a-postgresql:5432/trace
+    url: jdbc:postgresql://traceability-foss-backend-stable-b-postgresql:5432/trace
     username: trace
     password: <path:traceability-foss/data/int/database#tracePassword>
 
@@ -126,7 +126,7 @@ backend:
 
   edc:
     apiKey: "<path:traceability-foss/data/int/edc/controlplane#edc.api.control.auth.apikey.value>"
-    providerUrl: "https://tracex-consumer-controlplane-stable-a.stable.demo.catena-x.net"
+    providerUrl: "https://tracex-consumer-controlplane-stable-b.stable.demo.catena-x.net"
 
 #########################
 # PG Admin configuration     #
@@ -143,13 +143,13 @@ pgadmin4:
       kubernetes.io/ingress.class: nginx
       nginx.ingress.kubernetes.io/backend-protocol: HTTP
     hosts:
-      - host: tracex-pgadmin4-stable-a.stable.demo.catena-x.net
+      - host: tracex-pgadmin4-stable-b.stable.demo.catena-x.net
         paths:
           - path: /
             pathType: Prefix
     tls:
       - hosts:
-          - tracex-pgadmin4-stable-a.stable.demo.catena-x.net
+          - tracex-pgadmin4-stable-b.stable.demo.catena-x.net
         secretName: tls-secret
   env:
     email: pgadmin4@trace.foss
@@ -171,8 +171,8 @@ pgadmin4:
 postgresql:
   enabled: true
 
-  nameOverride: "traceability-foss-backend-stable-a-postgresql"
-  fullnameOverride: "traceability-foss-backend-stable-a-postgresql"
+  nameOverride: "traceability-foss-backend-stable-b-postgresql"
+  fullnameOverride: "traceability-foss-backend-stable-b-postgresql"
 
   auth:
     postgresPassword: "<path:traceability-foss/data/int/database#postgresPassword>"
@@ -229,13 +229,13 @@ irs-helm:
   edc:
     controlplane:
       endpoint:
-        data: http://tracex-consumer-controlplane-stable-a:8181/data
+        data: http://tracex-consumer-controlplane-stable-b:8181/data
       apikey:
         secret: <path:traceability-foss/data/int/edc/controlplane#edc.api.control.auth.apikey.value>
 
   minio:
-    nameOverride: "tracex-irs-minio-stable-a"
-    fullnameOverride: "tracex-irs-minio-stable-a"
+    nameOverride: "tracex-irs-minio-stable-b"
+    fullnameOverride: "tracex-irs-minio-stable-b"
     serviceAccount:
       create: false
     rootUser: <path:traceability-foss/data/int/minio#user>
@@ -248,8 +248,8 @@ irs-edc-consumer:
   enabled: true
 
   postgresql:
-    nameOverride: "tracex-consumer-edc-postgresql-stable-a"
-    fullnameOverride: "tracex-consumer-edc-postgresql-stable-a"
+    nameOverride: "tracex-consumer-edc-postgresql-stable-b"
+    fullnameOverride: "tracex-consumer-edc-postgresql-stable-b"
 
     namespace: product-traceability-foss
 
@@ -264,8 +264,8 @@ irs-edc-consumer:
 
   # Values for consumer edc-controlplane.
   edc-controlplane:
-    nameOverride: "tracex-consumer-controlplane-stable-a"
-    fullnameOverride: "tracex-consumer-controlplane-stable-a"
+    nameOverride: "tracex-consumer-controlplane-stable-b"
+    fullnameOverride: "tracex-consumer-controlplane-stable-b"
 
     namespace: product-traceability-foss
 
@@ -274,7 +274,7 @@ irs-edc-consumer:
 
     ingresses:
       - enabled: true
-        hostname: "tracex-consumer-controlplane-stable-a.stable.demo.catena-x.net"
+        hostname: "tracex-consumer-controlplane-stable-b.stable.demo.catena-x.net"
         annotations:
           nginx.ingress.kubernetes.io/ssl-passthrough: "false"
           nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
@@ -285,7 +285,7 @@ irs-edc-consumer:
         className: "nginx"
         tls:
           - hosts:
-              - "tracex-consumer-controlplane-stable-a.stable.demo.catena-x.net"
+              - "tracex-consumer-controlplane-stable-b.stable.demo.catena-x.net"
             secretName: tls-secret
 
     resources:
@@ -315,28 +315,28 @@ irs-edc-consumer:
           token:
             verifier:
               publickey:
-                alias: daps-cert-stable-a
+                alias: daps-cert-stable-b
             signer:
               privatekey:
-                alias: daps-cert-key-stable-a
+                alias: daps-cert-key-stable-b
       api:
         auth:
           key: <path:traceability-foss/data/int/edc/controlplane#edc.api.control.auth.apikey.value>
       controlplane:
-        url: "https://tracex-consumer-controlplane-stable-a.stable.demo.catena-x.net"
+        url: "https://tracex-consumer-controlplane-stable-b.stable.demo.catena-x.net"
       dataplane:
-        url: "https://tracex-consumer-dataplane-stable-a.stable.demo.catena-x.net"
+        url: "https://tracex-consumer-dataplane-stable-b.stable.demo.catena-x.net"
 
 
     configuration:
       # -- EDC configuration.properties configuring aspects of the [eclipse-dataspaceconnector](https://github.com/eclipse-dataspaceconnector/DataSpaceConnector)
       properties: |-
 
-        edc.receiver.http.dynamic.endpoint=https://traceability-stable-a.stable.demo.catena-x.net/api/callback/endpoint-data-reference
-        edc.dataplane.selector.consumer.url=http://tracex-consumer-dataplane-stable-a:9999/api/dataplane/control
-        edc.oauth.client.id=84:9D:1B:E4:9B:83:D1:42:BB:DB:41:D3:04:85:0F:BF:8B:A4:EA:8D:keyid:84:9D:1B:E4:9B:83:D1:42:BB:DB:41:D3:04:85:0F:BF:8B:A4:EA:8D
-        edc.oauth.certificate.alias=daps-cert-stable-a
-        edc.oauth.private.key.alias=daps-cert-key-stable-a
+        edc.receiver.http.dynamic.endpoint=https://traceability-stable-b.stable.demo.catena-x.net/api/callback/endpoint-data-reference
+        edc.dataplane.selector.consumer.url=http://tracex-consumer-dataplane-stable-b:9999/api/dataplane/control
+        edc.oauth.client.id=A0:35:A5:E2:52:7B:83:48:45:41:73:95:85:E2:2C:EB:D7:10:6D:16:keyid:A0:35:A5:E2:52:7B:83:48:45:41:73:95:85:E2:2C:EB:D7:10:6D:16
+        edc.oauth.certificate.alias=daps-cert-stable-b
+        edc.oauth.private.key.alias=daps-cert-key-stable-b
         edc.oauth.provider.jwks.url=https://daps1.int.demo.catena-x.net/.well-known/jwks.json
         edc.oauth.token.url=https://daps1.int.demo.catena-x.net/token
         edc.vault.hashicorp.url=https://vault.demo.catena-x.net
@@ -345,30 +345,30 @@ irs-edc-consumer:
         edc.data.encryption.keys.alias=edc-data-encryption-keys-alias
         edc.data.encryption.algorithm=NONE
 
-        edc.datasource.asset.url=jdbc:postgresql://tracex-consumer-edc-postgresql-stable-a-hl:5432/edc
+        edc.datasource.asset.url=jdbc:postgresql://tracex-consumer-edc-postgresql-stable-b-hl:5432/edc
         edc.datasource.asset.user=<path:traceability-foss/data/int/edc/database#user>
         edc.datasource.asset.password=<path:traceability-foss/data/int/edc/database#password>
 
-        edc.datasource.contractdefinition.url=jdbc:postgresql://tracex-consumer-edc-postgresql-stable-a-hl:5432/edc
+        edc.datasource.contractdefinition.url=jdbc:postgresql://tracex-consumer-edc-postgresql-stable-b-hl:5432/edc
         edc.datasource.contractdefinition.user=<path:traceability-foss/data/int/edc/database#user>
         edc.datasource.contractdefinition.password=<path:traceability-foss/data/int/edc/database#password>
 
-        edc.datasource.contractnegotiation.url=jdbc:postgresql://tracex-consumer-edc-postgresql-stable-a-hl:5432/edc
+        edc.datasource.contractnegotiation.url=jdbc:postgresql://tracex-consumer-edc-postgresql-stable-b-hl:5432/edc
         edc.datasource.contractnegotiation.user=<path:traceability-foss/data/int/edc/database#user>
         edc.datasource.contractnegotiation.password=<path:traceability-foss/data/int/edc/database#password>
 
-        edc.datasource.policy.url=jdbc:postgresql://tracex-consumer-edc-postgresql-stable-a-hl:5432/edc
+        edc.datasource.policy.url=jdbc:postgresql://tracex-consumer-edc-postgresql-stable-b-hl:5432/edc
         edc.datasource.policy.user=<path:traceability-foss/data/int/edc/database#user>
         edc.datasource.policy.password=<path:traceability-foss/data/int/edc/database#password>
 
-        edc.datasource.transferprocess.url=jdbc:postgresql://tracex-consumer-edc-postgresql-stable-a-hl:5432/edc
+        edc.datasource.transferprocess.url=jdbc:postgresql://tracex-consumer-edc-postgresql-stable-b-hl:5432/edc
         edc.datasource.transferprocess.user=<path:traceability-foss/data/int/edc/database#user>
         edc.datasource.transferprocess.password=<path:traceability-foss/data/int/edc/database#password>
 
   # Values for consumer edc-dataplane.
   edc-dataplane:
-    nameOverride: "tracex-consumer-dataplane-stable-a"
-    fullnameOverride: "tracex-consumer-dataplane-stable-a"
+    nameOverride: "tracex-consumer-dataplane-stable-b"
+    fullnameOverride: "tracex-consumer-dataplane-stable-b"
 
     namespace: product-traceability-foss
 
@@ -390,7 +390,7 @@ irs-edc-consumer:
         className: "nginx"
         tls:
           - hosts:
-              - "tracex-consumer-dataplane-stable-a.stable.demo.catena-x.net"
+              - "tracex-consumer-dataplane-stable-b.stable.demo.catena-x.net"
             secretName: tls-secret
 
     resources:
@@ -415,11 +415,11 @@ irs-edc-consumer:
     configuration:
       properties: |-
         edc.api.auth.key=<path:traceability-foss/data/int/edc/controlplane#edc.api.control.auth.apikey.value>
-        edc.dataplane.token.validation.endpoint=http://tracex-consumer-controlplane-stable-a:8182/validation/token
+        edc.dataplane.token.validation.endpoint=http://tracex-consumer-controlplane-stable-b:8182/validation/token
 
-        edc.oauth.client.id=84:9D:1B:E4:9B:83:D1:42:BB:DB:41:D3:04:85:0F:BF:8B:A4:EA:8D:keyid:84:9D:1B:E4:9B:83:D1:42:BB:DB:41:D3:04:85:0F:BF:8B:A4:EA:8D
-        edc.oauth.certificate.alias=daps-cert-stable-a
-        edc.oauth.private.key.alias=daps-cert-key-stable-a
+        edc.oauth.client.id=A0:35:A5:E2:52:7B:83:48:45:41:73:95:85:E2:2C:EB:D7:10:6D:16:keyid:A0:35:A5:E2:52:7B:83:48:45:41:73:95:85:E2:2C:EB:D7:10:6D:16
+        edc.oauth.certificate.alias=daps-cert-stable-b
+        edc.oauth.private.key.alias=daps-cert-key-stable-b
 
         edc.oauth.provider.jwks.url=https://daps1.int.demo.catena-x.net/.well-known/jwks.json
         edc.oauth.token.url=https://daps1.int.demo.catena-x.net/token
