@@ -380,7 +380,7 @@ irs-edc-consumer:
 
     ingresses:
       - enabled: true
-        hostname: "tracex-consumer-dataplane-int-a.int.demo.catena-x.net"
+        hostname: "tracex-consumer-dataplane-stable-a.stable.demo.catena-x.net"
         annotations:
           nginx.ingress.kubernetes.io/ssl-passthrough: "false"
           nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
