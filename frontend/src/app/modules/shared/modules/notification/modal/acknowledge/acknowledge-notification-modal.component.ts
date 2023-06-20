@@ -40,8 +40,9 @@ export class AcknowledgeNotificationModalComponent {
 
   constructor(private readonly toastService: ToastService, private readonly confirmModalService: ModalService) {}
 
-  public show(notification: Notification): void {
+  public show(notification: Notification, translationContext: 'commonInvestigation' | 'commonAlert'): void {
     this.notification = notification;
+    this.translationContext = translationContext;
 
     const onConfirm = (isConfirmed: boolean) => {
       if (!isConfirmed) return;

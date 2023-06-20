@@ -45,7 +45,7 @@ class AcceptModalComponent implements AfterViewInit {
   @Input() notification: Notification;
   public call = (id: string) => of(null);
   public ngAfterViewInit() {
-    this.modal.show(this.notification);
+    this.modal.show(this.notification, 'commonInvestigation');
   }
 }
 
@@ -59,7 +59,7 @@ class AcknowledgeModalComponent implements AfterViewInit {
   @Input() notification: Notification;
   public call = (id: string) => of(null);
   public ngAfterViewInit() {
-    this.modal.show(this.notification);
+    this.modal.show(this.notification, 'commonInvestigation');
   }
 }
 
@@ -73,7 +73,7 @@ class ApproveModalComponent implements AfterViewInit {
   @Input() notification: Notification;
   public call = (id: string) => of(null);
   public ngAfterViewInit() {
-    this.modal.show(this.notification);
+    this.modal.show(this.notification, 'commonInvestigation');
   }
 }
 
@@ -87,7 +87,7 @@ class CancelModalComponent implements AfterViewInit {
   @Input() notification: Notification;
   public call = (id: string) => of(null);
   public ngAfterViewInit() {
-    this.modal.show(this.notification);
+    this.modal.show(this.notification, 'commonInvestigation');
   }
 }
 
@@ -101,7 +101,7 @@ class DeclineModalComponent implements AfterViewInit {
   @Input() notification: Notification;
   public call = (id: string) => of(null);
   public ngAfterViewInit() {
-    this.modal.show(this.notification);
+    this.modal.show(this.notification, 'commonInvestigation');
   }
 }
 
@@ -115,7 +115,7 @@ class CloseModalComponent implements AfterViewInit {
   @Input() notification: Notification;
   public call = (id: string) => of(null);
   public ngAfterViewInit() {
-    this.modal.show(this.notification);
+    this.modal.show(this.notification, 'commonInvestigation');
   }
 }
 

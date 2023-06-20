@@ -45,8 +45,9 @@ export class AcceptNotificationModalComponent {
     this.formGroup = new UntypedFormGroup({ reason: this.textAreaControl });
   }
 
-  public show(notification: Notification): void {
+  public show(notification: Notification, translationContext: 'commonInvestigation' | 'commonAlert'): void {
     this.notification = notification;
+    this.translationContext = translationContext;
     this.textAreaControl.setValidators([Validators.required, Validators.maxLength(1000), Validators.minLength(15)]);
 
     const onConfirm = (isConfirmed: boolean) => {
