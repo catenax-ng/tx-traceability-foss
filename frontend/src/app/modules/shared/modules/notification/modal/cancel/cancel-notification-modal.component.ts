@@ -35,7 +35,7 @@ import { Observable } from 'rxjs';
 export class CancelNotificationModalComponent {
   @ViewChild('Modal') modal: TemplateRef<unknown>;
   @Input() cancelCall: (id: string) => Observable<void>;
-  @Input() translationContext: string;
+  @Input() translationContext: TranslationContext;
   @Output() confirmActionCompleted = new EventEmitter<void>();
 
   public notification: Notification;
@@ -48,12 +48,7 @@ export class CancelNotificationModalComponent {
 
   public show(notification: any, translationContext: TranslationContext): void {
 
-    if(translationContext === TranslationContext.COMMONINVESTIGATION) {
-      this.translationContext = "commonInvestigation";
-    }
-    if(translationContext === TranslationContext.COMMONALERT) {
-      this.translationContext = "commonAlert";
-    }
+    this.translationContext = translationContext
 
     this.notification = notification;
     this.textAreaControl.setValidators([Validators.required, Validators.pattern(this.notification.id.toString())]);

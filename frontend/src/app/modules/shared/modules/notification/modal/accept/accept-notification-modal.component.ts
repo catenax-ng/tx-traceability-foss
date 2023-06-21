@@ -48,18 +48,9 @@ export class AcceptNotificationModalComponent {
 
   public show(notification: Notification, translationContext: TranslationContext): void {
     this.notification = notification;
+    this.translationContext = translationContext;
 
-   export enum TranslationContext {
-  COMMONINVESTIGATION = "commonInvestigation",
-  COMMONALERT = "commonAlert"
-}
-      this.translationContext = "commonInvestigation";
-    }
-    if(translationContext === TranslationContext.COMMONALERT) {
-      this.translationContext = "commonAlert";
-    }
-
-    this.textAreaControl.setValidators([Validators.required, Validators.maxLength(1000), Validators.minLength(15)]);
+    this.textAreaControl.setValidators([ Validators.required, Validators.maxLength(1000), Validators.minLength(15) ]);
 
     const onConfirm = (isConfirmed: boolean) => {
       const reason = this.formGroup.get('reason').value;

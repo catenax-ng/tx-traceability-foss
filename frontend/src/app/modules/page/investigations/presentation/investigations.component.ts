@@ -134,4 +134,6 @@ export class InvestigationsComponent implements OnInit, OnDestroy, AfterContentI
   public handleConfirmActionCompletedEvent() {
     this.ngOnInit();
   }
+
+  protected readonly TranslationContext = TranslationContext;
 }

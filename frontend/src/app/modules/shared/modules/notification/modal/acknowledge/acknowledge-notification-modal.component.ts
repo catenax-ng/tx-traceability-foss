@@ -34,7 +34,7 @@ import { Observable } from 'rxjs';
 export class AcknowledgeNotificationModalComponent {
   @ViewChild('Modal') modal: TemplateRef<unknown>;
   @Input() acknowledgeCall: (id: string) => Observable<void>;
-  @Input() translationContext: string;
+  @Input() translationContext: TranslationContext;
   @Output() confirmActionCompleted = new EventEmitter<void>();
 
   public notification: Notification;
@@ -43,13 +43,7 @@ export class AcknowledgeNotificationModalComponent {
 
   public show(notification: Notification, translationContext: TranslationContext): void {
     this.notification = notification;
-
-    if(translationContext === TranslationContext.COMMONINVESTIGATION) {
-      this.translationContext = "commonInvestigation";
-    }
-    if(translationContext === TranslationContext.COMMONALERT) {
-      this.translationContext = "commonAlert";
-    }
+    this.translationContext = translationContext
 
 
     const onConfirm = (isConfirmed: boolean) => {

@@ -35,7 +35,7 @@ import { Observable } from 'rxjs';
 export class DeclineNotificationModalComponent {
   @ViewChild('Modal') modal: TemplateRef<unknown>;
   @Input() declineCall: (id: string, reason: string) => Observable<void>;
-  @Input() translationContext: string;
+  @Input() translationContext: TranslationContext;
   @Output() confirmActionCompleted = new EventEmitter<void>();
 
   public notification: Notification;
@@ -47,12 +47,7 @@ export class DeclineNotificationModalComponent {
   }
 
   public show(notification: Notification, translationContext: TranslationContext): void {
-    if(translationContext === TranslationContext.COMMONINVESTIGATION) {
-      this.translationContext = "commonInvestigation";
-    }
-    if(translationContext === TranslationContext.COMMONALERT) {
-      this.translationContext = "commonAlert";
-    }
+    this.translationContext = translationContext;
     this.notification = notification;
     this.textAreaControl.setValidators([Validators.required, Validators.maxLength(1000), Validators.minLength(15)]);
 
