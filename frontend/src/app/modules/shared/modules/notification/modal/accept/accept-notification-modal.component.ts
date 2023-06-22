@@ -46,7 +46,7 @@ export class AcceptNotificationModalComponent {
     this.formGroup = new UntypedFormGroup({ reason: this.textAreaControl });
   }
 
-  public show(notification: any): void {
+  public show(notification: Notification): void {
     this.notification = notification;
 
 

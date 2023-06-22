@@ -41,7 +41,7 @@ export class ApproveNotificationModalComponent {
 
   constructor(private readonly toastService: ToastService, private readonly confirmModalService: ModalService) {}
 
-  public show(notification: any): void {
+  public show(notification: Notification): void {
     this.notification = notification;
     const onConfirm = (isConfirmed: boolean) => {
       if (!isConfirmed) return;

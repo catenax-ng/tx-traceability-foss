@@ -46,7 +46,7 @@ export class DeclineNotificationModalComponent {
     this.formGroup = new UntypedFormGroup({ reason: this.textAreaControl });
   }
 
-  public show(notification: any): void {
+  public show(notification: Notification): void {
     this.notification = notification;
     this.textAreaControl.setValidators([Validators.required, Validators.maxLength(1000), Validators.minLength(15)]);
 
