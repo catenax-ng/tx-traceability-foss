@@ -46,8 +46,7 @@ export class CloseNotificationModalComponent {
     this.formGroup = new UntypedFormGroup({ reason: this.textAreaControl });
   }
 
-  public show(notification: Notification, translationContext: TranslationContext): void {
-    this.translationContext = translationContext
+  public show(notification: any): void {
     this.notification = notification;
     this.textAreaControl.setValidators([Validators.required, Validators.maxLength(1000), Validators.minLength(15)]);
 

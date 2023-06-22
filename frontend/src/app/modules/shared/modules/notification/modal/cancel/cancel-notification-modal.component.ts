@@ -46,10 +46,7 @@ export class CancelNotificationModalComponent {
     this.formGroup = new UntypedFormGroup({ notificationId: this.textAreaControl });
   }
 
-  public show(notification: any, translationContext: TranslationContext): void {
-
-    this.translationContext = translationContext
-
+  public show(notification: any): void {
     this.notification = notification;
     this.textAreaControl.setValidators([Validators.required, Validators.pattern(this.notification.id.toString())]);
     const onConfirm = (isConfirmed: boolean) => {

@@ -75,37 +75,37 @@ export class InvestigationsComponent implements OnInit, OnDestroy, AfterContentI
       {
         label: 'actions.close',
         icon: 'close',
-        action: data => this.closeModal.show(data, TranslationContext.COMMONINVESTIGATION),
+        action: data => this.closeModal.show(data),
         condition: data => this.helperService.showCloseButton(data),
       },
       {
         label: 'actions.approve',
         icon: 'share',
-        action: data => this.approveModal.show(data, TranslationContext.COMMONINVESTIGATION),
+        action: data => this.approveModal.show(data),
         condition: data => this.helperService.showApproveButton(data),
       },
       {
         label: 'actions.cancel',
         icon: 'cancel',
-        action: data => this.cancelModal.show(data, TranslationContext.COMMONINVESTIGATION),
+        action: data => this.cancelModal.show(data),
         condition: data => this.helperService.showCancelButton(data),
       },
       {
         label: 'actions.acknowledge',
         icon: 'work',
-        action: data => this.acknowledgeModal.show(data, TranslationContext.COMMONINVESTIGATION),
+        action: data => this.acknowledgeModal.show(data),
         condition: data => this.helperService.showAcknowledgeButton(data),
       },
       {
         label: 'actions.accept',
         icon: 'assignment_turned_in',
-        action: data => this.acceptModal.show(data, TranslationContext.COMMONINVESTIGATION),
+        action: data => this.acceptModal.show(data),
         condition: data => this.helperService.showAcceptButton(data),
       },
       {
         label: 'actions.decline',
         icon: 'assignment_late',
-        action: data => this.declineModal.show(data, TranslationContext.COMMONINVESTIGATION),
+        action: data => this.declineModal.show(data),
         condition: data => this.helperService.showDeclineButton(data),
       },
     ];
