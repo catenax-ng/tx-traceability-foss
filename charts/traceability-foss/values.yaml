@@ -354,3 +354,9 @@ tractusx-connector:
 ###################################
 edc-postgresql:
   enabled: false
+
+  auth:
+    postgresPassword: "CHANGEME"
+    password: "CHANGEME"
+    database: "edc"
+    username: "user"
