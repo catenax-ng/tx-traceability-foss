@@ -1,30 +1,27 @@
 {
   "policies": {
     "ID 3.0 Trace": {
-      "id": "id-3.0-trace",
-      "policy": {
-        "prohibitions": [],
-        "obligations": [],
-        "permissions": [
+      "@context" : {
+        "odrl" : "http://www.w3.org/ns/odrl/2/"
+      },
+      "@type" : "PolicyDefinitionRequestDto",
+      "@id" : "id-3.0-trace",
+      "policy" : {
+        "@type" : "Policy",
+        "odrl:permission" : [
           {
-            "edctype": "dataspaceconnector:permission",
-            "action": {
-              "type": "USE"
-            },
-            "constraints": [
-              {
-                "edctype": "AtomicConstraint",
-                "leftExpression": {
-                  "edctype": "dataspaceconnector:literalexpression",
-                  "value": "idsc:PURPOSE"
-                },
-                "rightExpression": {
-                  "edctype": "dataspaceconnector:literalexpression",
-                  "value": "ID 3.0 Trace"
-                },
-                "operator": "EQ"
-              }
-            ]
+            "odrl:action" : "USE",
+            "odrl:constraint" : {
+              "@type" : "AtomicConstraint",
+              "odrl:or" : [
+                {
+                  "@type" : "Constraint",
+                  "odrl:leftOperand" : "idsc:PURPOSE",
+                  "odrl:operator" : "EQ",
+                  "odrl:rightOperand" : "ID 3.0 Trace"
+                }
+              ]
+            }
           }
         ]
       }
@@ -1137,7 +1134,7 @@
           "partTypeInformation": {
             "manufacturerPartId": "ZX-55",
             "classification": "product",
-            "nameAtManufacturer": "Vehicle Model A"
+            "nameAtManufacturer" : "Vehicle Model B"
           }
         }
       ],
@@ -1156,19 +1153,19 @@
       ],
       "urn:bamm:io.catenax.single_level_bom_as_planned:1.0.2#SingleLevelBomAsPlanned": [
         {
-          "catenaXId": "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01",
-          "childParts": [
+          "catenaXId" : "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4eb01",
+          "childParts" : [
             {
-              "quantity": {
-                "quantityNumber": "1",
-                "measurementUnit": {
-                  "datatypeURI": "urn:bamm:io.openmanufacturing:meta-model:1.0.0#curie",
-                  "lexicalValue": "unit:piece"
+              "quantity" : {
+                "quantityNumber" : "1",
+                "measurementUnit" : {
+                  "datatypeURI" : "urn:bamm:io.openmanufacturing:meta-model:1.0.0#curie",
+                  "lexicalValue" : "unit:piece"
                 }
               },
-              "createdOn": "2022-02-03T14:48:54.709Z",
+              "createdOn" : "2022-02-03T14:48:54.709Z",
               "lastModifiedOn": "2022-02-03T14:48:54.709Z",
-              "childCatenaXId": "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4eb01"
+              "childCatenaXId" : "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
             }
           ]
         }

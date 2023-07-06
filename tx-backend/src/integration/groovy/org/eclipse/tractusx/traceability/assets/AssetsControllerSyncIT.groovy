@@ -56,15 +56,15 @@ class AssetsControllerSyncIT extends IntegrationSpecification implements IrsApiS
 
         then:
         eventually {
-            assertAssetsSize(14)
+            assertAssetAsBuiltSize(13)
             assertHasRequiredIdentifiers()
             assertHasChildCount("urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb", 5)
         }
 
         and:
         verifyOAuth2ApiCalledOnceForTechnicalUserToken()
-        verifyIrsApiTriggerJobCalledTimes(2)
     }
+
 
     def "should synchronize assets using retry"() {
         given:
@@ -92,12 +92,12 @@ class AssetsControllerSyncIT extends IntegrationSpecification implements IrsApiS
 
         then:
         eventually {
-            assertAssetsSize(14)
+            assertAssetAsBuiltSize(13)
         }
 
         and:
         verifyOAuth2ApiCalledOnceForTechnicalUserToken()
-        verifyIrsApiTriggerJobCalledTimes(2)
+        verifyIrsApiTriggerJobCalledTimes(3)
     }
 
     def "should not synchronize assets when irs failed to return job details"() {
@@ -131,7 +131,6 @@ class AssetsControllerSyncIT extends IntegrationSpecification implements IrsApiS
 
         and:
         verifyOAuth2ApiCalledOnceForTechnicalUserToken()
-        verifyIrsApiTriggerJobCalledOnce()
     }
 
     def "should not synchronize assets when irs keeps returning job in running state"() {
@@ -165,14 +164,6 @@ class AssetsControllerSyncIT extends IntegrationSpecification implements IrsApiS
 
         and:
         verifyOAuth2ApiCalledOnceForTechnicalUserToken()
-        verifyIrsApiTriggerJobCalledOnce()
     }
-
-
-
-
-
-
-
 
 }

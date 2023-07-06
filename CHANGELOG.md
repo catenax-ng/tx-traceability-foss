@@ -4,12 +4,35 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased - x.x.x]
+## [Unreleased]
 
 ### Added
 
+- Added back button in notification detailed view
+- EDC SPI Dependency for using provided models
+- Added default response types to apis
+
+### Changed
+
+- Changed Layout in notification detailed view
+- Changed request parameter for registerjob request to irs to match requirements of irs
+- Migration of edc 0.4.1 endpoints and api flow
+
+### Removed
+
+## [4.1.0] - 2023-06-26
+
+### Added
+
+- Spring profiles for integration int-a and int-b environments
 - Quality Alert feature
 - Updated testdata to reflect asPlanned assets
+- Added asPlanned lifecycle to the asset domain
+- Added Semantic Data Model 'PartAsPlanned'
+- Upgraded cypress-io/github-action from 5.8.0 to 5.8.3
+- Upgraded jruby from 9.3.9.0 to 9.4.3.0
+- Upgraded aquasecurity/trivy-action from 0.10.0 to 0.11.2
+- Upgraded maven-project-info-reports-plugin from 3.4.3 to 3.4.5
 
 ### Changed
 - Updated authorizeRequests to match with spring boot 3 requirements
@@ -17,6 +40,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Updated some schema object annotations
 - Updated spring boot to 3.0.7 to fix: CVE-2023-20883
 - Fixed calculation of otherParts amount within dashboard response
+- Fixed incorrect label mapping in notification action modals
 
 ### Removed
 

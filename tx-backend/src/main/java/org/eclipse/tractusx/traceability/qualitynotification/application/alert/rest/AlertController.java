@@ -19,6 +19,7 @@
 
 package org.eclipse.tractusx.traceability.qualitynotification.application.alert.rest;
 
+import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,13 +34,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.common.config.FeatureFlags;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.common.request.OwnPageable;
+import org.eclipse.tractusx.traceability.common.response.ErrorResponse;
+import org.eclipse.tractusx.traceability.qualitynotification.application.alert.mapper.AlertResponseMapper;
 import org.eclipse.tractusx.traceability.qualitynotification.application.alert.request.StartQualityAlertRequest;
-import org.eclipse.tractusx.traceability.qualitynotification.application.alert.response.AlertResponse;
 import org.eclipse.tractusx.traceability.qualitynotification.application.alert.service.AlertService;
 import org.eclipse.tractusx.traceability.qualitynotification.application.request.CloseQualityNotificationRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.request.QualityNotificationStatusRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.request.UpdateQualityNotificationRequest;
-import org.eclipse.tractusx.traceability.qualitynotification.application.response.QualityNotificationIdResponse;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,6 +52,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import qualitynotification.alert.response.AlertResponse;
+import qualitynotification.base.response.QualityNotificationIdResponse;
 
 import static org.eclipse.tractusx.traceability.qualitynotification.application.validation.UpdateQualityNotificationValidator.validate;
 
@@ -74,8 +77,37 @@ public class AlertController {
             description = "The endpoint starts alert based on part ids provided.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created."),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Authorization failed.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "429",
+                    description = "Too many requests.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public QualityNotificationIdResponse alertAssets(@RequestBody @Valid StartQualityAlertRequest request) {
@@ -98,12 +130,41 @@ public class AlertController {
             mediaType = "application/json",
             array = @ArraySchema(arraySchema = @Schema(description = "AlertData", implementation = AlertResponse.class, additionalProperties = Schema.AdditionalPropertiesValue.FALSE), maxItems = Integer.MAX_VALUE)
     )),
-            @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
-            @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Authorization failed.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "429",
+                    description = "Too many requests.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping("/created")
     public PageResult<AlertResponse> getCreatedAlerts(OwnPageable pageable) {
         log.info(API_LOG_START + "/created");
-        return AlertResponse.fromAsPageResult(alertService.getCreated(OwnPageable.toPageable(pageable)));
+        return AlertResponseMapper.fromAsPageResult(alertService.getCreated(OwnPageable.toPageable(pageable)));
     }
 
     @Operation(operationId = "getReceivedAlerts",
@@ -115,12 +176,41 @@ public class AlertController {
             mediaType = "application/json",
             array = @ArraySchema(arraySchema = @Schema(description = "AlertData", implementation = AlertResponse.class, additionalProperties = Schema.AdditionalPropertiesValue.FALSE), maxItems = Integer.MAX_VALUE)
     )),
-            @ApiResponse(responseCode = "401", description = "Authorization failed.", content = @Content()),
-            @ApiResponse(responseCode = "403", description = "Forbidden.", content = @Content())})
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Authorization failed.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "429",
+                    description = "Too many requests.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping("/received")
     public PageResult<AlertResponse> getReceivedAlerts(OwnPageable pageable) {
         log.info(API_LOG_START + "/received");
-        return AlertResponse.fromAsPageResult(alertService.getReceived(OwnPageable.toPageable(pageable)));
+        return AlertResponseMapper.fromAsPageResult(alertService.getReceived(OwnPageable.toPageable(pageable)));
     }
 
     @Operation(operationId = "getAlert",
@@ -129,12 +219,41 @@ public class AlertController {
             description = "The endpoint returns alert by id.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK."),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Authorization failed.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "429",
+                    description = "Too many requests.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)))})
     @GetMapping("/{alertId}")
     public AlertResponse getAlert(@PathVariable Long alertId) {
         log.info(API_LOG_START + "/{}", alertId);
-        return AlertResponse.from(alertService.find(alertId));
+        return AlertResponseMapper.from(alertService.find(alertId));
     }
 
     @Operation(operationId = "approveAlert",
@@ -142,9 +261,41 @@ public class AlertController {
             tags = {"Alerts"},
             description = "The endpoint approves alert by id.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
-    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No content."),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "No content."),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Authorization failed.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "429",
+                    description = "Too many requests.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping("/{alertId}/approve")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void approveAlert(@PathVariable Long alertId) {
@@ -157,9 +308,42 @@ public class AlertController {
             tags = {"Alerts"},
             description = "The endpoint cancels alert by id.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
-    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No content."),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "No content.",
+                    content = @Content()),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Authorization failed.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "429",
+                    description = "Too many requests.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)))})
     @PostMapping("/{alertId}/cancel")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancelAlert(@PathVariable Long alertId) {
@@ -172,14 +356,47 @@ public class AlertController {
             tags = {"Alerts"},
             description = "The endpoint closes alert by id.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
-    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No content."),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "No content.",
+                    content = @Content()),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Authorization failed.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "429",
+                    description = "Too many requests.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)))})
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERVISOR')")
     @PostMapping("/{alertId}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void closeAlert(
-            @PathVariable Long alertId,
+            @PathVariable @ApiParam Long alertId,
             @Valid @RequestBody CloseQualityNotificationRequest closeAlertRequest) {
         log.info(API_LOG_START + "/{}/close with params {}", alertId, closeAlertRequest);
         alertService.update(alertId, QualityNotificationStatusRequest.toDomain(QualityNotificationStatusRequest.CLOSED), closeAlertRequest.getReason());
@@ -190,9 +407,42 @@ public class AlertController {
             tags = {"Alerts"},
             description = "The endpoint updates alert by their id.",
             security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
-    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No content."),
-            @ApiResponse(responseCode = "401", description = "Authorization failed."),
-            @ApiResponse(responseCode = "403", description = "Forbidden.")})
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "No content.",
+                    content = @Content()),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Authorization failed.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "429",
+                    description = "Too many requests.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class)))})
     @PreAuthorize("hasAnyRole('ROLE_SUPERVISOR')")
     @PostMapping("/{alertId}/update")
     @ResponseStatus(HttpStatus.NO_CONTENT)
