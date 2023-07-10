@@ -1,0 +1,30 @@
+name: Update About Info
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Update JSON
+        run: |
+          echo "${{ github.sha }}" > commit-id.txt
+          echo "${{ github.event.repository.html_url }}/blob/${{ github.sha }}" > source-path.txt
+          jq --arg commitId "$(cat commit-id.txt)" --arg sourcePath "$(cat source-path.txt)" '.commitId = $commitId | .sourcePath = $sourcePath' frontend/src/assets/aboutInfo.json > updated.json
+          mv updated.json frontend/src/assets/aboutInfo.json
+          rm commit-id.txt source-path.txt
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add frontend/src/assets/aboutInfo.json
+          git commit -m "Update JSON with commit ID and source path"
+          git push
