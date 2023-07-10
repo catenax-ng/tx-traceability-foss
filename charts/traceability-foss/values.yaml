@@ -348,6 +348,8 @@ irs-helm:
 ###################################
 tractusx-connector:
   enabled: false
+  fullnameOverride: "traceability-foss-dev-tractusx-connector"
+  nameOverride: "traceability-foss-dev-tractusx-connector"
 
   participant:
     id: "BPN"
@@ -369,6 +371,8 @@ tractusx-connector:
 # EDC Database configuration  #
 ###################################
 edc-postgresql:
+  nameOverride: "tracex-consumer-edc-postgresql"
+  fullnameOverride: "tracex-consumer-edc-postgresql"
   enabled: false
   auth:
     postgresPassword: "CHANGEME"
