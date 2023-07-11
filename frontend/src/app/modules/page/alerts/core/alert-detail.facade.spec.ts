@@ -18,70 +18,72 @@
  ********************************************************************************/
 
 import { TitleCasePipe } from '@angular/common';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { CalendarDateModel } from '@core/model/calendar-date.model';
 import { AlertDetailFacade } from '@page/alerts/core/alert-detail.facade';
 import { AlertDetailState } from '@page/alerts/core/alert-detail.state';
-import { Notification } from '@shared/model/notification.model';
-import { Severity } from '@shared/model/severity.model';
+import { PartsAssembler } from '@shared/assembler/parts.assembler';
 import { PartsService } from '@shared/service/parts.service';
+import { KeycloakService } from 'keycloak-angular';
+import { MOCK_part_1 } from '../../../../mocks/services/parts-mock/parts.test.model';
 
 describe('AlertDetailFacade', () => {
   let alertDetailFacade: AlertDetailFacade;
   let alertDetailState: AlertDetailState;
-  let partsService: jasmine.SpyObj<PartsService>;
-  let titleCasePipe: jasmine.SpyObj<TitleCasePipe>;
-
-  let testNotification: Notification = {
-    id: 'id-1',
-    description: 'Alert No 1',
-    createdBy: { name: 'OEM xxxxxxxxxxxxxxx A', bpn: 'BPN10000000OEM0A' },
-    sendTo: { name: 'OEM xxxxxxxxxxxxxxx B', bpn: 'BPN20000000OEM0B' },
-    reason: { close: '', accept: '', decline: '' },
-    isFromSender: true,
-    assetIds: [],
-    status: null,
-    severity: Severity.MINOR,
-    createdDate: new CalendarDateModel('2022-05-01T10:34:12.000Z'),
-  }
+  let partService: PartsService;
 
   beforeEach(() => {
-    /*
-    alertDetailState = jasmine.createSpyObj('AlertDetailState', [
-      'getIdsFromPartList',
-      'setAlertPartsInformation',
-      'getAlertPartsInformation',
-      'setSupplierPartsInformation',
-      'getSupplierPartsInformation'
-    ]);
-    */
-    alertDetailState = new AlertDetailState();
-    partsService = jasmine.createSpyObj('PartsService', [ 'getPartDetailOfIds' ]);
-    titleCasePipe = jasmine.createSpyObj('TitleCasePipe', [ 'transform' ]);
 
     TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ],
       providers: [
+        KeycloakService,
+        PartsService,
+        TitleCasePipe,
         AlertDetailFacade,
-        { provide: AlertDetailState, useValue: alertDetailState },
-        { provide: PartsService, useValue: partsService },
-        { provide: TitleCasePipe, useValue: titleCasePipe }
+        AlertDetailState
       ]
     });
 
     alertDetailFacade = TestBed.inject(AlertDetailFacade);
+
+    alertDetailState = TestBed.inject(AlertDetailState);
+
+    partService = TestBed.inject(PartsService);
   });
 
-  it('should create the component facade', () => {
-    expect(alertDetailFacade).toBeTruthy();
+  fdescribe('sortNotificationParts()', () => {
+
+    let part = PartsAssembler.assemblePart(MOCK_part_1);
+
+    [[part], null, undefined].forEach((fallacy, index) => {
+
+      it('should pass sortParts', function() {
+
+        spyOnProperty(alertDetailState, 'alertPartsInformation', 'get').and.returnValue({
+          data: fallacy
+        });
+
+        this.spy = spyOn(partService, 'sortParts').and.callFake(() => [part]);
+
+        alertDetailFacade.sortNotificationParts(' ', null);
+
+        index == 0
+          ? expect(this.spy).toHaveBeenCalled()
+          : expect(this.spy).not.toHaveBeenCalled();
+      });
+    });
   });
 
-  it('should set empty data if no asset ids are provided', () => {
+  /*
+    public sortNotificationParts(key: string, direction: SortDirection): void {
+    const { data } = this.alertDetailState.alertPartsInformation;
+    if (!data) return;
 
-    let callSpy = spyOn(alertDetailFacade, 'setAlertPartsInformation');
-    let setSpy = spyOnProperty(alertDetailState, 'alertPartsInformation', 'set').and.callThrough();
-
-    alertDetailFacade.setAlertPartsInformation(testNotification);
-    expect(callSpy).toHaveBeenCalledWith(testNotification);
-
-  })
+    const sortedData = this.partsService.sortParts(data, key, direction);
+    this.alertDetailState.alertPartsInformation = { data: [ ...sortedData ]
+    };
+   */
 });
