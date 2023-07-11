@@ -22,6 +22,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { AlertDetailFacade } from '@page/alerts/core/alert-detail.facade';
 import { AlertDetailState } from '@page/alerts/core/alert-detail.state';
+import { Part } from '@page/parts/model/parts.model';
 import { PartsAssembler } from '@shared/assembler/parts.assembler';
 import { PartsService } from '@shared/service/parts.service';
 import { KeycloakService } from 'keycloak-angular';
@@ -36,15 +37,15 @@ describe('AlertDetailFacade', () => {
 
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule
+        HttpClientTestingModule,
       ],
       providers: [
         KeycloakService,
         PartsService,
         TitleCasePipe,
         AlertDetailFacade,
-        AlertDetailState
-      ]
+        AlertDetailState,
+      ],
     });
 
     alertDetailFacade = TestBed.inject(AlertDetailFacade);
@@ -54,36 +55,68 @@ describe('AlertDetailFacade', () => {
     partService = TestBed.inject(PartsService);
   });
 
-  fdescribe('sortNotificationParts()', () => {
+  [
+    {
+      method: 'sortNotificationParts',
+      prop: 'alertPartsInformation' as any,
+    },
+    {
+      method: 'sortSupplierParts',
+      prop: 'supplierPartsInformation' as any,
+    },
+  ].forEach(object => {
 
-    let part = PartsAssembler.assemblePart(MOCK_part_1);
+    describe(`${ object.method }()`, () => {
 
-    [[part], null, undefined].forEach((fallacy, index) => {
+      let part: Part;
 
-      it('should pass sortParts', function() {
+      beforeEach(function() {
 
-        spyOnProperty(alertDetailState, 'alertPartsInformation', 'get').and.returnValue({
-          data: fallacy
+        part = PartsAssembler.assemblePart(MOCK_part_1);
+
+        this.spy = spyOn(partService, 'sortParts').and.callFake(() => [ part ]);
+      });
+
+      [ [ part ], null, undefined ].forEach((fallacy, index) => {
+
+        it('should pass sortParts', function() {
+
+          spyOnProperty(alertDetailState, object.prop, 'get').and.returnValue({
+            data: fallacy,
+          });
+
+          alertDetailFacade[object.method]('', '');
+
+          index == 0
+            ? (() => {
+              expect(this.spy).toHaveBeenCalled();
+              expect(this.spy).toHaveBeenCalledWith(jasmine.any(Object), jasmine.any(String), jasmine.any(String));
+            })()
+            : (() => {
+              expect(this.spy).not.toHaveBeenCalled();
+              expect(this.spy).not.toHaveBeenCalledWith(jasmine.any(Object), jasmine.any(String), jasmine.any(String));
+            })();
         });
 
-        this.spy = spyOn(partService, 'sortParts').and.callFake(() => [part]);
+        it('should set part infos after sort', function() {
 
-        alertDetailFacade.sortNotificationParts(' ', null);
+          spyOnProperty(alertDetailState, object.prop, 'get').and.returnValue({
+            data: fallacy,
+          });
 
-        index == 0
-          ? expect(this.spy).toHaveBeenCalled()
-          : expect(this.spy).not.toHaveBeenCalled();
+          this.spyPropSet = spyOnProperty(alertDetailState, object.prop, 'set');
+
+          alertDetailFacade[object.method]('', '');
+
+          index == 0
+            ? (() => {
+              expect(this.spyPropSet).toHaveBeenCalledTimes(1);
+            })()
+            : (() => {
+              expect(this.spyPropSet).not.toHaveBeenCalledTimes(1);
+            })();
+        });
       });
     });
   });
-
-  /*
-    public sortNotificationParts(key: string, direction: SortDirection): void {
-    const { data } = this.alertDetailState.alertPartsInformation;
-    if (!data) return;
-
-    const sortedData = this.partsService.sortParts(data, key, direction);
-    this.alertDetailState.alertPartsInformation = { data: [ ...sortedData ]
-    };
-   */
 });

@@ -75,7 +75,7 @@ export class AlertDetailFacade {
         next: data => {
           data.forEach(part => {
             part.semanticDataModel = <SemanticDataModel>this.titleCasePipe.transform(part.semanticDataModel);
-          })
+          });
           this.alertDetailState.alertPartsInformation = { data };
         },
         error: error => (this.alertDetailState.alertPartsInformation = { error }),
@@ -96,7 +96,7 @@ export class AlertDetailFacade {
         next: data => {
           data.forEach(part => {
             part.semanticDataModel = this.titleCasePipe.transform(part.semanticDataModel);
-          })
+          });
           this.alertDetailState.supplierPartsInformation = { data };
         },
         error: error => (this.alertDetailState.supplierPartsInformation = { error }),
