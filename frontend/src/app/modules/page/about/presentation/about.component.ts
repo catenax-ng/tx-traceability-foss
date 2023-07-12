@@ -37,13 +37,8 @@ export class AboutComponent {
   @Input() commitId: string;
 
   constructor(private http: HttpClient) {
-    this.name = "Traceability-foss";
-    this.repositoryPath = "https://github.com/catenax-ng/tx-traceability-foss";
     this.license = "Apache-2.0";
-    this.licensePath = "https://github.com/catenax-ng/tx-traceability-foss/blob/main/LICENSE";
-    this.noticePath = "https://github.com/catenax-ng/tx-traceability-foss/blob/main/NOTICE.md";
     this.fetchAppInfo();
-
   }
 
    openLink(url: string) {
@@ -51,9 +46,13 @@ export class AboutComponent {
   }
 
    fetchAppInfo() {
-    this.http.get<any>('/assets/aboutInfo.json').subscribe(data => {
+    this.http.get<any>('/assets/notice/legal-notice.json').subscribe(data => {
       this.sourcePath = data.sourcePath;
       this.commitId = data.commitId;
+      this.name = data.name;
+      this.repositoryPath = data.repositoryPath;
+      this.licensePath = data.licensePath;
+      this.noticePath = data.noticePath;
     })
   }
 }
