@@ -76,9 +76,6 @@ export class InvestigationsComponent implements OnInit, OnDestroy, AfterContentI
       this.investigationsFacade.setReceivedInvestigation(this.pagination.page, this.pagination.pageSize, this.pagination.sorting);
       this.investigationsFacade.setQueuedAndRequestedInvestigations(this.pagination.page, this.pagination.pageSize, this.pagination.sorting);
     })
-
-
-
   }
 
   public ngAfterContentInit(): void {
