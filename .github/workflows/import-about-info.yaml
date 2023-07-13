@@ -19,7 +19,7 @@ jobs:
           echo "${{ github.sha }}" > commit-id.txt
           REPO_NAME=$(basename -s .git "${{ github.repository }}")
           REPO_URL="${{ github.event.repository.html_url }}"
-          SOURCE_PATH="${REPO_URL}}/blob/${{ github.sha }}"
+          SOURCE_PATH="${REPO_URL}/blob/${{ github.sha }}"
           echo "${SOURCE_PATH}" > source-path.txt
           echo "${REPO_URL}" > repository-path.txt
           echo "${REPO_URL}/blob/main/LICENSE" > license-path.txt
