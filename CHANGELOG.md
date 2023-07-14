@@ -17,7 +17,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Modified IRS Policies support to handle multiple policies
 - Readme titles to match TRGs
-
+- Update EDC dependencies to 0.1.3
+- Add Transformer to support new EDC constraint operator format
 
 ### Removed
 - unused classes and methods
