@@ -25,6 +25,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Known knowns
 
+- Backend [[TRACEFOSS-1458](https://jira.catena-x.net/browse/TRACEFOSS-1458)]: BPN Validation for EDC URL mapping in admin view is does not validate BPN
+- Backend [[TRACEFOSS-589](https://jira.catena-x.net/browse/TRACEFOSS-589)]: Backend API access without login returns HTTP code 500 instead of 401
+- Backend [[TRACEFOSS-2148](https://jira.catena-x.net/browse/TRACEFOSS-2148)]: Parts, Notification endpoints do not return sorted list
+---
+- Frontend [[TRACEFOSS-2149](https://jira.catena-x.net/browse/TRACEFOSS-2149)]: Sorting of any empty table on column causes an unhandled error view
+---
+- Security [[TRACEFOSS-829](https://jira.catena-x.net/browse/TRACEFOSS-829)]: Invicti Enterprise detected errors during parsing of Strict-Transport-Security header - The HSTS Warning and Error may allow attackers to bypass HSTS
+- Security [[TRACEFOSS-830](https://jira.catena-x.net/browse/TRACEFOSS-830)]: Invicti Enterprise identified a stack trace disclosure (Java) in the target web server's HTTP response.
+- Security [[TRACEFOSS-919](https://jira.catena-x.net/browse/TRACEFOSS-919)]: Authorization Bypass Through User-Controlled SQL Primary Key CWE ID 566
+- Security [[TRACEFOSS-984](https://jira.catena-x.net/browse/TRACEFOSS-984)]: Improper Output Neutralization for Logs CWE ID 117
+- Security [[TRACEFOSS-1313](https://jira.catena-x.net/browse/TRACEFOSS-1313)]: Using components with known vulnerabilities
+- Security [[TRACEFOSS-1314](https://jira.catena-x.net/browse/TRACEFOSS-1314)]: Open Redirect - host header injection
+- Security [[TRACEFOSS-1315](https://jira.catena-x.net/browse/TRACEFOSS-1315)]: No additional authentication component (MFA) during login process
+---
+- Environment [[TRACEFOSS-2164](https://jira.catena-x.net/browse/TRACEFOSS-2164)]: HTTP Requests for syncing the submodel server do not work
 
 
 ## [5.0.0] - 2023-07-10
