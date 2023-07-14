@@ -1,4 +1,3 @@
-################################################################################
 # Copyright (c) 2023 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
@@ -15,19 +14,26 @@
 # under the License.
 #
 # SPDX-License-Identifier: Apache-2.0
-################################################################################
+#
 
-feign:
-  irsApi:
-    url: https://tracex-irs-e2e-a.dev.demo.catena-x.net
-  registryApi:
-    url: https://trace-x-registry.dev.demo.catena-x.net/semantics/registry/api/v3.0
-  portalApi:
-    url: https://portal-backend.dev.demo.catena-x.net/api
-edc:
-  callback-urls: http://tracex-irs-e2e-a:8181/internal/endpoint-data-reference
+nameOverride: ""
+fullnameOverride: ""
 
+#Environment specific wiremock host
+wiremock:
+  provider: "https://trace-x-edc-test.dev.demo.catena-x.net/"
+  consumer: "https://tracex-consumer-controlplane.dev.demo.catena-x.net/"
+  bpn:
+    own: "BPNL00000003CNKC"
+    other: "BPNL00000003CML1"
 
-digitalTwinRegistryClient:
-  type: "decentral"
-  discoveryFinderUrl: "https://tracex-discovery-mock-e2e-a.dev.demo.catena-x.net/api/administration/connectors/discovery/search" # required if type is "decentral"
+ingress:
+  hosts:
+    - host: "tracex-discovery-mock-test.dev.demo.catena-x.net"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - "discovery-mock-test.dev.demo.catena-x.net"
+      secretName: tls-secret

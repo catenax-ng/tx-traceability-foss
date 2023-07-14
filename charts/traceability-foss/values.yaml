@@ -369,7 +369,7 @@ tractusx-connector:
     jdbcUrl: "CHANGEME"
 
 ###################################
-# IRS EDC Consumer configuration  #
+# EDC Database configuration  #
 ###################################
 edc-postgresql:
   nameOverride: "tracex-consumer-edc-postgresql"

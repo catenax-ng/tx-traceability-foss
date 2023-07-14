@@ -1,4 +1,9 @@
-# Copyright (c) 2023 Contributors to the Eclipse Foundation
+# Copyright (c) 2021,2022,2023
+#       2022: ZF Friedrichshafen AG
+#       2022: ISTOS GmbH
+#       2022,2023: Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
+#       2022,2023: BOSCH AG
+# Copyright (c) 2021,2022,2023 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -14,29 +19,19 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-# Patterns to ignore when building packages.
-# This supports shell glob matching, relative path matching, and
-# negation (prefixed with !). Only one pattern per line.
-.DS_Store
-# Common VCS dirs
-.git/
-.gitignore
-.bzr/
-.bzrignore
-.hg/
-.hgignore
-.svn/
-# Common backup files
-*.swp
-*.bak
-*.tmp
-*.orig
-*~
-# Various IDEs
-.project
-.idea/
-*.tmproj
-.vscode/
-# Accept only values.yaml
-values?*.yaml
-values?*.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "discovery.fullname" . }}
+  labels:
+    {{- include "discovery.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "discovery.selectorLabels" . | nindent 4 }}

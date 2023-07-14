@@ -1,0 +1,402 @@
+#
+#  Copyright (c) 2023 Contributors to the Eclipse Foundation
+#
+#  See the NOTICE file(s) distributed with this work for additional
+#  information regarding copyright ownership.
+#
+#  This program and the accompanying materials are made available under the
+#  terms of the Apache License, Version 2.0 which is available at
+#  https://www.apache.org/licenses/LICENSE-2.0.
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#  License for the specific language governing permissions and limitations
+#  under the License.
+#
+#  SPDX-License-Identifier: Apache-2.0
+#
+
+#########################
+# Global Values configuration     #
+#########################
+global:
+  enablePrometheus: false
+  enableGrafana: false
+
+#########################
+# Frontend Chart Values configuration     #
+#########################
+frontend:
+  image:
+    tag: $ARGOCD_APP_REVISION
+    CATENAX_PORTAL_API_URL: 'https://traceability-e2e-b.dev.demo.catena-x.net/api'
+    CATENAX_PORTAL_KEYCLOAK_URL: 'https://centralidp.dev.demo.catena-x.net/auth'
+    CATENAX_PORTAL_BACKEND_DOMAIN: 'catena-x.net'
+    CATENAX_PORTAL_URL: 'https://portal.dev.demo.catena-x.net/'
+
+  nameOverride: "traceability-foss-e2e-b-frontend"
+  fullnameOverride: "traceability-foss-e2e-b-frontend"
+
+  ingress:
+    enabled: true
+    className: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: "traceability-portal-e2e-b.dev.demo.catena-x.net"
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls:
+      - hosts:
+          - "traceability-portal-e2e-b.dev.demo.catena-x.net"
+        secretName: "traceability-portal-e2e-b.dev.demo.catena-x.net-tls"
+
+#########################
+# Backend Chart Values configuration     #
+#########################
+backend:
+  image:
+    repository: ghcr.io/catenax-ng/tx-traceability-foss
+    tag: $ARGOCD_APP_REVISION
+
+  nameOverride: "traceability-foss-backend-e2e-b"
+  fullnameOverride: "traceability-foss-backend-e2e-b"
+
+  podSecurityContext:
+    runAsUser: 10001
+    seccompProfile:
+      type: RuntimeDefault
+
+  # Following Catena-X Helm Best Practices @url: https://catenax-ng.github.io/docs/kubernetes-basics/helm
+  # @url: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  securityContext:
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    runAsUser: 10001
+    runAsGroup: 3000
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: false
+
+  # Following Catena-X Helm Best Practices @url: https://catenax-ng.github.io/docs/kubernetes-basics/helm
+  # @url: https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-resource-requests-and-limits
+  resources:
+    limits:
+      cpu: 1500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+  springprofile: e2e-b
+
+  ingress:
+    enabled: true
+    className: "nginx"
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    hosts:
+      - host: "traceability-e2e-b.dev.demo.catena-x.net"
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls:
+      - hosts:
+          - "traceability-e2e-b.dev.demo.catena-x.net"
+        secretName: tls-secret
+
+  traceability:
+    bpn: "BPNL00000003CNKC"
+    url: "https://traceability-e2e-b.dev.demo.catena-x.net"
+
+  datasource:
+    url: jdbc:postgresql://traceability-foss-backend-e2e-b-postgresql:5432/trace
+    username: trace
+    password: <path:traceability-foss/data/dev/database#tracePassword>
+
+  oauth2:
+    clientId: <path:traceability-foss/data/int/keycloak/oauth2#clientId>
+    clientSecret: <path:traceability-foss/data/int/keycloak/oauth2#clientSecret>
+    clientTokenUri: "https://centralidp.int.demo.catena-x.net/auth/realms/CX-Central/protocol/openid-connect/token"
+    jwkSetUri: "https://centralidp.dev.demo.catena-x.net/auth/realms/CX-Central/protocol/openid-connect/certs"
+    resourceClient: "Cl17-CX-Part"
+
+  edc:
+    apiKey: "<path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>"
+    providerUrl: "https://tracex-consumer-controlplane-e2e-b.dev.demo.catena-x.net"
+
+#########################
+# PG Admin configuration     #
+#########################
+pgadmin4:
+  enabled: true
+  strategy:
+    type: Recreate
+  networkPolicy:
+    enabled: false
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    hosts:
+      - host: tracex-pgadmin4-e2e-b.dev.demo.catena-x.net
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - hosts:
+          - tracex-pgadmin4-e2e-b.dev.demo.catena-x.net
+        secretName: tls-secret
+  env:
+    email: pgadmin4@trace.foss
+    password: "<path:traceability-foss/data/dev/database#pgadminPassword>"
+    variables:
+      - name: PGADMIN_CONFIG_UPGRADE_CHECK_ENABLED
+        value: "False"
+  resources:
+    limits:
+      cpu: 768m
+      memory: 768Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+#########################
+# Postgres configuration     #
+#########################
+postgresql:
+  enabled: true
+
+  nameOverride: "traceability-foss-backend-e2e-b-postgresql"
+  fullnameOverride: "traceability-foss-backend-e2e-b-postgresql"
+
+  auth:
+    postgresPassword: "<path:traceability-foss/data/dev/database#postgresPassword>"
+    password: "<path:traceability-foss/data/dev/database#tracePassword>"
+    database: "trace"
+    username: "trace"
+
+#########################
+# IRS configuration     #
+#########################
+irs-helm:
+  bpn: BPNL00000003CML1
+  enabled: true
+
+  nameOverride: "tracex-irs-e2e-b"
+  fullnameOverride: "tracex-irs-e2e-b"
+
+  namespace: product-traceability-foss
+
+  springprofile: dev
+
+  irsUrl: "https://tracex-irs-e2e-b.dev.demo.catena-x.net"
+
+  ingress:
+    enabled: true
+    hosts:
+      - host: "tracex-irs-e2e-b.dev.demo.catena-x.net"
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls:
+      - hosts:
+          - "tracex-irs-e2e-b.dev.demo.catena-x.net"
+        secretName: tls-secret
+  digitalTwinRegistry:
+    type: central
+    url: https://trace-x-registry-e2e-b.dev.demo.catena-x.net/semantics/registry
+    ## TODO needs to be adapted to our mock once we have one.
+    discoveryFinderUrl: https://discovery-mock-e2e-b.dev.demo.catena-x.net/api/administration/connectors/discovery/search
+
+  semanticshub:
+    url: https://semantics.int.demo.catena-x.net/hub/api/v1/models
+  bpdm:
+    url: https://partners-pool.int.demo.catena-x.net
+
+  minioUser: <path:traceability-foss/data/dev/minio#user>
+  minioPassword: <path:traceability-foss/data/dev/minio#password>
+  minioUrl: http://tracex-irs-minio-e2e-b:9000
+
+  keycloak:
+    oauth2:
+      clientId: <path:traceability-foss/data/int/keycloak/oauth2#clientId>
+      clientSecret: <path:traceability-foss/data/int/keycloak/oauth2#clientSecret>
+      clientTokenUri: https://centralidp.int.demo.catena-x.net/auth/realms/CX-Central/protocol/openid-connect/token
+      jwkSetUri: https://centralidp.int.demo.catena-x.net/auth/realms/CX-Central/protocol/openid-connect/certs
+
+  edc:
+    callbackurl: http://tracex-irs-e2e-b:8181/internal/endpoint-data-reference
+    catalog:
+      cache:
+        enabled: "false"
+    controlplane:
+      endpoint:
+        statesuffix: /state
+      apikey:
+        secret: <path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>
+
+
+  minio:
+    nameOverride: "tracex-irs-minio-e2e-b"
+    fullnameOverride: "tracex-irs-minio-e2e-b"
+    serviceAccount:
+      create: false
+    rootUser: <path:traceability-foss/data/dev/minio#user>
+    rootPassword: <path:traceability-foss/data/dev/minio#password>
+
+###################################
+# EDC Consumer configuration  #
+###################################
+tractusx-connector:
+  enabled: true
+  install:
+    postgresql: false
+    daps: false
+    vault: false
+  participant:
+    id: BPNL00000003CNKC
+
+  controlplane:
+    ingresses:
+      - enabled: true
+        hostname: "tracex-consumer-controlplane-e2e-b.dev.demo.catena-x.net"
+        annotations:
+          nginx.ingress.kubernetes.io/ssl-passthrough: "false"
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        endpoints:
+          - protocol
+          - management
+        tls:
+          enabled: true
+          secretName: tls-secret
+
+    endpoints:
+      # -- data management api, used by internal users, can be added to an ingress and must not be internet facing
+      management:
+        port: 8081
+        path: /management
+        authKey: <path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value> # -- authentication key, must be attached to each 'X-Api-Key' request header
+      # -- protocol api, used for inter connector communication and must be internet facing
+      protocol:
+        port: 8084
+        path: /api/v1/dsp
+      # -- observability api with unsecured access, must not be internet facing
+      observability:
+        port: 8085
+        path: /observability  # -- observability api, provides /health /readiness and /liveness endpoints
+        insecure: true  # -- allow or disallow insecure access, i.e. access without authentication
+
+    internationalDataSpaces:
+      id: TXDC
+      description: Tractus-X Eclipse IDS Data Space Connector
+      title: ""
+      maintainer: ""
+      curator: ""
+      catalogId: TXDC-Catalog
+
+    # Explicitly declared url for reaching the ids api (e.g. if ingresses not used)
+    url:
+      ids: ""
+
+    resources:
+      limits:
+        cpu: 768m
+        memory: 768Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+
+  dataplane:
+    ingresses:
+      - enabled: true
+        hostname: "tracex-consumer-dataplane-e2e-b.dev.demo.catena-x.net"
+        annotations:
+          nginx.ingress.kubernetes.io/ssl-passthrough: "false"
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        endpoints:
+          - public
+        className: "nginx"
+        tls:
+          enabled: true
+          secretName: tls-secret
+
+    endpoints:
+      public:
+        port: 8081
+        path: /api/public
+      observability:
+        port: 8085
+        path: /observability
+        insecure: true
+
+    resources:
+      limits:
+        cpu: 768m
+        memory: 768Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+
+  ## currently we need to provide a url but is not used anywhere
+  # URL where the EndpointDataReference callback will be sent to
+  backendService:
+    httpProxyTokenReceiverUrl: "https://traceability-e2e-b.dev.demo.catena-x.net/api/callback/endpoint-data-reference"
+
+  ################################
+  # EDC Vault/DAPS Configuration #
+  ################################
+  vault:
+    hashicorp:
+      url: "https://vault.demo.catena-x.net"
+      token: "<path:traceability-foss/data/dev/edc#edc.vault.hashicorp.token>"
+      timeout: 30
+      healthCheck:
+        enabled: true
+        standbyOk: true
+      paths:
+        secret: /v1/traceability-foss
+        health: /v1/sys/health
+    secretNames:
+      transferProxyTokenSignerPrivateKey: daps-cert-edc-e2e-b-consumer-private
+      transferProxyTokenSignerPublicKey: daps-cert-edc-e2e-b-consumer-public
+      transferProxyTokenEncryptionAesKey: token-signer-aes-key
+      dapsPrivateKey: daps-cert-edc-e2e-b-consumer-private
+      dapsPublicKey: daps-cert-edc-e2e-b-consumer-public
+
+  daps:
+    url: "https://daps1.int.demo.catena-x.net"
+    clientId: D9:AC:C7:93:FB:49:6B:1B:2B:D2:21:44:64:C1:07:D8:CC:D1:12:AF:keyid:D9:AC:C7:93:FB:49:6B:1B:2B:D2:21:44:64:C1:07:D8:CC:D1:12:AF
+    paths:
+      jwks: /.well-known/jwks.json
+      token: /token
+  ##################################
+  # EDC Postgres Configuration #
+  ##################################
+  postgresql:
+    enabled: true
+    auth:
+      username: "<path:traceability-foss/data/dev/edc/database#user>"
+      password: "<path:traceability-foss/data/dev/edc/database#password>"
+    username: "<path:traceability-foss/data/dev/edc/database#user>"
+    password: "<path:traceability-foss/data/dev/edc/database#password>"
+    jdbcUrl: "jdbc:postgresql://tracex-consumer-edc-postgresql-e2e-b-hl:5432/edc"
+
+###################################
+# EDC Postgres Configuration #
+###################################
+edc-postgresql:
+  nameOverride: "tracex-consumer-edc-postgresql-e2e-b"
+  fullnameOverride: "tracex-consumer-edc-postgresql-e2e-b"
+  enabled: true
+  auth:
+    database: edc
+    username: <path:traceability-foss/data/dev/edc/database#user>
+    postgresPassword: <path:traceability-foss/data/dev/edc/database#password>
+    password: <path:traceability-foss/data/dev/edc/database#password>

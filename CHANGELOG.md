@@ -24,6 +24,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Removed
 - unused classes and methods
 
+### Known knowns
+
+
+
 ## [5.0.0] - 2023-07-10
 
 ### Added
@@ -63,6 +67,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Upgraded maven-project-info-reports-plugin from 3.4.3 to 3.4.5
 
 ### Changed
+- Updated authorizeRequests to match with spring boot 3 requirements
+- Updated some response code annotations
+- Updated some schema object annotations
 - Updated spring boot to 3.0.7 to fix: CVE-2023-20883
 - Fixed calculation of otherParts amount within dashboard response
 - Fixed incorrect label mapping in notification action modals
