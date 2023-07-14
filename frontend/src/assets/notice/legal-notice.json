@@ -1,8 +1,8 @@
 {
-  "name": "tx-traceability-foss",
-  "repositoryPath": "https://github.com/catenax-ng/tx-traceability-foss",
-  "licensePath": "https://github.com/catenax-ng/tx-traceability-foss/blob/main/LICENSE",
-  "noticePath": "https://github.com/catenax-ng/tx-traceability-foss/blob/main/NOTICE.md",
-  "sourcePath": "https://github.com/catenax-ng/tx-traceability-foss/blob/70e5876804573b0fc27d0de703a42cff32fc6975",
-  "commitId": "70e5876804573b0fc27d0de703a42cff32fc6975"
+  "name": "traceability-foss",
+  "repositoryPath": "https://github.com/eclipse-tractusx/traceability-foss",
+  "licensePath": "https://github.com/eclipse-tractusx/traceability-foss/blob/main/LICENSE",
+  "noticePath": "https://github.com/eclipse-tractusx/traceability-foss/blob/main/NOTICE.md",
+  "sourcePath": "https://github.com/eclipse-tractusx/traceability-foss/blob/0f1e34f8fd12f64bf79fe18ec74a8e91d087c9b3",
+  "commitId": "0f1e34f8fd12f64bf79fe18ec74a8e91d087c9b3"
 }
