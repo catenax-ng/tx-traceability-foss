@@ -96,6 +96,12 @@ spec:
             - name: configuration
               mountPath: home/wiremock/__files/edc_discovery_response_notification_flow.json
               subPath: edc_discovery_response_notification_flow.json
+            - name: configuration
+              mountPath: /home/wiremock/mappings/bpn_discovery_service_request.json
+              subPath: bpn_discovery_service_request.json
+            - name: configuration
+              mountPath: home/wiremock/__files/bpn_discovery_service_response.json
+              subPath: bpn_discovery_service_response.json
             - name: tmp
               mountPath: /tmp
       volumes:
@@ -117,6 +123,10 @@ spec:
                 path: edc_discovery_request_notification_flow.json
               - key: edc_discovery_response_notification_flow.json
                 path: edc_discovery_response_notification_flow.json
+              - key: bpn_discovery_service_request.json
+                path: bpn_discovery_service_request.json
+              - key: bpn_discovery_service_response.json
+                path: bpn_discovery_service_response.json
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
