@@ -93,3 +93,18 @@ jobs:
           helm repo add runix https://helm.runix.net
           ct install --charts charts/traceability-foss --helm-extra-set-args "--set backend.image.repository=${{ env.REGISTRY }}/${{ env.APP_NAME}} --set backend.image.tag=${{env.TAG}} --set frontend.image.repository=${{ env.REGISTRY }}/traceability-foss --set frontend.image.tag=${{env.TAG}} --set postgresql.enabled=false"
         if: steps.list-changed.outputs.changed == 'true'
+
+      - name: Verify Deployment Functionality
+        run: |
+          echo "Verifying deployment functionality..."
+          FRONTEND_URL=$(kubectl get service/${{ env.APP_FRONTEND_NAME }} -n traceability-foss-8xybsqqqe9 -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          BACKEND_URL=$(kubectl get service/${{ env.APP_NAME }} -n traceability-foss-8xybsqqqe9 -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          FRONTEND_RESPONSE=$(curl -sS -o /dev/null -w "%{http_code}" http://${FRONTEND_URL})
+          BACKEND_RESPONSE=$(curl -sS -o /dev/null -w "%{http_code}" http://${BACKEND_URL}/api/swagger-ui/index.html)
+
+          if [[ $FRONTEND_RESPONSE == "200" && $BACKEND_RESPONSE == "200" ]]; then
+            echo "Deployment is functional. Front-end response: $FRONTEND_RESPONSE, Back-end response: $BACKEND_RESPONSE"
+          else
+            echo "Deployment is not functional. Front-end response: $FRONTEND_RESPONSE, Back-end response: $BACKEND_RESPONSE"
+            exit 1
+          fi
