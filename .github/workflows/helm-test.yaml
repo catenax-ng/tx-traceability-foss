@@ -46,6 +46,9 @@ jobs:
 
       - name: Kubernetes KinD Cluster
         uses: container-tools/kind-action@v2
+        with:
+          node_image: ${{ github.event.inputs.node_image || 'kindest/node:v1.27.3' }}
+          version: v0.20.0
 
       - name: Build & push Image App to KinD
         uses: docker/build-push-action@v4
@@ -88,5 +91,5 @@ jobs:
           helm repo add postgresql https://charts.bitnami.com/bitnami
           helm repo add tractusx-connector https://eclipse-tractusx.github.io/charts/dev
           helm repo add runix https://helm.runix.net
-          ct install --charts charts/traceability-foss --helm-extra-set-args "--set backend.image.repository=${{ env.REGISTRY }}/${{ env.APP_NAME}} --set backend.image.tag=testing --set frontend.image.repository=${{ env.REGISTRY }}/traceability-foss --set frontend.image.tag=testing --set postgresql.enabled=false"
+          ct install --charts charts/traceability-foss --helm-extra-set-args "--set backend.image.repository=${{ env.REGISTRY }}/${{ env.APP_NAME}} --set backend.image.tag=${{env.TAG}} --set frontend.image.repository=${{ env.REGISTRY }}/traceability-foss --set frontend.image.tag=${{env.TAG}} --set postgresql.enabled=false"
         if: steps.list-changed.outputs.changed == 'true'
