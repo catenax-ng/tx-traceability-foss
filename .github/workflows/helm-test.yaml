@@ -96,7 +96,8 @@ jobs:
           helm repo add postgresql https://charts.bitnami.com/bitnami
           helm repo add tractusx-connector https://eclipse-tractusx.github.io/charts/dev
           helm repo add runix https://helm.runix.net
-          ct install --charts charts/traceability-foss --namespace ${{env.NAMESPACE}} --helm-extra-set-args "--set backend.image.repository=${{ env.REGISTRY }}/${{ env.APP_NAME}} --set backend.image.tag=${{env.TAG}} --set frontend.image.repository=${{ env.REGISTRY }}/traceability-foss --set frontend.image.tag=${{env.TAG}} --set postgresql.enabled=false"
+          ct install ${{ env.APP_NAME }} --charts charts/traceability-foss/backend --namespace ${{env.NAMESPACE}} --helm-extra-set-args "--set backend.image.repository=${{ env.REGISTRY }}/${{ env.APP_NAME}} --set backend.image.tag=${{env.TAG}} --set frontend.image.repository=${{ env.REGISTRY }}/traceability-foss --set frontend.image.tag=${{env.TAG}} --set postgresql.enabled=false"
+          ct install ${{ env.APP_FRONTEND_NAME }} --charts charts/traceability-foss/frontend --namespace ${{env.NAMESPACE}} --helm-extra-set-args "--set frontend.image.repository=${{ env.REGISTRY }}/traceability-foss --set frontend.image.tag=${{env.TAG}} --set postgresql.enabled=false"
         # For testing make it install
         #if: steps.list-changed.outputs.changed == 'true'
 
