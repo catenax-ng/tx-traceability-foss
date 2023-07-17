@@ -28,5 +28,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "traceability-foss-backend.fullname" . }}:{{ .Values.service.port }}/api/swagger-ui/index.html?configUrl=/api/api-docs/swagger-config']
+      args: ['{{ include "traceability-foss-backend.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never
