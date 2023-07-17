@@ -93,7 +93,8 @@ jobs:
           helm repo add tractusx-connector https://eclipse-tractusx.github.io/charts/dev
           helm repo add runix https://helm.runix.net
           ct install --charts charts/traceability-foss --namespace ${{env.NAMESPACE}} --helm-extra-set-args "--set backend.image.repository=${{ env.REGISTRY }}/${{ env.APP_NAME}} --set backend.image.tag=${{env.TAG}} --set frontend.image.repository=${{ env.REGISTRY }}/traceability-foss --set frontend.image.tag=${{env.TAG}} --set postgresql.enabled=false"
-        if: steps.list-changed.outputs.changed == 'true'
+        # For testing make it install
+        #if: steps.list-changed.outputs.changed == 'true'
 
       - name: Verify Deployment Functionality
         run: |
