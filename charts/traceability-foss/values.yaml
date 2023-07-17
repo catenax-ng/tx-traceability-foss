@@ -330,8 +330,8 @@ pgadmin4:
 postgresql:
   enabled: true
 
-  nameOverride: "tracex-backend-postgresql"
-  fullnameOverride: "tracex-backend-postgresql"
+  nameOverride: "traceability-foss-backend-postgresql"
+  fullnameOverride: "traceability-foss-backend-postgresql"
 
   auth:
     postgresPassword: "CHANGEME"
