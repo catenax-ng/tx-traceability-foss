@@ -97,8 +97,8 @@ jobs:
       - name: Verify Deployment Functionality
         run: |
           echo "Verifying deployment functionality..."
-          FRONTEND_URL=$(kubectl get service/${{ env.APP_FRONTEND_NAME }} -n traceability-foss-8xybsqqqe9 -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-          BACKEND_URL=$(kubectl get service/${{ env.APP_NAME }} -n traceability-foss-8xybsqqqe9 -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          FRONTEND_URL=$(kubectl get service/${{ env.APP_FRONTEND_NAME }} -n traceability-foss-frontend -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          BACKEND_URL=$(kubectl get service/${{ env.APP_NAME }} -n traceability-foss-backend -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
           FRONTEND_RESPONSE=$(curl -sS -o /dev/null -w "%{http_code}" http://${FRONTEND_URL})
           BACKEND_RESPONSE=$(curl -sS -o /dev/null -w "%{http_code}" http://${BACKEND_URL}/api/swagger-ui/index.html)
 
