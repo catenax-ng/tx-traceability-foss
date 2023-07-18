@@ -269,7 +269,7 @@ backend:
         secretName: tls-secret
 
   healthCheck:
-    enabled: true  # <healthCheck.enabled>
+    enabled: false  # <healthCheck.enabled>
 
   traceability:
     bpn: "CHANGEME"  # <traceability.bpn>
