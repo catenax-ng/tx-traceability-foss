@@ -131,13 +131,13 @@ frontend:
   # @url: https://github.com/helm/charts/blob/master/stable/nginx-ingress/values.yaml#L210
   livenessProbe:
     failureThreshold: 5
-    initialDelaySeconds: 100
+    initialDelaySeconds: 150
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
   readinessProbe:
     failureThreshold: 5
-    initialDelaySeconds: 100
+    initialDelaySeconds: 150
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
@@ -246,13 +246,13 @@ backend:
   # @url: https://github.com/helm/charts/blob/master/stable/nginx-ingress/values.yaml#L210
   livenessProbe:
     failureThreshold: 5
-    initialDelaySeconds: 100
+    initialDelaySeconds: 150
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1
   readinessProbe:
     failureThreshold: 5
-    initialDelaySeconds: 100
+    initialDelaySeconds: 150
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1

@@ -82,7 +82,7 @@ jobs:
 
       - name: Run chart-testing (lint)
         run: |
-          ct lint  --validate-maintainers=false --check-version-increment=false --chart-dirs charts,charts/traceability-foss,charts/traceability-foss/charts/backend,charts/traceability-foss/charts/frontend --target-branch ${{ github.event.repository.default_branch }}
+          ct lint  --validate-maintainers=false --check-version-increment=false --chart-dirs=charts,charts/traceability-foss,charts/traceability-foss/charts/backend, charts/traceability-foss/charts/frontend--target-branch ${{ github.event.repository.default_branch }}
 
       - name: Run chart-testing (install)
         run: |
