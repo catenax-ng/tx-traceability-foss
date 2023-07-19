@@ -112,14 +112,14 @@ affinity:
 # Following Catena-X Helm Best Practices @url: https://catenax-ng.github.io/docs/kubernetes-basics/helm
 # @url: https://github.com/helm/charts/blob/master/stable/nginx-ingress/values.yaml#L210
 livenessProbe:
-  failureThreshold: 5
-  initialDelaySeconds: 150
+  failureThreshold: 6
+  initialDelaySeconds: 180
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 1
 readinessProbe:
-  failureThreshold: 5
-  initialDelaySeconds: 150
+  failureThreshold: 6
+  initialDelaySeconds: 180
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 1
