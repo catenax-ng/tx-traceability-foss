@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added decentral registry approach
 - Added discovery finder / edc discovery service for looking up edc urls of receiver of notifications
 - Added about component with additional Workflow to load repo info into the component
+- Added a helm chart connection test
 
 ### Changed
 
