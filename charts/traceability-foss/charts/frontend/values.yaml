@@ -58,9 +58,9 @@ serviceAccount:
   name: ""
 
 
-podAnnotations: { }
+podAnnotations: {}
 
-podSecurityContext: { }
+podSecurityContext: {}
 # fsGroup: 2000
 
 # Following Catena-X Helm Best Practices @url: https://catenax-ng.github.io/docs/kubernetes-basics/helm
@@ -86,9 +86,9 @@ resources:
     cpu: 500m
     memory: 512Mi
 
-nodeSelector: { }
+nodeSelector: {}
 
-tolerations: [ ]
+tolerations: []
 
 # Following Catena-X Helm Best Practices @url: https://catenax-ng.github.io/docs/kubernetes-basics/helm
 # @url: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity
@@ -124,4 +124,3 @@ readinessProbe:
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 1
-
