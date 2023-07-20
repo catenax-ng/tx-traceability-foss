@@ -34,7 +34,7 @@ dependencies:
     version: 1.3.10
   - name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 11.x.x
+    version: 12.1.6
     condition: postgresql.enabled
   - name: pgadmin4
     repository: https://helm.runix.net
@@ -44,12 +44,12 @@ dependencies:
     repository: https://eclipse-tractusx.github.io/item-relationship-service
     version: 6.1.0
     condition: irs-helm.enabled
-  - condition: tractusx-connector.enabled
-    name: tractusx-connector
+  - name: tractusx-connector
     repository: https://eclipse-tractusx.github.io/charts/dev
     version: 0.4.1
-  - condition: edc-postgresql.enabled
+    condition: tractusx-connector.enabled
+  - name: postgresql
     alias: edc-postgresql
-    name: postgresql
     repository: https://charts.bitnami.com/bitnami
     version: 12.1.6
+    condition: edc-postgresql.enabled
