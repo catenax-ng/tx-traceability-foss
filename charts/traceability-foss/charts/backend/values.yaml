@@ -55,8 +55,8 @@ podAnnotations: { }
 
 springprofile: dev #will be set as dev
 
-#nameOverride: "traceability-foss-backend"
-#fullnameOverride: "traceability-foss-backend"
+nameOverride: "traceability-foss-backend"
+fullnameOverride: "traceability-foss-backend"
 
 podSecurityContext:
   runAsUser: 10001
