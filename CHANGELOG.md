@@ -7,12 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 ### Added
 
+- Configuration for left and right policies to use registry client library
+
 ### Changed
 
 - schedlock version changed from 4.42.0 to 5.5.0
 - resilience4j version changed from 2.0.2 to 2.1.0
 - feign-slf4j version changed from 12.1 to 12.4
 - spock version changed from 1.18.0 to 1.18.3
+- Update asBuild test data to 1.5.3 and asPlanned to 1.5.1
 
 ### Removed
 
