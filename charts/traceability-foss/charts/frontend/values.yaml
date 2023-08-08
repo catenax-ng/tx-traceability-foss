@@ -62,8 +62,6 @@ podAnnotations: { }
 
 podSecurityContext:
   seccompProfile:
-    runAsNonRoot: true
-    runAsUser: 101
     type: RuntimeDefault
 
 # fsGroup: 2000
