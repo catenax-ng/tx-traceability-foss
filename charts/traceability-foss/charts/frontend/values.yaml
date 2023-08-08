@@ -60,7 +60,10 @@ serviceAccount:
 
 podAnnotations: { }
 
-podSecurityContext: { }
+podSecurityContext: {
+  seccompProfile:
+    type: RuntimeDefault
+}
 # fsGroup: 2000
 
 # Following Catena-X Helm Best Practices @url: https://catenax-ng.github.io/docs/kubernetes-basics/helm
