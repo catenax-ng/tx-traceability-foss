@@ -106,7 +106,7 @@ describe('requestInvestigationComponent', () => {
       await shouldRenderButtons();
     });
 
-    fit('should submit parts', async () => {
+    it('should submit parts', async () => {
       await renderRequestInvestigationComponent();
       await shouldSubmitParts('requestInvestigations');
     });
@@ -133,7 +133,7 @@ describe('requestInvestigationComponent', () => {
       await shouldRenderButtons();
     });
 
-    fit('should submit parts', async () => {
+    it('should submit parts', async () => {
       await renderRequestAlertComponent();
       await shouldSubmitParts('requestAlert', true);
     });
