@@ -58,7 +58,6 @@ export class CloseNotificationModalComponent {
 
       this.closeCall(notification.id, reason).subscribe({
         next: () => {
-          console.log(this.toastService, this.translationContext)
           this.toastService.success(this.translationContext + '.modal.successfullyClosed');
           this.confirmActionCompleted.emit();
         },
