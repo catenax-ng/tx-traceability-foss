@@ -55,8 +55,8 @@ jobs:
         run: |
                EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
                echo "CHANGELOG<<$EOF" >> $GITHUB_ENV
-               sed -n -e '/## \"["9.9.9"]"/,/## \[/ p' CHANGELOG.md | head -n -1 | tail -n +2 >> $GITHUB_ENV
-               echo **Full Changelog**: ${{ github.server_url }}/${{ github.repository }}/compare/${{ env.PREVIOUS_VERSION }}...6.0.0" >> $GITHUB_ENV
+               sed -n -e '/## \[9.9.9\]/,/## \[/ p' CHANGELOG.md | head -n -1 | tail -n +2 >> $GITHUB_ENV
+               echo **Full Changelog**: ${{ github.server_url }}/${{ github.repository }}/compare/${{ env.PREVIOUS_VERSION }}...9.9.9" >> $GITHUB_ENV
                echo "$EOF" >> "$GITHUB_ENV"
         #  TODO EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
         #  echo "CHANGELOG<<$EOF" >> $GITHUB_ENV
