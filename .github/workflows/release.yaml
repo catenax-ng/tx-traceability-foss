@@ -2,6 +2,7 @@ name: Release Trace-X
 
 on:
   workflow_dispatch:
+  # TODO this should not run on pull request, delete it
   pull_request:
   push:
     tags:
@@ -52,17 +53,16 @@ jobs:
       - name: Extract changelog text
         # See: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
         run: |
-          #  TODO EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-          #  echo "CHANGELOG<<$EOF" >> $GITHUB_ENV
-          #  sed -n -e '/## \[${{ github.ref_name }}\]/,/## \[/ p' CHANGELOG.md | head -n -1 | tail -n +2 >> $GITHUB_ENV
-          #  echo **Full Changelog**: ${{ github.server_url }}/${{ github.repository }}/compare/${{ env.PREVIOUS_VERSION }}...${{ github.ref_name }} >> $GITHUB_ENV
-          #  echo "$EOF" >> "$GITHUB_ENV"
-
                EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
                echo "CHANGELOG<<$EOF" >> $GITHUB_ENV
                sed -n -e '/## \"["9.9.9"]"/,/## \[/ p' CHANGELOG.md | head -n -1 | tail -n +2 >> $GITHUB_ENV
                echo **Full Changelog**: ${{ github.server_url }}/${{ github.repository }}/compare/${{ env.PREVIOUS_VERSION }}...TESTING" >> $GITHUB_ENV
                echo "$EOF" >> "$GITHUB_ENV"
+        #  TODO EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+        #  echo "CHANGELOG<<$EOF" >> $GITHUB_ENV
+        #  sed -n -e '/## \[${{ github.ref_name }}\]/,/## \[/ p' CHANGELOG.md | head -n -1 | tail -n +2 >> $GITHUB_ENV
+        #  echo **Full Changelog**: ${{ github.server_url }}/${{ github.repository }}/compare/${{ env.PREVIOUS_VERSION }}...${{ github.ref_name }} >> $GITHUB_ENV
+        #  echo "$EOF" >> "$GITHUB_ENV"
 
       - name: Create IRS release
         uses: softprops/action-gh-release@v1
