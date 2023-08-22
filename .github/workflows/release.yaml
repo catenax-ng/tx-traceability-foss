@@ -47,7 +47,7 @@ jobs:
             for this release. Also, make sure that the values.yaml is correct before merging this PR.
 
       - name: Get previous version
-        run: echo PREVIOUS_VERSION="9.9.8" >> $GITHUB_ENV
+        run: echo PREVIOUS_VERSION="5.0.0" >> $GITHUB_ENV
         # TODO run: echo PREVIOUS_VERSION=$(git tag | grep -E ^[0-9]+\\.[0-9]+\\.[0-9]+ | tail -2 | head -n +1) >> $GITHUB_ENV
 
       - name: Extract changelog text
@@ -64,7 +64,7 @@ jobs:
         #  echo **Full Changelog**: ${{ github.server_url }}/${{ github.repository }}/compare/${{ env.PREVIOUS_VERSION }}...${{ github.ref_name }} >> $GITHUB_ENV
         #  echo "$EOF" >> "$GITHUB_ENV"
 
-      - name: Create IRS release
+      - name: Create Trace-X release
         uses: softprops/action-gh-release@v1
         with:
           body: ${{ env.CHANGELOG }}
