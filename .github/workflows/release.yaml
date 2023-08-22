@@ -34,7 +34,9 @@ jobs:
       - name: Prepare Helm release
         uses: peter-evans/create-pull-request@v5
         with:
-          commit-message: "chore(release): Prepare release for Helm version ${{ env.HELM_VERSION }}"
+          # TODO Change PR Header
+          # commit-message: "chore(release): Prepare release for Helm version ${{ env.HELM_VERSION }}"
+          commit-message: "TESTING RELEASE AUTOMATION"
           # TODO Change this line to helm version env when releasing
           branch: chore/prepare-helm-release-TEST
           base: main
