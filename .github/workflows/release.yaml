@@ -1,4 +1,4 @@
-name: Release IRS
+name: Release Trace-X
 
 on:
   workflow_dispatch:
