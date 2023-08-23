@@ -75,6 +75,7 @@ irs-edc-client:
     policies:
       acceptedRightOperands: active # List of comma separated names of the rightOperands to accept.
       acceptedLeftOperands: PURPOSE # List of comma separated names of the leftOperands to accept.
+      allowedNames: ID 3.0 Trace, ID 3.1 Trace, R2_Traceability, FrameworkAgreement.traceability, Membership # List of comma separated names of the policies to accept.
 
 server:
   servlet:

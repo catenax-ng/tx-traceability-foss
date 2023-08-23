@@ -35,6 +35,9 @@ import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.policy.service.EdcPolicyDefinitionService;
 import org.springframework.stereotype.Component;
 
+import static org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.policy.service.EdcPolicyDefinitionService.ID_TRACE_CONSTRAINT_3_0;
+import static org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.policy.service.EdcPolicyDefinitionService.ID_TRACE_CONSTRAINT_3_1;
+
 @Slf4j
 @Component
 @AllArgsConstructor
@@ -60,9 +63,11 @@ public class EdcNotificationContractService {
         }
 
 
-        String accessPolicyId = "";
+        String accessPolicyId30 = "";
+        String accessPolicyId31 = "";
         try {
-            accessPolicyId = edcPolicyDefinitionService.createAccessPolicy();
+            accessPolicyId30 = edcPolicyDefinitionService.createAccessPolicy(ID_TRACE_CONSTRAINT_3_0);
+            accessPolicyId31 = edcPolicyDefinitionService.createAccessPolicy(ID_TRACE_CONSTRAINT_3_1);
         } catch (CreateEdcPolicyDefinitionException e) {
             revertNotificationAsset(notificationAssetId);
             throw new CreateNotificationContractException(e);
@@ -72,9 +77,11 @@ public class EdcNotificationContractService {
 
         String contractDefinitionId = "";
         try {
-            contractDefinitionId = edcContractDefinitionService.createContractDefinition(notificationAssetId, accessPolicyId);
+            contractDefinitionId = edcContractDefinitionService.createContractDefinition(notificationAssetId, accessPolicyId30);
+            edcContractDefinitionService.createContractDefinition(notificationAssetId, accessPolicyId31);
         } catch (CreateEdcContractDefinitionException e) {
-            revertAccessPolicy(accessPolicyId);
+            revertAccessPolicy(accessPolicyId30);
+            revertAccessPolicy(accessPolicyId31);
             revertNotificationAsset(notificationAssetId);
 
             throw new CreateNotificationContractException(e);
@@ -82,11 +89,11 @@ public class EdcNotificationContractService {
             log.error(e2.toString());
         }
 
-        log.info("Created notification contract for {} notification asset id, access policy id {} and contract definition id {}", notificationAssetId, accessPolicyId, contractDefinitionId);
+        log.info("Created notification contract for {} notification asset id, access policy id {} and contract definition id {}", notificationAssetId, accessPolicyId30, contractDefinitionId);
 
         return new CreateNotificationContractResponse(
                 notificationAssetId,
-                accessPolicyId,
+                accessPolicyId30,
                 contractDefinitionId
         );
     }

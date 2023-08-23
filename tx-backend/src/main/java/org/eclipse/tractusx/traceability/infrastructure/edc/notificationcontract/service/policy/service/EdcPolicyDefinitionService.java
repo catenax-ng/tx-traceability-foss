@@ -56,8 +56,9 @@ public class EdcPolicyDefinitionService {
     private static final String POLICY_TYPE = "Policy";
     private static final String POLICY_DEFINITION_TYPE = "PolicyDefinitionRequestDto";
     private static final String ATOMIC_CONSTRAINT = "AtomicConstraint";
-    private static final String PURPOSE_CONSTRAINT = "idsc:PURPOSE";
-    private static final String ID_TRACE_CONSTRAINT = "ID 3.0 Trace";
+    private static final String PURPOSE_CONSTRAINT = "PURPOSE";
+    public static final String ID_TRACE_CONSTRAINT_3_0 = "ID 3.0 Trace";
+    public static final String ID_TRACE_CONSTRAINT_3_1 = "ID 3.1 Trace";
     private static final String CONSTRAINT = "Constraint";
     private static final String ASSET_SELECTOR_EQUALITY_OPERATOR = "odrl:eq";
     private final ObjectMapper objectMapper;
@@ -71,11 +72,11 @@ public class EdcPolicyDefinitionService {
         this.edcProperties = edcProperties;
     }
 
-    public String createAccessPolicy() throws JsonProcessingException {
+    public String createAccessPolicy(final String policy) throws JsonProcessingException {
 
         EdcPolicyPermissionConstraintExpression constraint = EdcPolicyPermissionConstraintExpression.builder()
                 .leftOperand(PURPOSE_CONSTRAINT)
-                .rightOperand(ID_TRACE_CONSTRAINT)
+                .rightOperand(policy)
                 .operator(new EdcOperator(ASSET_SELECTOR_EQUALITY_OPERATOR))
                 .type(CONSTRAINT)
                 .build();
