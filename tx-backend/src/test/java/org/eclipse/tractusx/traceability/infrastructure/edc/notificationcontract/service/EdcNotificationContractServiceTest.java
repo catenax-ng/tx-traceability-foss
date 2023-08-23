@@ -63,7 +63,7 @@ class EdcNotificationContractServiceTest {
         NotificationMethod notificationMethod = NotificationMethod.RESOLVE;
         request = new CreateNotificationContractRequest(notificationType, notificationMethod);
         when(edcNotitifcationAssetService.createNotificationAsset(notificationMethod, request.notificationType())).thenReturn(notificationAssetId);
-        when(edcPolicyDefinitionService.createAccessPolicy()).thenReturn(accessPolicyId);
+        when(edcPolicyDefinitionService.createAccessPolicy("ID 3.0 Trace")).thenReturn(accessPolicyId);
         when(edcContractDefinitionService.createContractDefinition(notificationAssetId, accessPolicyId)).thenReturn(contractDefinitionId);
         edcNotificationContractService = new EdcNotificationContractService(
                 edcNotitifcationAssetService, edcPolicyDefinitionService, edcContractDefinitionService
