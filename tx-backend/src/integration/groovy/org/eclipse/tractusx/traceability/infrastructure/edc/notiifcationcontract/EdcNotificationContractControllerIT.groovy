@@ -64,7 +64,7 @@ class EdcNotificationContractControllerIT extends IntegrationSpecification imple
 		and:
 			verifyCreateNotificationAssetEndpointCalledTimes(1)
 			verifyCreatePolicyDefinitionEndpointCalledTimes(2)
-			verifyCreateContractDefinitionEndpointCalledTimes(1)
+			verifyCreateContractDefinitionEndpointCalledTimes(2)
 
 		and:
 			verifyDeleteNotificationAssetEndpointCalledTimes(0)
