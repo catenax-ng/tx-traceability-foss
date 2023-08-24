@@ -61,7 +61,8 @@ import java.util.List;
 @EnableJpaRepositories(basePackages = "org.eclipse.tractusx.traceability.*")
 public class ApplicationConfig {
     private final AcceptedPoliciesProvider.DefaultAcceptedPoliciesProvider defaultAcceptedPoliciesProvider;
-    private static final String ID_TRACE_CONSTRAINT = "ID 3.0 Trace";
+    private static final String ID_TRACE_CONSTRAINT_3_0 = "ID 3.0 Trace";
+    private static final String ID_TRACE_CONSTRAINT_3_1 = "ID 3.1 Trace";
 
 
 	@Bean
@@ -112,9 +113,10 @@ public class ApplicationConfig {
     public void registerDecentralRegistryPermissions() {
         try {
             OffsetDateTime offsetDateTime = OffsetDateTime.now().plusMonths(1);
-            AcceptedPolicy acceptedPolicy = new AcceptedPolicy(ID_TRACE_CONSTRAINT, offsetDateTime);
-            defaultAcceptedPoliciesProvider.addAcceptedPolicies(List.of(acceptedPolicy));
-            log.info("Successfully added permission to irs client lib provider: {}", acceptedPolicy);
+            AcceptedPolicy acceptedPolicy1 = new AcceptedPolicy(ID_TRACE_CONSTRAINT_3_0, offsetDateTime);
+            AcceptedPolicy acceptedPolicy2 = new AcceptedPolicy(ID_TRACE_CONSTRAINT_3_1, offsetDateTime);
+            defaultAcceptedPoliciesProvider.addAcceptedPolicies(List.of(acceptedPolicy1, acceptedPolicy2));
+            log.info("Successfully added permission to irs client lib provider: {} {}", acceptedPolicy1, acceptedPolicy2);
         } catch (Exception exception) {
             log.error("Failed to create Irs Policies : ", exception);
         }
