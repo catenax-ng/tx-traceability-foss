@@ -38,7 +38,7 @@ export class PartsService {
 
   constructor(private readonly apiService: ApiService) {}
 
-  public getMyParts(page: number, pageSize: number, sorting: TableHeaderSort): Observable<Pagination<Part>> {
+  public getPartsAsBuilt(page: number, pageSize: number, sorting: TableHeaderSort): Observable<Pagination<Part>> {
     const sort = PartsAssembler.mapSortToApiSort(sorting);
     const params = new HttpParams()
       .set('page', page)
@@ -47,7 +47,20 @@ export class PartsService {
       .set('owner', 'OWN');
 
     return this.apiService
-      .getBy<PartsResponse>(`${this.url}/assets`, params)
+      .getBy<PartsResponse>(`${this.url}/assets/as-built`, params)
+      .pipe(map(parts => PartsAssembler.assembleParts(parts)));
+  }
+
+  public getPartsAsPlanned(page: number, pageSize: number, sorting: TableHeaderSort): Observable<Pagination<Part>> {
+    const sort = PartsAssembler.mapSortToApiSort(sorting);
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', pageSize)
+      .set('sort', sort)
+      .set('owner', 'OWN');
+
+    return this.apiService
+      .getBy<PartsResponse>(`${this.url}/assets/as-planned`, params)
       .pipe(map(parts => PartsAssembler.assembleParts(parts)));
   }
 

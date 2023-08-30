@@ -35,13 +35,15 @@ export enum QualityType {
 export enum SemanticDataModel {
   BATCH = 'BATCH',
   SERIALPART = 'SERIALPART',
-  PARTASPLANNED = 'PARTASPLANNED'
+  PARTASPLANNED = 'PARTASPLANNED',
+  JUSTINSEQUENCEPART = 'JUSTINSEQUENCEPART',
 }
 
 export enum SemanticDataModelInCamelCase {
   BATCH = "Batch",
   SERIALPART = 'SerialPart',
   PARTASPLANNED = 'PartAsPlanned',
+  JUSTINSEQUENCEPART = 'JustInSequencePart',
   UNKNOWN = 'Unknown'
 }
 

@@ -18,6 +18,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+.table-wrapper {
+}
 
 table {
   width: 100%;
@@ -79,6 +81,9 @@ table {
 }
 
 .table--selected__container {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -167,4 +172,10 @@ tr.error {
 .collapsed {
   height: 0;
   min-height: 0;
+}
+
+.table-paginator-menu {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
 }

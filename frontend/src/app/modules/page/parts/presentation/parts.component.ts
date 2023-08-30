@@ -59,7 +59,8 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
   };
 
   public readonly titleId = this.staticIdService.generateId('PartsComponent.title');
-  public readonly parts$: Observable<View<Pagination<Part>>>;
+  public readonly partsAsBuilt$: Observable<View<Pagination<Part>>>;
+  public readonly partsAsPlanned$: Observable<View<Pagination<Part>>>;
 
   public readonly isAlertOpen$ = new BehaviorSubject<boolean>(false);
 
@@ -74,11 +75,13 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly partDetailsFacade: PartDetailsFacade,
     private readonly staticIdService: StaticIdService,
   ) {
-    this.parts$ = this.partsFacade.parts$;
+    this.partsAsBuilt$ = this.partsFacade.partsAsBuilt$;
+    this.partsAsPlanned$ = this.partsFacade.partsAsPlanned$;
   }
 
   public ngOnInit(): void {
-    this.partsFacade.setMyParts();
+    this.partsFacade.setPartsAsBuilt();
+    this.partsFacade.setPartsAsPlanned();
   }
 
   public ngAfterViewInit(): void {
@@ -98,6 +101,6 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public onTableConfigChange({ page, pageSize, sorting }: TableEventConfig): void {
-    this.partsFacade.setMyParts(page, pageSize, sorting);
+    this.partsFacade.setPartsAsBuilt(page, pageSize, sorting);
   }
 }

@@ -62,8 +62,6 @@ export class PartDetailComponent implements AfterViewInit, OnDestroy {
       tap(({ data }) => this.qualityTypeControl.patchValue(data.qualityType, { emitEvent: false, onlySelf: true })),
     );
 
-    this.qualityTypeControl.valueChanges.subscribe(value => this.updateQualityType(value));
-
     this.manufacturerDetails$ = this.partDetailsFacade.selectedPart$.pipe(PartsAssembler.mapPartForManufacturerView());
     this.customerDetails$ = this.partDetailsFacade.selectedPart$.pipe(PartsAssembler.mapPartForCustomerView());
 
@@ -94,7 +92,4 @@ export class PartDetailComponent implements AfterViewInit, OnDestroy {
     this.router.navigate([`parts/relations/${part.id}`]).then(_ => window.location.reload());
   }
 
-  public updateQualityType(newQualityType: QualityType): void {
-    this.partDetailsFacade.updateQualityType(newQualityType as QualityType).subscribe();
-  }
 }

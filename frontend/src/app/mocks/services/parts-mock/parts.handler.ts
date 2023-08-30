@@ -20,6 +20,7 @@
  ********************************************************************************/
 
 import { environment } from '@env';
+import { PartsAssembler } from '@shared/assembler/parts.assembler';
 import { rest } from 'msw';
 import { applyPagination, extractPagination } from '../pagination.helper';
 import { getAssetById, mockBmwAssets } from './parts.model';
@@ -30,6 +31,18 @@ export const partsHandlers = [
     const pagination = extractPagination(req);
 
     return res(ctx.status(200), ctx.json(applyPagination(mockBmwAssets, pagination)));
+  }),
+
+  rest.get(`*${environment.apiUrl}/assets/as-built`, (req, res, ctx) => {
+    const pagination = extractPagination(req);
+
+    return res(ctx.status(200), ctx.json(applyPagination(mockBmwAssets, pagination)));
+  }),
+
+  rest.get(`*${environment.apiUrl}/assets/as-planned`, (req, res, ctx) => {
+    const pagination = extractPagination(req);
+
+    return res(ctx.status(200), ctx.json(applyPagination(PartsAssembler.assemblePartList(mockBmwAssets), pagination)));
   }),
 
 
