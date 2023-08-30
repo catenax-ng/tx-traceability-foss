@@ -66,7 +66,7 @@ export class PartsService {
 
   public getPart(id: string): Observable<Part> {
     return this.apiService
-      .get<PartResponse>(`${this.url}/assets/${id}`)
+      .get<PartResponse>(`${this.url}/assets/as-built/${id}`)
       .pipe(map(part => PartsAssembler.assemblePart(part)));
   }
 
