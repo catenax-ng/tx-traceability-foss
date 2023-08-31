@@ -31,13 +31,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN;
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.SUPERVISOR;
-import static org.eclipse.tractusx.traceability.common.security.JwtRole.USER;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
@@ -90,10 +88,10 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
         given()
                 .contentType(ContentType.JSON)
                 .body("""
-                                 {
-                                 "status" : "$status"
-                                 }
-                                """.replace("$status", UpdateQualityNotificationStatusRequest.ACKNOWLEDGED.name()))
+                         {
+                         "status" : "$status"
+                         }
+                        """.replace("$status", UpdateQualityNotificationStatusRequest.ACKNOWLEDGED.name()))
                 .header(oAuth2Support.jwtAuthorization(SUPERVISOR))
                 .when()
                 .post("/api/alerts/$notExistingAlertId/update".replace("$notExistingAlertId", Long.toString(notExistingAlertId)))
@@ -124,11 +122,11 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
         given()
                 .contentType(ContentType.JSON)
                 .body("""
-                                 {
-                                 "status" : "$status",
-                                 "reason" : "some reason, why not"
-                                 }
-                                """.replace("$status", UpdateQualityNotificationStatusRequest.ACCEPTED.name()))
+                         {
+                         "status" : "$status",
+                         "reason" : "some reason, why not"
+                         }
+                        """.replace("$status", UpdateQualityNotificationStatusRequest.ACCEPTED.name()))
                 .header(oAuth2Support.jwtAuthorization(SUPERVISOR))
                 .when()
                 .post("/api/alerts/$notExistingAlertId/update".replace("$notExistingAlertId", Long.toString(notExistingAlertId)))
@@ -159,11 +157,11 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
         given()
                 .contentType(ContentType.JSON)
                 .body("""
-                                 {
-                                 "status" : "$status",
-                                 "reason" : "some reason, why not"
-                                 }
-                                """.replace("$status", UpdateQualityNotificationStatusRequest.DECLINED.name()))
+                         {
+                         "status" : "$status",
+                         "reason" : "some reason, why not"
+                         }
+                        """.replace("$status", UpdateQualityNotificationStatusRequest.DECLINED.name()))
                 .header(oAuth2Support.jwtAuthorization(SUPERVISOR))
                 .when()
                 .post("/api/alerts/$notExistingAlertId/update".replace("$notExistingAlertId", Long.toString(notExistingAlertId)))
@@ -219,35 +217,35 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
     private static Stream<Arguments> invalidRequest() {
         return Stream.of(
                 arguments("""
-                                 {
-                                 "status" : "$status",
-                                 "reason" : "No reason should be for acknowledging"
-                                 }
-                                """.replace("$status", UpdateQualityNotificationStatusRequest.ACKNOWLEDGED.name())),
+                         {
+                         "status" : "$status",
+                         "reason" : "No reason should be for acknowledging"
+                         }
+                        """.replace("$status", UpdateQualityNotificationStatusRequest.ACKNOWLEDGED.name())),
                 arguments("""
-                                 {
-                                 "status" : "$status",
-                                 "reason" : null
-                                 }
-                                """.replace("$status", UpdateQualityNotificationStatusRequest.ACCEPTED.name())),
+                         {
+                         "status" : "$status",
+                         "reason" : null
+                         }
+                        """.replace("$status", UpdateQualityNotificationStatusRequest.ACCEPTED.name())),
                 arguments("""
-                                 {
-                                 "status" : "$status",
-                                 "reason" : " "
-                                 }
-                                """.replace("$status", UpdateQualityNotificationStatusRequest.ACCEPTED.name())),
+                         {
+                         "status" : "$status",
+                         "reason" : " "
+                         }
+                        """.replace("$status", UpdateQualityNotificationStatusRequest.ACCEPTED.name())),
                 arguments("""
-                                 {
-                                 "status" : "$status",
-                                 "reason" : null
-                                 }
-                                """.replace("$status", UpdateQualityNotificationStatusRequest.DECLINED.name())),
+                         {
+                         "status" : "$status",
+                         "reason" : null
+                         }
+                        """.replace("$status", UpdateQualityNotificationStatusRequest.DECLINED.name())),
                 arguments("""
-                                 {
-                                 "status" : "$status",
-                                 "reason" : " "
-                                 }
-                                """.replace("$status", UpdateQualityNotificationStatusRequest.DECLINED.name()))
+                         {
+                         "status" : "$status",
+                         "reason" : " "
+                         }
+                        """.replace("$status", UpdateQualityNotificationStatusRequest.DECLINED.name()))
         );
     }
 

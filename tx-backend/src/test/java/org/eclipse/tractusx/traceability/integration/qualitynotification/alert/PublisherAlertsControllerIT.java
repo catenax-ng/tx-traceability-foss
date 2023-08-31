@@ -47,9 +47,11 @@ import org.jose4j.lang.JoseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.beans.Transient;
 import java.time.Instant;
 import java.util.List;
 
@@ -81,6 +83,7 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
         objectMapper = new ObjectMapper();
     }
 
+    @Transactional
     @Test
     void shouldReceiveAlert() {
         // given
@@ -104,12 +107,11 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
                 "it", notificationBuild);
 
         // when
-        // TODO: fix this
-        //alertsReceiverService.handleNotificationReceive(notification);
+        alertsReceiverService.handleNotificationReceive(notification);
 
         // then
-        //alertsSupport.assertAlertsSize(1);
-        //alertNotificationsSupport.assertAlertNotificationsSize(1);
+        alertsSupport.assertAlertsSize(1);
+        alertNotificationsSupport.assertAlertNotificationsSize(1);
     }
 
     @Test
