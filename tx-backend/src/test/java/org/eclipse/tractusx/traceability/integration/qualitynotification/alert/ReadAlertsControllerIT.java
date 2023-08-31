@@ -17,78 +17,111 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.alert.rest
+package org.eclipse.tractusx.traceability.integration.qualitynotification.alert;
 
-import io.restassured.http.ContentType
-import org.eclipse.tractusx.traceability.IntegrationSpecification
-import org.eclipse.tractusx.traceability.common.support.AlertNotificationsSupport
-import org.eclipse.tractusx.traceability.common.support.AlertsSupport
-import org.eclipse.tractusx.traceability.common.support.BpnSupport
-import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.alert.model.AlertEntity
-import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.alert.model.AlertNotificationEntity
-import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.model.QualityNotificationSideBaseEntity
-import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.model.QualityNotificationStatusBaseEntity
-import org.hamcrest.Matchers
-import spock.lang.Unroll
+import io.restassured.http.ContentType;
+import org.eclipse.tractusx.traceability.integration.IntegrationTestSpecification;
+import org.eclipse.tractusx.traceability.integration.common.support.AlertNotificationsSupport;
+import org.eclipse.tractusx.traceability.integration.common.support.AlertsSupport;
+import org.eclipse.tractusx.traceability.integration.common.support.BpnSupport;
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.alert.model.AlertEntity;
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.alert.model.AlertNotificationEntity;
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.model.QualityNotificationSideBaseEntity;
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.model.QualityNotificationStatusBaseEntity;
+import org.hamcrest.Matchers;
+import org.jose4j.lang.JoseException;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.Instant
+import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.IntStream;
 
-import static io.restassured.RestAssured.given
-import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN
-import static org.eclipse.tractusx.traceability.common.support.ISO8601DateTimeMatcher.isIso8601DateTime
+import static io.restassured.RestAssured.given;
+import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN;
+import static org.eclipse.tractusx.traceability.common.support.ISO8601DateTimeMatcher.isIso8601DateTime;
 
-class ReadAlertsControllerIT extends IntegrationSpecification implements AlertsSupport, AlertNotificationsSupport, BpnSupport {
+class ReadAlertsControllerIT extends IntegrationTestSpecification {
 
-    @Unroll
-    def "should not return #type alerts without authentication"() {
-        expect:
-        given()
-                .param("page", "0")
-                .param("size", "10")
-                .contentType(ContentType.JSON)
-                .when()
-                .get("/api/alerts/$type")
-                .then()
-                .statusCode(401)
-        where:
-        type << ["created", "received"]
-    }
+    @Autowired
+    AlertsSupport alertsSupport;
 
-    def "should not return alert without authentication"() {
-        expect:
+    @Autowired
+    AlertNotificationsSupport alertNotificationsSupport;
+
+    @Autowired
+    BpnSupport bpnSupport;
+
+    @Test
+    void shouldNotReturnAlertWithoutAuthentication() {
         given()
                 .contentType(ContentType.JSON)
                 .when()
                 .get("/api/alerts/123")
                 .then()
-                .statusCode(401)
+                .statusCode(401);
     }
 
-    def "should return no alerts"() {
-        expect:
+    @Test
+    void shouldNotReturnCreatedAlertWithoutAuthentication() {
         given()
-                .header(jwtAuthorization(ADMIN))
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/alerts/created")
+                .then()
+                .statusCode(401);
+    }
+
+    @Test
+    void shouldNotReturnReceivedAlertWithoutAuthentication() {
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/alerts/received")
+                .then()
+                .statusCode(401);
+    }
+
+    @Test
+    void shouldReturnNoReceivedAlerts() throws JoseException {
+        given()
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/$type")
+                .get("/api/alerts/received")
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
                 .body("pageSize", Matchers.is(10))
-                .body("content", Matchers.hasSize(0))
-
-        where:
-        type << ["created", "received"]
+                .body("content", Matchers.hasSize(0));
     }
 
-    def "should return created alerts sorted by creation time"() {
-        given:
-        Instant now = Instant.now()
-        String testBpn = testBpn()
+    @Test
+    void shouldReturnNoCreatedAlerts() throws JoseException {
+        given()
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
+                .param("page", "0")
+                .param("size", "10")
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/alerts/created")
+                .then()
+                .statusCode(200)
+                .body("page", Matchers.is(0))
+                .body("pageSize", Matchers.is(10))
+                .body("content", Matchers.hasSize(0));
+    }
 
-        and:
+    @Test
+    void givenAlerts_whenGetAlerts_thenReturnSortedByCreationTime() throws JoseException {
+        // given
+        Instant now = Instant.now();
+        String testBpn = bpnSupport.testBpn();
+
         AlertEntity firstInvestigation = AlertEntity.builder()
                 .assets(Collections.emptyList())
                 .bpn(testBpn)
@@ -130,9 +163,7 @@ class ReadAlertsControllerIT extends IntegrationSpecification implements AlertsS
                 .createdDate(now.plusSeconds(40L))
                 .build();
 
-        and:
-
-        storedAlertNotifications(
+        alertNotificationsSupport.storedAlertNotifications(
                 AlertNotificationEntity
                         .builder()
                         .id("1")
@@ -168,11 +199,11 @@ class ReadAlertsControllerIT extends IntegrationSpecification implements AlertsS
                         .alert(fifthInvestigation)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build()
-        )
+        );
 
-        expect:
+        // when/then
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
@@ -183,16 +214,16 @@ class ReadAlertsControllerIT extends IntegrationSpecification implements AlertsS
                 .body("page", Matchers.is(0))
                 .body("pageSize", Matchers.is(10))
                 .body("content", Matchers.hasSize(4))
-                .body("totalItems", Matchers.is(4))
+                .body("totalItems", Matchers.is(4));
     }
 
-    def "when sort provided should return created alerts sorted by creation time"() {
-        given:
-        String sortString = "createdDate,desc"
-        Instant now = Instant.now()
-        String testBpn = testBpn()
+    @Test
+    void givenSortProvided_whenGetAlerts_thenReturnAlertsProperlySorted() throws JoseException {
+        // given
+        String sortString = "createdDate,desc";
+        Instant now = Instant.now();
+        String testBpn = bpnSupport.testBpn();
 
-        and:
         AlertEntity firstInvestigation = AlertEntity.builder()
                 .assets(Collections.emptyList())
                 .bpn(testBpn)
@@ -234,9 +265,8 @@ class ReadAlertsControllerIT extends IntegrationSpecification implements AlertsS
                 .createdDate(now.plusSeconds(40L))
                 .build();
 
-        and:
 
-        storedAlertNotifications(
+        alertNotificationsSupport.storedAlertNotifications(
                 AlertNotificationEntity
                         .builder()
                         .id("1")
@@ -272,64 +302,67 @@ class ReadAlertsControllerIT extends IntegrationSpecification implements AlertsS
                         .alert(fifthInvestigation)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build()
-        )
+        );
 
-        expect:
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/created?page=0&size=10&sort=$sortString")
+                .get("/api/alerts/created?page=0&size=10&sort=$sortString".replace("$sortString", sortString))
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
                 .body("pageSize", Matchers.is(10))
                 .body("content", Matchers.hasSize(4))
-                .body("totalItems", Matchers.is(4))
+                .body("totalItems", Matchers.is(4));
     }
 
-    def "when invalid sort type provided should return created alerts sorted by creation time"() {
-        given:
-        String sortString = "createdDate,failure"
+    @Test
+    void givenInvalidSort_whenGetCreated_thenBadRequest() throws JoseException {
+        // given
+        String sortString = "createdDate,failure";
 
-        expect:
+        // when/then
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/created?page=0&size=10&sort=$sortString")
+                .get("/api/alerts/created?page=0&size=10&sort=$sortString".replace("$sortString", sortString))
                 .then()
                 .statusCode(400)
                 .body("message", Matchers.is(
                         "Invalid sort param provided sort=createdDate,failure expected format is following sort=parameter,order"
-                ))
+                ));
     }
 
-    def "should return properly paged created alerts"() {
-        given:
-        Instant now = Instant.now()
-        String testBpn = testBpn()
+    @Test
+    void shouldReturnPagedCreatedAlerts() throws JoseException {
+        // given
+        Instant now = Instant.now();
+        String testBpn = bpnSupport.testBpn();
 
-        and:
-        (1..100).each { it ->
-
-            AlertEntity alertEntity = AlertEntity.builder()
-                    .assets(Collections.emptyList())
-                    .bpn(testBpn)
-                    .status(QualityNotificationStatusBaseEntity.CREATED)
-                    .side(QualityNotificationSideBaseEntity.SENDER)
-                    .createdDate(now)
-                    .build();
-            storedAlert(alertEntity)
-        }
+        IntStream.range(1, 101)
+                .forEach(
+                        number -> {
+                            alertsSupport.storedAlert(
+                                    AlertEntity.builder()
+                                            .assets(Collections.emptyList())
+                                            .bpn(testBpn)
+                                            .status(QualityNotificationStatusBaseEntity.CREATED)
+                                            .side(QualityNotificationSideBaseEntity.SENDER)
+                                            .createdDate(now)
+                                            .build()
+                            );
+                        }
+                );
 
         expect:
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "2")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
@@ -340,49 +373,53 @@ class ReadAlertsControllerIT extends IntegrationSpecification implements AlertsS
                 .body("page", Matchers.is(2))
                 .body("pageSize", Matchers.is(10))
                 .body("content", Matchers.hasSize(10))
-                .body("totalItems", Matchers.is(100))
+                .body("totalItems", Matchers.is(100));
     }
 
-    def "should return properly paged received alerts"() {
-        given:
-        Instant now = Instant.now()
-        String testBpn = testBpn()
-        String senderBPN = "BPN0001"
-        String senderName = "Sender name"
-        String receiverBPN = "BPN0002"
-        String receiverName = "Receiver name"
-        and:
-        (101..200).each { it ->
-            AlertEntity alertEntity = AlertEntity.builder()
-                    .assets(Collections.emptyList())
-                    .bpn(testBpn)
-                    .status(QualityNotificationStatusBaseEntity.CREATED)
-                    .side(QualityNotificationSideBaseEntity.RECEIVER)
-                    .createdDate(now)
-                    .build();
+    @Test
+    void shouldReturnProperlyPagedReceivedAlerts() throws JoseException {
+        // given
+        Instant now = Instant.now();
+        String testBpn = bpnSupport.testBpn();
+        String senderBPN = "BPN0001";
+        String senderName = "Sender name";
+        String receiverBPN = "BPN0002";
+        String receiverName = "Receiver name";
 
-            AlertEntity alert = storedAlertFullObject(alertEntity)
+        IntStream.range(101, 201)
+                .forEach(number ->
+                        {
+                            AlertEntity alertEntity = AlertEntity.builder()
+                                    .assets(Collections.emptyList())
+                                    .bpn(testBpn)
+                                    .status(QualityNotificationStatusBaseEntity.CREATED)
+                                    .side(QualityNotificationSideBaseEntity.RECEIVER)
+                                    .createdDate(now)
+                                    .build();
 
-            AlertNotificationEntity notificationEntity = AlertNotificationEntity
-                    .builder()
-                    .id(UUID.randomUUID().toString())
-                    .alert(alert)
-                    .senderBpnNumber(senderBPN)
-                    .status(QualityNotificationStatusBaseEntity.CREATED)
-                    .senderManufacturerName(senderName)
-                    .receiverBpnNumber(receiverBPN)
-                    .receiverManufacturerName(receiverName)
-                    .messageId("messageId")
-                    .build()
+                            AlertEntity alert = alertsSupport.storedAlertFullObject(alertEntity);
 
-            AlertNotificationEntity persistedNotification = storedAlertNotification(notificationEntity)
-            persistedNotification.setAlert(alert);
-            storedAlertNotification(persistedNotification)
-        }
+                            AlertNotificationEntity notificationEntity = AlertNotificationEntity
+                                    .builder()
+                                    .id(UUID.randomUUID().toString())
+                                    .alert(alert)
+                                    .senderBpnNumber(senderBPN)
+                                    .status(QualityNotificationStatusBaseEntity.CREATED)
+                                    .senderManufacturerName(senderName)
+                                    .receiverBpnNumber(receiverBPN)
+                                    .receiverManufacturerName(receiverName)
+                                    .messageId("messageId")
+                                    .build();
 
-        expect:
+                            AlertNotificationEntity persistedNotification = alertNotificationsSupport.storedAlertNotification(notificationEntity);
+                            persistedNotification.setAlert(alert);
+                            alertNotificationsSupport.storedAlertNotification(persistedNotification);
+                        }
+                );
+
+        // when/then
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "2")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
@@ -397,15 +434,15 @@ class ReadAlertsControllerIT extends IntegrationSpecification implements AlertsS
                 .body("page", Matchers.is(2))
                 .body("pageSize", Matchers.is(10))
                 .body("content", Matchers.hasSize(10))
-                .body("totalItems", Matchers.is(100))
+                .body("totalItems", Matchers.is(100));
     }
 
-    def "should return received alerts sorted by creation time"() {
-        given:
-        Instant now = Instant.now()
-        String testBpn = testBpn()
+    @Test
+    void shouldReturnReceivedAlertsSortedByCreationTime() throws JoseException {
+        // given
+        Instant now = Instant.now();
+        String testBpn = bpnSupport.testBpn();
 
-        and:
         AlertEntity firstInvestigation = AlertEntity.builder()
                 .assets(Collections.emptyList())
                 .bpn(testBpn)
@@ -447,8 +484,7 @@ class ReadAlertsControllerIT extends IntegrationSpecification implements AlertsS
                 .createdDate(now.plusSeconds(40L))
                 .build();
 
-        and:
-        storedAlertNotifications(
+        alertNotificationsSupport.storedAlertNotifications(
                 AlertNotificationEntity
                         .builder()
                         .id("1")
@@ -484,11 +520,11 @@ class ReadAlertsControllerIT extends IntegrationSpecification implements AlertsS
                         .status(QualityNotificationStatusBaseEntity.CREATED)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build()
-        )
+        );
 
         expect:
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
@@ -501,35 +537,36 @@ class ReadAlertsControllerIT extends IntegrationSpecification implements AlertsS
                 .body("content", Matchers.hasSize(4))
                 .body("totalItems", Matchers.is(4))
                 .body("content.description", Matchers.containsInRelativeOrder("4", "2", "3", "1"))
-                .body("content.createdDate", Matchers.hasItems(isIso8601DateTime()))
+                .body("content.createdDate", Matchers.hasItems(isIso8601DateTime()));
     }
 
-    def "should not find non existing alert"() {
+    @Test
+    void givenNoAlertId_whenGetAlertById_thenReturnNotFound() throws JoseException {
         expect:
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .contentType(ContentType.JSON)
                 .when()
                 .get("/api/alerts/1234")
                 .then()
                 .statusCode(404)
-                .body("message", Matchers.is("Alert not found for 1234 id"))
+                .body("message", Matchers.is("Alert not found for 1234 id"));
     }
 
-    def "should return alert by id"() {
-        given:
-        String testBpn = testBpn()
-        String senderBPN = "BPN0001"
-        String senderName = "Sender name"
-        String receiverBPN = "BPN0002"
-        String receiverName = "Receiver name"
+    @Test
+    void shouldReturnAlertById() throws JoseException {
+        // given
+        String testBpn = bpnSupport.testBpn();
+        String senderBPN = "BPN0001";
+        String senderName = "Sender name";
+        String receiverBPN = "BPN0002";
+        String receiverName = "Receiver name";
 
-        and:
         AlertEntity alertEntity =
                 AlertEntity
                         .builder()
                         .id(1L)
-                        .assets([])
+                        .assets(List.of())
                         .bpn(testBpn)
                         .description("1")
                         .status(QualityNotificationStatusBaseEntity.RECEIVED)
@@ -537,9 +574,9 @@ class ReadAlertsControllerIT extends IntegrationSpecification implements AlertsS
                         .createdDate(Instant.now())
                         .build();
 
-        AlertEntity persistedAlert = storedAlertFullObject(alertEntity)
-        and:
-        AlertNotificationEntity notificationEntity = storedAlertNotification(
+        AlertEntity persistedAlert = alertsSupport.storedAlertFullObject(alertEntity);
+
+        AlertNotificationEntity notificationEntity = alertNotificationsSupport.storedAlertNotification(
                 AlertNotificationEntity
                         .builder()
                         .id("1")
@@ -549,21 +586,21 @@ class ReadAlertsControllerIT extends IntegrationSpecification implements AlertsS
                         .receiverBpnNumber(receiverBPN)
                         .status(QualityNotificationStatusBaseEntity.CREATED)
                         .receiverManufacturerName(receiverName)
-                        .build())
-        notificationEntity.setAlert(persistedAlert)
-        storedAlertNotification(notificationEntity)
-        and:
-        Long alertId = persistedAlert.getId()
+                        .build());
+        notificationEntity.setAlert(persistedAlert);
+        alertNotificationsSupport.storedAlertNotification(notificationEntity);
 
-        expect:
+        Long alertId = persistedAlert.getId();
+
+        // when/then
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/$alertId")
+                .get("/api/alerts/$alertId".replace("$alertId", alertId.toString()))
                 .then()
                 .statusCode(200)
-                .body("id", Matchers.is(alertId.toInteger()))
+                .body("id", Matchers.is(alertId.intValue()))
                 .body("status", Matchers.is("RECEIVED"))
                 .body("description", Matchers.is("1"))
                 .body("assetIds", Matchers.empty())
@@ -571,6 +608,6 @@ class ReadAlertsControllerIT extends IntegrationSpecification implements AlertsS
                 .body("createdByName", Matchers.is(senderName))
                 .body("sendTo", Matchers.is(receiverBPN))
                 .body("sendToName", Matchers.is(receiverName))
-                .body("createdDate", isIso8601DateTime())
+                .body("createdDate", isIso8601DateTime());
     }
 }
