@@ -19,6 +19,7 @@
 
 package org.eclipse.tractusx.traceability.integration.common.support;
 
+import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationEntity;
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.repository.JpaInvestigationRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.model.QualityNotificationSideBaseEntity;
@@ -27,7 +28,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Component
 public class InvestigationsSupport {
@@ -46,5 +51,29 @@ public class InvestigationsSupport {
                 .build();
 
         return jpaInvestigationRepository.save(entity).getId();
+    }
+
+    public void assertInvestigationsSize(int size) {
+        List<InvestigationEntity> investigations = jpaInvestigationRepository.findAll();
+
+        assertThat(investigations).hasSize(size);
+    }
+
+    public void assertInvestigationStatus(QualityNotificationStatus investigationStatus) {
+        jpaInvestigationRepository.findAll().forEach(
+                investigation -> assertThat(investigation.getStatus().name()).isEqualTo(investigationStatus.name())
+        );
+    }
+
+    public void storedInvestigations(InvestigationEntity... investigations) {
+        jpaInvestigationRepository.saveAll(Arrays.asList(investigations));
+    }
+
+    public Long storedInvestigation(InvestigationEntity investigation) {
+        return jpaInvestigationRepository.save(investigation).getId();
+    }
+
+    public InvestigationEntity storedInvestigationFullObject(InvestigationEntity investigation) {
+        return jpaInvestigationRepository.save(investigation);
     }
 }

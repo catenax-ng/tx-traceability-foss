@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.integration.qualitynotification.alert;
+package org.eclipse.tractusx.traceability.integration.qualitynotification.investigation;
 
 import io.restassured.http.ContentType;
 import lombok.val;
@@ -28,15 +28,16 @@ import org.eclipse.tractusx.traceability.common.security.JwtRole;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotificationFactory;
 import org.eclipse.tractusx.traceability.integration.IntegrationTestSpecification;
-import org.eclipse.tractusx.traceability.integration.common.support.AlertNotificationsSupport;
-import org.eclipse.tractusx.traceability.integration.common.support.AlertsSupport;
 import org.eclipse.tractusx.traceability.integration.common.support.AssetsSupport;
+import org.eclipse.tractusx.traceability.integration.common.support.InvestigationNotificationsSupport;
+import org.eclipse.tractusx.traceability.integration.common.support.InvestigationsSupport;
 import org.eclipse.tractusx.traceability.qualitynotification.application.alert.request.StartQualityAlertRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.request.CloseQualityNotificationRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.request.QualityNotificationSeverityRequest;
+import org.eclipse.tractusx.traceability.qualitynotification.application.request.StartQualityNotificationRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.request.UpdateQualityNotificationRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.request.UpdateQualityNotificationStatusRequest;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.alert.service.AlertsReceiverService;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.investigation.service.InvestigationsReceiverService;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationAffectedPart;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationMessage;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationSeverity;
@@ -51,7 +52,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.beans.Transient;
 import java.time.Instant;
 import java.util.List;
 
@@ -59,19 +59,20 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN;
 
-class PublisherAlertsControllerIT extends IntegrationTestSpecification {
+class PublisherInvestigationsControllerIT extends IntegrationTestSpecification {
 
-    ObjectMapper objectMapper;
     @Autowired
-    AlertsReceiverService alertsReceiverService;
+    InvestigationsReceiverService investigationsReceiverService;
     @Autowired
-    AlertsSupport alertsSupport;
-    @Autowired
-    AlertNotificationsSupport alertNotificationsSupport;
+    InvestigationsSupport investigationsSupport;
     @Autowired
     AssetsSupport assetsSupport;
     @Autowired
+    InvestigationNotificationsSupport investigationNotificationsSupport;
+    @Autowired
     AssetAsBuiltRepository assetAsBuiltRepository;
+
+    ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
@@ -80,7 +81,7 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
 
     @Transactional
     @Test
-    void shouldReceiveAlert() {
+    void shouldReceiveNotification() {
         // given
         assetsSupport.defaultAssetsStored();
 
@@ -93,24 +94,24 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
                 .receiverBpnNumber("BPNL00000003AXS3")
                 .receiverManufacturerName("Receiver manufacturer name")
                 .severity(QualityNotificationSeverity.MINOR)
+                .isInitial(false)
                 .targetDate(Instant.parse("2018-11-30T18:35:24.00Z"))
                 .isInitial(false)
-                .type(QualityNotificationType.ALERT)
+                .type(QualityNotificationType.INVESTIGATION)
                 .messageId("messageId")
                 .build();
         EDCNotification notification = EDCNotificationFactory.createEdcNotification(
                 "it", notificationBuild);
 
         // when
-        alertsReceiverService.handleNotificationReceive(notification);
+        investigationsReceiverService.handleNotificationReceive(notification);
 
-        // then
-        alertsSupport.assertAlertsSize(1);
-        alertNotificationsSupport.assertAlertNotificationsSize(1);
+        then:
+        investigationsSupport.assertInvestigationsSize(1);
+        investigationNotificationsSupport.assertNotificationsSize(1);
     }
 
-    @Test
-    void shouldStartAlert() throws JsonProcessingException, JoseException {
+    void shouldStartInvestigation() throws JsonProcessingException, JoseException {
         // given
         List<String> partIds = List.of(
                 "urn:uuid:fe99da3d-b0de-4e80-81da-882aebcca978", // BPN: BPNL00000003AYRE
@@ -118,16 +119,14 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
                 "urn:uuid:0ce83951-bc18-4e8f-892d-48bad4eb67ef"  // BPN: BPNL00000003AXS3
         );
         String description = "at least 15 characters long investigation description";
-        QualityNotificationSeverityRequest severity = QualityNotificationSeverityRequest.MINOR;
-        String bpn = "BPN";
-
+        String severity = "MINOR";
+        and:
         assetsSupport.defaultAssetsStored();
 
-        val request = StartQualityAlertRequest.builder()
+        val request = StartQualityNotificationRequest.builder()
                 .partIds(partIds)
                 .description(description)
-                .severity(severity)
-                .bpn(bpn)
+                .severity(QualityNotificationSeverityRequest.MINOR)
                 .isAsBuilt(true)
                 .build();
 
@@ -137,29 +136,29 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
                 .body(objectMapper.writeValueAsString(request))
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .when()
-                .post("/api/alerts")
+                .post("/api/investigations")
                 .then()
                 .statusCode(201)
                 .body("id", Matchers.isA(Number.class));
 
-        partIds.forEach(
-                partId -> {
-                    AssetBase asset = assetAsBuiltRepository.getAssetById(partId);
-                    assertThat(asset).isNotNull();
-                    assertThat(asset.isActiveAlert()).isTrue();
-                }
-        );
+        // then
+        partIds.forEach(partId -> {
+            AssetBase asset = assetAsBuiltRepository.getAssetById(partId);
+            assertThat(asset).isNotNull();
+            assertThat(asset.isUnderInvestigation()).isTrue();
+        });
 
-        alertNotificationsSupport.assertAlertNotificationsSize(1);
+        and:
+        investigationNotificationsSupport.assertNotificationsSize(2);
 
-        // when/then
+        and:
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/created")
+                .get("/api/investigations/created")
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
@@ -168,7 +167,7 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
     }
 
     @Test
-    void givenMissingSeverity_whenStartAlert_thenBadRequest() throws JsonProcessingException, JoseException {
+    void givenMissingSeverity_whenStartInvestigation_thenBadRequest() throws JsonProcessingException, JoseException {
         // given
         List<String> partIds = List.of(
                 "urn:uuid:fe99da3d-b0de-4e80-81da-882aebcca978", // BPN: BPNL00000003AYRE
@@ -176,24 +175,24 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
                 "urn:uuid:0ce83951-bc18-4e8f-892d-48bad4eb67ef"  // BPN: BPNL00000003AXS3
         );
         String description = "at least 15 characters long investigation description";
-        val request = StartQualityAlertRequest.builder()
+
+        val request = StartQualityNotificationRequest.builder()
                 .partIds(partIds)
                 .description(description)
                 .build();
-
         // when/then
         given()
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(request))
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .when()
-                .post("/api/alerts")
+                .post("/api/investigations")
                 .then()
                 .statusCode(400);
     }
 
     @Test
-    void givenDescriptionOverMaxLength_whenStartAlert_thenBadRequest() throws JsonProcessingException, JoseException {
+    void givenDescriptionExceedsMaxLength_whenStartInvestigation_thenBadRequest() throws JsonProcessingException, JoseException {
         // given
         List<String> partIds = List.of(
                 "urn:uuid:fe99da3d-b0de-4e80-81da-882aebcca978", // BPN: BPNL00000003AYRE
@@ -207,28 +206,27 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
                 .partIds(partIds)
                 .description(description)
                 .severity(QualityNotificationSeverityRequest.MINOR)
-                .bpn("BPN")
                 .build();
 
-        // when/then
+        expect:
         given()
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(request))
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .when()
-                .post("/api/alerts")
+                .post("/api/investigations")
                 .then()
                 .statusCode(400)
                 .body(Matchers.containsString("Description should have at least 15 characters and at most 1000 characters"));
     }
 
     @Test
-    void givenTooLongAlertReason_whenUpdateAlert_thenBadRequest() throws JsonProcessingException, JoseException {
+    void givenInvestigationReasonTooLong_whenUpdate_thenBadRequest() throws JsonProcessingException, JoseException {
         // given
         String description = RandomStringUtils.random(1001);
         val request = new UpdateQualityNotificationRequest();
-        request.setStatus(UpdateQualityNotificationStatusRequest.ACCEPTED);
         request.setReason(description);
+        request.setStatus(UpdateQualityNotificationStatusRequest.ACCEPTED);
 
         // when/then
         given()
@@ -236,14 +234,14 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
                 .body(objectMapper.writeValueAsString(request))
                 .header(oAuth2Support.jwtAuthorization(JwtRole.SUPERVISOR))
                 .when()
-                .post("/api/alerts/1/update")
+                .post("/api/investigations/1/update")
                 .then()
                 .statusCode(400)
                 .body(Matchers.containsString("Reason should have at least 15 characters and at most 1000 characters"));
     }
 
     @Test
-    void givenWrongStatus_whenUpdateAlert_thenBadRequest() throws JsonProcessingException, JoseException {
+    void givenWrongStatus_whenUpdateInvestigation_thenBadRequest() throws JsonProcessingException, JoseException {
         // given
         String description = RandomStringUtils.random(15);
         val request = new UpdateQualityNotificationRequest();
@@ -254,68 +252,67 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
         given()
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(request)
-                        .replace("ACCEPTED", "wrongStatus")
-                )
+                        .replace("ACCEPTED", "wrongStatus"))
                 .header(oAuth2Support.jwtAuthorization(JwtRole.SUPERVISOR))
                 .when()
-                .post("/api/alerts/1/update")
+                .post("/api/investigations/1/update")
                 .then()
                 .statusCode(400)
                 .body(Matchers.containsString("message\":\"NoSuchElementException: Unsupported UpdateInvestigationStatus: wrongStatus. Must be one of: ACKNOWLEDGED, ACCEPTED, DECLINED"));
     }
 
     @Test
-    void shouldCancelAlert() throws JsonProcessingException, JoseException {
+    void shouldCancelInvestigation() throws JsonProcessingException, JoseException {
         // given
         assetsSupport.defaultAssetsStored();
-        val startAlertRequest = StartQualityAlertRequest.builder()
+        val startInvestigationRequest = StartQualityNotificationRequest.builder()
                 .partIds(List.of("urn:uuid:fe99da3d-b0de-4e80-81da-882aebcca978"))
                 .description("at least 15 characters long investigation description")
                 .severity(QualityNotificationSeverityRequest.MAJOR)
-                .bpn("BPN")
                 .isAsBuilt(true)
                 .build();
 
-        val alertId = given()
+        val investigationId = given()
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(startAlertRequest))
+                .body(objectMapper.writeValueAsString(startInvestigationRequest))
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .when()
-                .post("/api/alerts")
+                .post("/api/investigations")
                 .then()
                 .statusCode(201)
                 .extract().path("id");
 
+        and:
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/created")
+                .get("/api/investigations/created")
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
                 .body("pageSize", Matchers.is(10))
                 .body("content", Matchers.hasSize(1));
 
-        // when
+        expect:
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .contentType(ContentType.JSON)
                 .when()
-                .post("/api/alerts/$alertId/cancel".replace("$alertId", alertId.toString()))
+                .post("/api/investigations/$investigationId/cancel".replace("$investigationId", investigationId.toString()))
                 .then()
                 .statusCode(204);
 
-        // then
+        and:
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/created")
+                .get("/api/investigations/created")
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
@@ -324,7 +321,7 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
     }
 
     @Test
-    void shouldApproveAlertStatus() throws JsonProcessingException, JoseException {
+    void shouldApproveInvestigationStatus() throws JsonProcessingException, JoseException {
         // given
         List<String> partIds = List.of(
                 "urn:uuid:fe99da3d-b0de-4e80-81da-882aebcca978", // BPN: BPNL00000003AYRE
@@ -333,44 +330,42 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
         String description = "at least 15 characters long investigation description";
 
         assetsSupport.defaultAssetsStored();
-
-        val startAlertRequest = StartQualityAlertRequest.builder()
+        val startInvestigationRequest = StartQualityNotificationRequest.builder()
                 .partIds(partIds)
                 .description(description)
                 .severity(QualityNotificationSeverityRequest.MINOR)
-                .bpn("BPN")
                 .isAsBuilt(true)
                 .build();
 
         // when
-        var alertId = given()
+        val investigationId = given()
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(startAlertRequest))
+                .body(objectMapper.writeValueAsString(startInvestigationRequest))
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .when()
-                .post("/api/alerts")
+                .post("/api/investigations")
                 .then()
                 .statusCode(201)
                 .extract().path("id");
 
-        alertsSupport.assertAlertsSize(1);
+        investigationsSupport.assertInvestigationsSize(1);
 
         given()
                 .contentType(ContentType.JSON)
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .when()
-                .post("/api/alerts/$alertId/approve".replace("$alertId", alertId.toString()))
+                .post("/api/investigations/{investigationId}/approve", investigationId)
                 .then()
                 .statusCode(204);
 
-        // then
+        then:
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/created")
+                .get("/api/investigations/created")
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
@@ -380,7 +375,7 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
     }
 
     @Test
-    void shouldCloseAlertStatus() throws JsonProcessingException, JoseException {
+    void shouldCloseInvestigationStatus() throws JsonProcessingException, JoseException {
         // given
         List<String> partIds = List.of(
                 "urn:uuid:fe99da3d-b0de-4e80-81da-882aebcca978" // BPN: BPNL00000003AYRE
@@ -388,38 +383,35 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
         String description = "at least 15 characters long investigation description";
 
         assetsSupport.defaultAssetsStored();
-
-        val startAlertRequest = StartQualityAlertRequest.builder()
+        val startInvestigationRequest = StartQualityNotificationRequest.builder()
                 .partIds(partIds)
                 .description(description)
                 .severity(QualityNotificationSeverityRequest.MINOR)
-                .bpn("BPN")
                 .isAsBuilt(true)
                 .build();
 
         // when
-        val alertId = given()
+        val investigationId = given()
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(startAlertRequest))
+                .body(objectMapper.writeValueAsString(startInvestigationRequest))
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .when()
-                .post("/api/alerts")
+                .post("/api/investigations")
                 .then()
                 .statusCode(201)
                 .extract().path("id");
 
         // then
-        alertsSupport.assertAlertsSize(1);
+        investigationsSupport.assertInvestigationsSize(1);
 
         // when
         given()
                 .contentType(ContentType.JSON)
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .when()
-                .post("/api/alerts/$alertId/approve".replace("$alertId", alertId.toString()))
+                .post("/api/investigations/{investigationId}/approve", investigationId)
                 .then()
                 .statusCode(204);
-
         // then
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
@@ -427,22 +419,23 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/created")
+                .get("/api/investigations/created")
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
                 .body("pageSize", Matchers.is(10))
                 .body("content", Matchers.hasSize(1))
                 .body("content[0].sendTo", Matchers.is(Matchers.not(Matchers.blankOrNullString())));
+
         // when
-        var closeAlertRequest = new CloseQualityNotificationRequest();
-        closeAlertRequest.setReason("this is the close reason for that investigation");
+        val closeInvestigationRequest = new CloseQualityNotificationRequest();
+        closeInvestigationRequest.setReason("this is the close reason for that investigation");
         given()
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(closeAlertRequest))
+                .body(objectMapper.writeValueAsString(closeInvestigationRequest))
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .when()
-                .post("/api/alerts/$alertId/close".replace("$alertId", alertId.toString()))
+                .post("/api/investigations/{investigationId}/close", investigationId)
                 .then()
                 .statusCode(204);
 
@@ -453,15 +446,15 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/created")
+                .get("/api/investigations/created")
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
                 .body("pageSize", Matchers.is(10))
                 .body("content", Matchers.hasSize(1));
 
-        alertsSupport.assertAlertsSize(1);
-        alertsSupport.assertAlertStatus(QualityNotificationStatus.CLOSED);
+        investigationsSupport.assertInvestigationsSize(1);
+        investigationsSupport.assertInvestigationStatus(QualityNotificationStatus.CLOSED);
     }
 
     @Test
@@ -470,10 +463,10 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .contentType(ContentType.JSON)
                 .when()
-                .post("/api/alerts/1/cancel")
+                .post("/api/investigations/1/cancel")
                 .then()
                 .statusCode(404)
-                .body("message", Matchers.is("Alert not found for 1 id"));
+                .body("message", Matchers.is("Investigation not found for 1 id"));
     }
 
     @Test
@@ -483,7 +476,7 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .post("/api/alerts/1/cancel")
+                .post("/api/investigations/1/cancel")
                 .then()
                 .statusCode(401);
     }
@@ -498,21 +491,20 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
         );
         String description = "at least 15 characters long investigation description";
         assetsSupport.defaultAssetsStored();
-        val startAlertRequest = StartQualityAlertRequest.builder()
+        val startInvestigationRequest = StartQualityNotificationRequest.builder()
                 .partIds(partIds)
                 .description(description)
                 .severity(QualityNotificationSeverityRequest.MINOR)
-                .bpn("BPN")
                 .isAsBuilt(true)
                 .build();
 
         // when
         given()
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(startAlertRequest))
+                .body(objectMapper.writeValueAsString(startInvestigationRequest))
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .when()
-                .post("/api/alerts")
+                .post("/api/investigations")
                 .then()
                 .statusCode(201)
                 .body("id", Matchers.isA(Number.class));
@@ -521,22 +513,23 @@ class PublisherAlertsControllerIT extends IntegrationTestSpecification {
         partIds.forEach(partId -> {
             AssetBase asset = assetAsBuiltRepository.getAssetById(partId);
             assertThat(asset).isNotNull();
-            assertThat(asset.isActiveAlert()).isTrue();
+            assertThat(asset.isUnderInvestigation()).isTrue();
         });
 
-        alertNotificationsSupport.assertAlertNotificationsSize(1);
-
+        investigationNotificationsSupport.assertNotificationsSize(2);
+        and:
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/created")
+                .get("/api/investigations/created")
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
                 .body("pageSize", Matchers.is(10))
                 .body("content", Matchers.hasSize(1));
     }
+
 }
