@@ -360,7 +360,7 @@ class ReadAlertsControllerIT extends IntegrationTestSpecification {
                         }
                 );
 
-        expect:
+        // when/then
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "2")
@@ -522,7 +522,7 @@ class ReadAlertsControllerIT extends IntegrationTestSpecification {
                         .build()
         );
 
-        expect:
+        // then
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")

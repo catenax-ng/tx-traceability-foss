@@ -1,7 +1,5 @@
 /********************************************************************************
- * Copyright (c) 2022, 2023 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
- * Copyright (c) 2022, 2023 ZF Friedrichshafen AG
- * Copyright (c) 2022, 2023 Contributors to the Eclipse Foundation
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -19,78 +17,113 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.qualitynotification.investigation.rest
+package org.eclipse.tractusx.traceability.integration.qualitynotification.investigation;
 
-import io.restassured.http.ContentType
-import org.eclipse.tractusx.traceability.IntegrationSpecification
-import org.eclipse.tractusx.traceability.common.support.BpnSupport
-import org.eclipse.tractusx.traceability.common.support.InvestigationNotificationsSupport
-import org.eclipse.tractusx.traceability.common.support.InvestigationsSupport
-import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationEntity
-import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationNotificationEntity
-import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.model.QualityNotificationSideBaseEntity
-import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.model.QualityNotificationStatusBaseEntity
-import org.hamcrest.Matchers
-import spock.lang.Unroll
+import io.restassured.http.ContentType;
+import org.eclipse.tractusx.traceability.integration.IntegrationTestSpecification;
+import org.eclipse.tractusx.traceability.integration.common.support.BpnSupport;
+import org.eclipse.tractusx.traceability.integration.common.support.InvestigationNotificationsSupport;
+import org.eclipse.tractusx.traceability.integration.common.support.InvestigationsSupport;
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationEntity;
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.investigation.model.InvestigationNotificationEntity;
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.model.QualityNotificationSideBaseEntity;
+import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.model.QualityNotificationStatusBaseEntity;
+import org.hamcrest.Matchers;
+import org.jose4j.lang.JoseException;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.Instant
+import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.IntStream;
 
-import static io.restassured.RestAssured.given
-import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN
-import static org.eclipse.tractusx.traceability.common.support.ISO8601DateTimeMatcher.isIso8601DateTime
+import static io.restassured.RestAssured.given;
+import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN;
+import static org.eclipse.tractusx.traceability.integration.common.support.ISO8601DateTimeMatcher.isIso8601DateTime;
 
-class ReadInvestigationsControllerIT extends IntegrationSpecification implements InvestigationsSupport, InvestigationNotificationsSupport, BpnSupport {
+class ReadInvestigationsControllerIT extends IntegrationTestSpecification {
 
-    @Unroll
-    def "should not return #type investigations without authentication"() {
-        expect:
+    @Autowired
+    BpnSupport bpnSupport;
+    @Autowired
+    InvestigationNotificationsSupport investigationNotificationsSupport;
+    @Autowired
+    InvestigationsSupport investigationsSupport;
+
+    @Test
+    void shouldNotReturnCreatedInvestigationWithoutAuthentication() {
         given()
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/investigations/$type")
+                .get("/api/investigations/created")
                 .then()
-                .statusCode(401)
-        where:
-        type << ["created", "received"]
+                .statusCode(401);
     }
 
-    def "should not return investigation without authentication"() {
-        expect:
+    @Test
+    void shouldNotReturnReceivedInvestigationWithoutAuthentication() {
+        given()
+                .param("page", "0")
+                .param("size", "10")
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/investigations/received")
+                .then()
+                .statusCode(401);
+    }
+
+    @Test
+    void shouldNotReturnInvestigationWithoutAuthentication() {
         given()
                 .contentType(ContentType.JSON)
                 .when()
                 .get("/api/investigations/123")
                 .then()
-                .statusCode(401)
+                .statusCode(401);
     }
 
-    def "should return no investigations"() {
-        expect:
+    @Test
+    void shouldReturnNoReceivedInvestigations() throws JoseException {
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/investigations/$type")
+                .get("/api/investigations/received")
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
                 .body("pageSize", Matchers.is(10))
-                .body("content", Matchers.hasSize(0))
-
-        where:
-        type << ["created", "received"]
+                .body("content", Matchers.hasSize(0));
     }
 
-    def "should return created investigations sorted by creation time"() {
-        given:
-        Instant now = Instant.now()
-        String testBpn = testBpn()
+    @Test
+    void shouldReturnNoCreatedInvestigations() throws JoseException {
+        given()
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
+                .param("page", "0")
+                .param("size", "10")
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/api/investigations/created")
+                .then()
+                .statusCode(200)
+                .body("page", Matchers.is(0))
+                .body("pageSize", Matchers.is(10))
+                .body("content", Matchers.hasSize(0));
+    }
 
-        and:
+    @Test
+    void givenAlerts_whenGetAlerts_thenReturnSortedByCreationTime() throws JoseException {
+        // given
+        Instant now = Instant.now();
+        String testBpn = bpnSupport.testBpn();
+
         InvestigationEntity firstInvestigation = InvestigationEntity.builder()
                 .assets(Collections.emptyList())
                 .bpn(testBpn)
@@ -132,9 +165,7 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                 .createdDate(now.plusSeconds(40L))
                 .build();
 
-        and:
-
-        storedNotifications(
+        investigationNotificationsSupport.storedNotifications(
                 InvestigationNotificationEntity
                         .builder()
                         .id("1")
@@ -170,11 +201,11 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                         .investigation(fifthInvestigation)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build()
-        )
+        );
 
-        expect:
+        // then
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
@@ -185,16 +216,16 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                 .body("page", Matchers.is(0))
                 .body("pageSize", Matchers.is(10))
                 .body("content", Matchers.hasSize(4))
-                .body("totalItems", Matchers.is(4))
+                .body("totalItems", Matchers.is(4));
     }
 
-    def "when sort provided should return created investigations sorted by creation time"() {
-        given:
-        String sortString = "createdDate,desc"
-        Instant now = Instant.now()
-        String testBpn = testBpn()
+    @Test
+    void givenSortProvided_whenGetAlerts_thenReturnAlertsProperlySorted() throws JoseException {
+        // given
+        String sortString = "createdDate,desc";
+        Instant now = Instant.now();
+        String testBpn = bpnSupport.testBpn();
 
-        and:
         InvestigationEntity firstInvestigation = InvestigationEntity.builder()
                 .assets(Collections.emptyList())
                 .bpn(testBpn)
@@ -236,9 +267,7 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                 .createdDate(now.plusSeconds(40L))
                 .build();
 
-        and:
-
-        storedNotifications(
+        investigationNotificationsSupport.storedNotifications(
                 InvestigationNotificationEntity
                         .builder()
                         .id("1")
@@ -274,64 +303,68 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                         .investigation(fifthInvestigation)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build()
-        )
+        );
 
         expect:
-                given()
-                .header(jwtAuthorization(ADMIN))
+        given()
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/investigations/created?page=0&size=10&sort=$sortString")
+                .get("/api/investigations/created?page=0&size=10&sort=$sortString".replace("$sortString", sortString))
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
                 .body("pageSize", Matchers.is(10))
                 .body("content", Matchers.hasSize(4))
-                .body("totalItems", Matchers.is(4))
+                .body("totalItems", Matchers.is(4));
     }
 
-    def "when invalid sort type provided should return created investigations sorted by creation time"() {
-        given:
-        String sortString = "createdDate,failure"
+    @Test
+    void givenInvalidSort_whenGetCreated_thenBadRequest() throws JoseException {
+        // given
+        String sortString = "createdDate,failure";
 
-        expect:
+        // when/then
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/investigations/created?page=0&size=10&sort=$sortString")
+                .get("/api/investigations/created?page=0&size=10&sort=$sortString".replace("$sortString", sortString))
                 .then()
                 .statusCode(400)
                 .body("message", Matchers.is(
                         "Invalid sort param provided sort=createdDate,failure expected format is following sort=parameter,order"
-                ))
+                ));
     }
 
-    def "should return properly paged created investigations"() {
-        given:
-        Instant now = Instant.now()
-        String testBpn = testBpn()
+    @Test
+    void shouldReturnPagedCreatedAlerts() throws JoseException {
+        // given
+        Instant now = Instant.now();
+        String testBpn = bpnSupport.testBpn();
 
-        and:
-        (1..100).each { it ->
+        IntStream.range(1, 101)
+                .forEach(
+                        number -> {
+                            investigationsSupport.storedInvestigation(
+                                    InvestigationEntity.builder()
+                                            .assets(Collections.emptyList())
+                                            .bpn(testBpn)
+                                            .status(QualityNotificationStatusBaseEntity.CREATED)
+                                            .side(QualityNotificationSideBaseEntity.SENDER)
+                                            .createdDate(now)
+                                            .build()
+                            );
+                        }
+                );
 
-            InvestigationEntity investigationEntity = InvestigationEntity.builder()
-                    .assets(Collections.emptyList())
-                    .bpn(testBpn)
-                    .status(QualityNotificationStatusBaseEntity.CREATED)
-                    .side(QualityNotificationSideBaseEntity.SENDER)
-                    .createdDate(now)
-                    .build();
-            storedInvestigation(investigationEntity)
-        }
-
-        expect:
+        // when/then
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "2")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
@@ -342,49 +375,53 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                 .body("page", Matchers.is(2))
                 .body("pageSize", Matchers.is(10))
                 .body("content", Matchers.hasSize(10))
-                .body("totalItems", Matchers.is(100))
+                .body("totalItems", Matchers.is(100));
     }
 
-    def "should return properly paged received investigations"() {
-        given:
-        Instant now = Instant.now()
-        String testBpn = testBpn()
-        String senderBPN = "BPN0001"
-        String senderName = "Sender name"
-        String receiverBPN = "BPN0002"
-        String receiverName = "Receiver name"
-        and:
-        (101..200).each { it ->
-            InvestigationEntity investigationEntity = InvestigationEntity.builder()
-                    .assets(Collections.emptyList())
-                    .bpn(testBpn)
-                    .status(QualityNotificationStatusBaseEntity.CREATED)
-                    .side(QualityNotificationSideBaseEntity.RECEIVER)
-                    .createdDate(now)
-                    .build();
+    @Test
+    void shouldReturnProperlyPagedReceivedInvestigations() throws JoseException {
+        // given
+        Instant now = Instant.now();
+        String testBpn = bpnSupport.testBpn();
+        String senderBPN = "BPN0001";
+        String senderName = "Sender name";
+        String receiverBPN = "BPN0002";
+        String receiverName = "Receiver name";
 
-            InvestigationEntity investigation = storedInvestigationFullObject(investigationEntity)
+        IntStream.range(101, 201)
+                .forEach(number ->
+                        {
+                            InvestigationEntity investigationEntity = InvestigationEntity.builder()
+                                    .assets(Collections.emptyList())
+                                    .bpn(testBpn)
+                                    .status(QualityNotificationStatusBaseEntity.CREATED)
+                                    .side(QualityNotificationSideBaseEntity.RECEIVER)
+                                    .createdDate(now)
+                                    .build();
 
-            InvestigationNotificationEntity notificationEntity = InvestigationNotificationEntity
-                    .builder()
-                    .id(UUID.randomUUID().toString())
-                    .investigation(investigation)
-                    .senderBpnNumber(senderBPN)
-                    .status(QualityNotificationStatusBaseEntity.CREATED)
-                    .senderManufacturerName(senderName)
-                    .receiverBpnNumber(receiverBPN)
-                    .receiverManufacturerName(receiverName)
-                    .messageId("messageId")
-                    .build()
+                            InvestigationEntity investigation = investigationsSupport.storedInvestigationFullObject(investigationEntity);
 
-            InvestigationNotificationEntity persistedNotification = storedNotification(notificationEntity)
-            persistedNotification.setInvestigation(investigation);
-            storedNotification(persistedNotification)
-        }
+                            InvestigationNotificationEntity notificationEntity = InvestigationNotificationEntity
+                                    .builder()
+                                    .id(UUID.randomUUID().toString())
+                                    .investigation(investigation)
+                                    .senderBpnNumber(senderBPN)
+                                    .status(QualityNotificationStatusBaseEntity.CREATED)
+                                    .senderManufacturerName(senderName)
+                                    .receiverBpnNumber(receiverBPN)
+                                    .receiverManufacturerName(receiverName)
+                                    .messageId("messageId")
+                                    .build();
+
+                            InvestigationNotificationEntity persistedNotification = investigationNotificationsSupport.storedNotification(notificationEntity);
+                            persistedNotification.setInvestigation(investigation);
+                            investigationNotificationsSupport.storedNotification(persistedNotification);
+                        }
+                );
 
         expect:
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "2")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
@@ -399,15 +436,15 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                 .body("page", Matchers.is(2))
                 .body("pageSize", Matchers.is(10))
                 .body("content", Matchers.hasSize(10))
-                .body("totalItems", Matchers.is(100))
+                .body("totalItems", Matchers.is(100));
     }
 
-    def "should return received investigations sorted by creation time"() {
-        given:
-        Instant now = Instant.now()
-        String testBpn = testBpn()
+    @Test
+    void shouldReturnReceivedInvestigationsSortedByCreationTime() throws JoseException {
+        // given
+        Instant now = Instant.now();
+        String testBpn = bpnSupport.testBpn();
 
-        and:
         InvestigationEntity firstInvestigation = InvestigationEntity.builder()
                 .assets(Collections.emptyList())
                 .bpn(testBpn)
@@ -450,7 +487,7 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                 .build();
 
         and:
-        storedNotifications(
+        investigationNotificationsSupport.storedNotifications(
                 InvestigationNotificationEntity
                         .builder()
                         .id("1")
@@ -486,11 +523,11 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                         .status(QualityNotificationStatusBaseEntity.CREATED)
                         .edcNotificationId("cda2d956-fa91-4a75-bb4a-8e5ba39b268a")
                         .build()
-        )
+        );
 
-        expect:
+        // then
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
@@ -503,35 +540,36 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                 .body("content", Matchers.hasSize(4))
                 .body("totalItems", Matchers.is(4))
                 .body("content.description", Matchers.containsInRelativeOrder("4", "2", "3", "1"))
-                .body("content.createdDate", Matchers.hasItems(isIso8601DateTime()))
+                .body("content.createdDate", Matchers.hasItems(isIso8601DateTime()));
     }
 
-    def "should not find non existing investigation"() {
+    @Test
+    void givenNoInvestigationId_whenGetInvestigationById_thenReturnNotFound() throws JoseException {
         expect:
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .contentType(ContentType.JSON)
                 .when()
                 .get("/api/investigations/1234")
                 .then()
                 .statusCode(404)
-                .body("message", Matchers.is("Investigation not found for 1234 id"))
+                .body("message", Matchers.is("Investigation not found for 1234 id"));
     }
 
-    def "should return investigation by id"() {
-        given:
-        String testBpn = testBpn()
-        String senderBPN = "BPN0001"
-        String senderName = "Sender name"
-        String receiverBPN = "BPN0002"
-        String receiverName = "Receiver name"
+    @Test
+    void shouldReturnInvestigationById() throws JoseException {
+        // given
+        String testBpn = bpnSupport.testBpn();
+        String senderBPN = "BPN0001";
+        String senderName = "Sender name";
+        String receiverBPN = "BPN0002";
+        String receiverName = "Receiver name";
 
-        and:
         InvestigationEntity investigationEntity =
                 InvestigationEntity
                         .builder()
                         .id(1L)
-                        .assets([])
+                        .assets(List.of())
                         .bpn(testBpn)
                         .description("1")
                         .status(QualityNotificationStatusBaseEntity.RECEIVED)
@@ -539,9 +577,9 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                         .createdDate(Instant.now())
                         .build();
 
-        InvestigationEntity persistedInvestigation = storedInvestigationFullObject(investigationEntity)
-        and:
-        InvestigationNotificationEntity notificationEntity = storedNotification(
+        InvestigationEntity persistedInvestigation = investigationsSupport.storedInvestigationFullObject(investigationEntity);
+
+        InvestigationNotificationEntity notificationEntity = investigationNotificationsSupport.storedNotification(
                 InvestigationNotificationEntity
                         .builder()
                         .id("1")
@@ -551,21 +589,20 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                         .receiverBpnNumber(receiverBPN)
                         .status(QualityNotificationStatusBaseEntity.CREATED)
                         .receiverManufacturerName(receiverName)
-                        .build())
-        notificationEntity.setInvestigation(persistedInvestigation)
-        storedNotification(notificationEntity)
-        and:
-        Long investigationId = persistedInvestigation.getId()
+                        .build());
+        notificationEntity.setInvestigation(persistedInvestigation);
+        investigationNotificationsSupport.storedNotification(notificationEntity);
+        Long investigationId = persistedInvestigation.getId();
 
-        expect:
+        // when/then
         given()
-                .header(jwtAuthorization(ADMIN))
+                .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/investigations/$investigationId")
+                .get("/api/investigations/{investigationId}", investigationId)
                 .then()
                 .statusCode(200)
-                .body("id", Matchers.is(investigationId.toInteger()))
+                .body("id", Matchers.is(investigationId.intValue()))
                 .body("status", Matchers.is("RECEIVED"))
                 .body("description", Matchers.is("1"))
                 .body("assetIds", Matchers.empty())
@@ -573,6 +610,6 @@ class ReadInvestigationsControllerIT extends IntegrationSpecification implements
                 .body("createdByName", Matchers.is(senderName))
                 .body("sendTo", Matchers.is(receiverBPN))
                 .body("sendToName", Matchers.is(receiverName))
-                .body("createdDate", isIso8601DateTime())
+                .body("createdDate", isIso8601DateTime());
     }
 }

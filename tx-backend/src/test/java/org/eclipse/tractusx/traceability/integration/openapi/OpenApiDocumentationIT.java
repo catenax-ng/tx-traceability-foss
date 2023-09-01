@@ -43,7 +43,6 @@ class OpenApiDocumentationIT extends IntegrationTestSpecification {
         response.then()
                 .statusCode(200);
 
-        and:
         FileUtils.writeStringToFile(new File(DOCUMENTATION_FILENAME), response.body().print());
     }
 }

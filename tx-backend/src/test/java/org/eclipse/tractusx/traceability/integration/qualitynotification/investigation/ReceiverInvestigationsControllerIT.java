@@ -17,11 +17,12 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.traceability.integration.qualitynotification.alert;
+package org.eclipse.tractusx.traceability.integration.qualitynotification.investigation;
 
 import io.restassured.http.ContentType;
+import lombok.val;
 import org.eclipse.tractusx.traceability.integration.IntegrationTestSpecification;
-import org.eclipse.tractusx.traceability.integration.common.support.AlertsSupport;
+import org.eclipse.tractusx.traceability.integration.common.support.InvestigationsSupport;
 import org.eclipse.tractusx.traceability.qualitynotification.application.request.UpdateQualityNotificationStatusRequest;
 import org.hamcrest.Matchers;
 import org.jose4j.lang.JoseException;
@@ -38,40 +39,38 @@ import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN;
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.SUPERVISOR;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
+class ReceiverInvestigationsControllerIT extends IntegrationTestSpecification {
 
     @Autowired
-    AlertsSupport alertsSupport;
+    InvestigationsSupport investigationsSupport;
 
     @Test
-    void ShouldAcknowledgeReceivedAlert() throws JoseException {
+    void ShouldAcknowledgeReceivedInvestigation() throws JoseException {
         // given
-        var alertId = alertsSupport.defaultReceivedAlertStored();
+        val investigationId = investigationsSupport.defaultReceivedInvestigationStored();
 
         // when
         given()
                 .contentType(ContentType.JSON)
-                .body(
-                        """
-                                 {
-                                 "status" : "ACKNOWLEDGED"
-                                 }
-                                """
-                )
+                .body("""
+                         {
+                         "status" : "ACKNOWLEDGED"
+                         }
+                        """)
                 .header(oAuth2Support.jwtAuthorization(SUPERVISOR))
                 .when()
-                .post("/api/alerts/$alertId/update".replace("$alertId", alertId.toString()))
+                .post("/api/investigations/{investigationId}/update", investigationId)
                 .then()
                 .statusCode(204);
 
-        // then
+        then:
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
                 .param("size", "10")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/received")
+                .get("/api/investigations/received")
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
@@ -80,9 +79,9 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
     }
 
     @Test
-    void shouldNotUpdateToAcknowledgedNonExistingAlert() throws JoseException {
+    void shouldNotUpdateToAcknowledgedNonExistingInvestigation() throws JoseException {
         // given
-        final long notExistingAlertId = 1234L;
+        final long notExistingInvestigationId = 1234L;
 
         // when
         given()
@@ -94,7 +93,7 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
                         """.replace("$status", UpdateQualityNotificationStatusRequest.ACKNOWLEDGED.name()))
                 .header(oAuth2Support.jwtAuthorization(SUPERVISOR))
                 .when()
-                .post("/api/alerts/$notExistingAlertId/update".replace("$notExistingAlertId", Long.toString(notExistingAlertId)))
+                .post("/api/investigations/{notExistingInvestigationId}/update", notExistingInvestigationId)
                 .then()
                 .statusCode(404);
 
@@ -105,7 +104,7 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
                 .param("size", "15")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/received")
+                .get("/api/investigations/received")
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
@@ -114,9 +113,9 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
     }
 
     @Test
-    void shouldNotUpdateToAcceptedNonExistingAlert() throws JoseException {
+    void shouldNotUpdateToAcceptedNonExistingInvestigation() throws JoseException {
         // given
-        final long notExistingAlertId = 1234L;
+        final long notExistingInvestigationId = 1234L;
 
         // when
         given()
@@ -129,7 +128,7 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
                         """.replace("$status", UpdateQualityNotificationStatusRequest.ACCEPTED.name()))
                 .header(oAuth2Support.jwtAuthorization(SUPERVISOR))
                 .when()
-                .post("/api/alerts/$notExistingAlertId/update".replace("$notExistingAlertId", Long.toString(notExistingAlertId)))
+                .post("/api/investigations/{notExistingInvestigationId}/update", notExistingInvestigationId)
                 .then()
                 .statusCode(404);
 
@@ -140,7 +139,7 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
                 .param("size", "15")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/received")
+                .get("/api/investigations/received")
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
@@ -149,9 +148,9 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
     }
 
     @Test
-    void shouldNotUpdateToDeclinedNonExistingAlert() throws JoseException {
+    void shouldNotUpdateToDeclinedNonExistingInvestigation() throws JoseException {
         // given
-        final long notExistingAlertId = 1234L;
+        final long notExistingInvestigationId = 1234L;
 
         // when
         given()
@@ -164,7 +163,7 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
                         """.replace("$status", UpdateQualityNotificationStatusRequest.DECLINED.name()))
                 .header(oAuth2Support.jwtAuthorization(SUPERVISOR))
                 .when()
-                .post("/api/alerts/$notExistingAlertId/update".replace("$notExistingAlertId", Long.toString(notExistingAlertId)))
+                .post("/api/investigations/{notExistingInvestigationId}/update", notExistingInvestigationId)
                 .then()
                 .statusCode(404);
 
@@ -175,7 +174,7 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
                 .param("size", "15")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/received")
+                .get("/api/investigations/received")
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
@@ -187,7 +186,7 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
     @MethodSource("invalidRequest")
     void shouldNotUpdateWithInvalidRequest(final String request) throws JoseException {
         // given
-        final long notExistingAlertId = 1234L;
+        final long notExistingInvestigationId = 1234L;
 
         // when
         given()
@@ -195,7 +194,7 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
                 .body(request)
                 .header(oAuth2Support.jwtAuthorization(SUPERVISOR))
                 .when()
-                .post("/api/alerts/{notExistingAlertId}/update", Long.toString(notExistingAlertId))
+                .post("/api/investigations/{notExistingInvestigationId}/update", Long.toString(notExistingInvestigationId))
                 .then()
                 .statusCode(400);
 
@@ -206,13 +205,14 @@ class ReceiverAlertsControllerIT extends IntegrationTestSpecification {
                 .param("size", "15")
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/api/alerts/received")
+                .get("/api/investigations/received")
                 .then()
                 .statusCode(200)
                 .body("page", Matchers.is(0))
                 .body("pageSize", Matchers.is(15))
                 .body("content", Matchers.hasSize(0));
     }
+
 
     private static Stream<Arguments> invalidRequest() {
         return Stream.of(

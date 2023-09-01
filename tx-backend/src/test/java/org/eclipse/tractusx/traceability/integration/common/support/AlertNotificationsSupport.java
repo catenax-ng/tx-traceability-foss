@@ -28,6 +28,8 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @Component
 public class AlertNotificationsSupport {
 
@@ -45,6 +47,6 @@ public class AlertNotificationsSupport {
     public void assertAlertNotificationsSize(int size) {
         List<AlertNotificationEntity> notifications = jpaAlertNotificationRepository.findAll();
 
-        assert notifications.size() == size;
+        assertThat(notifications).hasSize(size);
     }
 }

@@ -41,7 +41,7 @@ public class InvestigationNotificationsSupport {
 
    public void storedNotifications(InvestigationNotificationEntity... notifications) {
         Arrays.stream(notifications)
-                .forEach(this::storedNotifications);
+                .forEach(this::storedNotification);
     }
 
 

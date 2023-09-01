@@ -32,6 +32,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @Component
 public class AlertsSupport {
 
@@ -70,9 +72,9 @@ public class AlertsSupport {
     }
 
     public void assertAlertStatus(QualityNotificationStatus alertStatus) {
-        jpaAlertRepository.findAll().stream().forEach(alert -> {
-            assert alert.getStatus().name() == alertStatus.name();
-        });
+        jpaAlertRepository.findAll().forEach(alert ->
+                assertThat(alert.getStatus().name()).isEqualTo(alertStatus.name())
+        );
     }
 
     void storedAlerts(AlertEntity... alerts) {
