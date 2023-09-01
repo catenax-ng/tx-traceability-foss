@@ -29,7 +29,7 @@ import { PartDetailsState } from '@shared/modules/part-details/core/partDetails.
 import { PartDetailsModule } from '@shared/modules/part-details/partDetails.module';
 import { screen, waitFor } from '@testing-library/angular';
 import { renderComponent } from '@tests/test-render.utils';
-import { MOCK_part_1 } from '../../../../../mocks/services/parts-mock/parts.test.model';
+import { MOCK_part_1 } from '../../../../../mocks/services/parts-mock/partsAsPlanned/partsAsPlanned.test.model';
 import { PartDetailComponent } from './part-detail.component';
 
 let PartsStateMock: PartsState;

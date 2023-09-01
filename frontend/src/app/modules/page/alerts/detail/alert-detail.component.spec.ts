@@ -24,7 +24,7 @@ import { AlertsService } from '@shared/service/alerts.service';
 import { fireEvent, screen, waitFor } from '@testing-library/angular';
 import { renderComponent } from '@tests/test-render.utils';
 import { of } from 'rxjs';
-import { MOCK_part_1 } from '../../../../mocks/services/parts-mock/parts.test.model';
+import { MOCK_part_1 } from '../../../../mocks/services/parts-mock/partsAsPlanned/partsAsPlanned.test.model';
 
 describe('AlertDetailComponent', () => {
 

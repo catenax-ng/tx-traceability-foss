@@ -28,7 +28,7 @@ import { StaticIdService } from '@shared/service/staticId.service';
 import { fireEvent, screen, waitFor } from '@testing-library/angular';
 import { getTableCheckbox, renderComponent } from '@tests/test-render.utils';
 import { sleepForTests } from '../../../../../../../test';
-import { MOCK_part_1, MOCK_part_2, MOCK_part_3 } from '../../../../../../mocks/services/parts-mock/parts.test.model';
+import { MOCK_part_1, MOCK_part_2, MOCK_part_3 } from '../../../../../../mocks/services/parts-mock/partsAsPlanned/partsAsPlanned.test.model';
 import { StartInvestigationComponent } from './start-investigation.component';
 
 describe('StartInvestigationComponent', () => {

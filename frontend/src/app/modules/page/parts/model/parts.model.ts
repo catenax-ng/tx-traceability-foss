@@ -19,43 +19,21 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import type { CalendarDateModel } from '@core/model/calendar-date.model';
 import type { PaginationResponse } from '@core/model/pagination.model';
-import { Owner, SemanticModel } from '@page/parts/model/semanticModel.model';
-
-// TODO: needs to be aligned with Severity in the future in terms of coding standards and use
-export enum QualityType {
-  Ok = 'Ok',
-  Minor = 'Minor',
-  Major = 'Major',
-  Critical = 'Critical',
-  LifeThreatening = 'LifeThreatening',
-}
-
-export enum SemanticDataModel {
-  BATCH = 'BATCH',
-  SERIALPART = 'SERIALPART',
-  PARTASPLANNED = 'PARTASPLANNED',
-  JUSTINSEQUENCEPART = 'JUSTINSEQUENCEPART',
-}
-
-export enum SemanticDataModelInCamelCase {
-  BATCH = "Batch",
-  SERIALPART = 'SerialPart',
-  PARTASPLANNED = 'PartAsPlanned',
-  JUSTINSEQUENCEPART = 'JustInSequencePart',
-  UNKNOWN = 'Unknown'
-}
+import { SemanticModel } from '@page/parts/model/aspectModels.model';
+import { DetailAspectModel } from '@page/parts/model/detailAspectModel.model';
+import { Owner } from '@page/parts/model/owner.enum';
 
 export interface Part {
   id: string;
   name: string;
   manufacturer: string;
+  semanticModel: SemanticModel;
   semanticModelId: string;
-  partNumber: string;
-  productionCountry: string;
+  //partNumber: string;
+  //productionCountry: string;
   qualityType: QualityType;
-  productionDate: CalendarDateModel;
+  //productionDate: CalendarDateModel;
   children: string[];
   parents?: string[];
   nameAtCustomer?: string;
@@ -65,8 +43,9 @@ export interface Part {
   activeAlert: boolean;
   van?: string;
   semanticDataModel: SemanticDataModel;
+  classification: string;
 }
-
+/* OLD RESPONSE
 export interface PartResponse {
   id: string;
   idShort: string;
@@ -83,5 +62,55 @@ export interface PartResponse {
   van?: string;
   semanticDataModel: SemanticDataModel;
 }
+ */
+
+export interface PartResponse {
+  id: string;
+  idShort: string;
+  semanticModelId: string;
+  businessPartner: string;
+  manufacturerName: string;
+  owner: Owner;
+  childRelations: Relation[];
+  parentRelations: Relation[];
+  activeAlert: boolean;
+  underInvestigation: boolean;
+  qualityType: QualityType;
+  van: string;
+  semanticDataModel: SemanticDataModel;
+  classification: string;
+  detailAspectModels: DetailAspectModel[]
+
+}
 
 export type PartsResponse = PaginationResponse<PartResponse>;
+
+// TODO: needs to be aligned with Severity in the future in terms of coding standards and use
+export enum QualityType {
+  Ok = 'Ok',
+  Minor = 'Minor',
+  Major = 'Major',
+  Critical = 'Critical',
+  LifeThreatening = 'LifeThreatening',
+}
+
+export enum SemanticDataModel {
+  BATCH = 'BATCH',
+  SERIALPART = 'SERIALPART',
+  PARTASPLANNED = 'PARTASPLANNED',
+  JUSTINSEQUENCEPART = 'JUSTINSEQUENCEPART',
+  UNKNOWN = 'UNKNOWN'
+}
+
+export enum SemanticDataModelInCamelCase {
+  BATCH = "Batch",
+  SERIALPART = 'SerialPart',
+  PARTASPLANNED = 'PartAsPlanned',
+  JUSTINSEQUENCEPART = 'JustInSequencePart',
+  UNKNOWN = 'Unknown'
+}
+
+export interface Relation {
+  id: string;
+  idShort: string;
+}

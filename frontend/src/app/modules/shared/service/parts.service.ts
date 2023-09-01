@@ -65,22 +65,38 @@ export class PartsService {
   }
 
   public getPart(id: string): Observable<Part> {
-    return this.apiService
-      .get<PartResponse>(`${this.url}/assets/${id}`)
+
+    let resultsAsBuilt = this.apiService.get<PartResponse>(`${ this.url }/assets/as-built/${ id }`)
       .pipe(map(part => PartsAssembler.assemblePart(part)));
+
+    let resultsAsPlanned = this.apiService.get<PartResponse>(`${ this.url }/assets/as-planned/${ id }`)
+      .pipe(map(part => PartsAssembler.assemblePart(part)));
+
+    return resultsAsBuilt ? resultsAsBuilt : resultsAsPlanned;
+
   }
 
-  public patchPart({ qualityType, id }: Part): Observable<Part> {
-    const patchBody = { qualityType };
-
-    return this.apiService.patch<Part>(`${this.url}/assets/${id}`, patchBody);
-  }
 
   public getPartDetailOfIds(assetIds: string[]): Observable<Part[]> {
-    return this.apiService
-      .post<PartResponse[]>(`${this.url}/assets/detail-information`, { assetIds })
+
+    let resultsAsBuilt =  this.apiService
+      .post<PartResponse[]>(`${this.url}/assets/as-built/detail-information`, { assetIds })
       .pipe(map(parts => PartsAssembler.assemblePartList(parts)));
+
+    let resultsAsPlanned = this.apiService
+      .post<PartResponse[]>(`${this.url}/assets/as-planned/detail-information`, { assetIds })
+      .pipe(map(parts => PartsAssembler.assemblePartList(parts)));
+
+    if(resultsAsBuilt) {
+      return resultsAsBuilt;
+    }
+
+    if(resultsAsPlanned) {
+      return resultsAsPlanned
+    }
+
   }
+
 
   public sortParts(data: Part[], key: string, direction: SortDirection): Part[] {
     const clonedData: Part[] = _deepClone(data);

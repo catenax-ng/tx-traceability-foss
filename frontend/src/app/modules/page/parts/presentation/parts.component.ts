@@ -35,7 +35,43 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
   styleUrls: ['./parts.component.scss'],
 })
 export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
-  public readonly displayedColumns: string[] = [
+  /*
+  public readonly displayedColumnsAsBuilt: string[] = [
+    'select',
+    'id',
+    'name', // --> nameAtManufacturer
+    'manufacturer',
+    'partNumber', // Part number / Batch Number / JIS Number
+    // 'manufacturerPartId' // --> semanticModel.partId
+    // 'customerPartId' // --> semanticModel.customerPartId
+    'classification',
+    'nameAtCustomer', // --> semanticModel.nameAtCustomer
+    //'semanticModelId', // --> deleted it
+    'productionDate',
+    'productionCountry',
+    'semanticDataModel',
+  ];
+  */
+
+  public readonly displayedColumnsAsBuilt: string[] = [
+    'select',
+    'id',
+    'name', // --> currently manufacturerName, but similiar prop in comment at bottom
+    'manufacturer',
+    'semanticModel.partId', // Part number / Batch Number / JIS Number
+    'semanticModel.manufacturerPartId', // --> semanticModel.partId
+    'semanticModel.customerPartId', // --> semanticModel.customerPartId
+    'classification',
+    'semanticModel.nameAtCustomer', // --> semanticModel.nameAtCustomer
+      //nameAtManufacturer?
+    'semanticModelId',
+    'semanticModel.manufacturingDate',
+    'semanticModel.manufacturingCountry',
+    'semanticDataModel',
+  ];
+
+
+  public readonly displayedColumnsAsPlanned: string[] = [
     'select',
     'id',
     'semanticDataModel',
@@ -47,7 +83,18 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
     'productionCountry',
   ];
 
-  public readonly sortableColumns: Record<string, boolean> = {
+  public readonly sortableColumnsAsBuilt: Record<string, boolean> = {
+    id: true,
+    semanticDataModel: true,
+    name: true,
+    manufacturer: true,
+    partNumber: true,
+    semanticModelId: true,
+    productionDate: true,
+    productionCountry: true,
+  };
+
+  public readonly sortableColumnsAsPlanned: Record<string, boolean> = {
     id: true,
     semanticDataModel: true,
     name: true,
@@ -68,7 +115,8 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
   public readonly addPartTrigger$ = new Subject<Part>();
   public readonly currentSelectedItems$ = new BehaviorSubject<Part[]>([]);
 
-  public tableConfig: TableConfig;
+  public tableConfigAsBuilt: TableConfig;
+  public tableConfigAsPlanned: TableConfig;
 
   constructor(
     private readonly partsFacade: PartsFacade,
@@ -85,11 +133,16 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    this.tableConfig = {
-      displayedColumns: this.displayedColumns,
-      header: CreateHeaderFromColumns(this.displayedColumns, 'table.column'),
-      sortableColumns: this.sortableColumns,
+    this.tableConfigAsBuilt = {
+      displayedColumns: this.displayedColumnsAsBuilt,
+      header: CreateHeaderFromColumns(this.displayedColumnsAsBuilt, 'table.column'),
+      sortableColumns: this.sortableColumnsAsBuilt,
     };
+    this.tableConfigAsPlanned = {
+      displayedColumns: this.displayedColumnsAsPlanned,
+      header: CreateHeaderFromColumns(this.displayedColumnsAsPlanned, 'table.column'),
+      sortableColumns: this.sortableColumnsAsPlanned,
+    }
   }
 
   public ngOnDestroy(): void {
@@ -102,5 +155,6 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public onTableConfigChange({ page, pageSize, sorting }: TableEventConfig): void {
     this.partsFacade.setPartsAsBuilt(page, pageSize, sorting);
+    this.partsFacade.setPartsAsPlanned(page, pageSize, sorting);
   }
 }

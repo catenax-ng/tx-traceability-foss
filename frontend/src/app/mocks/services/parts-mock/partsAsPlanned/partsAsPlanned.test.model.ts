@@ -19,23 +19,24 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
+import { DetailAspectType } from '@page/parts/model/detailAspectModel.model';
 import { PartResponse, PartsResponse, QualityType, SemanticDataModel } from '@page/parts/model/parts.model';
-import { Owner } from '@page/parts/model/semanticModel.model';
+import {Owner} from '@page/parts/model/owner.enum';
 
 export const MOCK_part_5 = {
   id: 'MOCK_part_5',
   idShort: 'MOCK_part_5',
-  semanticModelId: 'mysemanticModelId5',
-  manufacturerId: '3',
-  manufacturerName: 'Mercedes-Benz',
-  semanticModel: {
-    manufacturingDate: '1990-01-13T12:34:12',
-    manufacturingCountry: 'DEU',
-    manufacturerPartId: 'JF1ZNAA12E8706066',
-    customerPartId: '33333',
-    nameAtManufacturer: 'A 180 Limousine',
-    nameAtCustomer: 'A 180 Limousine',
-  },
+  businessPartner: 'Mercedes-Benz',
+  manufacturerName: 'A 180 Limousine',
+  classification: "A-Level",
+  semanticModelId: "semanticID",
+  detailAspectModels: [{
+    type: DetailAspectType.AS_PLANNED,
+    data: {
+      validityPeriodFrom: "01.01.2023",
+      validityPeriodTo: "01.02.2023",
+    }
+  }],
   owner: Owner.OWN,
   childRelations: [],
   parentRelations: [],
@@ -49,17 +50,17 @@ export const MOCK_part_5 = {
 export const MOCK_part_4 = {
   id: 'MOCK_part_4',
   idShort: 'MOCK_part_4',
-  semanticModelId: 'mysemanticModelId4',
-  manufacturerId: '3',
-  manufacturerName: 'Mercedes-Benz',
-  semanticModel: {
-    manufacturingDate: '1990-01-13T12:34:12',
-    manufacturingCountry: 'DEU',
-    manufacturerPartId: 'JF1ZNAA12E8706066',
-    customerPartId: '33333',
-    nameAtManufacturer: 'A 180 Limousine',
-    nameAtCustomer: 'A 180 Limousine',
-  },
+  businessPartner: 'Mercedes-Benz',
+  manufacturerName: 'A 180 Limousine',
+  semanticModelId: "semanticID",
+  classification: 'B-Level',
+  detailAspectModels: [{
+    type: DetailAspectType.AS_PLANNED,
+    data: {
+      validityPeriodFrom: "01.01.2023",
+      validityPeriodTo: "01.02.2023",
+    }
+  }],
   owner: Owner.OWN,
   childRelations: [],
   parentRelations: [],
@@ -73,17 +74,17 @@ export const MOCK_part_4 = {
 export const MOCK_part_3 = {
   id: 'MOCK_part_3',
   idShort: 'MOCK_part_3',
-  semanticModelId: 'mysemanticModelId3',
-  manufacturerId: '3',
-  manufacturerName: 'Mercedes-Benz',
-  semanticModel: {
-    manufacturingDate: '1990-01-13T12:34:12',
-    manufacturingCountry: 'DEU',
-    manufacturerPartId: 'JF1ZNAA12E8706066',
-    customerPartId: '33333',
-    nameAtManufacturer: 'A 180 Limousine',
-    nameAtCustomer: 'A 180 Limousine',
-  },
+  businessPartner: 'Mercedes-Benz',
+  semanticModelId: "semanticID",
+  manufacturerName: 'Back Door left',
+  classification: 'C-Level',
+  detailAspectModels: [{
+    type: DetailAspectType.AS_PLANNED,
+    data: {
+      validityPeriodFrom: "01.01.2022",
+      validityPeriodTo: "01.02.2022",
+    }
+  }],
   owner: Owner.OWN,
   childRelations: [ { id: MOCK_part_5.id, idShort: MOCK_part_5.idShort } ],
   parentRelations: [],
@@ -91,23 +92,23 @@ export const MOCK_part_3 = {
   underInvestigation: false,
   qualityType: QualityType.Major,
   van: 'myvan3',
-  semanticDataModel: SemanticDataModel.SERIALPART,
+  semanticDataModel: SemanticDataModel.PARTASPLANNED,
 };
 
 export const MOCK_part_2 = {
   id: 'MOCK_part_2',
   idShort: 'MOCK_part_2',
-  semanticModelId: 'mysemanticmodelId2',
-  manufacturerId: '2',
-  manufacturerName: 'BMW',
-  semanticModel: {
-    manufacturingDate: '2020-10-23T12:34:12',
-    manufacturingCountry: 'POL',
-    manufacturerPartId: '3N1CE2CPXFL392065',
-    customerPartId: '22222',
-    nameAtManufacturer: 'BMW 520d Touring',
-    nameAtCustomer: 'BMW 520d Touring',
-  },
+  businessPartner: 'BMW',
+  manufacturerName: 'BMW 520d Touring',
+  semanticModelId: "semanticID",
+  classification: 'A-Level',
+  detailAspectModels: [{
+    type: DetailAspectType.AS_PLANNED,
+    data: {
+      validityPeriodFrom: "01.01.2023",
+      validityPeriodTo: "01.02.2023",
+    }
+  }],
   owner: Owner.OWN,
   childRelations: [{ id: MOCK_part_4.id, idShort: MOCK_part_4.idShort }],
   parentRelations: [],
@@ -121,17 +122,17 @@ export const MOCK_part_2 = {
 export const MOCK_part_1 = {
   id: 'MOCK_part_1',
   idShort: 'MOCK_part_1',
-  semanticModelId: 'mysemanticModelId1',
-  manufacturerId: '1',
-  manufacturerName: 'Audi',
-  semanticModel: {
-    manufacturingDate: '1997-05-30T12:34:12',
-    manufacturingCountry: 'POL',
-    manufacturerPartId: '5XXGM4A77CG032209',
-    customerPartId: '11111',
-    nameAtManufacturer: 'Audi A1 Sportback',
-    nameAtCustomer: 'Audi A1 Sportback Customer',
-  },
+  businessPartner: 'Audi',
+  semanticModelId: "semanticID",
+  manufacturerName: 'Audi A1 Sportback',
+  classification: 'C-Level',
+  detailAspectModels: [{
+    type: DetailAspectType.AS_PLANNED,
+    data: {
+      validityPeriodFrom: "01.01.2023",
+      validityPeriodTo: "01.02.2023",
+    }
+  }],
   owner: Owner.OWN,
   childRelations: [
     { id: MOCK_part_2.id, idShort: MOCK_part_2.idShort },

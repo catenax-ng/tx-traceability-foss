@@ -1,17 +1,54 @@
-import { PartSiteInformationAsPlanned } from '@page/parts/model/partSiteInformationAsPlanned.model';
-import { TractionBatteryCode } from '@page/parts/model/tractionBatteryCode.model';
+/********************************************************************************
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
+import {
+  AsBuiltAspectModel, AsPlannedAspectModel,
+  PartSiteInformationAsPlanned,
+  TractionBatteryCode,
+} from '@page/parts/model/aspectModels.model';
 
 export interface DetailAspectModel {
-  type: DetailSemanticDataModelType
-  data: TractionBatteryCode | PartSiteInformationAsPlanned
+  type: DetailAspectType,
+  data: TractionBatteryCode | PartSiteInformationAsPlanned | AsBuiltAspectModel | AsPlannedAspectModel
 }
 
-export enum DetailSemanticDataModelType {
-  TRACTIONBATTERYCODE = "TRACTIONBATTERYCODE",
-  PARTSITEINFORMATIONASPLANNED = "PARTSITEINFORMATIONASPLANNED"
+
+
+export enum DetailAspectType {
+  AS_BUILT = "AS_BUILT",
+  AS_PLANNED = "AS_PLANNED",
+
+  // Detail aspect of as built parts
+  TRACTION_BATTERY_CODE = "TRACTION_BATTERY_CODE",
+
+  // Detail aspect of as planed parts
+  PART_SITE_INFORMATION_AS_PLANNED = "PART_SITE_INFORMATION_AS_PLANNED",
+
+
 }
 
 export enum DetailSemanticDataModelTypeCamelCase {
-  TRACTIONBATTERYCODE = "TractionBatteryCode",
-  PARTSITEINFORMATIONASPLANNED = "PartSiteInformationAsPlanned"
+    AS_BUILT = "AsBuilt",
+    AS_PLANNED = "AsPlanned",
+
+    // Detail aspect of as built parts
+    TRACTION_BATTERY_CODE = "TractionBatteryCode",
+
+    // Detail aspect of as planed parts
+    PART_SITE_INFORMATION_AS_PLANNED = "PartSiteInformationAsPlanned",
 }

@@ -21,12 +21,13 @@ SPDX-License-Identifier: Apache-2.0
 
 <div class="parts-table-container">
   <ng-container *viewContainer="partsAsBuilt$ | async; main: mainTmp; error: errorTmp; loading: loaderTmp"></ng-container>
+  <ng-container *viewContainer="partsAsPlanned$ | async; main: myTmp; error: errorTmp; loading: loaderTmp"></ng-container>
   <ng-template #mainTmp let-parts="view">
     <!-- asBuilt Parts Table-->
     <app-table class="parts-asBuilt-table"
-      [paginationData]="parts.data | formatPaginationSemanticDataModelToCamelCase"
+      [PartsPaginationData]="parts.data | formatPaginationSemanticDataModelToCamelCase"
       [labelId]="titleId"
-      [tableConfig]="tableConfig"
+      [tableConfig]="tableConfigAsBuilt"
       [selectedPartsInfoLabel]="'page.selectedParts.info'"
       [selectedPartsActionLabel]="'page.selectedParts.action'"
       [deselectTrigger]="deselectPartTrigger$ | async"
@@ -36,11 +37,13 @@ SPDX-License-Identifier: Apache-2.0
       (multiSelect)="currentSelectedItems$.next($event)"
       (clickSelectAction)="isAlertOpen$.next(true)"
     ></app-table>
+  </ng-template>
+  <ng-template #myTmp let-parts="view">
     <!-- asPlanned Parts Table-->
     <app-table class="parts-asPlanned-table"
-      [paginationData]="parts.data | formatPaginationSemanticDataModelToCamelCase"
+      [PartsPaginationData]="parts.data | formatPaginationSemanticDataModelToCamelCase"
       [labelId]="titleId"
-      [tableConfig]="tableConfig"
+      [tableConfig]="tableConfigAsPlanned"
       [selectedPartsInfoLabel]="'page.selectedParts.info'"
       [selectedPartsActionLabel]="'page.selectedParts.action'"
       [deselectTrigger]="deselectPartTrigger$ | async"
@@ -51,7 +54,7 @@ SPDX-License-Identifier: Apache-2.0
       (clickSelectAction)="isAlertOpen$.next(true)"
     ></app-table>
     <app-part-detail></app-part-detail>
-
+  </ng-template>
     <app-sidenav-wrapper [isOpen]="isAlertOpen$ | async" (sidenavAction)="isAlertOpen$.next($event)">
       <app-request-alert
         *ngIf="isAlertOpen$ | async"
@@ -62,7 +65,7 @@ SPDX-License-Identifier: Apache-2.0
         (submitted)="isAlertOpen$.next(false)"
       ></app-request-alert>
     </app-sidenav-wrapper>
-  </ng-template>
+
 
   <ng-template #errorTmp let-parts="view">
     <h1>{{ 'dataLoading.error' | i18n }}</h1>

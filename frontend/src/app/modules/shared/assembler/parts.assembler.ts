@@ -19,9 +19,9 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { CalendarDateModel } from '@core/model/calendar-date.model';
 import { Pagination, PaginationResponse } from '@core/model/pagination.model';
 import { PaginationAssembler } from '@core/pagination/pagination.assembler';
+import { SemanticModel } from '@page/parts/model/aspectModels.model';
 import { Part, PartResponse, QualityType } from '@page/parts/model/parts.model';
 import { TableHeaderSort } from '@shared/components/table/table.model';
 import { View } from '@shared/model/view.model';
@@ -29,30 +29,97 @@ import { OperatorFunction } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export class PartsAssembler {
-  public static assemblePart(part: PartResponse): Part {
-    if (!part) {
+
+  public static createSemanticModelFromPartResponse(partResponse: PartResponse): SemanticModel {
+    let proplist= {};
+    partResponse.detailAspectModels.map((detailAspectModel) => {
+      proplist = {...proplist, ...detailAspectModel.data};   //detailSemanticModel.data;
+    })
+
+    return proplist;
+  }
+
+  public static assemblePart(partResponse: PartResponse): Part {
+    if (!partResponse) {
       return null;
     }
 
+    let createdSemanticModel = PartsAssembler.createSemanticModelFromPartResponse(partResponse);
+
     return {
-      id: part.id,
-      name: part.semanticModel.nameAtManufacturer,
-      manufacturer: part.manufacturerName,
-      semanticModelId: part.semanticModelId,
-      partNumber: part.semanticModel.manufacturerPartId,
-      productionCountry: part.semanticModel.manufacturingCountry,
-      nameAtCustomer: part.semanticModel.nameAtCustomer,
-      customerPartId: part.semanticModel.customerPartId,
-      qualityType: part.qualityType || QualityType.Ok,
-      productionDate: new CalendarDateModel(part.semanticModel.manufacturingDate) ,
-      children: part.childRelations.map(child => child.id) || [],
-      parents: part.parentRelations?.map(parent => parent.id) || [],
-      activeInvestigation: part.underInvestigation || false,
-      activeAlert: part.activeAlert || false,
-      van: part.van || '--',
-      semanticDataModel: part.semanticDataModel
+      id: partResponse.id,
+      semanticModelId: partResponse.semanticModelId,
+      manufacturer: partResponse.businessPartner,
+      name: partResponse.idShort,
+      children: partResponse.childRelations.map(child => child.id) || [],
+      parents: partResponse.parentRelations?.map(parent => parent.id) || [],
+      activeAlert: partResponse.activeAlert || false,
+      activeInvestigation: partResponse.underInvestigation || false,
+      qualityType: partResponse.qualityType || QualityType.Ok,
+      van: partResponse.van || '--',
+      semanticDataModel: partResponse.semanticDataModel,
+      classification: partResponse.classification,
+      semanticModel: createdSemanticModel,
     };
   }
+/*
+    return {
+      id: partResponse.id,
+      name: partResponse.semanticModel.nameAtManufacturer,
+      manufacturer: partResponse.manufacturerName,
+      semanticModelId: partResponse.semanticModelId,
+      partNumber: partResponse.semanticModel.manufacturerPartId,
+      productionCountry: partResponse.semanticModel.manufacturingCountry,
+      nameAtCustomer: partResponse.semanticModel.nameAtCustomer,
+      customerPartId: partResponse.semanticModel.customerPartId,
+      qualityType: partResponse.qualityType || QualityType.Ok,
+      productionDate: new CalendarDateModel(partResponse.semanticModel.manufacturingDate),
+      children: partResponse.childRelations.map(child => child.id) || [],
+      parents: partResponse.parentRelations?.map(parent => parent.id) || [],
+      activeInvestigation: partResponse.underInvestigation || false,
+      activeAlert: partResponse.activeAlert || false,
+      van: partResponse.van || '--',
+      semanticDataModel: partResponse.semanticDataModel
+    };
+  }
+*/
+  /* OLD RESPONSE
+export interface PartResponse {
+  id: string;
+  idShort: string;
+  semanticModelId: string;
+  manufacturerId: string;
+  manufacturerName: string;
+  semanticModel: SemanticModel;
+  owner: Owner;
+  childRelations: Array<{ id: string; idShort: string }>;
+  parentRelations?: Array<{ id: string; idShort: string }>;
+  activeAlert: boolean;
+  underInvestigation?: boolean;
+  qualityType: QualityType;
+  van?: string;
+  semanticDataModel: SemanticDataModel;
+}
+ */
+/*
+  export interface PartResponse {
+  id: string;
+  owner: Owner;
+  activeAlert: boolean;
+  qualityType: QualityType;
+  underInvestigation: boolean;
+  semanticDataModelType: SemanticDataModel;
+  childRelations: Array<Relation>;
+  parentRelations: Array<Relation>;
+  idShort: string;
+  van: string;
+  businessPartner: string;
+  nameAtManufacturer: string;
+  classification: string;
+  detailSemanticModels: Array<DetailAspectModel>
+
+}
+*/
 
   public static assembleOtherPart(part: PartResponse): Part {
     if (!part) {
@@ -79,8 +146,8 @@ export class PartsAssembler {
     if (!viewData?.data) {
       return viewData;
     }
-    const { name, semanticDataModel, productionDate, semanticModelId } = viewData.data;
-    return { data: { name, semanticDataModel, productionDate, semanticModelId } as Part };
+    const { name, semanticDataModel, semanticModel} = viewData.data;
+    return { data: { name, semanticDataModel, semanticModel } as Part };
   }
 
   public static mapPartForView(): OperatorFunction<View<Part>, View<Part>> {
@@ -93,8 +160,8 @@ export class PartsAssembler {
         return viewData;
       }
 
-      const { manufacturer, partNumber, semanticModelId, van } = viewData.data;
-      return { data: { manufacturer, partNumber, semanticModelId, van } as Part };
+      const { manufacturer, semanticDataModel, van } = viewData.data;
+      return { data: { manufacturer, semanticDataModel, van } as Part };
     });
   }
 

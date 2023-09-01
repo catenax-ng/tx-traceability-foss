@@ -25,7 +25,7 @@ import { PartsService } from '@shared/service/parts.service';
 import { waitFor } from '@testing-library/angular';
 import { BehaviorSubject, firstValueFrom, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { mockAssetList, mockAssets } from '../../../../mocks/services/parts-mock/parts.test.model';
+import { mockAssetList, mockAssets } from '../../../../mocks/services/parts-mock/partsAsPlanned/partsAsPlanned.test.model';
 
 describe('OtherPartsFacade', () => {
   let otherPartsFacade: OtherPartsFacade, otherPartsState: OtherPartsState, partsServiceMok: PartsService, otherPartsServiceMock: OtherPartsService;
