@@ -27,8 +27,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.jackson.Jacksonized;
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationAffectedPart;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.model.QualityNotificationStatus;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.model.QualityNotificationAffectedPart;
+import org.eclipse.tractusx.traceability.qualitynotification.domain.base.model.QualityNotificationStatus;
 
 import java.time.Instant;
 import java.util.List;

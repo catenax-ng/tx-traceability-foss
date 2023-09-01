@@ -20,10 +20,8 @@
 package org.eclipse.tractusx.traceability.integration.edc.notificationcontract;
 
 import io.restassured.http.ContentType;
-import org.eclipse.tractusx.traceability.common.security.JwtRole;
 import org.eclipse.tractusx.traceability.integration.IntegrationTestSpecification;
 import org.eclipse.tractusx.traceability.integration.common.support.EdcSupport;
-import org.eclipse.tractusx.traceability.qualitynotification.application.request.UpdateQualityNotificationStatusRequest;
 import org.hamcrest.Matchers;
 import org.jose4j.lang.JoseException;
 import org.junit.jupiter.api.Test;
@@ -31,12 +29,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import spock.lang.Unroll;
 
 import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.oauth;
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN;
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.SUPERVISOR;
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.USER;
@@ -67,8 +63,8 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
                                 "notificationMethod" : "RECEIVE"
                                 }
                                 """
-				)
-				.when()
+                )
+                .when()
                 .post("/api/edc/notification/contract")
                 .then()
                 .statusCode(201)
@@ -79,7 +75,7 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
         and:
         edcSupport.verifyCreateNotificationAssetEndpointCalledTimes(1);
         edcSupport.verifyCreatePolicyDefinitionEndpointCalledTimes(1);
-        edcSupport. verifyCreateContractDefinitionEndpointCalledTimes(1);
+        edcSupport.verifyCreateContractDefinitionEndpointCalledTimes(1);
 
         and:
         edcSupport.verifyDeleteNotificationAssetEndpointCalledTimes(0);
@@ -98,13 +94,13 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
                 .header(oAuth2Support.jwtAuthorization(SUPERVISOR))
                 .body(
                         """
-                                 {
-                                 "notificationType" : "QUALITY_INVESTIGATION",
-                                 "notificationMethod" : "RECEIVE"
-                                 }
-                                 """
-				)
-				.when()
+                                {
+                                "notificationType" : "QUALITY_INVESTIGATION",
+                                "notificationMethod" : "RECEIVE"
+                                }
+                                """
+                )
+                .when()
                 .post("/api/edc/notification/contract")
                 .then()
                 .statusCode(500)
@@ -136,13 +132,13 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
                 .header(oAuth2Support.jwtAuthorization(SUPERVISOR))
                 .body(
                         """
-                                  {
-                                  "notificationType" : "QUALITY_INVESTIGATION",
-                                  "notificationMethod" : "RECEIVE"
-                                  }
-                                  """
-				)
-				.when()
+                                {
+                                "notificationType" : "QUALITY_INVESTIGATION",
+                                "notificationMethod" : "RECEIVE"
+                                }
+                                """
+                )
+                .when()
                 .post("/api/edc/notification/contract")
                 .then()
                 .statusCode(500)
@@ -173,13 +169,13 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
                 .header(oAuth2Support.jwtAuthorization(SUPERVISOR))
                 .body(
                         """
-                                  {
-                                  "notificationType" : "QUALITY_INVESTIGATION",
-                                  "notificationMethod" : "RECEIVE"
-                                  }
-                                  """
-				)
-				.when()
+                                {
+                                "notificationType" : "QUALITY_INVESTIGATION",
+                                "notificationMethod" : "RECEIVE"
+                                }
+                                """
+                )
+                .when()
                 .post("/api/edc/notification/contract")
                 .then()
                 .statusCode(500)
@@ -202,13 +198,13 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
                 .contentType(ContentType.JSON)
                 .body(
                         """
-                                  {
-                                  "notificationType" : "QUALITY_INVESTIGATION",
-                                  "notificationMethod" : "RECEIVE"
-                                  }
-                                  """
-				)
-				.when()
+                                {
+                                "notificationType" : "QUALITY_INVESTIGATION",
+                                "notificationMethod" : "RECEIVE"
+                                }
+                                """
+                )
+                .when()
                 .post("/api/edc/notification/contract")
                 .then()
                 .statusCode(401);
@@ -221,13 +217,13 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .body(
                         """
-                                 {
-                                 "notificationType" : "QUALITY_INVESTIGATION",
-                                 "notificationMethod" : "RECEIVE"
-                                 }
-                                 """
-				)
-				.when()
+                                {
+                                "notificationType" : "QUALITY_INVESTIGATION",
+                                "notificationMethod" : "RECEIVE"
+                                }
+                                """
+                )
+                .when()
                 .post("/api/edc/notification/contract")
                 .then()
                 .statusCode(403);
@@ -240,11 +236,11 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
                 .header(oAuth2Support.jwtAuthorization(USER))
                 .body(
                         """
-                                 {
-                                 "notificationType" : "QUALITY_INVESTIGATION",
-                                 "notificationMethod" : "RECEIVE"
-                                 }
-                                 """
+                                {
+                                "notificationType" : "QUALITY_INVESTIGATION",
+                                "notificationMethod" : "RECEIVE"
+                                }
+                                """
                 )
                 .when()
                 .post("/api/edc/notification/contract")
@@ -264,14 +260,14 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
                 .body(
 
                         """
-                                 {
-                                 "notificationType" : $notificationType,
-                                 "notificationMethod" : $notificationMethod
-                                 }
-                                 """.replace("$notificationType", notificationType)
-                                        .replace("$notificationMethod", notificationMethod)
-				)
-				.post("/api/edc/notification/contract")
+                                {
+                                "notificationType" : $notificationType,
+                                "notificationMethod" : $notificationMethod
+                                }
+                                """.replace("$notificationType", notificationType)
+                                .replace("$notificationMethod", notificationMethod)
+                )
+                .post("/api/edc/notification/contract")
                 .then()
                 .statusCode(400);
     }
@@ -283,13 +279,13 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
                 .header(oAuth2Support.jwtAuthorization(SUPERVISOR))
                 .body(
                         """
-                                 {
-                                 "notificationType" : "QUALITY_ALERT",
-                                 "notificationMethod" : "RECEIVE"
-                                 }
-                                 """
-				)
-				.post("/api/edc/notification/contract")
+                                {
+                                "notificationType" : "QUALITY_ALERT",
+                                "notificationMethod" : "RECEIVE"
+                                }
+                                """
+                )
+                .post("/api/edc/notification/contract")
                 .then()
                 .statusCode(500)
                 .body("message", Matchers.is("Failed to create notification contract."));
@@ -300,7 +296,7 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
                 arguments("null", "null"),
                 arguments("", "null"),
                 arguments("null", ""),
-                arguments("",""),
+                arguments("", ""),
                 arguments(" ", " "),
                 arguments("\"invalid-notification-type\"", "\"RECEIVE\""),
                 arguments("\"QUALITY_INVESTIGATION\"", "\"invalid-notification-method\"")
