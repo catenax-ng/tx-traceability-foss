@@ -19,7 +19,6 @@
 
 package org.eclipse.tractusx.traceability.integration.common.support;
 
-import groovy.lang.Closure;
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.alert.model.AlertNotificationEntity;
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.alert.repository.JpaAlertNotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
