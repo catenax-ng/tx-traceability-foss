@@ -106,7 +106,7 @@ class PublisherInvestigationsControllerIT extends IntegrationTestSpecification {
         // when
         investigationsReceiverService.handleNotificationReceive(notification);
 
-        then:
+        // then
         investigationsSupport.assertInvestigationsSize(1);
         investigationNotificationsSupport.assertNotificationsSize(1);
     }
@@ -119,8 +119,7 @@ class PublisherInvestigationsControllerIT extends IntegrationTestSpecification {
                 "urn:uuid:0ce83951-bc18-4e8f-892d-48bad4eb67ef"  // BPN: BPNL00000003AXS3
         );
         String description = "at least 15 characters long investigation description";
-        String severity = "MINOR";
-        and:
+
         assetsSupport.defaultAssetsStored();
 
         val request = StartQualityNotificationRequest.builder()
@@ -148,10 +147,8 @@ class PublisherInvestigationsControllerIT extends IntegrationTestSpecification {
             assertThat(asset.isUnderInvestigation()).isTrue();
         });
 
-        and:
         investigationNotificationsSupport.assertNotificationsSize(2);
 
-        and:
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
@@ -208,7 +205,7 @@ class PublisherInvestigationsControllerIT extends IntegrationTestSpecification {
                 .severity(QualityNotificationSeverityRequest.MINOR)
                 .build();
 
-        expect:
+        // when/then
         given()
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(request))
@@ -282,7 +279,6 @@ class PublisherInvestigationsControllerIT extends IntegrationTestSpecification {
                 .statusCode(201)
                 .extract().path("id");
 
-        and:
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
@@ -295,8 +291,7 @@ class PublisherInvestigationsControllerIT extends IntegrationTestSpecification {
                 .body("page", Matchers.is(0))
                 .body("pageSize", Matchers.is(10))
                 .body("content", Matchers.hasSize(1));
-
-        expect:
+        // when/then
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .contentType(ContentType.JSON)
@@ -305,7 +300,6 @@ class PublisherInvestigationsControllerIT extends IntegrationTestSpecification {
                 .then()
                 .statusCode(204);
 
-        and:
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
@@ -358,7 +352,7 @@ class PublisherInvestigationsControllerIT extends IntegrationTestSpecification {
                 .then()
                 .statusCode(204);
 
-        then:
+        // then
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
@@ -517,7 +511,6 @@ class PublisherInvestigationsControllerIT extends IntegrationTestSpecification {
         });
 
         investigationNotificationsSupport.assertNotificationsSize(2);
-        and:
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")

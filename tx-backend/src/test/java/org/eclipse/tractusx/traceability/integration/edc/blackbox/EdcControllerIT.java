@@ -63,12 +63,12 @@ class EdcControllerIT extends IntegrationTestSpecification {
 
     @Test
     void shouldCreateAnInvestigationIncludingNotificationOnAPICallClass() throws IOException, JoseException {
-        given:
+        // given
         assetsSupport.defaultAssetsStored();
         String notificationJson = readFile("/testdata/edc_notification_okay.json");
         EDCNotification edcNotification = objectMapper.readValue(notificationJson, EDCNotification.class);
 
-        when:
+        // when/then
         given()
                 .contentType(ContentType.JSON)
                 .body(edcNotification)
@@ -78,7 +78,7 @@ class EdcControllerIT extends IntegrationTestSpecification {
                 .then()
                 .statusCode(200);
 
-        then:
+        // then
         investigationNotificationsSupport.assertNotificationsSize(1);
         investigationsSupport.assertInvestigationsSize(1);
         investigationsSupport.assertInvestigationStatus(QualityNotificationStatus.RECEIVED);
@@ -188,7 +188,7 @@ class EdcControllerIT extends IntegrationTestSpecification {
         EDCNotification edcNotification = objectMapper.readValue(notificationJson, EDCNotification.class);
 
 
-        when:
+        // when
         given()
                 .contentType(ContentType.JSON)
                 .body(edcNotification)
@@ -198,7 +198,7 @@ class EdcControllerIT extends IntegrationTestSpecification {
                 .then()
                 .statusCode(400);
 
-        then:
+        // then
         investigationNotificationsSupport.assertNotificationsSize(1);
 
     }

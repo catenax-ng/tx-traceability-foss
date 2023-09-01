@@ -72,12 +72,10 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
                 .body("accessPolicyId", Matchers.is(not(blankString())))
                 .body("contractDefinitionId", Matchers.is(not(blankString())));
 
-        and:
         edcSupport.verifyCreateNotificationAssetEndpointCalledTimes(1);
         edcSupport.verifyCreatePolicyDefinitionEndpointCalledTimes(1);
         edcSupport.verifyCreateContractDefinitionEndpointCalledTimes(1);
 
-        and:
         edcSupport.verifyDeleteNotificationAssetEndpointCalledTimes(0);
         edcSupport.verifyDeletePolicyDefinitionEndpointCalledTimes(0);
         edcSupport.verifyDeleteContractDefinitionEndpointCalledTimes(0);
@@ -106,12 +104,10 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
                 .statusCode(500)
                 .body("message", Matchers.is("Failed to create notification contract."));
 
-        and:
         edcSupport.verifyCreateNotificationAssetEndpointCalledTimes(1);
         edcSupport.verifyCreatePolicyDefinitionEndpointCalledTimes(0);
         edcSupport.verifyCreateContractDefinitionEndpointCalledTimes(0);
 
-        and:
         edcSupport.verifyDeleteNotificationAssetEndpointCalledTimes(0);
         edcSupport.verifyDeletePolicyDefinitionEndpointCalledTimes(0);
         edcSupport.verifyDeleteContractDefinitionEndpointCalledTimes(0);
@@ -126,7 +122,7 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
 
         edcSupport.edcWillRemoveNotificationAsset();
 
-        expect:
+        // when/then
         given()
                 .contentType(ContentType.JSON)
                 .header(oAuth2Support.jwtAuthorization(SUPERVISOR))
@@ -181,12 +177,10 @@ public class EdcNotificationContractControllerIT extends IntegrationTestSpecific
                 .statusCode(500)
                 .body("message", Matchers.is("Failed to create notification contract."));
 
-        and:
         edcSupport.verifyCreateNotificationAssetEndpointCalledTimes(1);
         edcSupport.verifyCreatePolicyDefinitionEndpointCalledTimes(1);
         edcSupport.verifyCreateContractDefinitionEndpointCalledTimes(1);
 
-        and:
         edcSupport.verifyDeleteNotificationAssetEndpointCalledTimes(1);
         edcSupport.verifyDeletePolicyDefinitionEndpointCalledTimes(1);
         edcSupport.verifyDeleteContractDefinitionEndpointCalledTimes(0);

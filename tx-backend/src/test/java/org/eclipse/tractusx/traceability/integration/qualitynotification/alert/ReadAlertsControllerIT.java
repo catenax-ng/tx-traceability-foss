@@ -542,7 +542,6 @@ class ReadAlertsControllerIT extends IntegrationTestSpecification {
 
     @Test
     void givenNoAlertId_whenGetAlertById_thenReturnNotFound() throws JoseException {
-        expect:
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .contentType(ContentType.JSON)

@@ -63,7 +63,7 @@ class ReceiverInvestigationsControllerIT extends IntegrationTestSpecification {
                 .then()
                 .statusCode(204);
 
-        then:
+        // then
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")

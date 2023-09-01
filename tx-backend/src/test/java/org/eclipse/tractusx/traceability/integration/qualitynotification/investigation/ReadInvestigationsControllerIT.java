@@ -305,7 +305,7 @@ class ReadInvestigationsControllerIT extends IntegrationTestSpecification {
                         .build()
         );
 
-        expect:
+        // when/then
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "0")
@@ -419,7 +419,7 @@ class ReadInvestigationsControllerIT extends IntegrationTestSpecification {
                         }
                 );
 
-        expect:
+        // when/then
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .param("page", "2")
@@ -486,7 +486,6 @@ class ReadInvestigationsControllerIT extends IntegrationTestSpecification {
                 .createdDate(now.plusSeconds(40L))
                 .build();
 
-        and:
         investigationNotificationsSupport.storedNotifications(
                 InvestigationNotificationEntity
                         .builder()
@@ -545,7 +544,6 @@ class ReadInvestigationsControllerIT extends IntegrationTestSpecification {
 
     @Test
     void givenNoInvestigationId_whenGetInvestigationById_thenReturnNotFound() throws JoseException {
-        expect:
         given()
                 .header(oAuth2Support.jwtAuthorization(ADMIN))
                 .contentType(ContentType.JSON)
