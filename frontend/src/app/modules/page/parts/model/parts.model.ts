@@ -36,14 +36,23 @@ export interface Part {
   //productionDate: CalendarDateModel;
   children: string[];
   parents?: string[];
-  nameAtCustomer?: string;
-  customerPartId?: string;
   error?: boolean;
   activeInvestigation?: boolean;
   activeAlert: boolean;
-  van?: string;
+  van: string;
   semanticDataModel: SemanticDataModel;
   classification: string;
+  // aspectmodel props are temporarely hardcoded here because Tables and Views only accept root level prop array
+  // as built
+  partId?: string;
+  customerPartId?: string;
+  nameAtCustomer?: string;
+  manufacturingDate?: string;
+  manufacturingCountry?: string;
+
+  // as planned
+  validityPeriodFrom?: string;
+  validityPeriodTo?: string;
 }
 /* OLD RESPONSE
 export interface PartResponse {

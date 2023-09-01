@@ -21,7 +21,7 @@
 
 import { Pagination, PaginationResponse } from '@core/model/pagination.model';
 import { PaginationAssembler } from '@core/pagination/pagination.assembler';
-import { SemanticModel } from '@page/parts/model/aspectModels.model';
+import {AsBuiltAspectModel, AsPlannedAspectModel, SemanticModel} from '@page/parts/model/aspectModels.model';
 import { Part, PartResponse, QualityType } from '@page/parts/model/parts.model';
 import { TableHeaderSort } from '@shared/components/table/table.model';
 import { View } from '@shared/model/view.model';
@@ -46,6 +46,18 @@ export class PartsAssembler {
 
     let createdSemanticModel = PartsAssembler.createSemanticModelFromPartResponse(partResponse);
 
+    // Access the partId property
+
+    const partId = (partResponse.detailAspectModels[0].data as AsBuiltAspectModel)?.partId;
+    const customerPartId = (partResponse.detailAspectModels[0].data as AsBuiltAspectModel)?.customerPartId;
+    const nameAtCustomer = (partResponse.detailAspectModels[0].data as AsBuiltAspectModel)?.nameAtCustomer;
+    const manufacturingDate = (partResponse.detailAspectModels[0].data as AsBuiltAspectModel)?.manufacturingDate;
+    const manufacturingCountry = (partResponse.detailAspectModels[0].data as AsBuiltAspectModel)?.manufacturingCountry;
+    const validityPeriodFrom = (partResponse.detailAspectModels[0].data as AsPlannedAspectModel)?.validityPeriodFrom;
+    const validityPeriodTo = (partResponse.detailAspectModels[0].data as AsPlannedAspectModel)?.validityPeriodTo;
+
+    console.log(partId); // Outputs the partId value from the AsBuiltAspectModel
+
     return {
       id: partResponse.id,
       semanticModelId: partResponse.semanticModelId,
@@ -60,6 +72,17 @@ export class PartsAssembler {
       semanticDataModel: partResponse.semanticDataModel,
       classification: partResponse.classification,
       semanticModel: createdSemanticModel,
+      // as built
+      partId: partId,
+      customerPartId: customerPartId,
+      nameAtCustomer: nameAtCustomer,
+      manufacturingDate: manufacturingDate,
+      manufacturingCountry: manufacturingCountry,
+
+      // as planned
+      validityPeriodFrom: validityPeriodFrom,
+      validityPeriodTo: validityPeriodTo
+
     };
   }
 /*
@@ -121,12 +144,12 @@ export interface PartResponse {
 }
 */
 
-  public static assembleOtherPart(part: PartResponse): Part {
-    if (!part) {
+  public static assembleOtherPart(partResponse: PartResponse): Part {
+    if (!partResponse) {
       return null;
     }
 
-    return { ...PartsAssembler.assemblePart(part), qualityType: part.qualityType };
+    return { ...PartsAssembler.assemblePart(partResponse), qualityType: partResponse.qualityType };
   }
 
   public static assembleParts(parts: PaginationResponse<PartResponse>): Pagination<Part> {
@@ -146,8 +169,26 @@ export interface PartResponse {
     if (!viewData?.data) {
       return viewData;
     }
-    const { name, semanticDataModel, semanticModel} = viewData.data;
-    return { data: { name, semanticDataModel, semanticModel } as Part };
+
+    const {
+      name,
+      semanticDataModel,
+      semanticModelId,
+      manufacturingDate,
+      manufacturingCountry,
+      classification ,
+
+    } = viewData.data;
+    return { data: {
+        name,
+        semanticDataModel,
+        semanticModelId,
+        manufacturingDate,
+        manufacturingCountry,
+        classification ,
+
+
+      } as Part };
   }
 
   public static mapPartForView(): OperatorFunction<View<Part>, View<Part>> {
@@ -160,8 +201,14 @@ export interface PartResponse {
         return viewData;
       }
 
-      const { manufacturer, semanticDataModel, van } = viewData.data;
-      return { data: { manufacturer, semanticDataModel, van } as Part };
+      const {
+        manufacturer,
+        partId,
+        //nameAtManuFacturer?
+        van,
+
+      } = viewData.data;
+      return { data: { manufacturer, partId, van } as Part };
     });
   }
 

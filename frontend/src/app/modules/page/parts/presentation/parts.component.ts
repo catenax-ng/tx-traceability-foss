@@ -58,15 +58,14 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
     'id',
     'name', // --> currently manufacturerName, but similiar prop in comment at bottom
     'manufacturer',
-    'semanticModel.partId', // Part number / Batch Number / JIS Number
-    'semanticModel.manufacturerPartId', // --> semanticModel.partId
-    'semanticModel.customerPartId', // --> semanticModel.customerPartId
+    'partId', // Part number / Batch Number / JIS Number
+    'customerPartId', // --> semanticModel.customerPartId
     'classification',
-    'semanticModel.nameAtCustomer', // --> semanticModel.nameAtCustomer
+    'nameAtCustomer', // --> semanticModel.nameAtCustomer
       //nameAtManufacturer?
     'semanticModelId',
-    'semanticModel.manufacturingDate',
-    'semanticModel.manufacturingCountry',
+    'manufacturingDate',
+    'manufacturingCountry',
     'semanticDataModel',
   ];
 
@@ -74,13 +73,16 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
   public readonly displayedColumnsAsPlanned: string[] = [
     'select',
     'id',
-    'semanticDataModel',
     'name',
     'manufacturer',
-    'partNumber',
+    //'partId', if partId is manufacturerPartId then this should not be here'
+    'classification',
+    // nameAtManufacturer?
+    'semanticDataModel',
     'semanticModelId',
-    'productionDate',
-    'productionCountry',
+    'validityPeriodFrom',
+    'validityPeriodTo',
+      // partsite tbd
   ];
 
   public readonly sortableColumnsAsBuilt: Record<string, boolean> = {

@@ -5,7 +5,7 @@
     "manufacturerData": "Herstellerdaten",
     "customerData": "Kundendaten",
     "name": "Name",
-    "partNumber": "Produktnummer",
+    "partId": "Produktnummer",
     "semanticModelId": "Semantische Modellnummer",
     "qualityType": "Qualitätsstufe",
     "productionDate": "Produktionsdatum",
@@ -14,6 +14,9 @@
     "customerPartId": "Kunden Produktnummer",
     "semanticDataModel": "Semantisches Datenmodell",
     "van": "Van",
+    "manufacturingDate": "Produktionsdatum",
+    "manufacturingCountry": "Produktionsland",
+    "classification": "Klassifizierung",
     "tab": {
       "header": "Produkt-Details",
       "description": "Detaillierte Informationen über Ihr ausgewähltes Produkt"
