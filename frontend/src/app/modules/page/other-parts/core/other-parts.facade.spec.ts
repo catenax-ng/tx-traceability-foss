@@ -33,7 +33,9 @@ describe('OtherPartsFacade', () => {
   beforeEach(() => {
     partsServiceMok = {
       getPart: id => new BehaviorSubject(mockAssetList[id]).pipe(map(part => PartsAssembler.assemblePart(part))),
-      getMyParts: (_page, _pageSize, _sorting) =>
+      getPartsAsBuilt: (_page, _pageSize, _sorting) =>
+        of(mockAssets).pipe(map(parts => PartsAssembler.assembleParts(parts))),
+      getPartsAsPlanned: (_page, _pageSize, _sorting) =>
         of(mockAssets).pipe(map(parts => PartsAssembler.assembleParts(parts))),
     } as PartsService;
 

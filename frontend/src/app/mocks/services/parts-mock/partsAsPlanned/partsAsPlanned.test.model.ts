@@ -131,7 +131,7 @@ export const MOCK_part_1 = {
   id: 'MOCK_part_1',
   idShort: 'MOCK_part_1',
   businessPartner: 'Audi',
-  semanticModelId: "semanticID",
+  semanticModelId: "mySemanticModelId",
   manufacturerName: 'Audi AG',
   nameAtManufacturer: "MyAsPlannedPartName",
   manufacturerPartId: "ManuPartID",

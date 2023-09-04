@@ -113,9 +113,10 @@ describe('PartsAssembler', () => {
     const qualityType = 'qualityType';
     const semanticModelId = 'semanticModelId';
     const semanticDataModel = 'semanticDataModel';
-
+    const manufacturingDate = 'manufacturingDate'
+ // TODO
     it('should clean up data for part view', () => {
-      const data = { productionDate, qualityType, semanticModelId, semanticDataModel, test: '' } as unknown as Part;
+      const data = { semanticDataModel, semanticModelId, manufacturingDate, qualityType, test: '' } as unknown as Part;
       expect(PartsAssembler.filterPartForView({ data })).toEqual({
         data: { name: undefined, productionDate, semanticModelId, semanticDataModel } as unknown as Part,
       });
@@ -165,7 +166,7 @@ describe('PartsAssembler', () => {
     it('should clean up data for customer view', done => {
       const data = { customerPartId, nameAtCustomer, test: '' } as unknown as Part;
       of({ data })
-        .pipe(PartsAssembler.mapPartForCustomerView())
+        .pipe(PartsAssembler.mapPartForCustomerOrPartSiteView())
         .subscribe(result => {
           expect(result).toEqual({ data: { customerPartId, nameAtCustomer } as unknown as Part });
           done();
@@ -175,7 +176,7 @@ describe('PartsAssembler', () => {
     it('should return view if data is not set', done => {
       const viewData = {};
       of(viewData)
-        .pipe(PartsAssembler.mapPartForCustomerView())
+        .pipe(PartsAssembler.mapPartForCustomerOrPartSiteView())
         .subscribe(result => {
           expect(result).toEqual(viewData);
           done();
