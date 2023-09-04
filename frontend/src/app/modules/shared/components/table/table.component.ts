@@ -69,6 +69,8 @@ export class TableComponent {
   @Input() selectedPartsInfoLabel: string;
   @Input() selectedPartsActionLabel: string;
 
+  @Input() tableHeader: string;
+
   @Input() set paginationData({ page, pageSize, totalItems, content }: Pagination<unknown>) {
     this.totalItems = totalItems;
     this.pageSize = pageSize;
