@@ -56,8 +56,6 @@ export class PartsAssembler {
     const validityPeriodFrom = (partResponse.detailAspectModels[0].data as AsPlannedAspectModel)?.validityPeriodFrom;
     const validityPeriodTo = (partResponse.detailAspectModels[0].data as AsPlannedAspectModel)?.validityPeriodTo;
 
-    console.log(partId); // Outputs the partId value from the AsBuiltAspectModel
-
     return {
       id: partResponse.id,
       semanticModelId: partResponse.semanticModelId,
