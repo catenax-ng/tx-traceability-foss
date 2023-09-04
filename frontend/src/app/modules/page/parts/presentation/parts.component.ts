@@ -56,6 +56,7 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
   public readonly displayedColumnsAsBuilt: string[] = [
     'select',
     'id',
+    'idShort',
     'name', // idShort
     'manufacturer',
     'partId', // Part number / Batch Number / JIS Number
@@ -74,16 +75,17 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
   public readonly displayedColumnsAsPlanned: string[] = [
     'select',
     'id',
+    'idShort',
     'name',
     'manufacturer',
-    //'partId', if partId is manufacturerPartId then this should not be here'
+    'manufacturerPartId',
     'classification',
-    'nameAtManufacturer',
     'semanticDataModel',
     'semanticModelId',
     'validityPeriodFrom',
     'validityPeriodTo',
-      // partsite tbd
+    'functionValidFrom',
+    'functionValidUntil',
   ];
 
   public readonly sortableColumnsAsBuilt: Record<string, boolean> = {

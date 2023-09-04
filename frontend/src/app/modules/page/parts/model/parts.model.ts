@@ -26,6 +26,7 @@ import { Owner } from '@page/parts/model/owner.enum';
 
 export interface Part {
   id: string;
+  idShort: string;
   name: string;
   manufacturer: string;
   manufacturerPartId: string;
@@ -33,10 +34,7 @@ export interface Part {
   businessPartner: string
   semanticModel: SemanticModel;
   semanticModelId: string;
-  //partNumber: string;
-  //productionCountry: string;
   qualityType: QualityType;
-  //productionDate: CalendarDateModel;
   children: string[];
   parents?: string[];
   error?: boolean;
@@ -45,6 +43,7 @@ export interface Part {
   van: string;
   semanticDataModel: SemanticDataModel;
   classification: string;
+
   // aspectmodel props are temporarely hardcoded here because Tables and Views only accept root level prop array
   // as built
   partId?: string;
@@ -56,25 +55,10 @@ export interface Part {
   // as planned
   validityPeriodFrom?: string;
   validityPeriodTo?: string;
+  //partSiteInformationAsPlanned
+  functionValidFrom?: string;
+  functionValidUntil?: string;
 }
-/* OLD RESPONSE
-export interface PartResponse {
-  id: string;
-  idShort: string;
-  semanticModelId: string;
-  manufacturerId: string;
-  manufacturerName: string;
-  semanticModel: SemanticModel;
-  owner: Owner;
-  childRelations: Array<{ id: string; idShort: string }>;
-  parentRelations?: Array<{ id: string; idShort: string }>;
-  activeAlert: boolean;
-  underInvestigation?: boolean;
-  qualityType: QualityType;
-  van?: string;
-  semanticDataModel: SemanticDataModel;
-}
- */
 
 export interface PartResponse {
   id: string;

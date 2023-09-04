@@ -303,7 +303,7 @@ export const mockBmwAsPlannedAssets = [
   },
   {
     "id": "urn:uuid:d8030bbf-a874-49fb-b2e1-7610f0ccav85",
-    "idShort": "--",
+    "idShort": "myShortId",
     "semanticModelId": "OMAYSKEITUGNVHKKX",
     "businessPartner": "BPNL00000003CML1",
     "manufacturerName": "MyManufacturerName",

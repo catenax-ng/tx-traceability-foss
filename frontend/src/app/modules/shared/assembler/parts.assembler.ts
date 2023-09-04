@@ -21,7 +21,12 @@
 
 import { Pagination, PaginationResponse } from '@core/model/pagination.model';
 import { PaginationAssembler } from '@core/pagination/pagination.assembler';
-import {AsBuiltAspectModel, AsPlannedAspectModel, SemanticModel} from '@page/parts/model/aspectModels.model';
+import {
+  AsBuiltAspectModel,
+  AsPlannedAspectModel,
+  PartSiteInformationAsPlanned,
+  SemanticModel,
+} from '@page/parts/model/aspectModels.model';
 import { Part, PartResponse, QualityType } from '@page/parts/model/parts.model';
 import { TableHeaderSort } from '@shared/components/table/table.model';
 import { View } from '@shared/model/view.model';
@@ -53,17 +58,20 @@ export class PartsAssembler {
     const nameAtCustomer = (partResponse.detailAspectModels[0].data as AsBuiltAspectModel)?.nameAtCustomer;
     const manufacturingDate = (partResponse.detailAspectModels[0].data as AsBuiltAspectModel)?.manufacturingDate;
     const manufacturingCountry = (partResponse.detailAspectModels[0].data as AsBuiltAspectModel)?.manufacturingCountry;
+
     const validityPeriodFrom = (partResponse.detailAspectModels[0].data as AsPlannedAspectModel)?.validityPeriodFrom;
     const validityPeriodTo = (partResponse.detailAspectModels[0].data as AsPlannedAspectModel)?.validityPeriodTo;
-
+    const functionValidFrom = (partResponse.detailAspectModels[0].data as PartSiteInformationAsPlanned)?.functionValidFrom;
+    const functionValidUntil = (partResponse.detailAspectModels[0].data as PartSiteInformationAsPlanned)?.functionValidUntil;
     return {
       id: partResponse.id,
+      idShort: partResponse.idShort,
       semanticModelId: partResponse.semanticModelId,
       manufacturer: partResponse.manufacturerName,
       manufacturerPartId: partResponse.manufacturerPartId,
       nameAtManufacturer: partResponse.nameAtManufacturer,
       businessPartner: partResponse.businessPartner,
-      name: partResponse.idShort,
+      name: partResponse.nameAtManufacturer,
       children: partResponse.childRelations.map(child => child.id) || [],
       parents: partResponse.parentRelations?.map(parent => parent.id) || [],
       activeAlert: partResponse.activeAlert || false,
@@ -82,7 +90,10 @@ export class PartsAssembler {
 
       // as planned
       validityPeriodFrom: validityPeriodFrom,
-      validityPeriodTo: validityPeriodTo
+      validityPeriodTo: validityPeriodTo,
+      //partSiteInformationAsPlanned
+      functionValidFrom: functionValidFrom,
+      functionValidUntil: functionValidUntil,
 
     };
   }

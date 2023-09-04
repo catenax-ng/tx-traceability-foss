@@ -67,6 +67,7 @@
     },
     "column": {
       "id": "ID",
+      "idShort": "ID short",
       "name": "Name",
       "manufacturer": "Manufacturer",
       "partId": "Part number",
@@ -88,7 +89,9 @@
       "createdBy": "Created by",
       "sendTo": "Send to",
       "severity": "Severity",
-      "semanticDataModel": "Semantic Data Model"
+      "semanticDataModel": "Semantic Data Model",
+      "functionValidFrom": "Function valid from",
+      "functionValidUntil": "Function valid until"
     }
   },
   "dataLoading": {

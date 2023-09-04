@@ -67,6 +67,7 @@
     },
     "column": {
       "id": "ID",
+      "idShort": "ID kurz",
       "name": "Name",
       "manufacturer": "Hersteller",
       "partId": "Produktnummer",
@@ -89,7 +90,9 @@
       "createdBy": "Erstellt von",
       "sendTo": "Gesendet an",
       "severity": "Gefahrenstufe",
-      "semanticDataModel": "Semantisches Datenmodell"
+      "semanticDataModel": "Semantisches Datenmodell",
+      "functionValidFrom": "Funktion gültig von",
+      "functionValidUntil": "Funktion gültig bis"
     }
   },
   "dataLoading": {
