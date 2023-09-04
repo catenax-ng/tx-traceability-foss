@@ -26,8 +26,10 @@ import {Owner} from '@page/parts/model/owner.enum';
 export const MOCK_part_5 = {
   id: 'MOCK_part_5',
   idShort: 'MOCK_part_5',
-  businessPartner: 'Mercedes-Benz',
-  manufacturerName: 'A 180 Limousine',
+  businessPartner: 'BPNCML1000001',
+  manufacturerName: 'Mercedes Benz',
+  nameAtManufacturer: "K-130",
+  manufacturerPartId: "ManuPartID",
   classification: "A-Level",
   semanticModelId: "semanticID",
   detailAspectModels: [{
@@ -50,8 +52,10 @@ export const MOCK_part_5 = {
 export const MOCK_part_4 = {
   id: 'MOCK_part_4',
   idShort: 'MOCK_part_4',
-  businessPartner: 'Mercedes-Benz',
-  manufacturerName: 'A 180 Limousine',
+  businessPartner: 'BPNCML000001',
+  manufacturerName: 'Daimler',
+  nameAtManufacturer: "F-Klasse",
+  manufacturerPartId: "ManuPartID",
   semanticModelId: "semanticID",
   classification: 'B-Level',
   detailAspectModels: [{
@@ -76,7 +80,9 @@ export const MOCK_part_3 = {
   idShort: 'MOCK_part_3',
   businessPartner: 'Mercedes-Benz',
   semanticModelId: "semanticID",
-  manufacturerName: 'Back Door left',
+  manufacturerName: 'BWM AG',
+  nameAtManufacturer: 'Back Door Left',
+  manufacturerPartId: "ManuPartID",
   classification: 'C-Level',
   detailAspectModels: [{
     type: DetailAspectType.AS_PLANNED,
@@ -99,7 +105,9 @@ export const MOCK_part_2 = {
   id: 'MOCK_part_2',
   idShort: 'MOCK_part_2',
   businessPartner: 'BMW',
-  manufacturerName: 'BMW 520d Touring',
+  manufacturerName: 'BMW AG',
+  nameAtManufacturer: "MyAsPlannedPartName",
+  manufacturerPartId: "ManuPartID",
   semanticModelId: "semanticID",
   classification: 'A-Level',
   detailAspectModels: [{
@@ -124,7 +132,9 @@ export const MOCK_part_1 = {
   idShort: 'MOCK_part_1',
   businessPartner: 'Audi',
   semanticModelId: "semanticID",
-  manufacturerName: 'Audi A1 Sportback',
+  manufacturerName: 'Audi AG',
+  nameAtManufacturer: "MyAsPlannedPartName",
+  manufacturerPartId: "ManuPartID",
   classification: 'C-Level',
   detailAspectModels: [{
     type: DetailAspectType.AS_PLANNED,

@@ -28,6 +28,9 @@ export interface Part {
   id: string;
   name: string;
   manufacturer: string;
+  manufacturerPartId: string;
+  nameAtManufacturer: string;
+  businessPartner: string
   semanticModel: SemanticModel;
   semanticModelId: string;
   //partNumber: string;
@@ -77,8 +80,10 @@ export interface PartResponse {
   id: string;
   idShort: string;
   semanticModelId: string;
+  manufacturerPartId: string;
   businessPartner: string;
   manufacturerName: string;
+  nameAtManufacturer: string;
   owner: Owner;
   childRelations: Relation[];
   parentRelations: Relation[];

@@ -56,17 +56,18 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
   public readonly displayedColumnsAsBuilt: string[] = [
     'select',
     'id',
-    'name', // --> currently manufacturerName, but similiar prop in comment at bottom
+    'name', // idShort
     'manufacturer',
     'partId', // Part number / Batch Number / JIS Number
+    'manufacturerPartId',
     'customerPartId', // --> semanticModel.customerPartId
     'classification',
+    'nameAtManufacturer',
     'nameAtCustomer', // --> semanticModel.nameAtCustomer
-      //nameAtManufacturer?
     'semanticModelId',
+    'semanticDataModel',
     'manufacturingDate',
     'manufacturingCountry',
-    'semanticDataModel',
   ];
 
 
@@ -77,7 +78,7 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
     'manufacturer',
     //'partId', if partId is manufacturerPartId then this should not be here'
     'classification',
-    // nameAtManufacturer?
+    'nameAtManufacturer',
     'semanticDataModel',
     'semanticModelId',
     'validityPeriodFrom',

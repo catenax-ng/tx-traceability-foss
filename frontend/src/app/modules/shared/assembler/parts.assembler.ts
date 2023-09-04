@@ -61,7 +61,10 @@ export class PartsAssembler {
     return {
       id: partResponse.id,
       semanticModelId: partResponse.semanticModelId,
-      manufacturer: partResponse.businessPartner,
+      manufacturer: partResponse.manufacturerName,
+      manufacturerPartId: partResponse.manufacturerPartId,
+      nameAtManufacturer: partResponse.nameAtManufacturer,
+      businessPartner: partResponse.businessPartner,
       name: partResponse.idShort,
       children: partResponse.childRelations.map(child => child.id) || [],
       parents: partResponse.parentRelations?.map(parent => parent.id) || [],
@@ -73,7 +76,7 @@ export class PartsAssembler {
       classification: partResponse.classification,
       semanticModel: createdSemanticModel,
       // as built
-      partId: partId,
+      partId: partId, // is partInstance, BatchId, jisNumber
       customerPartId: customerPartId,
       nameAtCustomer: nameAtCustomer,
       manufacturingDate: manufacturingDate,
@@ -203,12 +206,12 @@ export interface PartResponse {
 
       const {
         manufacturer,
-        partId,
-        //nameAtManuFacturer?
+        manufacturerPartId,
+        nameAtManufacturer,
         van,
 
       } = viewData.data;
-      return { data: { manufacturer, partId, van } as Part };
+      return { data: { manufacturer, manufacturerPartId, nameAtManufacturer, van } as Part };
     });
   }
 

@@ -30,7 +30,9 @@ export const mockBmwAsPlannedAssets = [
     "idShort": "--",
     "semanticModelId": "NO-341449848714937445621543",
     "businessPartner": "BPNL00000003CML1",
-    "manufacturerName": "MyPlannedPart43",
+    "manufacturerName": "MyManufacturerName",
+    nameAtManufacturer: "MyAsPlannedPartName",
+    manufacturerPartId: "ManuPartID",
     "owner": "OWN",
     "childRelations": [],
     "parentRelations": [],
@@ -55,7 +57,9 @@ export const mockBmwAsPlannedAssets = [
     "idShort": "--",
     "semanticModelId": "NO-341449848714937445621543",
     "businessPartner": "BPNL00000003CML1",
-    "manufacturerName": "MyPlannedPart05",
+    "manufacturerName": "MyManufacturerName",
+    nameAtManufacturer: "MyAsPlannedPartName",
+    manufacturerPartId: "ManuPartID",
     "owner": "OWN",
     "childRelations": [],
     "parentRelations": [
@@ -85,7 +89,9 @@ export const mockBmwAsPlannedAssets = [
     "idShort": "--",
     "semanticModelId": "NO-246880451848384868750731",
     "businessPartner": "BPNL00000003CML1",
-    "manufacturerName": "MyPlannedPart95",
+    "manufacturerName": "MyManufacturerName",
+    nameAtManufacturer: "MyAsPlannedPartName",
+    manufacturerPartId: "ManuPartID",
     "owner": "OWN",
     "childRelations": [],
     "parentRelations": [
@@ -115,7 +121,9 @@ export const mockBmwAsPlannedAssets = [
     "idShort": "--",
     "semanticModelId": "12345678ABC",
     "businessPartner": "BPNL00000003CML1",
-    "manufacturerName": "MyPlannedPart5324",
+    "manufacturerName": "MyManufacturerName",
+    nameAtManufacturer: "MyAsPlannedPartName",
+    manufacturerPartId: "ManuPartID",
     "owner": "OWN",
     "childRelations": [],
     "parentRelations": [],
@@ -140,7 +148,9 @@ export const mockBmwAsPlannedAssets = [
     "idShort": "--",
     "semanticModelId": "NO-613963493493659233961306",
     "businessPartner": "BPNL00000003CML1",
-    "manufacturerName": "PlannedPart1231",
+    "manufacturerName": "MyManufacturerName",
+    nameAtManufacturer: "MyAsPlannedPartName",
+    manufacturerPartId: "ManuPartID",
     "owner": "OWN",
     "childRelations": [],
     "parentRelations": [
@@ -171,7 +181,9 @@ export const mockBmwAsPlannedAssets = [
   "idShort": "--",
   "semanticModelId": "12345678ABC",
   "businessPartner": "BPNL00000003CML1",
-  "manufacturerName": "plannedpart53",
+  "manufacturerName": "MyManufacturerName",
+  nameAtManufacturer: "MyAsPlannedPartName",
+  manufacturerPartId: "ManuPartID",
   "owner": "OWN",
   "childRelations": [],
   "parentRelations": [],
@@ -197,7 +209,9 @@ export const mockBmwAsPlannedAssets = [
     "idShort": "--",
     "semanticModelId": "OMAYSKEITUGNVHKKX",
     "businessPartner": "BPNL00000003CML1",
-    "manufacturerName": "plannedPart523",
+    "manufacturerName": "MyManufacturerName",
+    nameAtManufacturer: "MyAsPlannedPartName",
+    manufacturerPartId: "ManuPartID",
     "owner": "OWN",
     "childRelations": [
       {
@@ -228,7 +242,9 @@ export const mockBmwAsPlannedAssets = [
     "idShort": "--",
     "semanticModelId": "OMAYSKEITUGNVHKKX",
     "businessPartner": "BPNL00000003CML1",
-    "manufacturerName": "plannedPart42",
+    "manufacturerName": "MyManufacturerName",
+    nameAtManufacturer: "MyAsPlannedPartName",
+    manufacturerPartId: "ManuPartID",
     "owner": "OWN",
     "childRelations": [
       {
@@ -258,7 +274,9 @@ export const mockBmwAsPlannedAssets = [
     "idShort": "--",
     "semanticModelId": "OMAYSKEITUGNVHKKX",
     "businessPartner": "BPNL00000003CML1",
-    "manufacturerName": "plannedPart34",
+    "manufacturerName": "MyManufacturerName",
+    nameAtManufacturer: "MyAsPlannedPartName",
+    manufacturerPartId: "ManuPartID",
     "owner": "OWN",
     "childRelations": [
       {
@@ -288,7 +306,9 @@ export const mockBmwAsPlannedAssets = [
     "idShort": "--",
     "semanticModelId": "OMAYSKEITUGNVHKKX",
     "businessPartner": "BPNL00000003CML1",
-    "manufacturerName": "--",
+    "manufacturerName": "MyManufacturerName",
+    nameAtManufacturer: "MyAsPlannedPartName",
+    manufacturerPartId: "ManuPartID",
     "owner": "OWN",
     "childRelations": [
       {
@@ -318,7 +338,9 @@ export const mockBmwAsPlannedAssets = [
     "idShort": "--",
     "semanticModelId": "OMAYSKEITUGNVHKKX",
     "businessPartner": "BPNL00000003CML1",
-    "manufacturerName": "--",
+    "manufacturerName": "MyManufacturerName",
+    nameAtManufacturer: "MyAsPlannedPartName",
+    manufacturerPartId: "ManuPartID",
     "owner": "OWN",
     "childRelations": [
       {
@@ -350,7 +372,9 @@ const MockEmptyPart: PartResponse = {
   idShort: '--',
   businessPartner: 'OEM A',
   semanticModelId: "emptySematicModelId",
-  manufacturerName:'EmptyPart',
+  "manufacturerName": "MyDefaultManufacturerName",
+  nameAtManufacturer: "MyDefaultAsPlannedPartName",
+  manufacturerPartId: "ManuDefaultPartID",
   classification: "B-Level",
   detailAspectModels: [{
     type: DetailAspectType.AS_PLANNED,

@@ -10,6 +10,8 @@
     "qualityType": "Quality type",
     "productionDate": "Production date",
     "manufacturer": "Manufacturer",
+    "manufacturerPartId": "Manufacturer part ID",
+    "nameAtManufacturer": "Name at manufacturer",
     "nameAtCustomer": "Name at customer",
     "customerPartId": "Customer part ID",
     "semanticDataModel": "Semantic Data Model",
