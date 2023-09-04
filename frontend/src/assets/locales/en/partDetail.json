@@ -4,6 +4,7 @@
     "overview": "Overview",
     "manufacturerData": "Manufacturer data",
     "customerData": "Customer data",
+    "partSiteInformationData": "PartSite Information",
     "name": "Name",
     "partId": "Part number",
     "semanticModelId": "Semantic Model ID",
@@ -19,6 +20,8 @@
     "manufacturingDate": "Production date",
     "manufacturingCountry": "Production country",
     "classification": "Classification",
+    "functionValidFrom": "Function valid from",
+    "functionValidUntil": "Function valid until",
     "tab": {
       "header": "Part details",
       "description": "Detailed information about your selected part"

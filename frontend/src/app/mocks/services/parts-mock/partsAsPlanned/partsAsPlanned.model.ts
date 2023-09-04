@@ -44,10 +44,10 @@ export const mockBmwAsPlannedAssets = [
     "classification": "component",
     "detailAspectModels": [
       {
-        "type": "AS_PLANNED",
+        "type": "PART_SITE_INFORMATION_AS_PLANNED",
         "data": {
-          validityPeriodFrom: "01.01.2023",
-          validityPeriodTo: "01.02.2023",
+          functionValidFrom: "01.01.2023",
+          functionValidUntil: "01.02.2023",
         }
       }
     ]

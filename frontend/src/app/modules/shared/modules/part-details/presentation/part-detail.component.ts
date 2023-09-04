@@ -28,7 +28,7 @@ import { SelectOption } from '@shared/components/select/select.component';
 import { State } from '@shared/model/state';
 import { View } from '@shared/model/view.model';
 import { PartDetailsFacade } from '@shared/modules/part-details/core/partDetails.facade';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 
 @Component({
@@ -43,7 +43,10 @@ export class PartDetailComponent implements AfterViewInit, OnDestroy {
   public readonly shortenPartDetails$: Observable<View<Part>>;
   public readonly selectedPartDetails$: Observable<View<Part>>;
   public readonly manufacturerDetails$: Observable<View<Part>>;
-  public readonly customerDetails$: Observable<View<Part>>;
+  public readonly customerOrPartSiteDetails$: Observable<View<Part>>;
+  public customerOrPartSiteDetailsHeader$: Subscription;
+
+  public customerOrPartSiteHeader: string;
 
   public showQualityTypeDropdown = false;
   public qualityTypeOptions: SelectOption[];
@@ -63,7 +66,15 @@ export class PartDetailComponent implements AfterViewInit, OnDestroy {
     );
 
     this.manufacturerDetails$ = this.partDetailsFacade.selectedPart$.pipe(PartsAssembler.mapPartForManufacturerView());
-    this.customerDetails$ = this.partDetailsFacade.selectedPart$.pipe(PartsAssembler.mapPartForCustomerView());
+    this.customerOrPartSiteDetails$ = this.partDetailsFacade.selectedPart$.pipe(PartsAssembler.mapPartForCustomerOrPartSiteView());
+    this.customerOrPartSiteDetailsHeader$ = this.customerOrPartSiteDetails$?.subscribe(data=> {
+      if(data?.data?.functionValidFrom){
+        this.customerOrPartSiteHeader = 'partDetail.partSiteInformationData'
+      } else {
+        this.customerOrPartSiteHeader = 'partDetail.customerData'
+      }
+    });
+
 
     this.qualityTypeOptions = Object.values(QualityType).map(value => ({
       label: value,

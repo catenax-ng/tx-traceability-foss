@@ -97,65 +97,6 @@ export class PartsAssembler {
 
     };
   }
-/*
-    return {
-      id: partResponse.id,
-      name: partResponse.semanticModel.nameAtManufacturer,
-      manufacturer: partResponse.manufacturerName,
-      semanticModelId: partResponse.semanticModelId,
-      partNumber: partResponse.semanticModel.manufacturerPartId,
-      productionCountry: partResponse.semanticModel.manufacturingCountry,
-      nameAtCustomer: partResponse.semanticModel.nameAtCustomer,
-      customerPartId: partResponse.semanticModel.customerPartId,
-      qualityType: partResponse.qualityType || QualityType.Ok,
-      productionDate: new CalendarDateModel(partResponse.semanticModel.manufacturingDate),
-      children: partResponse.childRelations.map(child => child.id) || [],
-      parents: partResponse.parentRelations?.map(parent => parent.id) || [],
-      activeInvestigation: partResponse.underInvestigation || false,
-      activeAlert: partResponse.activeAlert || false,
-      van: partResponse.van || '--',
-      semanticDataModel: partResponse.semanticDataModel
-    };
-  }
-*/
-  /* OLD RESPONSE
-export interface PartResponse {
-  id: string;
-  idShort: string;
-  semanticModelId: string;
-  manufacturerId: string;
-  manufacturerName: string;
-  semanticModel: SemanticModel;
-  owner: Owner;
-  childRelations: Array<{ id: string; idShort: string }>;
-  parentRelations?: Array<{ id: string; idShort: string }>;
-  activeAlert: boolean;
-  underInvestigation?: boolean;
-  qualityType: QualityType;
-  van?: string;
-  semanticDataModel: SemanticDataModel;
-}
- */
-/*
-  export interface PartResponse {
-  id: string;
-  owner: Owner;
-  activeAlert: boolean;
-  qualityType: QualityType;
-  underInvestigation: boolean;
-  semanticDataModelType: SemanticDataModel;
-  childRelations: Array<Relation>;
-  parentRelations: Array<Relation>;
-  idShort: string;
-  van: string;
-  businessPartner: string;
-  nameAtManufacturer: string;
-  classification: string;
-  detailSemanticModels: Array<DetailAspectModel>
-
-}
-*/
-
   public static assembleOtherPart(partResponse: PartResponse): Part {
     if (!partResponse) {
       return null;
@@ -224,10 +165,15 @@ export interface PartResponse {
     });
   }
 
-  public static mapPartForCustomerView(): OperatorFunction<View<Part>, View<Part>> {
+  public static mapPartForCustomerOrPartSiteView(): OperatorFunction<View<Part>, View<Part>> {
     return map(viewData => {
       if (!viewData.data) {
-        return viewData;
+        return;
+      }
+      // if no customer data is available then return partSiteInformation
+      if(!viewData.data?.nameAtCustomer && !viewData.data?.customerPartId) {
+        const { functionValidFrom, functionValidUntil } = viewData.data;
+        return { data: { functionValidFrom, functionValidUntil } as Part };
       }
 
       const { nameAtCustomer, customerPartId } = viewData.data;

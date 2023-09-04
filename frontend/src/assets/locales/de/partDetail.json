@@ -4,6 +4,7 @@
     "overview": "Übersicht",
     "manufacturerData": "Herstellerdaten",
     "customerData": "Kundendaten",
+    "partSiteInformationData": "PartSite Informationen",
     "name": "Name",
     "partId": "Produktnummer",
     "semanticModelId": "Semantische Modellnummer",
@@ -19,6 +20,8 @@
     "manufacturingDate": "Produktionsdatum",
     "manufacturingCountry": "Produktionsland",
     "classification": "Klassifizierung",
+    "functionValidFrom": "Funktion gülitg von",
+    "functionValidUntil": "Funktion gültig bis",
     "tab": {
       "header": "Produkt-Details",
       "description": "Detaillierte Informationen über Ihr ausgewähltes Produkt"
