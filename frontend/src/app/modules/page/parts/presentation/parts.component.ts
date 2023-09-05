@@ -35,23 +35,6 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
   styleUrls: ['./parts.component.scss'],
 })
 export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
-  /*
-  public readonly displayedColumnsAsBuilt: string[] = [
-    'select',
-    'id',
-    'name', // --> nameAtManufacturer
-    'manufacturer',
-    'partNumber', // Part number / Batch Number / JIS Number
-    // 'manufacturerPartId' // --> semanticModel.partId
-    // 'customerPartId' // --> semanticModel.customerPartId
-    'classification',
-    'nameAtCustomer', // --> semanticModel.nameAtCustomer
-    //'semanticModelId', // --> deleted it
-    'productionDate',
-    'productionCountry',
-    'semanticDataModel',
-  ];
-  */
 
   public readonly displayedColumnsAsBuilt: string[] = [
     'select',

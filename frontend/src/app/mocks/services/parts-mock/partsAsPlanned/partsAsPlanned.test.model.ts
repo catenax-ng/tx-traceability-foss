@@ -153,7 +153,7 @@ export const MOCK_part_1 = {
   underInvestigation: false,
   qualityType: QualityType.Ok,
   van: 'myvan1',
-  semanticDataModel: SemanticDataModel.BATCH
+  semanticDataModel: SemanticDataModel.SERIALPART
 };
 
 export const mockAssets: PartsResponse = {

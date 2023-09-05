@@ -53,7 +53,7 @@ export const MOCK_part_5 = {
         "customerPartId": "95657762-59",
         "nameAtCustomer": "Door Key",
         "manufacturingCountry": "DEU",
-        "manufacturingDate": "2022-02-04T13:48:54"
+        "manufacturingDate": "2022-02-04T13:48:54",
       }
     }
   ]
@@ -84,7 +84,7 @@ export const MOCK_part_4 = {
         "customerPartId": "PRT-12345",
         "nameAtCustomer": "side element A",
         "manufacturingCountry": "HUR",
-        "manufacturingDate": "2022-02-04T13:48:54"
+        "manufacturingDate": "2022-02-04T13:48:54",
       }
     }
   ]
@@ -120,7 +120,7 @@ export const MOCK_part_3 = {
         "customerPartId": "95657762-59",
         "nameAtCustomer": "Door Key",
         "manufacturingCountry": "DEU",
-        "manufacturingDate": "2022-02-04T13:48:54"
+        "manufacturingDate": "2022-02-04T13:48:54",
       }
     }
   ]
@@ -156,7 +156,7 @@ export const MOCK_part_2 = {
         "customerPartId": "95657762-59",
         "nameAtCustomer": "Door Key",
         "manufacturingCountry": "DEU",
-        "manufacturingDate": "2022-02-04T13:48:54"
+        "manufacturingDate": "2022-02-04T13:48:54",
       }
     }
   ]
@@ -187,7 +187,7 @@ export const MOCK_part_1 = {
         "customerPartId": "95657762-59",
         "nameAtCustomer": "Door Key",
         "manufacturingCountry": "DEU",
-        "manufacturingDate": "2022-02-04T13:48:54"
+        "manufacturingDate": "2022-02-04T13:48:54",
       }
     }
   ]
