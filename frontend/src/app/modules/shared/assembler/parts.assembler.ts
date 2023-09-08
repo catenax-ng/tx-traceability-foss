@@ -100,7 +100,6 @@ export class PartsAssembler {
       functionValidFrom: functionValidFrom,
       functionValidUntil: functionValidUntil,
     }
-    console.log(mappedPart);
     return mappedPart;
   }
   public static assembleOtherPart(partResponse: PartResponse): Part {
