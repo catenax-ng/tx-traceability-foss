@@ -29,7 +29,7 @@ import * as d3 from 'd3';
 import { BehaviorSubject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { sleepForTests } from '../../../../../../../test';
-import { MOCK_part_1 } from '../../../../../../mocks/services/parts-mock/partsAsPlanned/partsAsPlanned.test.model';
+import { MOCK_part_1 } from '../../../../../../mocks/services/parts-mock/partsAsBuilt/partsAsBuilt.test.model';
 
 export const renderTree = async () => {
   return renderComponent(

@@ -100,12 +100,7 @@ export const MOCK_part_3 = {
   manufacturerPartId: "ManuPartID",
   "owner": Owner.OWN,
   "childRelations": [],
-  "parentRelations": [
-    {
-      "id": "urn:uuid:f11ddc62-3bd5-468f-b7b0-110fe13ed0cd",
-      "idShort": null
-    }
-  ],
+  "parentRelations": [],
   "activeAlert": false,
   "underInvestigation": false,
   "qualityType": QualityType.Ok,
@@ -171,8 +166,19 @@ export const MOCK_part_1 = {
   nameAtManufacturer: "Modell Z4",
   manufacturerPartId: "ManuPartID",
   "owner": Owner.OWN,
-  "childRelations": [],
-  "parentRelations": [],
+  "childRelations": [{
+    id: MOCK_part_2.id,
+    idShort: null,
+  },
+    {
+      id: MOCK_part_2.id,
+      idShort: null,
+    }
+  ],
+  "parentRelations": [{
+    id: MOCK_part_3.id,
+    idShort: null,
+  }],
   "activeAlert": false,
   "underInvestigation": false,
   "qualityType": QualityType.Ok,

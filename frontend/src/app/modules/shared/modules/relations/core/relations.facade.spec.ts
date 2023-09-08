@@ -34,7 +34,7 @@ import {
   MOCK_part_2,
   MOCK_part_3,
   mockAssetList,
-} from '../../../../../mocks/services/parts-mock/partsAsPlanned/partsAsPlanned.test.model';
+} from '../../../../../mocks/services/parts-mock/partsAsBuilt/partsAsBuilt.test.model';
 
 describe('Relations facade', () => {
   const childDescriptionsToChild = children => children.map(({ id }) => id);
@@ -127,38 +127,24 @@ describe('Relations facade', () => {
   describe('formatOpenElementsToTreeData', () => {
     it('should format data', async () => {
       const expected = {
-        id: 'MOCK_part_1',
+        id: 'Mock_part_1',
         state: 'done',
         children: [
           {
             children: [],
             id: 'MOCK_part_2',
-            relations: [
-              {
-                children: null,
-                id: 'MOCK_part_4',
-                state: 'loading',
-                title: 'MOCK_part_4',
-              },
-            ],
-            state: 'SERIALPART',
-            text: 'BMW 520d Touring',
-            title: 'BMW 520d Touring | mysemanticmodelId2',
+            relations: null,
+            state: 'BATCH',
+            text: 'MyAsBuiltPartName',
+            title: 'MyAsBuiltPartName | MOCK_part_2',
           },
           {
             children: [],
-            id: 'MOCK_part_3',
-            relations: [
-              {
-                children: null,
-                id: 'MOCK_part_5',
-                state: 'loading',
-                title: 'MOCK_part_5',
-              },
-            ],
-            state: 'SERIALPART',
-            text: 'A 180 Limousine',
-            title: 'A 180 Limousine | mysemanticModelId3',
+            id: 'MOCK_part_2',
+            relations: null,
+            state: 'BATCH',
+            text: 'MyAsBuiltPartName',
+            title: 'MyAsBuiltPartName | MOCK_part_2',
           },
         ],
         relations: [
@@ -170,9 +156,9 @@ describe('Relations facade', () => {
           },
           {
             children: null,
-            id: 'MOCK_part_3',
+            id: 'MOCK_part_2',
             state: 'loading',
-            title: 'MOCK_part_3',
+            title: 'MOCK_part_2',
           },
         ],
       } as TreeStructure;
