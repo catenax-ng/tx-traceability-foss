@@ -35,6 +35,8 @@ export type AsPlannedAspectModel = {
 }
 
 export type PartSiteInformationAsPlanned = {
+  function: string,
+  catenaXSiteId: string
   functionValidFrom: string,
   functionValidUntil: string
 }

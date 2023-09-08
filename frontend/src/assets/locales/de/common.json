@@ -91,6 +91,8 @@
       "sendTo": "Gesendet an",
       "severity": "Gefahrenstufe",
       "semanticDataModel": "Semantisches Datenmodell",
+      "catenaXSiteId": "Standort ID",
+      "psFunction": "Funktion",
       "functionValidFrom": "Funktion gültig von",
       "functionValidUntil": "Funktion gültig bis"
     }

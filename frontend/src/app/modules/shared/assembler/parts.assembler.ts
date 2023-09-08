@@ -61,8 +61,10 @@ export class PartsAssembler {
 
     const validityPeriodFrom = (partResponse.detailAspectModels[0].data as AsPlannedAspectModel)?.validityPeriodFrom;
     const validityPeriodTo = (partResponse.detailAspectModels[0].data as AsPlannedAspectModel)?.validityPeriodTo;
-    const functionValidFrom = (partResponse.detailAspectModels[0].data as PartSiteInformationAsPlanned)?.functionValidFrom;
-    const functionValidUntil = (partResponse.detailAspectModels[0].data as PartSiteInformationAsPlanned)?.functionValidUntil;
+    const catenaXSiteId = (partResponse.detailAspectModels[1]?.data as PartSiteInformationAsPlanned)?.catenaXSiteId;
+    const psFunction = (partResponse.detailAspectModels[1]?.data as PartSiteInformationAsPlanned)?.function;
+    const functionValidFrom = (partResponse.detailAspectModels[1]?.data as PartSiteInformationAsPlanned)?.functionValidFrom;
+    const functionValidUntil = (partResponse.detailAspectModels[1]?.data as PartSiteInformationAsPlanned)?.functionValidUntil;
 
     let mappedPart = {
       id: partResponse.id,
@@ -93,6 +95,8 @@ export class PartsAssembler {
       validityPeriodFrom: validityPeriodFrom,
       validityPeriodTo: validityPeriodTo,
       //partSiteInformationAsPlanned
+      catenaXSiteId: catenaXSiteId,
+      psFunction: psFunction,
       functionValidFrom: functionValidFrom,
       functionValidUntil: functionValidUntil,
     }
@@ -173,9 +177,9 @@ export class PartsAssembler {
         return;
       }
       // if no customer data is available then return partSiteInformation
-      if(!viewData.data?.nameAtCustomer && !viewData.data?.customerPartId) {
-        const { functionValidFrom, functionValidUntil } = viewData.data;
-        return { data: { functionValidFrom, functionValidUntil } as Part };
+      if(!viewData.data?.nameAtCustomer && !viewData.data?.customerPartId && viewData.data?.functionValidFrom) {
+        const { catenaXSiteId, psFunction, functionValidFrom, functionValidUntil } = viewData.data;
+        return { data: { catenaXSiteId, psFunction, functionValidFrom, functionValidUntil } as Part };
       }
 
       const { nameAtCustomer, customerPartId } = viewData.data;

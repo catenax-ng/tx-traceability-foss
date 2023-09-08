@@ -90,6 +90,8 @@
       "sendTo": "Send to",
       "severity": "Severity",
       "semanticDataModel": "Semantic Data Model",
+      "catenaXSiteId": "SiteId",
+      "psFunction": "Function",
       "functionValidFrom": "Function valid from",
       "functionValidUntil": "Function valid until"
     }

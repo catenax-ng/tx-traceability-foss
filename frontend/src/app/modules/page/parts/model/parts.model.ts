@@ -56,6 +56,8 @@ export interface Part {
   validityPeriodFrom?: string;
   validityPeriodTo?: string;
   //partSiteInformationAsPlanned
+  catenaXSiteId: string;
+  psFunction: string;
   functionValidFrom?: string;
   functionValidUntil?: string;
 }

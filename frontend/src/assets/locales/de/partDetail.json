@@ -5,6 +5,8 @@
     "manufacturerData": "Herstellerdaten",
     "customerData": "Kundendaten",
     "partSiteInformationData": "PartSite Informationen",
+    "catenaXSiteId": "Standort",
+    "psFunction": "Funktion",
     "name": "Name",
     "partId": "Produktnummer",
     "semanticModelId": "Semantische Modellnummer",

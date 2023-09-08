@@ -40,13 +40,13 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
     'select',
     'id',
     'idShort',
-    'name', // idShort
+    'name', // nameAtManufacturer
     'manufacturer',
     'partId', // Part number / Batch Number / JIS Number
     'manufacturerPartId',
     'customerPartId', // --> semanticModel.customerPartId
     'classification',
-    'nameAtManufacturer',
+    //'nameAtManufacturer', --> already in name
     'nameAtCustomer', // --> semanticModel.nameAtCustomer
     'semanticModelId',
     'semanticDataModel',
@@ -67,6 +67,8 @@ export class PartsComponent implements OnInit, OnDestroy, AfterViewInit {
     'semanticModelId',
     'validityPeriodFrom',
     'validityPeriodTo',
+    'psFunction',
+    'catenaXSiteId',
     'functionValidFrom',
     'functionValidUntil',
   ];
