@@ -67,7 +67,7 @@
     },
     "column": {
       "id": "ID",
-      "idShort": "ID kurz",
+      "idShort": "Kurz-ID",
       "name": "Name",
       "manufacturer": "Hersteller",
       "partId": "Produktnummer",

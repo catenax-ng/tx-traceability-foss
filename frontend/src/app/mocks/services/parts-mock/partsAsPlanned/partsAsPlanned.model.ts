@@ -152,7 +152,10 @@ export const mockBmwAsPlannedAssets = [
     nameAtManufacturer: "MyAsPlannedPartName",
     manufacturerPartId: "ManuPartID",
     "owner": "OWN",
-    "childRelations": [],
+    "childRelations": [{
+      "id": "urn:uuid:c47b9f8b-48d0-4ef4-8f0b-e965a225cb8d",
+      "idShort": null
+    }],
     "parentRelations": [
       {
         "id": "urn:uuid:c47b9f8b-48d0-4ef4-8f0b-e965a225cb8d",
@@ -169,8 +172,8 @@ export const mockBmwAsPlannedAssets = [
       {
         "type": "AS_BUILT",
         "data": {
-          validityPeriodFrom: "01.01.2023",
-          validityPeriodTo: "01.02.2023",
+          "validityPeriodFrom": "01.01.2023",
+          "validityPeriodTo": "01.02.2023",
         }
       }
     ]

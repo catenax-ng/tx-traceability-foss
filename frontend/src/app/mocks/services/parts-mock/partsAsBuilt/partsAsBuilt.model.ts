@@ -34,7 +34,12 @@ export const mockBmwAssets = [
         nameAtManufacturer: "MyAsBuiltPartName",
       manufacturerPartId: "ManuPartID",
         "owner": "OWN",
-        "childRelations": [],
+        "childRelations": [
+          {
+            "id": "urn:uuid:c47b9f8b-48d0-4ef4-8f0b-e965a225cb8d",
+            "idShort": null
+          }
+        ],
         "parentRelations": [
             {
                 "id": "urn:uuid:c47b9f8b-48d0-4ef4-8f0b-e965a225cb8d",
@@ -99,7 +104,10 @@ export const mockBmwAssets = [
       nameAtManufacturer: "MyAsBuiltPartName",
       manufacturerPartId: "ManuPartID",
         "owner": "OWN",
-        "childRelations": [],
+      "childRelations": [{
+        "id": "urn:uuid:c47b9f8b-48d0-4ef4-8f0b-e965a225cb8d",
+        "idShort": null
+      }],
         "parentRelations": [
             {
                 "id": "urn:uuid:f11ddc62-3bd5-468f-b7b0-110fe13ed0cd",

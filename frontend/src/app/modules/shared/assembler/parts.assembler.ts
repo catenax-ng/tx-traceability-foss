@@ -63,7 +63,8 @@ export class PartsAssembler {
     const validityPeriodTo = (partResponse.detailAspectModels[0].data as AsPlannedAspectModel)?.validityPeriodTo;
     const functionValidFrom = (partResponse.detailAspectModels[0].data as PartSiteInformationAsPlanned)?.functionValidFrom;
     const functionValidUntil = (partResponse.detailAspectModels[0].data as PartSiteInformationAsPlanned)?.functionValidUntil;
-    return {
+
+    let mappedPart = {
       id: partResponse.id,
       idShort: partResponse.idShort,
       semanticModelId: partResponse.semanticModelId,
@@ -94,8 +95,9 @@ export class PartsAssembler {
       //partSiteInformationAsPlanned
       functionValidFrom: functionValidFrom,
       functionValidUntil: functionValidUntil,
-
-    };
+    }
+    console.log(mappedPart);
+    return mappedPart;
   }
   public static assembleOtherPart(partResponse: PartResponse): Part {
     if (!partResponse) {

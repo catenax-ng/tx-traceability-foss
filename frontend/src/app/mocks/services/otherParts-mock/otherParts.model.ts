@@ -29,6 +29,8 @@ export const otherPartsAssets = [
     "semanticModelId": "NO-613963493493659233961306",
     "businessPartner": "BPNL00000003CML1",
     "manufacturerName": "--",
+    "nameAtManufacturer": "SupplierPartName",
+    "manufacturerPartId": "MySupplierPartId",
     "owner": "SUPPLIER",
     "childRelations": [],
     "parentRelations": [
@@ -62,9 +64,17 @@ export const otherPartsAssets = [
     "semanticModelId": "12345678ABC",
     "businessPartner": "BPNL00000003CML1",
     "manufacturerName": "--",
+    "nameAtManufacturer": "SupplierPartName",
+    "manufacturerPartId": "MySupplierPartId",
     "owner": "SUPPLIER",
-    "childRelations": [],
-    "parentRelations": [],
+    "childRelations": [{
+      "id": "urn:uuid:c47b9f8b-48d0-4ef4-8f0b-e965a225cb8d",
+      "idShort": null
+    }],
+    "parenRelations": [{
+      "id": "urn:uuid:c47b9f8b-48d0-4ef4-8f0b-e965a225cb8d",
+      "idShort": null
+    }],
     "activeAlert": false,
     "underInvestigation": false,
     "qualityType": "Ok",
@@ -90,6 +100,8 @@ export const otherPartsAssets = [
     "semanticModelId": "NO-246880451848384868750731",
     "businessPartner": "BPNL00000003CML1",
     "manufacturerName": "--",
+    "nameAtManufacturer": "SupplierPartName",
+    "manufacturerPartId": "MySupplierPartId",
     "owner": "OWN",
     "childRelations": [],
     "parentRelations": [
@@ -123,6 +135,8 @@ export const otherPartsAssets = [
     "semanticModelId": "NO-341449848714937445621543",
     "businessPartner": "BPNL00000003CML1",
     "manufacturerName": "--",
+    "nameAtManufacturer": "SupplierPartName",
+    "manufacturerPartId": "MySupplierPartId",
     "owner": "SUPPLIER",
     "childRelations": [],
     "parentRelations": [
@@ -156,6 +170,8 @@ export const otherPartsAssets = [
     "semanticModelId": "NO-341449848714937445621543",
     "businessPartner": "BPNL00000003CML1",
     "manufacturerName": "--",
+    "nameAtManufacturer": "SupplierPartName",
+    "manufacturerPartId": "MySupplierPartId",
     "owner": "SUPPLIER",
     "childRelations": [],
     "parentRelations": [],
@@ -184,6 +200,8 @@ export const otherPartsAssets = [
     "semanticModelId": "OMAYSKEITUGNVHKKX",
     "businessPartner": "BPNL00000003CML1",
     "manufacturerName": "--",
+    "nameAtManufacturer": "SupplierPartName",
+    "manufacturerPartId": "MySupplierPartId",
     "owner": "SUPPLIER",
     "childRelations": [
       {
@@ -217,6 +235,8 @@ export const otherPartsAssets = [
     "semanticModelId": "NO-989134870198932317923938",
     "businessPartner": "BPNL00000003CNKC",
     "manufacturerName": "TEST_BPN_IRS_1",
+    "nameAtManufacturer": "SupplierPartName",
+    "manufacturerPartId": "MySupplierPartId",
     "owner": "SUPPLIER",
     "childRelations": [],
     "parentRelations": [],
@@ -245,6 +265,8 @@ export const otherPartsAssets = [
     "semanticModelId": "NO-341449848714937445621543",
     "businessPartner": "BPNL00000003CML1",
     "manufacturerName": "--",
+    "nameAtManufacturer": "SupplierPartName",
+    "manufacturerPartId": "MySupplierPartId",
     "owner": "CUSTOMER",
     "childRelations": [
       {
@@ -278,6 +300,8 @@ export const otherPartsAssets = [
     "semanticModelId": "NO-341449848714937445621543",
     "businessPartner": "BPNL00000003CNKC",
     "manufacturerName": "TEST_BPN_IRS_1",
+    "nameAtManufacturer": "SupplierPartName",
+    "manufacturerPartId": "MySupplierPartId",
     "owner": "CUSTOMER",
     "childRelations": [],
     "parentRelations": [],
@@ -306,6 +330,8 @@ export const otherPartsAssets = [
     "semanticModelId": "OMAOYGBDTSRCMYSCX",
     "businessPartner": "BPNL00000003CML1",
     "manufacturerName": "--",
+    "nameAtManufacturer": "SupplierPartName",
+    "manufacturerPartId": "MySupplierPartId",
     "owner": "CUSTOMER",
     "childRelations": [
       {
@@ -339,6 +365,8 @@ export const otherPartsAssets = [
     "semanticModelId": "NO-477013846751358222215326",
     "businessPartner": "BPNL00000003CNKC",
     "manufacturerName": "TEST_BPN_IRS_1",
+    "nameAtManufacturer": "SupplierPartName",
+    "manufacturerPartId": "MySupplierPartId",
     "owner": "CUSTOMER",
     "childRelations": [],
     "parentRelations": [],
@@ -367,6 +395,8 @@ export const otherPartsAssets = [
     "semanticModelId": "NO-004314332935115065980115",
     "businessPartner": "BPNL00000003CNKC",
     "manufacturerName": "TEST_BPN_IRS_1",
+    "nameAtManufacturer": "SupplierPartName",
+    "manufacturerPartId": "MySupplierPartId",
     "owner": "CUSTOMER",
     "childRelations": [],
     "parentRelations": [],
@@ -395,6 +425,8 @@ export const otherPartsAssets = [
     "semanticModelId": "NO-341449848714937445621543",
     "businessPartner": "BPNL00000003CNKC",
     "manufacturerName": "TEST_BPN_IRS_1",
+    "nameAtManufacturer": "SupplierPartName",
+    "manufacturerPartId": "MySupplierPartId",
     "owner": "CUSTOMER",
     "childRelations": [],
     "parentRelations": [],
@@ -423,6 +455,8 @@ export const otherPartsAssets = [
     "semanticModelId": "NO-313869652971440618042264",
     "businessPartner": "BPNL00000003CNKC",
     "manufacturerName": "TEST_BPN_IRS_1",
+    "nameAtManufacturer": "SupplierPartName",
+    "manufacturerPartId": "MySupplierPartId",
     "owner": "SUPPLIER",
     "childRelations": [],
     "parentRelations": [],

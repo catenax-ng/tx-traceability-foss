@@ -10,23 +10,25 @@ export class FlattenObjectPipe implements PipeTransform {
     const result: { [key: string]: any } = {};
 
     function recurse(current: any, property: string) {
+      if (current === undefined) {
+        return; // Skip properties with undefined values
+      }
+
+      if (property === 'children' || property === 'parents') {
+        // Preserve 'children' and 'parents' properties as they are
+        result[property] = current;
+        return;
+      }
+
       if (Object(current) !== current) {
         result[property] = current;
       } else if (Array.isArray(current)) {
-        for (let i = 0; i < current.length; i++) {
-          recurse(current[i], property + '[' + i + ']');
-        }
-        if (current.length === 0) {
-          result[property] = [];
-        }
+        result[property] = current.map((item, index) => ({
+          [`${property}[${index}]`]: item,
+        }));
       } else {
-        let isEmpty = true;
         for (const p in current) {
-          isEmpty = false;
           recurse(current[p], property ? property + '.' + p : p); // Remove dot for root-level properties
-        }
-        if (isEmpty && property) {
-          result[property] = {};
         }
       }
     }
