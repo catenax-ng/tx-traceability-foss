@@ -17,7 +17,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 import { Pipe, PipeTransform } from '@angular/core';
-import { Part, SemanticDataModel } from '@page/parts/model/parts.model';
+import { Part, SemanticDataModelInCamelCase } from '@page/parts/model/parts.model';
 
 @Pipe({
   name: 'formatPartlistSemanticDataModelToCamelCase'
@@ -30,23 +30,23 @@ export class FormatPartlistSemanticDataModelToCamelCasePipe implements PipeTrans
         switch (part.semanticDataModel.toString().toLowerCase()) {
 
           case 'batch': {
-            part.semanticDataModel = SemanticDataModel.BATCH;
+            part.semanticDataModel = SemanticDataModelInCamelCase.BATCH;
             break;
           }
           case 'serialpart': {
-            part.semanticDataModel = SemanticDataModel.SERIALPART;
+            part.semanticDataModel = SemanticDataModelInCamelCase.SERIALPART;
             break;
           }
           case 'partasplanned': {
-            part.semanticDataModel = SemanticDataModel.PARTASPLANNED;
+            part.semanticDataModel = SemanticDataModelInCamelCase.PARTASPLANNED;
             break;
           }
           case 'JustInSequencePart': {
-            part.semanticDataModel = SemanticDataModel.JUSTINSEQUENCEPART;
+            part.semanticDataModel = SemanticDataModelInCamelCase.JUSTINSEQUENCEPART;
             break;
           }
           default: {
-            part.semanticDataModel = SemanticDataModel.UNKNOWN;
+            part.semanticDataModel = SemanticDataModelInCamelCase.UNKNOWN;
             break;
           }
 
