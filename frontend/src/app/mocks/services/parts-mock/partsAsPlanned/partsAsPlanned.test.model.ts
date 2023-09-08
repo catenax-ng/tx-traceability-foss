@@ -38,7 +38,17 @@ export const MOCK_part_5 = {
       validityPeriodFrom: "01.01.2023",
       validityPeriodTo: "01.02.2023",
     }
-  }],
+  },
+    {
+      type: DetailAspectType.PART_SITE_INFORMATION_AS_PLANNED,
+      data: {
+        functionValidUntil: "Sat Feb 08 03:30:48 GMT 2025",
+        function: "production",
+        functionValidFrom: "Wed Aug 21 00:10:36 GMT 2019",
+        catenaXSiteId: "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
+      }
+    }
+  ],
   owner: Owner.OWN,
   childRelations: [],
   parentRelations: [],
@@ -64,7 +74,17 @@ export const MOCK_part_4 = {
       validityPeriodFrom: "01.01.2023",
       validityPeriodTo: "01.02.2023",
     }
-  }],
+  },
+    {
+      type: DetailAspectType.PART_SITE_INFORMATION_AS_PLANNED,
+      data: {
+        functionValidUntil: "Sat Feb 08 03:30:48 GMT 2025",
+        function: "production",
+        functionValidFrom: "Wed Aug 21 00:10:36 GMT 2019",
+        catenaXSiteId: "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
+      }
+    }
+  ],
   owner: Owner.OWN,
   childRelations: [],
   parentRelations: [],
@@ -90,7 +110,17 @@ export const MOCK_part_3 = {
       validityPeriodFrom: "01.01.2022",
       validityPeriodTo: "01.02.2022",
     }
-  }],
+  },
+    {
+      type: DetailAspectType.PART_SITE_INFORMATION_AS_PLANNED,
+      data: {
+        functionValidUntil: "Sat Feb 08 03:30:48 GMT 2025",
+        function: "production",
+        functionValidFrom: "Wed Aug 21 00:10:36 GMT 2019",
+        catenaXSiteId: "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
+      }
+    }
+  ],
   owner: Owner.OWN,
   childRelations: [ { id: MOCK_part_5.id, idShort: MOCK_part_5.idShort } ],
   parentRelations: [],
@@ -116,7 +146,17 @@ export const MOCK_part_2 = {
       validityPeriodFrom: "01.01.2023",
       validityPeriodTo: "01.02.2023",
     }
-  }],
+  },
+    {
+      type: DetailAspectType.PART_SITE_INFORMATION_AS_PLANNED,
+      data: {
+        functionValidUntil: "Sat Feb 08 03:30:48 GMT 2025",
+        function: "production",
+        functionValidFrom: "Wed Aug 21 00:10:36 GMT 2019",
+        catenaXSiteId: "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
+      }
+    }
+  ],
   owner: Owner.OWN,
   childRelations: [{ id: MOCK_part_4.id, idShort: MOCK_part_4.idShort }],
   parentRelations: [],
@@ -142,7 +182,17 @@ export const MOCK_part_1 = {
       validityPeriodFrom: "01.01.2023",
       validityPeriodTo: "01.02.2023",
     }
-  }],
+  },
+    {
+      type: DetailAspectType.PART_SITE_INFORMATION_AS_PLANNED,
+      data: {
+        functionValidUntil: "Sat Feb 08 03:30:48 GMT 2025",
+        function: "production",
+        functionValidFrom: "Wed Aug 21 00:10:36 GMT 2019",
+        catenaXSiteId: "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
+      }
+    }
+  ],
   owner: Owner.OWN,
   childRelations: [
     { id: MOCK_part_2.id, idShort: MOCK_part_2.idShort },

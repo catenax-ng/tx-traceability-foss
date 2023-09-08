@@ -44,10 +44,19 @@ export const mockBmwAsPlannedAssets = [
     "classification": "component",
     "detailAspectModels": [
       {
+        "type": "AS_PLANNED",
+        "data": {
+          validityPeriodFrom: "01.01.2020",
+          functionValidUntil: "01.02.2020"
+        }
+      },
+      {
         "type": "PART_SITE_INFORMATION_AS_PLANNED",
         "data": {
-          functionValidFrom: "01.01.2023",
-          functionValidUntil: "01.02.2023",
+          "functionValidUntil": "Sat Feb 08 03:30:48 GMT 2025",
+          "function": "production",
+          "functionValidFrom": "Wed Aug 21 00:10:36 GMT 2019",
+          "catenaXSiteId": "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
         }
       }
     ]
@@ -78,8 +87,17 @@ export const mockBmwAsPlannedAssets = [
       {
         "type": "AS_PLANNED",
         "data": {
-          validityPeriodFrom: "01.01.2023",
-          validityPeriodTo: "01.02.2023",
+          validityPeriodFrom: "01.01.2020",
+          functionValidUntil: "01.02.2020"
+        }
+      },
+      {
+        "type": "PART_SITE_INFORMATION_AS_PLANNED",
+        "data": {
+          "functionValidUntil": "Sat Feb 08 03:30:48 GMT 2025",
+          "function": "production",
+          "functionValidFrom": "Wed Aug 21 00:10:36 GMT 2019",
+          "catenaXSiteId": "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
         }
       }
     ]
@@ -110,8 +128,17 @@ export const mockBmwAsPlannedAssets = [
       {
         "type": "AS_PLANNED",
         "data": {
-          validityPeriodFrom: "01.01.2023",
-          validityPeriodTo: "01.02.2023",
+          validityPeriodFrom: "01.01.2020",
+          functionValidUntil: "01.02.2020"
+        }
+      },
+      {
+        "type": "PART_SITE_INFORMATION_AS_PLANNED",
+        "data": {
+          "functionValidUntil": "Sat Feb 08 03:30:48 GMT 2025",
+          "function": "production",
+          "functionValidFrom": "Wed Aug 21 00:10:36 GMT 2019",
+          "catenaXSiteId": "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
         }
       }
     ]
@@ -139,6 +166,15 @@ export const mockBmwAsPlannedAssets = [
         "data": {
           validityPeriodFrom: "01.01.2023",
           validityPeriodTo: "01.02.2023",
+        }
+      },
+      {
+        "type": "PART_SITE_INFORMATION_AS_PLANNED",
+        "data": {
+          "functionValidUntil": "Sat Feb 08 03:30:48 GMT 2025",
+          "function": "production",
+          "functionValidFrom": "Wed Aug 21 00:10:36 GMT 2019",
+          "catenaXSiteId": "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
         }
       }
     ]
@@ -170,10 +206,19 @@ export const mockBmwAsPlannedAssets = [
     "classification": "component",
     "detailAspectModels": [
       {
-        "type": "AS_BUILT",
+        "type": "AS_PLANNED",
         "data": {
           "validityPeriodFrom": "01.01.2023",
           "validityPeriodTo": "01.02.2023",
+        }
+      },
+      {
+        "type": "PART_SITE_INFORMATION_AS_PLANNED",
+        "data": {
+          "functionValidUntil": "Sat Feb 08 03:30:48 GMT 2025",
+          "function": "production",
+          "functionValidFrom": "Wed Aug 21 00:10:36 GMT 2019",
+          "catenaXSiteId": "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
         }
       }
     ]
@@ -202,6 +247,15 @@ export const mockBmwAsPlannedAssets = [
       "data": {
         validityPeriodFrom: "01.01.2023",
         validityPeriodTo: "01.02.2023",
+      }
+    },
+    {
+      "type": "PART_SITE_INFORMATION_AS_PLANNED",
+      "data": {
+        "functionValidUntil": "Sat Feb 08 03:30:48 GMT 2025",
+        "function": "production",
+        "functionValidFrom": "Wed Aug 21 00:10:36 GMT 2019",
+        "catenaXSiteId": "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
       }
     }
   ]
@@ -236,6 +290,15 @@ export const mockBmwAsPlannedAssets = [
           validityPeriodFrom: "01.01.2023",
           validityPeriodTo: "01.02.2023",
         }
+      },
+      {
+        "type": "PART_SITE_INFORMATION_AS_PLANNED",
+        "data": {
+          "functionValidUntil": "Sat Feb 08 03:30:48 GMT 2025",
+          "function": "production",
+          "functionValidFrom": "Wed Aug 21 00:10:36 GMT 2019",
+          "catenaXSiteId": "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
+        }
       }
     ]
   },
@@ -269,6 +332,15 @@ export const mockBmwAsPlannedAssets = [
           validityPeriodFrom: "01.01.2023",
           validityPeriodTo: "01.02.2023",
         }
+      },
+      {
+        "type": "PART_SITE_INFORMATION_AS_PLANNED",
+        "data": {
+          "functionValidUntil": "Sat Feb 08 03:30:48 GMT 2025",
+          "function": "production",
+          "functionValidFrom": "Wed Aug 21 00:10:36 GMT 2019",
+          "catenaXSiteId": "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
+        }
       }
     ]
   },
@@ -300,6 +372,15 @@ export const mockBmwAsPlannedAssets = [
         "data": {
           validityPeriodFrom: "01.01.2023",
           validityPeriodTo: "01.02.2023",
+        }
+      },
+      {
+        "type": "PART_SITE_INFORMATION_AS_PLANNED",
+        "data": {
+          "functionValidUntil": "Sat Feb 08 03:30:48 GMT 2025",
+          "function": "production",
+          "functionValidFrom": "Wed Aug 21 00:10:36 GMT 2019",
+          "catenaXSiteId": "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
         }
       }
     ]
@@ -333,6 +414,15 @@ export const mockBmwAsPlannedAssets = [
           validityPeriodFrom: "01.01.2023",
           validityPeriodTo: "01.02.2023",
         }
+      },
+      {
+        "type": "PART_SITE_INFORMATION_AS_PLANNED",
+        "data": {
+          "functionValidUntil": "Sat Feb 08 03:30:48 GMT 2025",
+          "function": "production",
+          "functionValidFrom": "Wed Aug 21 00:10:36 GMT 2019",
+          "catenaXSiteId": "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
+        }
       }
     ]
   },
@@ -365,6 +455,15 @@ export const mockBmwAsPlannedAssets = [
           validityPeriodFrom: "01.01.2023",
           validityPeriodTo: "01.02.2023",
         }
+      },
+      {
+        "type": "PART_SITE_INFORMATION_AS_PLANNED",
+        "data": {
+          "functionValidUntil": "Sat Feb 08 03:30:48 GMT 2025",
+          "function": "production",
+          "functionValidFrom": "Wed Aug 21 00:10:36 GMT 2019",
+          "catenaXSiteId": "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
+        }
       }
     ]
   },
@@ -385,6 +484,15 @@ const MockEmptyPart: PartResponse = {
       validityPeriodFrom: "01.01.2023",
       validityPeriodTo: "01.02.2023",
     }
+    },
+    {
+      type: DetailAspectType.PART_SITE_INFORMATION_AS_PLANNED,
+      data: {
+        functionValidUntil: "Sat Feb 08 03:30:48 GMT 2025",
+        function: "production",
+        functionValidFrom: "Wed Aug 21 00:10:36 GMT 2019",
+        catenaXSiteId: "urn:uuid:0733946c-59c6-41ae-9570-cb43a6e4da01"
+      }
   }] ,
   owner: Owner.OWN,
   childRelations: [],
