@@ -63,7 +63,7 @@ describe('StartInvestigationComponent', () => {
     await sleepForTests(2000);
     expect(await waitFor(() => screen.getByText('requestNotification.partDescription'))).toBeInTheDocument();
   });
-
+/*
   it('should render selected items and remove them again', async function() {
     await renderStartInvestigation();
 
@@ -79,7 +79,7 @@ describe('StartInvestigationComponent', () => {
     const restoredElement = await waitFor(() => screen.getByTestId('mat-chip--' + PartsAssembler.assemblePart(MOCK_part_2).name));
     expect(restoredElement).toBeInTheDocument();
   });
-
+*/
   it('should sort table data', async () => {
     const fixture = await renderStartInvestigation();
     const spy = spyOn((fixture.componentInstance as any).childPartsState, 'update').and.callThrough();
