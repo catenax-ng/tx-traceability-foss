@@ -18,8 +18,7 @@
  ********************************************************************************/
 package org.eclipse.tractusx.traceability.assets.application.asplanned.mapper;
 
-import assets.response.AssetAsBuiltResponse;
-import assets.response.AssetAsPlannedResponse;
+import assets.response.asplanned.AssetAsPlannedResponse;
 import org.eclipse.tractusx.traceability.assets.application.base.mapper.AssetBaseResponseMapper;
 import org.eclipse.tractusx.traceability.assets.domain.base.model.AssetBase;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
@@ -34,9 +33,10 @@ public class AssetAsPlannedResponseMapper extends AssetBaseResponseMapper {
                 .idShort(asset.getIdShort())
                 .classification(asset.getClassification())
                 .semanticModelId(asset.getSemanticModelId())
-                .manufacturerId(asset.getManufacturerId())
+                .businessPartner(asset.getManufacturerId())
                 .manufacturerName(asset.getManufacturerName())
-                .semanticModel(from(asset.getSemanticModel()))
+                .nameAtManufacturer(asset.getNameAtManufacturer())
+                .manufacturerPartId(asset.getManufacturerPartId())
                 .owner(from(asset.getOwner()))
                 .childRelations(
                         asset.getChildRelations().stream()
@@ -53,8 +53,11 @@ public class AssetAsPlannedResponseMapper extends AssetBaseResponseMapper {
                 )
                 .van(asset.getVan())
                 .semanticDataModel(from(asset.getSemanticDataModel()))
+                .detailAspectModels(fromList(asset.getDetailAspectModels()))
                 .build();
     }
+
+
 
     public static PageResult<AssetAsPlannedResponse> from(final PageResult<AssetBase> assetPageResult) {
         return new PageResult<>(

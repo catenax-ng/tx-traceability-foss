@@ -19,8 +19,8 @@
 
 package org.eclipse.tractusx.traceability.assets.application.asplanned.rest;
 
-import assets.response.AssetAsBuiltResponse;
-import assets.response.AssetAsPlannedResponse;
+import assets.response.asbuilt.AssetAsBuiltResponse;
+import assets.response.asplanned.AssetAsPlannedResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,7 +31,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.QueryParam;
-import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.assets.application.asplanned.mapper.AssetAsPlannedResponseMapper;
 import org.eclipse.tractusx.traceability.assets.application.base.request.GetDetailInformationRequest;
 import org.eclipse.tractusx.traceability.assets.application.base.request.SyncAssetsRequest;
@@ -157,49 +156,6 @@ public class AssetAsPlannedController {
     public PageResult<AssetAsPlannedResponse> assets(OwnPageable pageable, @QueryParam("owner") Owner owner) {
         return AssetAsPlannedResponseMapper.from(assetService.getAssets(OwnPageable.toPageable(pageable), owner));
     }
-
-    @Operation(operationId = "assetsCountryMap",
-            summary = "Get map of assets",
-            tags = {"Assets"},
-            description = "The endpoint returns a map for assets consumed by the map.",
-            security = @SecurityRequirement(name = "oAuth2", scopes = "profile email"))
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Returns the assets found"),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad request.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "Authorization failed.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class))),
-
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "Forbidden.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(
-                    responseCode = "429",
-                    description = "Too many requests.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal server error.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponse.class)))})
-    @GetMapping("/countries")
-    public Map<String, Long> assetsCountryMap() {
-        return assetService.getAssetsCountryMap();
-    }
-
 
     @Operation(operationId = "assetById",
             summary = "Get asset by id",
