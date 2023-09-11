@@ -72,7 +72,7 @@ export class PartsService {
     let resultsAsPlanned = this.apiService.get<PartResponse>(`${ this.url }/assets/as-planned/${ id }`)
       .pipe(map(part => PartsAssembler.assemblePart(part)));
 
-    return resultsAsBuilt ? resultsAsBuilt : resultsAsPlanned;
+    return resultsAsBuilt || resultsAsPlanned;
 
   }
 
