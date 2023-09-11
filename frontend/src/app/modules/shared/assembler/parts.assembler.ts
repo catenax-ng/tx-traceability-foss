@@ -37,7 +37,7 @@ export class PartsAssembler {
 
   public static createSemanticModelFromPartResponse(partResponse: PartResponse): SemanticModel {
     let proplist= {};
-    partResponse.detailAspectModels.map((detailAspectModel) => {
+    partResponse.detailAspectModels.forEach((detailAspectModel) => {
       proplist = {...proplist, ...detailAspectModel.data};   //detailSemanticModel.data;
     })
 
