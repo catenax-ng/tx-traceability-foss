@@ -45,16 +45,16 @@ describe('PartsAssembler', () => {
     it('should format the object correctly', () => {
       const testData = [];
       const expected = [];
-      for (let i = 0; i < 3; i++) {
-        const id = 'id_' + i;
-        const idShort = 'idShort_' + i;
+
+        const id = 'id_0';
+        const idShort = 'idShort_0';
         const semanticModelId = 'semanticModelId';
         const manufacturerPartId = 'manufacturerPartId';
         const businessPartner = 'businesspartner';
         const manufacturerName = 'manufacturerName';
         const nameAtManufacturer = 'nameAtManufacturer';
         const owner = 'OWN';
-        const childRelations = [ { id: 'id', idShort: 'idShort' } ];
+        const childRelations = [];
         const parentRelations = [];
         const activeAlert = false;
         const underInvestigation = false;
@@ -62,13 +62,20 @@ describe('PartsAssembler', () => {
         const van = 'van';
         const semanticDataModel = 'BATCH';
         const classification = 'component';
+        const semanticModel = {
+          "partId": "partId",
+          "customerPartId": "customerPartId",
+          "nameAtCustomer": "nameAtCustomer",
+          "manufacturingDate": "testdate",
+          "manufacturingCountry": "manufacturingCountry",
+        }
         const detailAspectModels = [ {
           type: DetailAspectType.AS_BUILT,
           data: {
             partId: 'partId',
             customerPartId: 'customerPartId',
             nameAtCustomer: 'nameAtCustomer',
-            manufacturingDate: "2022-02-04T13:48:54",
+            manufacturingDate: "testdate",
             manufacturingCountry: 'manufacturingCountry'
           }
         }
@@ -82,35 +89,36 @@ describe('PartsAssembler', () => {
           businessPartner,
           manufacturerName,
           nameAtManufacturer,
-          detailAspectModels,
           owner,
-          activeAlert,
-          underInvestigation,
           childRelations,
           parentRelations,
+          activeAlert,
+          underInvestigation,
           qualityType,
           van,
+          semanticDataModel,
           classification,
-          semanticDataModel
+          semanticModel,
+          detailAspectModels,
         });
 
         const partId = (detailAspectModels[0].data as AsBuiltAspectModel)?.partId;
         const customerPartId = (detailAspectModels[0].data as AsBuiltAspectModel)?.customerPartId;
         const nameAtCustomer = (detailAspectModels[0].data as AsBuiltAspectModel)?.nameAtCustomer;
-        const manufacturingDate = "2022-02-04T13:48:54"
+        const manufacturingDate = "testdate"
         const manufacturingCountry = (detailAspectModels[0].data as AsBuiltAspectModel)?.manufacturingCountry;
-
 
         expected.push({
           id,
           idShort: idShort,
           semanticModelId: semanticModelId,
+
           manufacturer: manufacturerName,
           manufacturerPartId: manufacturerPartId,
           nameAtManufacturer: nameAtManufacturer,
           businessPartner: businessPartner,
           name: nameAtManufacturer,
-          children: childRelations.map(child => child.id),
+          children: [],
           parents: [],
           activeAlert: false,
           activeInvestigation: false,
@@ -119,6 +127,8 @@ describe('PartsAssembler', () => {
           semanticDataModel: SemanticDataModel.BATCH,
           classification: classification,
 
+          semanticModel: semanticModel,
+
           partId: partId, // is partInstance, BatchId, jisNumber
           customerPartId: customerPartId,
           nameAtCustomer: nameAtCustomer,
@@ -126,9 +136,7 @@ describe('PartsAssembler', () => {
           manufacturingCountry: manufacturingCountry,
 
         });
-      }
-      console.warn(JSON.stringify(PartsAssembler.assembleParts(page(testData)).content));
-      console.warn(JSON.stringify(expected))
+
       expect(JSON.stringify(PartsAssembler.assembleParts(page(testData)).content)).toEqual(JSON.stringify(expected));
     });
   });

@@ -32,7 +32,7 @@ export interface Part {
   manufacturerPartId: string;
   nameAtManufacturer: string;
   businessPartner: string
-  semanticModel: SemanticModel;
+  semanticModel?: SemanticModel;
   semanticModelId: string;
   qualityType: QualityType;
   children: string[];

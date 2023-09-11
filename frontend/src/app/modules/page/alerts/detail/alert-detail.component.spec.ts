@@ -71,6 +71,6 @@ describe('AlertDetailComponent', () => {
     const spy = spyOn(navigator.clipboard, 'writeText').and.returnValue(new Promise(null));
     fireEvent.click(await waitFor(() => screen.getByTestId('copy-button--' + MOCK_part_1.id)));
 
-    expect(spy).toHaveBeenCalledWith(MOCK_part_1.semanticModelId);
+    expect(spy).toHaveBeenCalledWith("NO-341449848714937445621543");
   });
 });

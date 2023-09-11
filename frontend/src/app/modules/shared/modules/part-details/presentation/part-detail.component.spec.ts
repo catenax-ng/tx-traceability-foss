@@ -70,7 +70,7 @@ describe('PartDetailComponent', () => {
     await renderPartDetailComponent();
 
     const sideNavElement = await waitFor(() => screen.getByTestId('sidenav--test-id'));
-    const nameElement = await screen.findAllByText(part.name);
+    const nameElement = await screen.findByText(part.name);
     const productionDateElement = await screen.findByText('2022-02-04T13:48:54');
 
     expect(sideNavElement).toBeInTheDocument();

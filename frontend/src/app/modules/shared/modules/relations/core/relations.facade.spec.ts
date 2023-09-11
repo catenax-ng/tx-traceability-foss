@@ -32,7 +32,6 @@ import { debounceTime, map } from 'rxjs/operators';
 import {
   MOCK_part_1,
   MOCK_part_2,
-  MOCK_part_3,
   mockAssetList,
 } from '../../../../../mocks/services/parts-mock/partsAsBuilt/partsAsBuilt.test.model';
 
@@ -67,9 +66,7 @@ describe('Relations facade', () => {
       const expected = {
         [MOCK_part_1.id]: childDescriptionsToChild(MOCK_part_1.childRelations),
         [MOCK_part_2.id]: childDescriptionsToChild(MOCK_part_2.childRelations),
-        [MOCK_part_3.id]: childDescriptionsToChild(MOCK_part_3.childRelations),
       };
-
       relationsFacade.openElementWithChildren(mockTreeElement);
       expect(await getOpenElements()).toEqual(expected);
     });
@@ -91,7 +88,7 @@ describe('Relations facade', () => {
       const { id, childRelations } = MOCK_part_1;
       const children = childDescriptionsToChild(childRelations);
       const mockTreeElement = { id, children } as TreeElement;
-      const expected = { MOCK_part_1: ['MOCK_part_2', 'MOCK_part_3'], MOCK_part_3: ['MOCK_part_5'] };
+      const expected = { MOCK_part_1: ['MOCK_part_2']};
 
       relationsFacade.openElementWithChildren(mockTreeElement);
       relationsFacade.deleteOpenElement(children[0]);
@@ -104,8 +101,7 @@ describe('Relations facade', () => {
       const mockTreeElement = { id, children: childDescriptionsToChild(childRelations) } as TreeElement;
       const expected_all = {
         [MOCK_part_1.id]: childDescriptionsToChild(MOCK_part_1.childRelations),
-        [MOCK_part_2.id]: childDescriptionsToChild(MOCK_part_2.childRelations),
-        [MOCK_part_3.id]: childDescriptionsToChild(MOCK_part_3.childRelations),
+        [MOCK_part_2.id]: childDescriptionsToChild(MOCK_part_2.childRelations)
       };
 
       relationsFacade.openElementWithChildren(mockTreeElement);
@@ -116,7 +112,6 @@ describe('Relations facade', () => {
 
       const expected_deleted = {
         [MOCK_part_1.id]: childDescriptionsToChild(MOCK_part_1.childRelations),
-        [MOCK_part_3.id]: childDescriptionsToChild(MOCK_part_3.childRelations),
       };
 
       const deletedOpenElements = await getOpenElements();
@@ -127,33 +122,26 @@ describe('Relations facade', () => {
   describe('formatOpenElementsToTreeData', () => {
     it('should format data', async () => {
       const expected = {
-        id: 'Mock_part_1',
+        id: 'MOCK_part_1',
         state: 'done',
         children: [
           {
             children: [],
             id: 'MOCK_part_2',
-            relations: null,
-            state: 'BATCH',
-            text: 'MyAsBuiltPartName',
-            title: 'MyAsBuiltPartName | MOCK_part_2',
-          },
-          {
-            children: [],
-            id: 'MOCK_part_2',
-            relations: null,
+            relations: [
+              {
+              id: "MOCK_part_4",
+              title: "MOCK_part_4",
+              state: "loading",
+              children: null,
+            }
+            ],
             state: 'BATCH',
             text: 'MyAsBuiltPartName',
             title: 'MyAsBuiltPartName | MOCK_part_2',
           },
         ],
         relations: [
-          {
-            children: null,
-            id: 'MOCK_part_2',
-            state: 'loading',
-            title: 'MOCK_part_2',
-          },
           {
             children: null,
             id: 'MOCK_part_2',

@@ -33,12 +33,7 @@ export const MOCK_part_5 = {
   manufacturerPartId: "ManuPartID",
   "owner": Owner.OWN,
   "childRelations": [],
-  "parentRelations": [
-    {
-      "id": "urn:uuid:c47b9f8b-48d0-4ef4-8f0b-e965a225cb8d",
-      "idShort": null
-    }
-  ],
+  "parentRelations": [],
   "activeAlert": false,
   "underInvestigation": false,
   "qualityType": QualityType.Ok,
@@ -69,7 +64,12 @@ export const MOCK_part_4 = {
   manufacturerPartId: "ManuPartID",
   "owner": Owner.OWN,
   "childRelations": [],
-  "parentRelations": [],
+  "parentRelations": [
+    {
+      id: "MOCK_part_2",
+      idShort: "--"
+    }
+  ],
   "activeAlert": false,
   "underInvestigation": false,
   "qualityType": QualityType.Ok,
@@ -99,7 +99,13 @@ export const MOCK_part_3 = {
   nameAtManufacturer: "B-Klasse",
   manufacturerPartId: "ManuPartID",
   "owner": Owner.OWN,
-  "childRelations": [],
+  "childRelations": [
+    {
+      id: "MOCK_part_1",
+      idShort: "--"
+
+    }
+  ],
   "parentRelations": [],
   "activeAlert": false,
   "underInvestigation": false,
@@ -130,11 +136,16 @@ export const MOCK_part_2 = {
   nameAtManufacturer: "MyAsBuiltPartName",
   manufacturerPartId: "ManuPartID",
   "owner": Owner.OWN,
-  "childRelations": [],
+  "childRelations": [
+    {
+      id: "MOCK_part_4",
+      idShort: "--"
+    }
+  ],
   "parentRelations": [
     {
-      "id": "urn:uuid:1be6ec59-40fb-4993-9836-acb0e284fb02",
-      "idShort": null
+      "id": "MOCK_part_1",
+      "idShort": "--"
     }
   ],
   "activeAlert": false,
@@ -158,7 +169,7 @@ export const MOCK_part_2 = {
 };
 
 export const MOCK_part_1 = {
-  id: "Mock_part_1",
+  id: "MOCK_part_1",
   "idShort": "--",
   "semanticModelId": "NO-341449848714937445621543",
   "businessPartner": "BPNL00000003CML1",
@@ -168,16 +179,12 @@ export const MOCK_part_1 = {
   "owner": Owner.OWN,
   "childRelations": [{
     id: MOCK_part_2.id,
-    idShort: null,
+    idShort: "--",
   },
-    {
-      id: MOCK_part_2.id,
-      idShort: null,
-    }
   ],
   "parentRelations": [{
     id: MOCK_part_3.id,
-    idShort: null,
+    idShort: "--",
   }],
   "activeAlert": false,
   "underInvestigation": false,
