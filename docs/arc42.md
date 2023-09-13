@@ -266,19 +266,20 @@ This section describes the overall flow of the TraceX-FOSS application
 
 ## Scenario 1: Return all Assets
 
-This section describes what happens when user lists all stored assets.
+This section describes what happens when user lists all stored as built assets.
 
 ![arc42_007](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_007.png)
 
 ##### Overview
 
-When a user requests all stored assets, TraceX-FOSS checks if the user has an adequate role ('ROLE_ADMIN', 'ROLE_SUPERVISOR', 'ROLE_USER'). If yes, then the endpoint returns a pageable result of assets.
+When a user requests stored assets, TraceX-FOSS checks if the user has an adequate role ('ROLE_ADMIN', 'ROLE_SUPERVISOR', 'ROLE_USER').
+If yes, then the endpoint returns a pageable result of assets.
 
 The returned pageable result can be empty if no suitable asset has been found.
 
 ## Scenario 2: Return specific Assets
 
-This section describes what happens when user searches for a specific asset.
+This section describes what happens when user searches for a specific as built asset.
 
 ![arc42_008](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_008.png)
 
@@ -287,32 +288,6 @@ This section describes what happens when user searches for a specific asset.
 When a user requests a specific asset, TraceX-FOSS checks if the user has an adequate role ('ROLE_ADMIN', 'ROLE_SUPERVISOR', 'ROLE_USER'). If yes, then the endpoint returns a precise Asset for the given assetId, if it is found.
 
 If no asset has been found for the given ID, an AssetNotFoundException is thrown.
-
-## Scenario 3: Get country information for assets
-
-This section describes what happens when user lists the map of assets.
-
-![arc42_009](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_009.png)
-
-##### Overview
-
-When a user requests the map of assets, TraceX-FOSS checks if the user has an adequate role ('ROLE_ADMIN', 'ROLE_SUPERVISOR', 'ROLE_USER'). If yes, then the endpoint returns a JAVA map containing a country names as keys and the number of assets stored for each country and for the given assetId, if they are found.
-
-If no asset has been found, an empty JAVA map will be returned.
-
-## Scenario 4: Get specific information for assets
-
-This section describes what happens when user lists detailed information for assets.
-
-![arc42_010](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_010.png)
-
-##### Overview
-
-When a user requests detailed information for assets, TraceX-FOSS checks if the user has an adequate role ('ROLE_ADMIN', 'ROLE_SUPERVISOR', 'ROLE_USER'). If yes, then the endpoint returns a list containing all the stored information for the given assetId, if they are found.
-
-If no asset has been found, an empty list will be returned.
-
-This information for an asset can contain the name of the manufacturer, the manufacturer part ID, the manufacturer name, the manufacturing country, etc.
 
 ## Deployment view
 
@@ -340,7 +315,7 @@ This section includes concrete quality scenarios to better capture the key quali
 
 The tree structure provides an overview for a sometimes large number of quality requirements.
 
-![arc42_011](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_011.png)
+![arc42_009](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_009.png)
 
 ## Quality scenarios
 
