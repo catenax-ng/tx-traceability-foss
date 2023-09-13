@@ -264,9 +264,11 @@ Component Diagram
 
 This section describes the overall flow of the TraceX-FOSS application
 
-## Scenario 1: Return all Assets
+## Scenario 1: Return Assets
 
-This section describes what happens when user lists all stored as built assets.
+This section describes what happens when user lists stored assets.
+In this example, the user requests as built assets.
+The same can be done with as planned assets.
 
 ![arc42_007](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_007.png)
 
@@ -279,7 +281,9 @@ The returned pageable result can be empty if no suitable asset has been found.
 
 ## Scenario 2: Return specific Assets
 
-This section describes what happens when user searches for a specific as built asset.
+This section describes what happens when user searches for a specific asset.
+This example shows the request of one as built asset.
+The same can be done with as planned assets.
 
 ![arc42_008](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_008.png)
 
