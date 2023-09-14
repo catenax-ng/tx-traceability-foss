@@ -346,6 +346,7 @@ The initial letters of the scenario identifiers (IDs) in the following table eac
 | AAS | ***A****sset **A****dministration **S***hell (Industry 4.0). Is the implementation of the digital twin for Industry 4.0 and enables interoperability between different companies. |
 | BoM | ***B****ill **o****f **M***aterial. BoM is a list of parts and materials that a product contains. Without them, manufacturing would not be possible. |
 | BoM AsBuilt | Bill of material lifecycle of the built entity |
+| BoM AsPlanned | Bill of material lifecycle of the planned entity |
 | BPN | ***B****usiness **P****artner **N***umber. A BPN is used to identify a partner in the Catena-X network |
 | CX | Abbreviation for Catena-X |
 | Data Sovereignty | Ability to keep control over own data, that is shared with other participants |
