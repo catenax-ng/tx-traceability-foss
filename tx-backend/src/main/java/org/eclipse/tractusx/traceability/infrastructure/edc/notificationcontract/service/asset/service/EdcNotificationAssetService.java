@@ -29,6 +29,7 @@ import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract
 import org.eclipse.tractusx.traceability.infrastructure.edc.properties.EdcProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -43,7 +44,8 @@ import static org.eclipse.tractusx.traceability.infrastructure.edc.notificationc
 
 @Slf4j
 @Component
-public class EdcNotitifcationAssetService {
+@Profile("!integration")
+public class EdcNotificationAssetService {
 
     private static final String DEFAULT_CONTENT_TYPE = "application/json";
     private static final String DEFAULT_POLICY_ID = "use-eu";
@@ -57,7 +59,7 @@ public class EdcNotitifcationAssetService {
     private final EdcProperties edcProperties;
 
     @Autowired
-    public EdcNotitifcationAssetService(TraceabilityProperties traceabilityProperties, @Qualifier(EDC_REST_TEMPLATE) RestTemplate edcRestTemplate, EdcProperties edcProperties) {
+    public EdcNotificationAssetService(TraceabilityProperties traceabilityProperties, @Qualifier(EDC_REST_TEMPLATE) RestTemplate edcRestTemplate, EdcProperties edcProperties) {
         this.traceabilityProperties = traceabilityProperties;
         this.restTemplate = edcRestTemplate;
         this.edcProperties = edcProperties;

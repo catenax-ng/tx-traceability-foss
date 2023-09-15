@@ -28,22 +28,27 @@ import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.controller.model.CreateNotificationContractResponse;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.controller.model.NotificationMethod;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.asset.model.CreateEdcAssetException;
-import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.asset.service.EdcNotitifcationAssetService;
+import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.asset.service.EdcNotificationAssetService;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.contract.model.CreateEdcContractDefinitionException;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.contract.service.EdcContractDefinitionService;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.policy.model.CreateEdcPolicyDefinitionException;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.policy.service.EdcPolicyDefinitionService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+
+import static org.eclipse.tractusx.traceability.common.config.ApplicationProfiles.NOT_INTEGRATION_TESTS;
 
 @Slf4j
 @Component
 @AllArgsConstructor
-public class EdcNotificationContractService {
+@Profile(NOT_INTEGRATION_TESTS)
+public class EdcNotificationContractService implements NotificationContractService {
 
-    private final EdcNotitifcationAssetService edcNotitifcationAssetService;
+    private final EdcNotificationAssetService edcNotificationAssetService;
     private final EdcPolicyDefinitionService edcPolicyDefinitionService;
     private final EdcContractDefinitionService edcContractDefinitionService;
 
+    @Override
     public CreateNotificationContractResponse handle(CreateNotificationContractRequest request) {
 
         NotificationMethod notificationMethod = request.notificationMethod();
@@ -52,7 +57,7 @@ public class EdcNotificationContractService {
 
         String notificationAssetId = "";
         try {
-            notificationAssetId = edcNotitifcationAssetService.createNotificationAsset(notificationMethod, request.notificationType());
+            notificationAssetId = edcNotificationAssetService.createNotificationAsset(notificationMethod, request.notificationType());
         } catch (CreateEdcAssetException e) {
             throw new CreateNotificationContractException(e);
         } catch (JsonProcessingException e2) {
@@ -100,6 +105,6 @@ public class EdcNotificationContractService {
     private void revertNotificationAsset(String notificationAssetId) {
         log.info("Removing {} notification asset", notificationAssetId);
 
-        edcNotitifcationAssetService.deleteNotificationAsset(notificationAssetId);
+        edcNotificationAssetService.deleteNotificationAsset(notificationAssetId);
     }
 }

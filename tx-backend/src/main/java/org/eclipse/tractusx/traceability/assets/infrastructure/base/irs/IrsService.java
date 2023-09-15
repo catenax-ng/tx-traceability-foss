@@ -38,11 +38,14 @@ import org.eclipse.tractusx.traceability.assets.infrastructure.base.irs.model.re
 import org.eclipse.tractusx.traceability.assets.infrastructure.base.irs.model.response.RegisterJobResponse;
 import org.eclipse.tractusx.traceability.assets.infrastructure.base.model.IrsPolicy;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static org.eclipse.tractusx.traceability.common.config.ApplicationProfiles.NOT_INTEGRATION_TESTS;
 
 @Slf4j
 @Service
@@ -51,7 +54,6 @@ public class IrsService implements IrsRepository {
 
     private final IRSApiClient irsClient;
     private final BpnRepository bpnRepository;
-    private final IrsPolicyConfig irsPolicyConfig;
     @Value("${traceability.bpn}")
     private String applicationBPN;
     private final ObjectMapper objectMapper;
@@ -83,52 +85,6 @@ public class IrsService implements IrsRepository {
             return jobResponse.convertAssets();
         }
         return Collections.emptyList();
-    }
-
-    @Override
-    public void createIrsPolicyIfMissing() {
-        log.info("Check if irs policy exists");
-        List<IrsPolicy> irsPolicies = irsClient.getPolicies().stream().map(PolicyResponse::toDomain)
-                .toList();
-        log.info("Irs has following policies: {}", irsPolicies);
-
-
-        final List<IrsPolicy> requiredPolicies = irsPolicyConfig.getPolicies();
-
-        log.info("Required policies from application yaml are : {}", requiredPolicies);
-
-        final List<IrsPolicy> existingPolicy = irsPolicies.stream().filter(
-                        irsPolicy -> requiredPolicies.stream()
-                                .map(IrsPolicy::getPolicyId)
-                                .toList()
-                                .contains(irsPolicy.getPolicyId()))
-                .toList();
-        final List<IrsPolicy> missingPolicies = requiredPolicies.stream().filter(requiredPolicy -> !irsPolicies.stream()
-                        .map(IrsPolicy::getPolicyId)
-                        .toList()
-                        .contains(requiredPolicy.getPolicyId()))
-                .toList();
-
-        existingPolicy.forEach(policy -> checkAndUpdatePolicy(policy, requiredPolicies));
-
-
-        missingPolicies.forEach(this::createPolicy);
-    }
-
-    private void createPolicy(IrsPolicy requiredPolicy) {
-        log.info("Irs policy does not exist creating {}", requiredPolicy);
-        irsClient.registerPolicy(RegisterPolicyRequest.from(requiredPolicy));
-    }
-
-    private void checkAndUpdatePolicy(IrsPolicy existingPolicy, List<IrsPolicy> requiredPolicies) {
-        Optional<IrsPolicy> requiredPolicy = requiredPolicies.stream().filter(policyItem -> policyItem.getPolicyId().equals(existingPolicy.getPolicyId())).findFirst();
-        if (requiredPolicy.isPresent() &&
-                requiredPolicy.get().getTtlAsInstant().isAfter(existingPolicy.getTtlAsInstant())
-        ) {
-            log.info("IRS Policy {} has outdated validity updating new ttl {}", existingPolicy, requiredPolicy);
-            irsClient.deletePolicy(existingPolicy.getPolicyId());
-            irsClient.registerPolicy(RegisterPolicyRequest.from(requiredPolicy.get()));
-        }
     }
 
 }

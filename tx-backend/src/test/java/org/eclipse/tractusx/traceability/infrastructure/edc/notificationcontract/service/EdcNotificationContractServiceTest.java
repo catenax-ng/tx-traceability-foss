@@ -26,7 +26,7 @@ import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.controller.model.CreateNotificationContractResponse;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.controller.model.NotificationMethod;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.controller.model.NotificationType;
-import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.asset.service.EdcNotitifcationAssetService;
+import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.asset.service.EdcNotificationAssetService;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.contract.service.EdcContractDefinitionService;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.policy.service.EdcPolicyDefinitionService;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +42,7 @@ import static org.mockito.Mockito.when;
 class EdcNotificationContractServiceTest {
 
     @Mock
-    EdcNotitifcationAssetService edcNotitifcationAssetService;
+    EdcNotificationAssetService edcNotificationAssetService;
 
     @Mock
     EdcPolicyDefinitionService edcPolicyDefinitionService;
@@ -62,11 +62,11 @@ class EdcNotificationContractServiceTest {
         NotificationType notificationType = NotificationType.QUALITY_INVESTIGATION;
         NotificationMethod notificationMethod = NotificationMethod.RESOLVE;
         request = new CreateNotificationContractRequest(notificationType, notificationMethod);
-        when(edcNotitifcationAssetService.createNotificationAsset(notificationMethod, request.notificationType())).thenReturn(notificationAssetId);
+        when(edcNotificationAssetService.createNotificationAsset(notificationMethod, request.notificationType())).thenReturn(notificationAssetId);
         when(edcPolicyDefinitionService.createAccessPolicy()).thenReturn(accessPolicyId);
         when(edcContractDefinitionService.createContractDefinition(notificationAssetId, accessPolicyId)).thenReturn(contractDefinitionId);
         edcNotificationContractService = new EdcNotificationContractService(
-                edcNotitifcationAssetService, edcPolicyDefinitionService, edcContractDefinitionService
+                edcNotificationAssetService, edcPolicyDefinitionService, edcContractDefinitionService
         );
     }
 
