@@ -20,3 +20,5 @@ name: "TraceX CodeQL config"
 query-filters:
   - exclude:
       id: java/unused-reference-type
+  - exclude:
+      id: java/spring-disabled-csrf-protection

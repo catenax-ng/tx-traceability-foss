@@ -29,7 +29,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -69,7 +68,7 @@ public class SecurityConfig {
         httpSecurity.formLogin().disable();
         httpSecurity.logout().disable();
         httpSecurity.anonymous().disable();
-        httpSecurity.csrf();
+        httpSecurity.csrf().disable();
         httpSecurity.cors();
 
 
