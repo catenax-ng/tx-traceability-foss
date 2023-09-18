@@ -69,7 +69,7 @@ public class SecurityConfig {
         httpSecurity.formLogin().disable();
         httpSecurity.logout().disable();
         httpSecurity.anonymous().disable();
-        httpSecurity.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+        httpSecurity.csrf();
         httpSecurity.cors();
 
 
