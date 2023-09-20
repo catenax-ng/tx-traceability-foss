@@ -23,6 +23,7 @@ package org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontrac
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.tractusx.traceability.common.utilities.Masker;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.asset.model.CreateEdcAssetException;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.asset.model.EdcContext;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.contract.model.CreateEdcContractDefinitionException;
@@ -103,7 +104,7 @@ public class EdcContractDefinitionService {
             return accessPolicyId;
         }
 
-        log.error("Failed to create EDC contract definition for {} notification asset id. Body: {}, status: {}", notificationAssetId, createContractDefinitionResponse.getBody(), createContractDefinitionResponse.getStatusCode());
+        log.error("Failed to create EDC contract definition for {} notification asset id. Body: {}, status: {}", notificationAssetId, Masker.mask(createContractDefinitionResponse.getBody()), createContractDefinitionResponse.getStatusCode());
 
         throw new CreateEdcAssetException("Failed to create EDC contract definition for %s notification asset id".formatted(notificationAssetId));
     }

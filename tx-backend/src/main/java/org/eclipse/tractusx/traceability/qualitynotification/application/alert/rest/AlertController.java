@@ -34,6 +34,7 @@ import org.eclipse.tractusx.traceability.common.config.FeatureFlags;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.common.request.OwnPageable;
 import org.eclipse.tractusx.traceability.common.response.ErrorResponse;
+import org.eclipse.tractusx.traceability.common.utilities.Masker;
 import org.eclipse.tractusx.traceability.qualitynotification.application.alert.mapper.AlertResponseMapper;
 import org.eclipse.tractusx.traceability.qualitynotification.application.alert.request.StartQualityAlertRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.base.request.CloseQualityNotificationRequest;
@@ -125,7 +126,7 @@ public class AlertController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public QualityNotificationIdResponse alertAssets(@RequestBody @Valid StartQualityAlertRequest request) {
-        log.info(API_LOG_START + " with params: {}", request);
+        log.info(API_LOG_START + " with params: {}", Masker.mask(request));
         //TODO refactor this method to only take request as parameter
         return new QualityNotificationIdResponse(alertService.start(
                 request.getPartIds(),
@@ -473,7 +474,7 @@ public class AlertController {
     public void closeAlert(
             @PathVariable @ApiParam Long alertId,
             @Valid @RequestBody CloseQualityNotificationRequest closeAlertRequest) {
-        log.info(API_LOG_START + "/{}/close with params {}", alertId, closeAlertRequest);
+        log.info(API_LOG_START + "/{}/close with params {}", alertId, Masker.mask(closeAlertRequest));
         alertService.update(alertId, QualityNotificationStatusRequest.toDomain(QualityNotificationStatusRequest.CLOSED), closeAlertRequest.getReason());
     }
 
@@ -537,7 +538,7 @@ public class AlertController {
             @PathVariable Long alertId,
             @Valid @RequestBody UpdateQualityNotificationRequest updateAlertRequest) {
         validate(updateAlertRequest);
-        log.info(API_LOG_START + "/{}/update with params {}", alertId, updateAlertRequest);
+        log.info(API_LOG_START + "/{}/update with params {}", alertId, Masker.mask(updateAlertRequest));
         alertService.update(alertId, updateAlertRequest.getStatus().toDomain(), updateAlertRequest.getReason());
     }
 }

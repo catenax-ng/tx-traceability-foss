@@ -23,6 +23,7 @@ package org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontrac
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
+import org.eclipse.tractusx.traceability.common.utilities.Masker;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.controller.model.NotificationMethod;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.controller.model.NotificationType;
 import org.eclipse.tractusx.traceability.infrastructure.edc.notificationcontract.service.asset.model.*;
@@ -131,7 +132,7 @@ public class EdcNotitifcationAssetService {
             return notificationAssetId;
         }
 
-        log.error("Failed to create EDC notification asset for {} method. Body: {}, status: {}", notificationMethodValue, createEdcDataAssetResponse.getBody(), createEdcDataAssetResponse.getStatusCode());
+        log.error("Failed to create EDC notification asset for {} method. Body: {}, status: {}", notificationMethodValue, Masker.mask(createEdcDataAssetResponse.getBody()), createEdcDataAssetResponse.getStatusCode());
 
         throw new CreateEdcAssetException("Failed to create EEC notification asset for %s method".formatted(notificationMethodValue));
     }

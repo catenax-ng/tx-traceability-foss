@@ -36,6 +36,7 @@ import org.eclipse.tractusx.traceability.common.config.FeatureFlags;
 import org.eclipse.tractusx.traceability.common.model.PageResult;
 import org.eclipse.tractusx.traceability.common.request.OwnPageable;
 import org.eclipse.tractusx.traceability.common.response.ErrorResponse;
+import org.eclipse.tractusx.traceability.common.utilities.Masker;
 import org.eclipse.tractusx.traceability.qualitynotification.application.base.request.CloseQualityNotificationRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.base.request.QualityNotificationStatusRequest;
 import org.eclipse.tractusx.traceability.qualitynotification.application.base.request.StartQualityNotificationRequest;
@@ -122,7 +123,7 @@ public class InvestigationsController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public QualityNotificationIdResponse investigateAssets(@RequestBody @Valid StartQualityNotificationRequest request) {
-        log.info(API_LOG_START + " with params: {}", request);
+        log.info(API_LOG_START + " with params: {}", Masker.mask(request));
         return new QualityNotificationIdResponse(investigationService.start(
                         request.getPartIds(),
                         request.getDescription(),
@@ -426,7 +427,7 @@ public class InvestigationsController {
     @PostMapping("/{investigationId}/close")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void closeInvestigation(@PathVariable Long investigationId, @Valid @RequestBody CloseQualityNotificationRequest closeInvestigationRequest) {
-        log.info(API_LOG_START + "/{}/close with params {}", investigationId, closeInvestigationRequest);
+        log.info(API_LOG_START + "/{}/close with params {}", investigationId, Masker.mask(closeInvestigationRequest));
         investigationService.update(investigationId, QualityNotificationStatusRequest.toDomain(QualityNotificationStatusRequest.CLOSED), closeInvestigationRequest.getReason());
     }
 
@@ -482,7 +483,7 @@ public class InvestigationsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateInvestigation(@PathVariable Long investigationId, @Valid @RequestBody UpdateQualityNotificationRequest updateInvestigationRequest) {
         validate(updateInvestigationRequest);
-        log.info(API_LOG_START + "/{}/update with params {}", investigationId, updateInvestigationRequest);
+        log.info(API_LOG_START + "/{}/update with params {}", investigationId, Masker.mask(updateInvestigationRequest));
         investigationService.update(investigationId, updateInvestigationRequest.getStatus().toDomain(), updateInvestigationRequest.getReason());
     }
 }

@@ -25,6 +25,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.common.config.FeatureFlags;
+import org.eclipse.tractusx.traceability.common.utilities.Masker;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.EDCNotification;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.model.NotificationType;
 import org.eclipse.tractusx.traceability.infrastructure.edc.blackbox.validators.ValidEDCNotification;
@@ -53,7 +54,7 @@ public class EdcController {
      */
     @PostMapping("/qualitynotifications/receive")
     public void qualityNotificationInvestigationReceive(final @ValidEDCNotification @Valid @RequestBody EDCNotification edcNotification) {
-        log.info("EdcController [qualityNotificationReceive] notificationId:{}", edcNotification);
+        log.info("EdcController [qualityNotificationReceive] notificationId:{}", Masker.mask(edcNotification));
         validateIsQualityInvestigation(edcNotification);
         investigationsReceiverService.handleNotificationReceive(edcNotification);
     }
@@ -63,7 +64,7 @@ public class EdcController {
      */
     @PostMapping("/qualitynotifications/update")
     public void qualityNotificationInvestigationUpdate(final @ValidEDCNotification @Valid @RequestBody EDCNotification edcNotification) {
-        log.info("EdcController [qualityNotificationUpdate] notificationId:{}", edcNotification);
+        log.info("EdcController [qualityNotificationUpdate] notificationId:{}", Masker.mask(edcNotification));
         validateIsQualityInvestigation(edcNotification);
         investigationsReceiverService.handleNotificationUpdate(edcNotification);
     }
@@ -73,7 +74,7 @@ public class EdcController {
      */
     @PostMapping("/qualityalerts/receive")
     public void qualityNotificationAlertReceive(final @ValidEDCNotification @Valid @RequestBody EDCNotification edcNotification) {
-        log.info("EdcController [qualityNotificationReceive] notificationId:{}", edcNotification);
+        log.info("EdcController [qualityNotificationReceive] notificationId:{}", Masker.mask(edcNotification));
         validateIsAlert(edcNotification);
         alertsReceiverService.handleNotificationReceive(edcNotification);
     }
@@ -83,7 +84,7 @@ public class EdcController {
      */
     @PostMapping("/qualityalerts/update")
     public void qualityNotificationAlertUpdate(final @ValidEDCNotification @Valid @RequestBody EDCNotification edcNotification) {
-        log.info("EdcController [qualityNotificationUpdate] notificationId:{}", edcNotification);
+        log.info("EdcController [qualityNotificationUpdate] notificationId:{}", Masker.mask(edcNotification));
         validateIsAlert(edcNotification);
         alertsReceiverService.handleNotificationUpdate(edcNotification);
     }
