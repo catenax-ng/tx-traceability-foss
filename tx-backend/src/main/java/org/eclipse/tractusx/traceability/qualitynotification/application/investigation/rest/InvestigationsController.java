@@ -103,6 +103,12 @@ public class InvestigationsController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(
+                    responseCode = "404",
+                    description = "Not found.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
                     responseCode = "415",
                     description = "Unsupported media type",
                     content = @Content(
@@ -163,6 +169,18 @@ public class InvestigationsController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(
+                    responseCode = "404",
+                    description = "Not found.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "415",
+                    description = "Unsupported media type",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
                     responseCode = "429",
                     description = "Too many requests.",
                     content = @Content(
@@ -205,6 +223,18 @@ public class InvestigationsController {
             @ApiResponse(
                     responseCode = "403",
                     description = "Forbidden.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Not found.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "415",
+                    description = "Unsupported media type",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class))),
@@ -252,6 +282,18 @@ public class InvestigationsController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(
+                    responseCode = "404",
+                    description = "Not found.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "415",
+                    description = "Unsupported media type",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
                     responseCode = "429",
                     description = "Too many requests.",
                     content = @Content(
@@ -295,6 +337,12 @@ public class InvestigationsController {
             @ApiResponse(
                     responseCode = "403",
                     description = "Forbidden.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Not found.",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class))),
@@ -348,6 +396,12 @@ public class InvestigationsController {
             @ApiResponse(
                     responseCode = "403",
                     description = "Forbidden.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Not found.",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class))),
@@ -406,6 +460,12 @@ public class InvestigationsController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(
+                    responseCode = "404",
+                    description = "Not found.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
                     responseCode = "415",
                     description = "Unsupported media type",
                     content = @Content(
@@ -457,6 +517,12 @@ public class InvestigationsController {
             @ApiResponse(
                     responseCode = "403",
                     description = "Forbidden.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Not found.",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class))),
