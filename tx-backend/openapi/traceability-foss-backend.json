@@ -538,12 +538,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "placeholderProperty" : {
-                      "type" : "string"
-                    }
-                  }
+                  "$ref" : "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -728,19 +723,7 @@
         },
         "responses" : {
           "204" : {
-            "description" : "No content.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "placeholderProperty" : {
-                      "type" : "string"
-                    }
-                  }
-                }
-              }
-            }
+            "description" : "No content."
           },
           "404" : {
             "description" : "Not found.",
@@ -853,19 +836,7 @@
         },
         "responses" : {
           "204" : {
-            "description" : "No content.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "placeholderProperty" : {
-                      "type" : "string"
-                    }
-                  }
-                }
-              }
-            }
+            "description" : "No content."
           },
           "404" : {
             "description" : "Not found.",
@@ -988,19 +959,7 @@
             }
           },
           "204" : {
-            "description" : "No content.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "placeholderProperty" : {
-                      "type" : "string"
-                    }
-                  }
-                }
-              }
-            }
+            "description" : "No content."
           },
           "429" : {
             "description" : "Too many requests.",
@@ -1083,19 +1042,7 @@
         ],
         "responses" : {
           "204" : {
-            "description" : "No content.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "placeholderProperty" : {
-                      "type" : "string"
-                    }
-                  }
-                }
-              }
-            }
+            "description" : "No content."
           },
           "404" : {
             "description" : "Not found.",
@@ -1852,19 +1799,7 @@
         },
         "responses" : {
           "204" : {
-            "description" : "No content.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "placeholderProperty" : {
-                      "type" : "string"
-                    }
-                  }
-                }
-              }
-            }
+            "description" : "No content."
           },
           "404" : {
             "description" : "Not found.",
@@ -1977,19 +1912,7 @@
         },
         "responses" : {
           "204" : {
-            "description" : "No content.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "placeholderProperty" : {
-                      "type" : "string"
-                    }
-                  }
-                }
-              }
-            }
+            "description" : "No content."
           },
           "404" : {
             "description" : "Not found.",
@@ -2092,19 +2015,7 @@
         ],
         "responses" : {
           "204" : {
-            "description" : "No content.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "placeholderProperty" : {
-                      "type" : "string"
-                    }
-                  }
-                }
-              }
-            }
+            "description" : "No content."
           },
           "404" : {
             "description" : "Not found.",
@@ -2227,19 +2138,7 @@
             }
           },
           "204" : {
-            "description" : "No content.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "placeholderProperty" : {
-                      "type" : "string"
-                    }
-                  }
-                }
-              }
-            }
+            "description" : "No content."
           },
           "429" : {
             "description" : "Too many requests.",
@@ -3342,19 +3241,7 @@
             }
           },
           "204" : {
-            "description" : "Deleted.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "placeholderProperty" : {
-                      "type" : "string"
-                    }
-                  }
-                }
-              }
-            }
+            "description" : "Deleted."
           },
           "500" : {
             "description" : "Internal server error.",
@@ -5631,19 +5518,7 @@
             }
           },
           "204" : {
-            "description" : "No Content.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "placeholderProperty" : {
-                      "type" : "string"
-                    }
-                  }
-                }
-              }
-            }
+            "description" : "No Content."
           },
           "400" : {
             "description" : "Bad request.",
@@ -5715,19 +5590,7 @@
             }
           },
           "204" : {
-            "description" : "Deleted.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "placeholderProperty" : {
-                      "type" : "string"
-                    }
-                  }
-                }
-              }
-            }
+            "description" : "Deleted."
           },
           "500" : {
             "description" : "Internal server error.",
