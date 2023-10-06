@@ -534,14 +534,7 @@
             }
           },
           "204" : {
-            "description" : "No Content.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
+            "description" : "No Content."
           },
           "400" : {
             "description" : "Bad request.",
