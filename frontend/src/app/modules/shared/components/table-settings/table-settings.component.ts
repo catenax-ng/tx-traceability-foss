@@ -71,7 +71,6 @@ export class TableSettingsComponent {
           }
       }
       newArray = newArray.filter(item => item !== undefined);
-      console.log(newArray);
       this.tableColumnsRef.splice(0, this.tableColumnsRef.length, ...newArray);
       this.tableSettingsService.setColumnVisibilitySettings(this.tableType, newArray);
       this.dialogRef.close();
@@ -98,7 +97,6 @@ export class TableSettingsComponent {
      console.log(this.selectedColumn);
    }
 
-    this.selectedColumn = item;
   }
 
   handleSortListItem(direction: string) {
