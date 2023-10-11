@@ -1,0 +1,12 @@
+.dialog--content {
+  display: flex;
+}
+
+.dialog--columns--container {
+  display: flex;
+  flex-direction: column;
+}
+
+.selected-item {
+  background-color: red;
+}

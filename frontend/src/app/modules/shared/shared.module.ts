@@ -23,25 +23,29 @@ import { TitleCasePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { RouterModule } from '@angular/router';
+import { BomLifecycleActivatorComponent } from '@shared/components/bom-lifecycle-activator/bom-lifecycle-activator.component';
+import { CountryFlagGeneratorComponent } from '@shared/components/country-flag-generator/country-flag-generator.component';
 import { DateTimeComponent } from '@shared/components/dateTime/dateTime.component';
 import { FormErrorMessageComponent } from '@shared/components/formErrorMessage/formErrorMessage.component';
+import { InputComponent } from '@shared/components/input/input.component';
 import { MultiSelectAutocompleteComponent } from '@shared/components/multi-select-autocomplete/multi-select-autocomplete.component';
 import { NotificationOverviewComponent } from '@shared/components/notification-overview/notification-overview.component';
 import { NotificationReasonComponent } from '@shared/components/notification-reason/notification-reason.component';
 import { NotificationUserComponent } from '@shared/components/notification-user/notification-user.component';
 import { PartsTableComponent } from '@shared/components/parts-table/parts-table.component';
+import { RequestInvestigationComponent } from '@shared/components/request-notification';
+import { RequestAlertComponent } from '@shared/components/request-notification/request-alert.component';
 import { SeveritySelectComponent } from '@shared/components/severity-select/severity-select.component';
 import { SeverityComponent } from '@shared/components/severity/severity.component';
+import { TableSettingsComponent } from '@shared/components/table-settings/table-settings.component';
 import { TextWithIconComponent } from '@shared/components/text-with-icon/text-with-icon.component';
+import { ViewSelectorComponent } from '@shared/components/view-selector/view-selector.component';
 import { NotificationModalContentComponent } from '@shared/modules/notification/modal/content/notification-modal-content.component';
 import { FlattenObjectPipe } from '@shared/pipes/flatten-object.pipe';
 import { FormatPaginationSemanticDataModelToCamelCasePipe } from '@shared/pipes/format-pagination-semantic-data-model-to-camelcase.pipe';
 import { FormatPartSemanticDataModelToCamelCasePipe } from '@shared/pipes/format-part-semantic-data-model-to-camelcase.pipe';
 import { FormatPartlistSemanticDataModelToCamelCasePipe } from '@shared/pipes/format-partlist-semantic-data-model-to-camelcase.pipe';
 import { I18NextModule } from 'angular-i18next';
-import {
-  BomLifecycleActivatorComponent
-} from "@shared/components/bom-lifecycle-activator/bom-lifecycle-activator.component";
 import { BaseInputComponent } from './abstraction/baseInput/baseInput.component';
 import { AvatarComponent } from './components/avatar/avatar.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
@@ -53,7 +57,6 @@ import { DataLoadingErrorComponent } from './components/data-loading-error/data-
 import { LanguageSelectorComponent } from './components/language-selector/language-selector.component';
 import { PaginatorIntlService } from './components/pagination/paginator-intl.service';
 import { QualityTypeComponent } from './components/quality-type/quality-type.component';
-import { RequestInvestigationComponent } from '@shared/components/request-notification';
 import { ScrollWithShadowComponent } from './components/scroll-with-shadow/scroll-with-shadow.component';
 import { SelectComponent } from './components/select/select.component';
 import { ValueToLablePipe } from './components/select/valueToLable.pipe';
@@ -73,12 +76,6 @@ import { I18nPipe } from './pipes/i18n.pipe';
 import { PartsService } from './service/parts.service';
 import { StaticIdService } from './service/staticId.service';
 import { TemplateModule } from './template.module';
-import { InputComponent } from '@shared/components/input/input.component';
-import { RequestAlertComponent } from '@shared/components/request-notification/request-alert.component';
-import {ViewSelectorComponent} from "@shared/components/view-selector/view-selector.component";
-import {
-    CountryFlagGeneratorComponent
-} from "@shared/components/country-flag-generator/country-flag-generator.component";
 
 @NgModule({
   declarations: [
@@ -128,7 +125,8 @@ import {
     BomLifecycleActivatorComponent,
     ViewSelectorComponent,
       MultiSelectAutocompleteComponent,
-      CountryFlagGeneratorComponent
+      CountryFlagGeneratorComponent,
+    TableSettingsComponent,
   ],
   imports: [TemplateModule, RouterModule, I18NextModule],
     exports: [
@@ -177,6 +175,7 @@ import {
       PartsTableComponent,
         MultiSelectAutocompleteComponent,
         CountryFlagGeneratorComponent,
+      TableSettingsComponent,
     ],
   providers: [
     FormatDatePipe,

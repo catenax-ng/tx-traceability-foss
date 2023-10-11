@@ -17,35 +17,36 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import {SelectionModel} from '@angular/cdk/collections';
+import { SelectionModel } from '@angular/cdk/collections';
 import {
-    Component,
-    ElementRef,
-    EventEmitter,
-    Input,
-    OnInit,
-    Output,
-    QueryList,
-    ViewChild,
-    ViewChildren,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewChildren,
 } from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
-import {MatPaginator, PageEvent} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
-import {Pagination} from '@core/model/pagination.model';
-import {SemanticDataModel} from '@page/parts/model/parts.model';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { Pagination } from '@core/model/pagination.model';
+import { TableSettingsService } from '@core/user/table-settings.service';
+import { SemanticDataModel } from '@page/parts/model/parts.model';
+import { MultiSelectAutocompleteComponent } from '@shared/components/multi-select-autocomplete/multi-select-autocomplete.component';
+import { TableSettingsComponent } from '@shared/components/table-settings/table-settings.component';
 import {
-    MultiSelectAutocompleteComponent
-} from '@shared/components/multi-select-autocomplete/multi-select-autocomplete.component';
-import {
-    CreateHeaderFromColumns,
-    PartTableType,
-    TableConfig,
-    TableEventConfig,
-    TableHeaderSort,
+  CreateHeaderFromColumns,
+  PartTableType,
+  TableConfig,
+  TableEventConfig,
+  TableHeaderSort,
 } from '@shared/components/table/table.model';
-import {addSelectedValues, removeSelectedValues} from '@shared/helper/table-helper';
+import { addSelectedValues, removeSelectedValues } from '@shared/helper/table-helper';
 
 
 @Component({
@@ -116,6 +117,8 @@ export class PartsTableComponent implements OnInit {
     @Output() clickSelectAction = new EventEmitter<void>();
     @Output() filterActivated = new EventEmitter<any>();
 
+    constructor(private readonly tableSettingsService: TableSettingsService, private dialog: MatDialog) {}
+
 
     public readonly dataSource = new MatTableDataSource<unknown>();
     public readonly selection = new SelectionModel<unknown>(true, []);
@@ -129,6 +132,7 @@ export class PartsTableComponent implements OnInit {
 
     public filterConfiguration: any[];
     public displayedColumns: string[];
+    public defaultColumns: string[];
 
     filterFormGroup = new FormGroup({});
 
@@ -414,17 +418,36 @@ export class PartsTableComponent implements OnInit {
     }
 
     private handleAsBuiltTableType(): void {
+      const columnSetup = this.tableSettingsService.getColumnVisibilitySettings(this.tableType);
+      console.log(columnSetup);
         switch (this.tableType) {
-            case PartTableType.AS_BUILT_OWN:
-                this.setupTableConfigurations(this.displayedColumnsAsBuiltForTable, this.displayedColumnsAsBuilt, this.sortableColumnsAsBuilt, this.assetAsBuiltFilterConfiguration, this.assetAsBuiltFilterFormGroup);
-                break;
-            case PartTableType.AS_BUILT_CUSTOMER:
-                this.setupTableConfigurations(this.displayedColumnsAsBuiltCustomerForTable, this.displayedColumnsAsBuiltCustomer, this.sortableColumnsAsBuiltCustomer, this.assetAsBuiltCustomerFilterConfiguration, this.assetAsBuiltCustomerFilterFormGroup);
-                break;
-            case PartTableType.AS_BUILT_SUPPLIER:
-                this.setupTableConfigurations(this.displayedColumnsAsBuiltSupplierForTable, this.displayedColumnsAsBuiltSupplier, this.sortableColumnsAsBuiltSupplier, this.assetAsBuiltSupplierFilterConfiguration, this.assetAsBuiltSupplierFilterFormGroup);
-                break;
-        }
+          case PartTableType.AS_BUILT_OWN:
+            this.defaultColumns = [...this.displayedColumnsAsBuiltForTable];
+            if(!columnSetup.length) {
+              this.setupTableConfigurations(this.displayedColumnsAsBuiltForTable, this.displayedColumnsAsBuilt, this.sortableColumnsAsBuilt, this.assetAsBuiltFilterConfiguration, this.assetAsBuiltFilterFormGroup);
+            } else {
+              this.setupTableConfigurations(columnSetup, this.displayedColumnsAsBuilt, this.sortableColumnsAsBuilt, this.assetAsBuiltFilterConfiguration, this.assetAsBuiltFilterFormGroup);
+            }
+            break;
+          case PartTableType.AS_BUILT_CUSTOMER:
+              this.defaultColumns = [...this.displayedColumnsAsBuiltForTable];
+            if(!columnSetup.length) {
+              this.setupTableConfigurations(this.displayedColumnsAsBuiltForTable, this.displayedColumnsAsBuilt, this.sortableColumnsAsBuilt, this.assetAsBuiltFilterConfiguration, this.assetAsBuiltFilterFormGroup);
+            } else {
+              this.setupTableConfigurations(columnSetup, this.displayedColumnsAsBuilt, this.sortableColumnsAsBuilt, this.assetAsBuiltFilterConfiguration, this.assetAsBuiltFilterFormGroup);
+            }
+            break;
+          case PartTableType.AS_BUILT_SUPPLIER:
+              this.defaultColumns = [...this.displayedColumnsAsBuiltForTable];
+            if(!columnSetup.length) {
+              this.setupTableConfigurations(this.displayedColumnsAsBuiltForTable, this.displayedColumnsAsBuilt, this.sortableColumnsAsBuilt, this.assetAsBuiltFilterConfiguration, this.assetAsBuiltFilterFormGroup);
+            } else {
+              this.setupTableConfigurations(columnSetup, this.displayedColumnsAsBuilt, this.sortableColumnsAsBuilt, this.assetAsBuiltFilterConfiguration, this.assetAsBuiltFilterFormGroup);
+            }
+            break;
+
+      }
+
     }
 
     optionTextSearch = [];
@@ -679,5 +702,18 @@ export class PartsTableComponent implements OnInit {
     private removeSelectedValues(itemsToRemove: unknown[]): void {
         removeSelectedValues(this.selection, itemsToRemove);
     }
+
+    openDialog(): void {
+      const config = new MatDialogConfig();
+      config.data = {
+        title: "Column Settings",
+        tableType: this.tableType,
+        defaultColumns: this.defaultColumns,
+        displayedColumns: this.tableConfig.displayedColumns,
+        panelClass: 'myDialog'
+      };
+      this.dialog.open(TableSettingsComponent, config )
+    }
+
 
 }

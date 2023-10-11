@@ -33,6 +33,13 @@ SPDX-License-Identifier: Apache-2.0
                     {{ selectedPartsActionLabel | i18n }}
                 </div>
             </app-button>
+          <app-button
+            (click)="openDialog()"
+            [variant]="'raised'"
+            [color]="'accent'"
+          >
+            Settings
+          </app-button>
         </div>
     </ng-container>
 
