@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, ViewChildren } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TableSettingsService } from '@core/user/table-settings.service';
 import { PartTableType } from '@shared/components/table/table.model';
@@ -27,15 +27,16 @@ import { PartTableType } from '@shared/components/table/table.model';
   styleUrls: ['table-settings.component.scss']
 })
 export class TableSettingsComponent {
-  @ViewChildren('checkbox') checkbox: ElementRef;
   title: string;
-  tableDisplayedColumnsRef: string[];
-  tableDisplayedFilterColumnsRef: string[];
+  tableColumnsRef: string[];
+  ALL_COLLUMS_IN_DEFAULT_ORDER: string[];
+  //tableDisplayedFilterColumnsRef: string[];
 
   tableType: PartTableType;
 
-  columnSelection: Map<string,boolean> = new Map<string, boolean>();
-  defaultColumns: string[];
+  columnsCheckBoxMap: Map<string,boolean> = new Map<string, boolean>();
+  columnsShownInDialog: string[];
+
   selectAllSelected: boolean;
 
   selectedColumn: string = null;
@@ -46,59 +47,106 @@ export class TableSettingsComponent {
   constructor(public dialogRef: MatDialogRef<TableSettingsComponent>, @Inject(MAT_DIALOG_DATA) public data: any, public readonly tableSettingsService: TableSettingsService) {
     this.tableType = data.tableType;
     this.title = data.title;
-    this.defaultColumns = data.defaultColumns;
-    this.tableDisplayedColumnsRef = data.displayedColumns;
+    this.columnsShownInDialog = data.defaultColumns;
+    this.tableColumnsRef = data.displayedColumns;
 
-      this.tableDisplayedColumnsRef.map(column => {
-          this.columnSelection.set(column, true);
+      this.tableColumnsRef.map(column => {
+          this.columnsCheckBoxMap.set(column, true);
       })
 
+    this.ALL_COLLUMS_IN_DEFAULT_ORDER = data.unchangedColumns;
+    console.log("columnsInDialog", this.columnsShownInDialog);
+    console.log("tableColumnsRef",this.tableColumnsRef);
+    console.log("ALL_DEFAULT_UNSORTED",this.ALL_COLLUMS_IN_DEFAULT_ORDER);
+    console.log("columnsCheckBoxMap", this.columnsCheckBoxMap);
   }
 
   save() {
       let newArray = [];
 
-      for(let column of this.defaultColumns) {
-          if(this.columnSelection.get(column)) {
-            let index = this.defaultColumns.indexOf(column)
+      for(let column of this.columnsShownInDialog) {
+          if(this.columnsCheckBoxMap.get(column)) {
+            let index = this.columnsShownInDialog.indexOf(column)
               newArray[index]= column;
           }
       }
       newArray = newArray.filter(item => item !== undefined);
       console.log(newArray);
-      this.tableDisplayedColumnsRef.splice(0, this.tableDisplayedColumnsRef.length, ...newArray);
+      this.tableColumnsRef.splice(0, this.tableColumnsRef.length, ...newArray);
       this.tableSettingsService.setColumnVisibilitySettings(this.tableType, newArray);
       this.dialogRef.close();
-
+    console.log("columnsInDialog", this.columnsShownInDialog);
+    console.log("tableColumnsRef",this.tableColumnsRef);
+    console.log("ALL_DEFAULT_UNSORTED",this.ALL_COLLUMS_IN_DEFAULT_ORDER);
+    console.log("columnsCheckBoxMap", this.columnsCheckBoxMap);
   }
 
     handleCheckBoxChange (item: string, isChecked: boolean) {
-    this.columnSelection.set(item,isChecked);
+    this.columnsCheckBoxMap.set(item,isChecked);
+      console.log("columnsInDialog", this.columnsShownInDialog);
+      console.log("tableColumnsRef",this.tableColumnsRef);
+      console.log("ALL_DEFAULT_UNSORTED",this.ALL_COLLUMS_IN_DEFAULT_ORDER);
+      console.log("columnsCheckBoxMap", this.columnsCheckBoxMap);
   }
 
-  handleListItemClick( item: string) {
-   // let element = event.target as HTMLElement;
+  handleListItemClick( event: MouseEvent, item: string) {
+   let element = event.target as HTMLElement;
+
+   if(element.tagName !== 'INPUT') {
+     this.selectedColumn = item;
+     element.classList.toggle('selected-item');
+     console.log(this.selectedColumn);
+   }
 
     this.selectedColumn = item;
-    console.log(this.selectedColumn);
   }
 
-  handleSortListItem() {
+  handleSortListItem(direction: string) {
     if(!this.selectedColumn) {
       console.log("no list item was selected")
       // TODO handle if no listitem was selected
       return;
     }
+
+    let oldPosition = this.columnsShownInDialog.indexOf(this.selectedColumn);
+    let newPositon = direction === 'up' ? -1 : 1;
+
+    if((oldPosition == 0 && direction === 'up') || (oldPosition === this.columnsShownInDialog.length-1 && direction === 'down')) {
+      return;
+    }
+      let temp = this.columnsShownInDialog[oldPosition+newPositon];
+      this.columnsShownInDialog[oldPosition+newPositon] = this.selectedColumn;
+      this.columnsShownInDialog[oldPosition] = temp;
+    console.log("columnsInDialog", this.columnsShownInDialog);
+    console.log("tableColumnsRef",this.tableColumnsRef);
+    console.log("ALL_DEFAULT_UNSORTED",this.ALL_COLLUMS_IN_DEFAULT_ORDER);
+    console.log("columnsCheckBoxMap", this.columnsCheckBoxMap);
+
+
   }
 
-  // TODO Reset button to reset sorting and displayedColumns
+
   selectAll(isChecked: boolean) {
 
-    for(let column of this.defaultColumns) {
-      this.columnSelection.set(column,isChecked);
+    for(let column of this.columnsShownInDialog) {
+      this.columnsCheckBoxMap.set(column,isChecked);
     }
     this.selectAllSelected = true;
 
+    console.log("columnsInDialog", this.columnsShownInDialog);
+    console.log("tableColumnsRef",this.tableColumnsRef);
+    console.log("ALL_DEFAULT_UNSORTED",this.ALL_COLLUMS_IN_DEFAULT_ORDER);
+    console.log("columnsCheckBoxMap", this.columnsCheckBoxMap);
+
+  }
+
+  resetColumns() {
+    this.columnsShownInDialog.splice(0,this.columnsShownInDialog.length, ...this.ALL_COLLUMS_IN_DEFAULT_ORDER);
+    this.selectAll(true);
+    console.log("columnsInDialog", this.columnsShownInDialog);
+    console.log("tableColumnsRef",this.tableColumnsRef);
+    console.log("ALL_DEFAULT_UNSORTED",this.ALL_COLLUMS_IN_DEFAULT_ORDER);
+    console.log("columnsCheckBoxMap", this.columnsCheckBoxMap);
   }
 
 }

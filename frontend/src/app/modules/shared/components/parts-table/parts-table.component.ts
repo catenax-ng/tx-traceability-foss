@@ -709,6 +709,7 @@ export class PartsTableComponent implements OnInit {
         title: "Column Settings",
         tableType: this.tableType,
         defaultColumns: this.defaultColumns,
+        unchangedColumns: [...this.defaultColumns],
         displayedColumns: this.tableConfig.displayedColumns,
         panelClass: 'myDialog'
       };

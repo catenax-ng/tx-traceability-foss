@@ -21,9 +21,9 @@ SPDX-License-Identifier: Apache-2.0
 
 <mat-dialog-content class="dialog--content">
   <div class="dialog--content--menu--order">
-    <mat-icon (click)="handleSortListItem()"
+    <mat-icon (click)="handleSortListItem('down')"
     >arrow_downward</mat-icon>
-    <mat-icon (click)="handleSortListItem()"
+    <mat-icon (click)="handleSortListItem('up')"
     >arrow_upward</mat-icon>
   </div>
   <div class="dialog--columns--container">
@@ -34,19 +34,23 @@ SPDX-License-Identifier: Apache-2.0
     >Select All
   </mat-checkbox>
   <mat-divider></mat-divider>
-    <mat-checkbox #checkbox *ngFor="let item of defaultColumns; let index = index"
+    <mat-checkbox *ngFor="let item of columnsShownInDialog; let index = index"
       color="primary"
-      [checked]="columnSelection.get(item)"
+      [checked]="columnsCheckBoxMap.get(item)"
       [value]="item"
       [class.selected-item]="selectedColumn === item"
       (change)="$event ? handleCheckBoxChange(item, $event.checked) : null"
-      (click) = "handleListItemClick( item)"
-    ><label>
-      <!--(click)="handleListItemClick( item)"-->
+      (click) = "handleListItemClick($event, item)"
+    >
       {{item | i18n}}
-    </label>
+
     </mat-checkbox>
 
+  </div>
+  <div class="dialog--content--menu--refresh">
+    <mat-icon
+    (click)="resetColumns()"
+    >refresh</mat-icon>
   </div>
 </mat-dialog-content>
 
