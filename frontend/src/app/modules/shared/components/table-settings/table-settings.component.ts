@@ -1,8 +1,3 @@
-import { Component, EventEmitter, Inject, Output } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TableSettingsService } from '@core/user/table-settings.service';
-import { PartTableType } from '@shared/components/table/table.model';
-
 /********************************************************************************
  * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
@@ -21,6 +16,12 @@ import { PartTableType } from '@shared/components/table/table.model';
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
+
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { TableSettingsService } from '@core/user/table-settings.service';
+import { PartTableType } from '@shared/components/table/table.model';
+
 @Component({
   selector: 'app-table-settings',
   templateUrl: 'table-settings.component.html',

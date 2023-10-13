@@ -555,20 +555,6 @@ export class PartsTableComponent implements OnInit {
 
     }
 
-    /*
-            switch (this.tableType) {
-          case PartTableType.AS_BUILT_OWN:
-            this.setupTableConfigurations(this.displayedColumnsAsBuiltForTable, this.displayedColumnsAsBuilt, this.sortableColumnsAsBuilt, this.assetAsBuiltFilterConfiguration, this.assetAsBuiltFilterFormGroup);
-            break;
-          case PartTableType.AS_BUILT_CUSTOMER:
-            this.setupTableConfigurations(this.displayedColumnsAsBuiltCustomerForTable, this.displayedColumnsAsBuiltCustomer, this.sortableColumnsAsBuiltCustomer, this.assetAsBuiltCustomerFilterConfiguration, this.assetAsBuiltCustomerFilterFormGroup);
-            break;
-          case PartTableType.AS_BUILT_SUPPLIER:
-            this.setupTableConfigurations(this.displayedColumnsAsBuiltSupplierForTable, this.displayedColumnsAsBuiltSupplier, this.sortableColumnsAsBuiltSupplier, this.assetAsBuiltSupplierFilterConfiguration, this.assetAsBuiltSupplierFilterFormGroup);
-            break;
-        }
-     */
-
 
   private setupTableConfigurations(displayedColumnsForTable: string[], displayedColumns: string[], sortableColumns: Record<string, boolean>, filterConfiguration: any[], filterFormGroup: any): any {
     const headerKey = 'table.column';
