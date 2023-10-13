@@ -407,10 +407,10 @@ export class PartsTableComponent implements OnInit {
           columns =   this.displayedColumnsAsBuiltForTable
           break;
         case PartTableType.AS_BUILT_CUSTOMER:
-          columns = this.displayedColumnsAsBuiltForTable
+          columns = this.displayedColumnsAsBuiltCustomerForTable
           break;
         case PartTableType.AS_BUILT_SUPPLIER:
-          columns =  this.displayedColumnsAsBuiltForTable
+          columns =  this.displayedColumnsAsBuiltSupplierForTable
           break;
       }
       return columns;
@@ -432,10 +432,10 @@ export class PartsTableComponent implements OnInit {
           columns =   this.displayedColumnsAsBuilt
           break;
         case PartTableType.AS_BUILT_CUSTOMER:
-          columns = this.displayedColumnsAsBuilt
+          columns = this.displayedColumnsAsBuiltCustomer
           break;
         case PartTableType.AS_BUILT_SUPPLIER:
-          columns =  this.displayedColumnsAsBuilt
+          columns =  this.displayedColumnsAsBuiltSupplier
           break;
       }
       return columns;
