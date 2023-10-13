@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TableSettingsService } from '@core/user/table-settings.service';
 import { PartTableType } from '@shared/components/table/table.model';
@@ -24,80 +24,120 @@ import { PartTableType } from '@shared/components/table/table.model';
 @Component({
   selector: 'app-table-settings',
   templateUrl: 'table-settings.component.html',
-  styleUrls: ['table-settings.component.scss']
+  styleUrls: [ 'table-settings.component.scss' ],
 })
 export class TableSettingsComponent {
+  /**
+   * What does the Component do
+   *
+   * list all possible columns for a tabletype
+   * mutate columnsettingsoption for visibilty of columns
+   * change order of all possible columns
+   * reset to default column view
+   * apply changes to the table
+   *  event when closed with boolean something changed
+   *
+   * What input does it need
+   *
+   * tabletype
+   * a list of all default columns of the table (immutable default list with a specific order and content)
+   * a list of all possible columns for a tabletype (mutable in order, add and delete columns)
+   * mutate columnsettingsoptions (set false/true)
+   *
+   *
+   *
+   */
+  @Output() changeSettingsEvent = new EventEmitter<void>();
   title: string;
-  tableColumnsRef: string[];
-  ALL_COLLUMS_IN_DEFAULT_ORDER: string[];
-  //tableDisplayedFilterColumnsRef: string[];
+  panelClass: string;
 
   tableType: PartTableType;
+  defaultColumns: string[];
+  defaultFilterColumns: string[]
 
-  columnsCheckBoxMap: Map<string,boolean> = new Map<string, boolean>();
-  columnsShownInDialog: string[];
+  columnOptions: Map<string, boolean>;
+  dialogColumns: string[];
+  tableColumns: string[];
+  filterColumns: string[];
 
   selectAllSelected: boolean;
-
   selectedColumn: string = null;
 
 
-
-
   constructor(public dialogRef: MatDialogRef<TableSettingsComponent>, @Inject(MAT_DIALOG_DATA) public data: any, public readonly tableSettingsService: TableSettingsService) {
-    this.tableType = data.tableType;
+    // Layout
     this.title = data.title;
-    this.columnsShownInDialog = data.defaultColumns;
-    this.tableColumnsRef = data.displayedColumns;
+    this.panelClass = data.panelClass;
 
-      this.tableColumnsRef.map(column => {
-          this.columnsCheckBoxMap.set(column, true);
-      })
+    // Passed Data
+    this.tableType = data.tableType;
+    this.defaultColumns = data.defaultColumns;
+    this.defaultFilterColumns = data.defaultFilterColumns;
 
-    this.ALL_COLLUMS_IN_DEFAULT_ORDER = data.unchangedColumns;
-    console.log("columnsInDialog", this.columnsShownInDialog);
-    console.log("tableColumnsRef",this.tableColumnsRef);
-    console.log("ALL_DEFAULT_UNSORTED",this.ALL_COLLUMS_IN_DEFAULT_ORDER);
-    console.log("columnsCheckBoxMap", this.columnsCheckBoxMap);
+    // Storage Data
+    this.columnOptions = tableSettingsService.getColumnVisibilitySettings()[this.tableType].columnSettingsOptions;
+    this.dialogColumns = tableSettingsService.getColumnVisibilitySettings()[this.tableType].columnsForDialog;
+    this.tableColumns = tableSettingsService.getColumnVisibilitySettings()[this.tableType].columnsForTable;
+    this.filterColumns = tableSettingsService.getColumnVisibilitySettings()[this.tableType].filterColumnsForTable;
+
   }
 
   save() {
-      let newArray = [];
-
-      for(let column of this.columnsShownInDialog) {
-          if(this.columnsCheckBoxMap.get(column)) {
-            let index = this.columnsShownInDialog.indexOf(column)
-              newArray[index]= column;
+    // build new tableColumns how they should be displayed
+    let newTableColumns: string[] = [];
+    let newTableFilterColumns: string[] = [];
+      // iterate over dialogColumns
+      for(const column of this.dialogColumns) {
+        // if item in dialogColumns is true in columnOptions --> add to new tableColumns
+        if(this.columnOptions.get(column)) {
+          newTableColumns.push(column);
+          if(column === 'select') {
+            newTableFilterColumns.push('Filter');
+          } else {
+            newTableFilterColumns.push('filter'+ column.charAt(0).toUpperCase() + column.slice(1))
           }
+        }
       }
-      newArray = newArray.filter(item => item !== undefined);
-      this.tableColumnsRef.splice(0, this.tableColumnsRef.length, ...newArray);
-      this.tableSettingsService.setColumnVisibilitySettings(this.tableType, newArray);
-      this.dialogRef.close();
-    console.log("columnsInDialog", this.columnsShownInDialog);
-    console.log("tableColumnsRef",this.tableColumnsRef);
-    console.log("ALL_DEFAULT_UNSORTED",this.ALL_COLLUMS_IN_DEFAULT_ORDER);
-    console.log("columnsCheckBoxMap", this.columnsCheckBoxMap);
-  }
 
-    handleCheckBoxChange (item: string, isChecked: boolean) {
-    this.columnsCheckBoxMap.set(item,isChecked);
-      console.log("columnsInDialog", this.columnsShownInDialog);
-      console.log("tableColumnsRef",this.tableColumnsRef);
-      console.log("ALL_DEFAULT_UNSORTED",this.ALL_COLLUMS_IN_DEFAULT_ORDER);
-      console.log("columnsCheckBoxMap", this.columnsCheckBoxMap);
-  }
+    // build visibilitySettings how they should be saved back
+    // get Settingslist
+    // set this tableType Settings from SettingsList to the new one
+    let tableSettingsList = this.tableSettingsService.getColumnVisibilitySettings();
+      let newTableSettings = {
+        columnSettingsOptions: this.columnOptions,
+        columnsForDialog: this.dialogColumns,
+        columnsForTable: newTableColumns,
+        filterColumnsForTable: newTableFilterColumns
+      }
+    tableSettingsList[this.tableType] = newTableSettings;
+      console.log("saving as:", tableSettingsList);
 
-  handleListItemClick( event: MouseEvent, item: string) {
-   let element = event.target as HTMLElement;
+    // save all values back to localstorage
+    this.tableSettingsService.setColumnVisibilitySettings(this.tableType, tableSettingsList);
 
-   if(element.tagName !== 'INPUT') {
-     this.selectedColumn = item;
-     element.classList.toggle('selected-item');
-     console.log(this.selectedColumn);
-   }
+    // trigger action that table will refresh
+    this.tableSettingsService.emitChangeEvent();
+    this.dialogRef.close();
+      // the tableconfig with the corresponding columns (and filter)
+    // close the dialog
 
   }
+
+  handleCheckBoxChange(item: string, isChecked: boolean) {
+    this.columnOptions.set(item, isChecked);
+    console.log(this.columnOptions);
+  }
+
+  handleListItemClick(event: MouseEvent, item: string) {
+    let element = event.target as HTMLElement;
+
+    if (element.tagName !== 'INPUT') {
+      this.selectedColumn = item;
+      element.classList.toggle('selected-item');
+      console.log(this.selectedColumn);
+    }
+  }
+
 
   handleSortListItem(direction: string) {
     if(!this.selectedColumn) {
@@ -106,46 +146,36 @@ export class TableSettingsComponent {
       return;
     }
 
-    let oldPosition = this.columnsShownInDialog.indexOf(this.selectedColumn);
+    let oldPosition = this.dialogColumns.indexOf(this.selectedColumn);
     let newPositon = direction === 'up' ? -1 : 1;
 
-    if((oldPosition == 0 && direction === 'up') || (oldPosition === this.columnsShownInDialog.length-1 && direction === 'down')) {
+    if((oldPosition == 1 && direction === 'up') || (oldPosition === this.dialogColumns.length-1 && direction === 'down')) {
       return;
     }
-      let temp = this.columnsShownInDialog[oldPosition+newPositon];
-      this.columnsShownInDialog[oldPosition+newPositon] = this.selectedColumn;
-      this.columnsShownInDialog[oldPosition] = temp;
-    console.log("columnsInDialog", this.columnsShownInDialog);
-    console.log("tableColumnsRef",this.tableColumnsRef);
-    console.log("ALL_DEFAULT_UNSORTED",this.ALL_COLLUMS_IN_DEFAULT_ORDER);
-    console.log("columnsCheckBoxMap", this.columnsCheckBoxMap);
-
-
+      let temp = this.dialogColumns[oldPosition+newPositon];
+    this.dialogColumns[oldPosition+newPositon] = this.selectedColumn;
+    this.dialogColumns[oldPosition] = temp;
+    console.log(this.dialogColumns);
   }
 
 
   selectAll(isChecked: boolean) {
-
-    for(let column of this.columnsShownInDialog) {
-      this.columnsCheckBoxMap.set(column,isChecked);
+    for(let column of this.dialogColumns) {
+      if(column === 'select'){
+        continue;
+      }
+      this.columnOptions.set(column,isChecked);
     }
     this.selectAllSelected = true;
-
-    console.log("columnsInDialog", this.columnsShownInDialog);
-    console.log("tableColumnsRef",this.tableColumnsRef);
-    console.log("ALL_DEFAULT_UNSORTED",this.ALL_COLLUMS_IN_DEFAULT_ORDER);
-    console.log("columnsCheckBoxMap", this.columnsCheckBoxMap);
-
+    console.log(this.columnOptions);
   }
 
   resetColumns() {
-    this.columnsShownInDialog.splice(0,this.columnsShownInDialog.length, ...this.ALL_COLLUMS_IN_DEFAULT_ORDER);
+    this.dialogColumns = [...this.defaultColumns];
     this.selectAll(true);
-    console.log("columnsInDialog", this.columnsShownInDialog);
-    console.log("tableColumnsRef",this.tableColumnsRef);
-    console.log("ALL_DEFAULT_UNSORTED",this.ALL_COLLUMS_IN_DEFAULT_ORDER);
-    console.log("columnsCheckBoxMap", this.columnsCheckBoxMap);
+    console.log(this.defaultColumns);
+    console.log(this.dialogColumns);
+    console.log(this.columnOptions);
+
   }
-
 }
-

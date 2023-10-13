@@ -34,9 +34,10 @@ SPDX-License-Identifier: Apache-2.0
     >Select All
   </mat-checkbox>
   <mat-divider></mat-divider>
-    <mat-checkbox *ngFor="let item of columnsShownInDialog; let index = index"
+    <ng-container *ngFor="let item of dialogColumns; let index=index">
+    <mat-checkbox *ngIf="item !== 'select'"
       color="primary"
-      [checked]="columnsCheckBoxMap.get(item)"
+      [checked]="columnOptions.get(item)"
       [value]="item"
       [class.selected-item]="selectedColumn === item"
       (change)="$event ? handleCheckBoxChange(item, $event.checked) : null"
@@ -45,6 +46,7 @@ SPDX-License-Identifier: Apache-2.0
       {{item | i18n}}
 
     </mat-checkbox>
+    </ng-container>
 
   </div>
   <div class="dialog--content--menu--refresh">
