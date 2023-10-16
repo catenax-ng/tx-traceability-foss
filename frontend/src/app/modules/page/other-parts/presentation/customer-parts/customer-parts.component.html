@@ -30,6 +30,7 @@ SPDX-License-Identifier: Apache-2.0
   <ng-template #mainTmp let-parts="view" let-customContext="customContext">
     <app-parts-table
       [paginationData]="parts.data | formatPaginationSemanticDataModelToCamelCase"
+      [selectedPartsInfoLabel]="' '"
       [noShadow]="true"
       [labelId]="customContext.labelId"
       (selected)="onSelectItem($event)"
@@ -56,6 +57,7 @@ SPDX-License-Identifier: Apache-2.0
   <ng-template #myTmp let-parts="view" let-customContext="customContext">
     <app-parts-table
       [paginationData]="parts.data | formatPaginationSemanticDataModelToCamelCase"
+      [selectedPartsInfoLabel]="' '"
       [noShadow]="true"
       [labelId]="customContext.labelId"
       (selected)="onSelectItem($event)"

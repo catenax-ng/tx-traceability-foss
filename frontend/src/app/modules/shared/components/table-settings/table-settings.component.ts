@@ -92,7 +92,7 @@ export class TableSettingsComponent {
         // if item in dialogColumns is true in columnOptions --> add to new tableColumns
         if(this.columnOptions.get(column)) {
           newTableColumns.push(column);
-          if(column === 'select') {
+          if(column === 'select' && this.tableType != PartTableType.AS_BUILT_CUSTOMER && this.tableType != PartTableType.AS_PLANNED_CUSTOMER) {
             newTableFilterColumns.push('Filter');
           } else {
             newTableFilterColumns.push('filter'+ column.charAt(0).toUpperCase() + column.slice(1))
