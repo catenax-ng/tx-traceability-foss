@@ -46,8 +46,8 @@ import {
   TableEventConfig,
   TableHeaderSort,
 } from '@shared/components/table/table.model';
-import {addSelectedValues, removeSelectedValues} from '@shared/helper/table-helper';
-import {isDateFilter} from "@shared/helper/filter-helper";
+import { isDateFilter } from '@shared/helper/filter-helper';
+import { addSelectedValues, removeSelectedValues } from '@shared/helper/table-helper';
 
 
 @Component({
@@ -861,8 +861,8 @@ export class PartsTableComponent implements OnInit {
       const config = new MatDialogConfig();
       let my = this.tableType;
       config.data = {
-        title: "Column Settings",
-
+        title: "table.tableSettings.title",
+        panelClass: "custom",
         tableType: this.tableType,
         defaultColumns: this.getDefaultColumnsForTable(),
         defaultFilterColumns: this.getDefaultFilterColumns()

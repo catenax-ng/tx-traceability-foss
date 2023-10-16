@@ -21,7 +21,7 @@ SPDX-License-Identifier: Apache-2.0
     <ng-container *ngIf="tableHeader"><p class="large-text table--header">{{tableHeader | i18n }}</p></ng-container>
     <ng-container *ngIf="selectedPartsInfoLabel">
         <div *appHasRole="tableConfig.columnRoles?.['select'] ?? 'user'" class="table--selected__container">
-            <p class="regular-text">{{ selectedPartsInfoLabel | i18n : {count: selection?.selected?.length || 0} }}</p>
+            <p class="regular-text table--selected--label">{{ selectedPartsInfoLabel | i18n : {count: selection?.selected?.length || 0} }}</p>
             <app-button
                     *ngIf="selection?.selected?.length"
                     (click)="clickSelectAction.emit()"
@@ -33,13 +33,12 @@ SPDX-License-Identifier: Apache-2.0
                     {{ selectedPartsActionLabel | i18n }}
                 </div>
             </app-button>
-          <app-button
+          <mat-icon
             (click)="openDialog()"
-            [variant]="'raised'"
-            [color]="'accent'"
+            class="table--settings--button ml-2"
           >
-            Settings
-          </app-button>
+            settings
+          </mat-icon>
         </div>
     </ng-container>
 
