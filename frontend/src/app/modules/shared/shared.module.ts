@@ -19,21 +19,23 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { TitleCasePipe } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { MatPaginatorIntl } from '@angular/material/paginator';
-import { RouterModule } from '@angular/router';
-import { BomLifecycleActivatorComponent } from '@shared/components/bom-lifecycle-activator/bom-lifecycle-activator.component';
+import {DatePipe, TitleCasePipe} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {MatPaginatorIntl} from '@angular/material/paginator';
+import {RouterModule} from '@angular/router';
+import {BomLifecycleActivatorComponent } from '@shared/components/bom-lifecycle-activator/bom-lifecycle-activator.component';
 import { CountryFlagGeneratorComponent } from '@shared/components/country-flag-generator/country-flag-generator.component';
 import { DateTimeComponent } from '@shared/components/dateTime/dateTime.component';
 import { FormErrorMessageComponent } from '@shared/components/formErrorMessage/formErrorMessage.component';
 import { InputComponent } from '@shared/components/input/input.component';
-import { MultiSelectAutocompleteComponent } from '@shared/components/multi-select-autocomplete/multi-select-autocomplete.component';
-import { NotificationOverviewComponent } from '@shared/components/notification-overview/notification-overview.component';
-import { NotificationReasonComponent } from '@shared/components/notification-reason/notification-reason.component';
-import { NotificationUserComponent } from '@shared/components/notification-user/notification-user.component';
-import { PartsTableComponent } from '@shared/components/parts-table/parts-table.component';
-import { RequestInvestigationComponent } from '@shared/components/request-notification';
+import {
+    MultiSelectAutocompleteComponent
+} from '@shared/components/multi-select-autocomplete/multi-select-autocomplete.component';
+import {NotificationOverviewComponent} from '@shared/components/notification-overview/notification-overview.component';
+import {NotificationReasonComponent} from '@shared/components/notification-reason/notification-reason.component';
+import {NotificationUserComponent} from '@shared/components/notification-user/notification-user.component';
+import {PartsTableComponent} from '@shared/components/parts-table/parts-table.component';
+import {RequestInvestigationComponent } from '@shared/components/request-notification';
 import { RequestAlertComponent } from '@shared/components/request-notification/request-alert.component';
 import { SeveritySelectComponent } from '@shared/components/severity-select/severity-select.component';
 import { SeverityComponent } from '@shared/components/severity/severity.component';
@@ -78,54 +80,54 @@ import { StaticIdService } from './service/staticId.service';
 import { TemplateModule } from './template.module';
 
 @NgModule({
-  declarations: [
-    ToastContainerComponent,
-    PartsTableComponent,
-    ToastMessageComponent,
-    BreadcrumbsComponent,
-    ButtonComponent,
-    TextWithIconComponent,
-    TableComponent,
-    TooltipDirective,
-    RoleDirective,
-    I18nPipe,
-    AutoFormatPipe,
-    FormatDatePipe,
-    FormatPaginationSemanticDataModelToCamelCasePipe,
-    FormatPartSemanticDataModelToCamelCasePipe,
-    FormatPartlistSemanticDataModelToCamelCasePipe,
-    FlattenObjectPipe,
-    ViewContainerDirective,
-    AvatarComponent,
-    LanguageSelectorComponent,
-    CardIconComponent,
-    CardListComponent,
-    ToKeyValuePipe,
-    SelectComponent,
-    DataLoadingErrorComponent,
-    TabAsPanelDirective,
-    SidenavWrapperComponent,
-    TextareaComponent,
-    ErrorMessagePipe,
-    RequestInvestigationComponent,
-    RequestAlertComponent,
-    ScrollWithShadowComponent,
-    QualityTypeComponent,
-    ValueToLablePipe,
-    NotificationOverviewComponent,
-    NotificationReasonComponent,
-    NotificationModalContentComponent,
-    DateTimeComponent,
-    BaseInputComponent,
-    FormErrorMessageComponent,
-    SeverityComponent,
-    SeveritySelectComponent,
-    NotificationUserComponent,
-    InputComponent,
-    BomLifecycleActivatorComponent,
-    ViewSelectorComponent,
-      MultiSelectAutocompleteComponent,
-      CountryFlagGeneratorComponent,
+    declarations: [
+        ToastContainerComponent,
+        PartsTableComponent,
+        ToastMessageComponent,
+        BreadcrumbsComponent,
+        ButtonComponent,
+        TextWithIconComponent,
+        TableComponent,
+        TooltipDirective,
+        RoleDirective,
+        I18nPipe,
+        AutoFormatPipe,
+        FormatDatePipe,
+        FormatPaginationSemanticDataModelToCamelCasePipe,
+        FormatPartSemanticDataModelToCamelCasePipe,
+        FormatPartlistSemanticDataModelToCamelCasePipe,
+        FlattenObjectPipe,
+        ViewContainerDirective,
+        AvatarComponent,
+        LanguageSelectorComponent,
+        CardIconComponent,
+        CardListComponent,
+        ToKeyValuePipe,
+        SelectComponent,
+        DataLoadingErrorComponent,
+        TabAsPanelDirective,
+        SidenavWrapperComponent,
+        TextareaComponent,
+        ErrorMessagePipe,
+        RequestInvestigationComponent,
+        RequestAlertComponent,
+        ScrollWithShadowComponent,
+        QualityTypeComponent,
+        ValueToLablePipe,
+        NotificationOverviewComponent,
+        NotificationReasonComponent,
+        NotificationModalContentComponent,
+        DateTimeComponent,
+        BaseInputComponent,
+        FormErrorMessageComponent,
+        SeverityComponent,
+        SeveritySelectComponent,
+        NotificationUserComponent,
+        InputComponent,
+        BomLifecycleActivatorComponent,
+        ViewSelectorComponent,
+        MultiSelectAutocompleteComponent,
+        CountryFlagGeneratorComponent,
     TableSettingsComponent,
   ],
   imports: [TemplateModule, RouterModule, I18NextModule],
@@ -172,21 +174,22 @@ import { TemplateModule } from './template.module';
         FormatPartlistSemanticDataModelToCamelCasePipe,
         BomLifecycleActivatorComponent,
         ViewSelectorComponent,
-      PartsTableComponent,
+        PartsTableComponent,
         MultiSelectAutocompleteComponent,
         CountryFlagGeneratorComponent,
-      TableSettingsComponent,
     ],
-  providers: [
-    FormatDatePipe,
-    StaticIdService,
-    PartsService,
-    ErrorMessagePipe,
-    TitleCasePipe,
-    {
-      provide: MatPaginatorIntl,
-      useClass: PaginatorIntlService,
-    },
-  ],
+    providers: [
+        FormatDatePipe,
+        StaticIdService,
+        PartsService,
+        ErrorMessagePipe,
+        TitleCasePipe,
+        DatePipe,
+        {
+            provide: MatPaginatorIntl,
+            useClass: PaginatorIntlService,
+        },
+    ],
 })
-export class SharedModule {}
+export class SharedModule {
+}

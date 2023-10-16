@@ -16,16 +16,29 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-package org.eclipse.tractusx.traceability.qualitynotification.application.base.request;
+package org.eclipse.tractusx.traceability.common.date;
 
-import io.swagger.annotations.ApiModel;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.model.QualityNotificationStatus;
-// TODO move to tx-models
-@ApiModel(description = "Describes status for closed action")
-public enum QualityNotificationStatusRequest {
-    CLOSED;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
-    public static QualityNotificationStatus toDomain(QualityNotificationStatusRequest qualityNotificationStatusRequest) {
-        return QualityNotificationStatus.fromStringValue(qualityNotificationStatusRequest.name());
+import static org.eclipse.tractusx.traceability.common.config.TimeConfig.SYSTEM_TIMEZONE;
+
+public class DateUtil {
+
+    public static Instant toInstant(OffsetDateTime offsetDateTime) {
+        if (offsetDateTime != null) {
+            return offsetDateTime.toInstant();
+        } else {
+            return null;
+        }
+    }
+
+    public static OffsetDateTime toOffsetDateTime(Instant instant) {
+        if (instant != null) {
+            return OffsetDateTime.from(instant.atZone(ZoneId.of(SYSTEM_TIMEZONE)));
+        } else {
+            return null;
+        }
     }
 }
