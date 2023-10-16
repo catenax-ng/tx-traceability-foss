@@ -81,6 +81,8 @@ export class TableSettingsComponent {
     this.tableColumns = tableSettingsService.getColumnVisibilitySettings()[this.tableType].columnsForTable;
     this.filterColumns = tableSettingsService.getColumnVisibilitySettings()[this.tableType].filterColumnsForTable;
 
+    this.selectAllSelected = this.dialogColumns.length === this.tableColumns.length;
+
   }
 
   save() {
