@@ -107,14 +107,13 @@ SPDX-License-Identifier: Apache-2.0
                 </td>
             </tr>
             <ng-container *ngFor="let column of tableConfig?.displayedColumns" [ngSwitch]="column">
-              <ng-container *ngIf="tableConfig?.displayedColumns.length > 1">
                 <ng-container *ngSwitchCase="'select'" >
                     <ng-container *ngTemplateOutlet="SelectColumn"></ng-container>
                 </ng-container>
                 <ng-container *ngSwitchDefault>
                     <ng-container *ngTemplateOutlet="NormalColumn; context: { $implicit: column }"></ng-container>
                 </ng-container>
-              </ng-container>
+
             </ng-container>
 
             <ng-template #SelectColumn>
