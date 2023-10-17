@@ -38,6 +38,7 @@ import { Pagination } from '@core/model/pagination.model';
 import { TableSettingsService } from '@core/user/table-settings.service';
 import { SemanticDataModel } from '@page/parts/model/parts.model';
 import { MultiSelectAutocompleteComponent } from '@shared/components/multi-select-autocomplete/multi-select-autocomplete.component';
+import { TableViewConfig } from '@shared/components/parts-table/table-view-config.model';
 import { TableSettingsComponent } from '@shared/components/table-settings/table-settings.component';
 import {
   CreateHeaderFromColumns,
@@ -133,7 +134,9 @@ export class PartsTableComponent implements OnInit {
     public displayedColumns: string[];
     public defaultColumns: string[];
 
-    filterFormGroup = new FormGroup({});
+    private tableViewConfig: TableViewConfig
+
+  filterFormGroup = new FormGroup({});
 
     public isDateElement(key: string){
         return isDateFilter(key);
@@ -254,7 +257,6 @@ export class PartsTableComponent implements OnInit {
     };
 
     private readonly displayedColumnsAsPlannedCustomer: string[] = [
-        'Filter',
         'filterSemanticDataModel',
         'filterName',
         'filterManufacturer',
@@ -274,7 +276,6 @@ export class PartsTableComponent implements OnInit {
 
 
     private readonly displayedColumnsAsBuiltCustomer: string[] = [
-        'Filter',
         'filterSemanticDataModel',
         'filterName',
         'filterManufacturer',
@@ -299,7 +300,6 @@ export class PartsTableComponent implements OnInit {
     ];
 
     private readonly displayedColumnsAsBuiltCustomerForTable: string[] = [
-        'select',
         'semanticDataModel',
         'name',
         'manufacturer',
@@ -323,7 +323,6 @@ export class PartsTableComponent implements OnInit {
     };
 
     private readonly displayedColumnsAsPlannedCustomerForTable: string[] = [
-        'select',
         'semanticDataModel',
         'name',
         'manufacturer',
@@ -384,180 +383,119 @@ export class PartsTableComponent implements OnInit {
     private sorting: TableHeaderSort;
 
     ngOnInit() {
+      this.initializeTableViewSettings();
       this.tableSettingsService.getEvent().subscribe(() => {
-        // TODO: update only table and filtercolumns
-        this.initializeTableConfiguration();
+        this.setupTableViewSettings();
       })
-      this.initializeTableConfiguration();
-        //this.handleAsBuiltTableType();
-        //this.handleAsPlannedTableType();
+      this.setupTableViewSettings();
         this.filterFormGroup.valueChanges.subscribe((formValues) => {
             this.filterActivated.emit(formValues);
         });
     }
 
-    private getDefaultColumnsForTable(): string[] {
-      let columns = [];
-      switch (this.tableType) {
-        case PartTableType.AS_PLANNED_CUSTOMER:
-          columns = this.displayedColumnsAsPlannedCustomerForTable;
-          break;
-        case PartTableType.AS_PLANNED_OWN:
-          columns = this.displayedColumnsAsPlannedForTable
-          break;
-        case PartTableType.AS_PLANNED_SUPPLIER:
-          columns = this.displayedColumnsAsPlannedSupplierForTable
-          break;
-        case PartTableType.AS_BUILT_OWN:
-          columns =   this.displayedColumnsAsBuiltForTable
-          break;
-        case PartTableType.AS_BUILT_CUSTOMER:
-          columns = this.displayedColumnsAsBuiltCustomerForTable
-          break;
-        case PartTableType.AS_BUILT_SUPPLIER:
-          columns =  this.displayedColumnsAsBuiltSupplierForTable
-          break;
-      }
-      return columns;
+  private initializeTableViewSettings(): void {
+    switch (this.tableType) {
+      case PartTableType.AS_PLANNED_CUSTOMER:
+        this.tableViewConfig = {
+          displayedColumns: this.displayedColumnsAsPlannedCustomer,
+          displayedColumnsForTable: this.displayedColumnsAsPlannedCustomerForTable,
+          filterConfiguration: this.assetAsPlannedCustomerFilterConfiguration,
+          filterFormGroup: this.assetAsPlannedCustomerFilterFormGroup,
+          sortableColumns: this.sortableColumnsAsPlannedCustomer
+        }
+        break;
+      case PartTableType.AS_PLANNED_OWN:
+        this.tableViewConfig = {
+          displayedColumns: this.displayedColumnsAsPlanned,
+          displayedColumnsForTable: this.displayedColumnsAsPlannedForTable,
+          filterConfiguration: this.assetAsPlannedFilterConfiguration,
+          filterFormGroup: this.assetAsPlannedFilterFormGroup,
+          sortableColumns: this.sortableColumnsAsPlanned
+        }
+        break;
+      case PartTableType.AS_PLANNED_SUPPLIER:
+        this.tableViewConfig = {
+          displayedColumns: this.displayedColumnsAsPlannedSupplier,
+          displayedColumnsForTable: this.displayedColumnsAsPlannedSupplierForTable,
+          filterConfiguration: this.assetAsPlannedSupplierFilterConfiguration,
+          filterFormGroup: this.assetAsPlannedSupplierFilterFormGroup,
+          sortableColumns: this.sortableColumnsAsPlannedSupplier
+        }
+        break;
+      case PartTableType.AS_BUILT_OWN:
+        this.tableViewConfig = {
+          displayedColumns: this.displayedColumnsAsBuilt,
+          displayedColumnsForTable: this.displayedColumnsAsBuiltForTable,
+          filterConfiguration: this.assetAsBuiltFilterConfiguration,
+          filterFormGroup: this.assetAsBuiltFilterFormGroup,
+          sortableColumns: this.sortableColumnsAsBuilt
+        }
+        break;
+      case PartTableType.AS_BUILT_CUSTOMER:
+        this.tableViewConfig = {
+          displayedColumns: this.displayedColumnsAsBuiltCustomer,
+          displayedColumnsForTable: this.displayedColumnsAsBuiltCustomerForTable,
+          filterConfiguration: this.assetAsBuiltCustomerFilterConfiguration,
+          filterFormGroup: this.assetAsBuiltCustomerFilterFormGroup,
+          sortableColumns: this.sortableColumnsAsBuiltCustomer
+        }
+        break;
+      case PartTableType.AS_BUILT_SUPPLIER:
+        this.tableViewConfig = {
+          displayedColumns: this.displayedColumnsAsBuiltSupplier,
+          displayedColumnsForTable: this.displayedColumnsAsBuiltSupplierForTable,
+          filterConfiguration: this.assetAsBuiltSupplierFilterConfiguration,
+          filterFormGroup: this.assetAsBuiltSupplierFilterFormGroup,
+          sortableColumns: this.sortableColumnsAsBuiltSupplier
+        }
+        break;
     }
-
-    private getDefaultFilterColumns(): string[] {
-      let columns = [];
-      switch (this.tableType) {
-        case PartTableType.AS_PLANNED_CUSTOMER:
-          columns = this.displayedColumnsAsPlannedCustomer;
-          break;
-        case PartTableType.AS_PLANNED_OWN:
-          columns = this.displayedColumnsAsPlanned
-          break;
-        case PartTableType.AS_PLANNED_SUPPLIER:
-          columns = this.displayedColumnsAsPlannedSupplier
-          break;
-        case PartTableType.AS_BUILT_OWN:
-          columns =   this.displayedColumnsAsBuilt
-          break;
-        case PartTableType.AS_BUILT_CUSTOMER:
-          columns = this.displayedColumnsAsBuiltCustomer
-          break;
-        case PartTableType.AS_BUILT_SUPPLIER:
-          columns =  this.displayedColumnsAsBuiltSupplier
-          break;
-      }
-      return columns;
-    }
-
-
-    //
+  }
 
 // TODO: refactor this function
-    private initializeTableConfiguration() {
+    private setupTableViewSettings() {
       const tableSettingsList = this.tableSettingsService.getColumnVisibilitySettings();
+      console.log(tableSettingsList);
       // check if there are table settings list
       if(tableSettingsList) {
         // if yes, check if there is a table-setting for this table type
         if(tableSettingsList[this.tableType]) {
           // if yes, get the effective displayedcolumns from the settings and set the tableconfig after it.
-          switch (this.tableType) {
-            case PartTableType.AS_BUILT_OWN:
-              this.setupTableConfigurations(tableSettingsList[this.tableType].columnsForTable, tableSettingsList[this.tableType].filterColumnsForTable, this.sortableColumnsAsBuilt, this.assetAsBuiltFilterConfiguration, this.assetAsBuiltFilterFormGroup);
-              break;
-            case PartTableType.AS_BUILT_CUSTOMER:
-              this.setupTableConfigurations(tableSettingsList[this.tableType].columnsForTable, tableSettingsList[this.tableType].filterColumnsForTable, this.sortableColumnsAsBuiltCustomer, this.assetAsBuiltCustomerFilterConfiguration, this.assetAsBuiltCustomerFilterFormGroup);
-              break;
-            case PartTableType.AS_BUILT_SUPPLIER:
-              this.setupTableConfigurations(tableSettingsList[this.tableType].columnsForTable, tableSettingsList[this.tableType].filterColumnsForTable, this.sortableColumnsAsBuiltSupplier, this.assetAsBuiltSupplierFilterConfiguration, this.assetAsBuiltSupplierFilterFormGroup);
-              break;
-            case PartTableType.AS_PLANNED_CUSTOMER:
-              this.setupTableConfigurations(tableSettingsList[this.tableType].columnsForTable, tableSettingsList[this.tableType].filterColumnsForTable, this.sortableColumnsAsPlannedCustomer, this.assetAsPlannedCustomerFilterConfiguration, this.assetAsPlannedCustomerFilterFormGroup);
-              break;
-            case PartTableType.AS_PLANNED_OWN:
-              this.setupTableConfigurations(tableSettingsList[this.tableType].columnsForTable, tableSettingsList[this.tableType].filterColumnsForTable, this.sortableColumnsAsPlanned, this.assetAsPlannedFilterConfiguration, this.assetAsPlannedFilterFormGroup);
-              break;
-            case PartTableType.AS_PLANNED_SUPPLIER:
-              this.setupTableConfigurations(tableSettingsList[this.tableType].columnsForTable, tableSettingsList[this.tableType].filterColumnsForTable, this.sortableColumnsAsPlannedSupplier, this.assetAsPlannedSupplierFilterConfiguration, this.assetAsPlannedSupplierFilterFormGroup);
-              break;
-          }
-
+          this.setupTableConfigurations(tableSettingsList[this.tableType].columnsForTable, tableSettingsList[this.tableType].filterColumnsForTable, this.tableViewConfig.sortableColumns, this.tableViewConfig.filterConfiguration, this.tableViewConfig.filterFormGroup);
         } else {
-
-          // if no, create new a table setting for this.tabletype and put it into the list. Also intitialize default table configuration
+          // if no, create new a table setting for this.tabletype and put it into the list. Additionally, intitialize default table configuration
           const initialColumnMap = new Map<string,boolean>();
-          for(const column of this.getDefaultColumnsForTable()) {
+          for(const column of this.tableViewConfig.displayedColumnsForTable) {
             initialColumnMap.set(column,true);
           }
 
-          let newTableSettings = {
-              columnsForDialog: this.getDefaultColumnsForTable(),
-              columnSettingsOptions: initialColumnMap,
-              columnsForTable: this.getDefaultColumnsForTable(),
-              filterColumnsForTable: this.getDefaultFilterColumns()
-          }
-          console.log(newTableSettings);
-          tableSettingsList[this.tableType] = newTableSettings;
-          console.log("settings input from part", tableSettingsList)
+          tableSettingsList[this.tableType] = {
+            columnsForDialog: this.tableViewConfig.displayedColumnsForTable,
+            columnSettingsOptions: initialColumnMap,
+            columnsForTable: this.tableViewConfig.displayedColumnsForTable,
+            filterColumnsForTable: this.tableViewConfig.displayedColumns
+          };
           this.tableSettingsService.setColumnVisibilitySettings(this.tableType, tableSettingsList);
-          switch (this.tableType) {
-            case PartTableType.AS_BUILT_OWN:
-              this.setupTableConfigurations(this.displayedColumnsAsBuiltForTable, this.displayedColumnsAsBuilt, this.sortableColumnsAsBuilt, this.assetAsBuiltFilterConfiguration, this.assetAsBuiltFilterFormGroup);
-              break;
-            case PartTableType.AS_BUILT_CUSTOMER:
-              this.setupTableConfigurations(this.displayedColumnsAsBuiltCustomerForTable, this.displayedColumnsAsBuiltCustomer, this.sortableColumnsAsBuiltCustomer, this.assetAsBuiltCustomerFilterConfiguration, this.assetAsBuiltCustomerFilterFormGroup);
-              break;
-            case PartTableType.AS_BUILT_SUPPLIER:
-              this.setupTableConfigurations(this.displayedColumnsAsBuiltSupplierForTable, this.displayedColumnsAsBuiltSupplier, this.sortableColumnsAsBuiltSupplier, this.assetAsBuiltSupplierFilterConfiguration, this.assetAsBuiltSupplierFilterFormGroup);
-              break;
-            case PartTableType.AS_PLANNED_CUSTOMER:
-              this.setupTableConfigurations(this.displayedColumnsAsPlannedCustomerForTable, this.displayedColumnsAsPlannedCustomer, this.sortableColumnsAsPlannedCustomer, this.assetAsPlannedCustomerFilterConfiguration, this.assetAsPlannedCustomerFilterFormGroup);
-              break;
-            case PartTableType.AS_PLANNED_OWN:
-              this.setupTableConfigurations(this.displayedColumnsAsPlannedForTable, this.displayedColumnsAsPlanned, this.sortableColumnsAsPlanned, this.assetAsPlannedFilterConfiguration, this.assetAsPlannedFilterFormGroup);
-              break;
-            case PartTableType.AS_PLANNED_SUPPLIER:
-              this.setupTableConfigurations(this.displayedColumnsAsPlannedSupplierForTable, this.displayedColumnsAsPlannedSupplier, this.sortableColumnsAsPlannedSupplier, this.assetAsPlannedSupplierFilterConfiguration, this.assetAsPlannedSupplierFilterFormGroup);
-              break;
-          }
-
+          this.setupTableConfigurations(this.tableViewConfig.displayedColumnsForTable, this.tableViewConfig.displayedColumns, this.tableViewConfig.sortableColumns, this.tableViewConfig.filterConfiguration, this.tableViewConfig.filterFormGroup);
         }
-
-
       } else {
         // if no, create new list and a settings entry for this.tabletype with default values and set correspondingly the tableconfig
         const initialColumnMap = new Map<string,boolean>();
-        for(const column of this.getDefaultColumnsForTable()) {
+        for(const column of this.tableViewConfig.displayedColumnsForTable) {
           initialColumnMap.set(column,true);
         }
 
-        let newTableSettingsList = {
+        const newTableSettingsList = {
           [this.tableType]: {
-            columnsForDialog: this.getDefaultColumnsForTable(),
+            columnsForDialog: this.tableViewConfig.displayedColumnsForTable,
             columnSettingsOptions: initialColumnMap,
-            columnsForTable: this.getDefaultColumnsForTable(),
-            filterColumnsForTable: this.getDefaultFilterColumns()
+            columnsForTable: this.tableViewConfig.displayedColumnsForTable,
+            filterColumnsForTable: this.tableViewConfig.displayedColumns
           }
         }
         this.tableSettingsService.setColumnVisibilitySettings(this.tableType, newTableSettingsList);
-        switch (this.tableType) {
-          case PartTableType.AS_BUILT_OWN:
-            this.setupTableConfigurations(this.displayedColumnsAsBuiltForTable, this.displayedColumnsAsBuilt, this.sortableColumnsAsBuilt, this.assetAsBuiltFilterConfiguration, this.assetAsBuiltFilterFormGroup);
-            break;
-          case PartTableType.AS_BUILT_CUSTOMER:
-            this.setupTableConfigurations(this.displayedColumnsAsBuiltCustomerForTable, this.displayedColumnsAsBuiltCustomer, this.sortableColumnsAsBuiltCustomer, this.assetAsBuiltCustomerFilterConfiguration, this.assetAsBuiltCustomerFilterFormGroup);
-            break;
-          case PartTableType.AS_BUILT_SUPPLIER:
-            this.setupTableConfigurations(this.displayedColumnsAsBuiltSupplierForTable, this.displayedColumnsAsBuiltSupplier, this.sortableColumnsAsBuiltSupplier, this.assetAsBuiltSupplierFilterConfiguration, this.assetAsBuiltSupplierFilterFormGroup);
-            break;
-          case PartTableType.AS_PLANNED_CUSTOMER:
-            this.setupTableConfigurations(this.displayedColumnsAsPlannedCustomerForTable, this.displayedColumnsAsPlannedCustomer, this.sortableColumnsAsPlannedCustomer, this.assetAsPlannedCustomerFilterConfiguration, this.assetAsPlannedCustomerFilterFormGroup);
-            break;
-          case PartTableType.AS_PLANNED_OWN:
-            this.setupTableConfigurations(this.displayedColumnsAsPlannedForTable, this.displayedColumnsAsPlanned, this.sortableColumnsAsPlanned, this.assetAsPlannedFilterConfiguration, this.assetAsPlannedFilterFormGroup);
-            break;
-          case PartTableType.AS_PLANNED_SUPPLIER:
-            this.setupTableConfigurations(this.displayedColumnsAsPlannedSupplierForTable, this.displayedColumnsAsPlannedSupplier, this.sortableColumnsAsPlannedSupplier, this.assetAsPlannedSupplierFilterConfiguration, this.assetAsPlannedSupplierFilterFormGroup);
-            break;
-        }
+        this.setupTableConfigurations(this.tableViewConfig.displayedColumnsForTable, this.tableViewConfig.displayedColumns, this.tableViewConfig.sortableColumns, this.tableViewConfig.filterConfiguration, this.tableViewConfig.filterFormGroup);
       }
-
     }
 
 
@@ -577,36 +515,6 @@ export class PartsTableComponent implements OnInit {
     }
 
   }
-
-    private handleAsPlannedTableType(): void {
-        switch (this.tableType) {
-            case PartTableType.AS_PLANNED_CUSTOMER:
-                this.setupTableConfigurations(this.displayedColumnsAsPlannedCustomerForTable, this.displayedColumnsAsPlannedCustomer, this.sortableColumnsAsPlannedCustomer, this.assetAsPlannedCustomerFilterConfiguration, this.assetAsPlannedCustomerFilterFormGroup);
-                break;
-            case PartTableType.AS_PLANNED_OWN:
-                this.setupTableConfigurations(this.displayedColumnsAsPlannedForTable, this.displayedColumnsAsPlanned, this.sortableColumnsAsPlanned, this.assetAsPlannedFilterConfiguration, this.assetAsPlannedFilterFormGroup);
-                break;
-            case PartTableType.AS_PLANNED_SUPPLIER:
-                this.setupTableConfigurations(this.displayedColumnsAsPlannedSupplierForTable, this.displayedColumnsAsPlannedSupplier, this.sortableColumnsAsPlannedSupplier, this.assetAsPlannedSupplierFilterConfiguration, this.assetAsPlannedSupplierFilterFormGroup);
-                break;
-        }
-    }
-
-
-
-    private handleAsBuiltTableType(): void {
-      switch (this.tableType) {
-        case PartTableType.AS_BUILT_OWN:
-          this.setupTableConfigurations(this.displayedColumnsAsBuiltForTable, this.displayedColumnsAsBuilt, this.sortableColumnsAsBuilt, this.assetAsBuiltFilterConfiguration, this.assetAsBuiltFilterFormGroup);
-          break;
-        case PartTableType.AS_BUILT_CUSTOMER:
-          this.setupTableConfigurations(this.displayedColumnsAsBuiltCustomerForTable, this.displayedColumnsAsBuiltCustomer, this.sortableColumnsAsBuiltCustomer, this.assetAsBuiltCustomerFilterConfiguration, this.assetAsBuiltCustomerFilterFormGroup);
-          break;
-        case PartTableType.AS_BUILT_SUPPLIER:
-          this.setupTableConfigurations(this.displayedColumnsAsBuiltSupplierForTable, this.displayedColumnsAsBuiltSupplier, this.sortableColumnsAsBuiltSupplier, this.assetAsBuiltSupplierFilterConfiguration, this.assetAsBuiltSupplierFilterFormGroup);
-          break;
-      }
-    }
 
     optionTextSearch = [];
     semanticDataModelOptions = [
@@ -628,6 +536,7 @@ export class PartsTableComponent implements OnInit {
         },
     ];
 
+    // TODO: create a type for the filterconfig
     public readonly assetAsBuiltFilterConfiguration: any[] = [
         {filterKey: 'Filter', headerKey: 'Filter', isTextSearch: true, option: this.optionTextSearch},
         {filterKey: 'id', headerKey: 'filterId', isTextSearch: true, option: this.optionTextSearch},
@@ -864,8 +773,8 @@ export class PartsTableComponent implements OnInit {
         title: "table.tableSettings.title",
         panelClass: "custom",
         tableType: this.tableType,
-        defaultColumns: this.getDefaultColumnsForTable(),
-        defaultFilterColumns: this.getDefaultFilterColumns()
+        defaultColumns: this.tableViewConfig.displayedColumnsForTable,
+        defaultFilterColumns: this.tableViewConfig.displayedColumns
       };
       this.dialog.open(TableSettingsComponent, config )
     }

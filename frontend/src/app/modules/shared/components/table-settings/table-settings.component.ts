@@ -19,6 +19,7 @@
 
 import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { TableViewSettings } from '@core/user/table-settings.model';
 import { TableSettingsService } from '@core/user/table-settings.service';
 import { PartTableType } from '@shared/components/table/table.model';
 
@@ -64,12 +65,14 @@ export class TableSettingsComponent {
   selectAllSelected: boolean;
   selectedColumn: string = null;
 
+  isCustomerTable: boolean;
+
 
   constructor(public dialogRef: MatDialogRef<TableSettingsComponent>, @Inject(MAT_DIALOG_DATA) public data: any, public readonly tableSettingsService: TableSettingsService) {
     // Layout
     this.title = data.title;
     this.panelClass = data.panelClass;
-
+    this.isCustomerTable = data.tableType === PartTableType.AS_BUILT_CUSTOMER || data.tableType === PartTableType.AS_PLANNED_CUSTOMER
     // Passed Data
     this.tableType = data.tableType;
     this.defaultColumns = data.defaultColumns;
@@ -94,7 +97,7 @@ export class TableSettingsComponent {
         // if item in dialogColumns is true in columnOptions --> add to new tableColumns
         if(this.columnOptions.get(column)) {
           newTableColumns.push(column);
-          if(column === 'select' && this.tableType != PartTableType.AS_BUILT_CUSTOMER && this.tableType != PartTableType.AS_PLANNED_CUSTOMER) {
+          if(column === 'select' && !this.isCustomerTable) {
             newTableFilterColumns.push('Filter');
           } else {
             newTableFilterColumns.push('filter'+ column.charAt(0).toUpperCase() + column.slice(1))
@@ -106,14 +109,13 @@ export class TableSettingsComponent {
     // get Settingslist
     // set this tableType Settings from SettingsList to the new one
     let tableSettingsList = this.tableSettingsService.getColumnVisibilitySettings();
-      let newTableSettings = {
-        columnSettingsOptions: this.columnOptions,
-        columnsForDialog: this.dialogColumns,
-        columnsForTable: newTableColumns,
-        filterColumnsForTable: newTableFilterColumns
-      }
-    tableSettingsList[this.tableType] = newTableSettings;
-      console.log("saving as:", tableSettingsList);
+
+    tableSettingsList[this.tableType] = {
+      columnSettingsOptions: this.columnOptions,
+      columnsForDialog: this.dialogColumns,
+      columnsForTable: newTableColumns,
+      filterColumnsForTable: newTableFilterColumns
+    } as TableViewSettings;
 
     // save all values back to localstorage
     this.tableSettingsService.setColumnVisibilitySettings(this.tableType, tableSettingsList);
@@ -121,14 +123,10 @@ export class TableSettingsComponent {
     // trigger action that table will refresh
     this.tableSettingsService.emitChangeEvent();
     this.dialogRef.close();
-      // the tableconfig with the corresponding columns (and filter)
-    // close the dialog
-
   }
 
   handleCheckBoxChange(item: string, isChecked: boolean) {
     this.columnOptions.set(item, isChecked);
-    console.log(this.columnOptions);
   }
 
   handleListItemClick(event: MouseEvent, item: string) {
@@ -137,7 +135,6 @@ export class TableSettingsComponent {
     if (element.tagName !== 'INPUT') {
       this.selectedColumn = item;
       element.classList.toggle('selected-item');
-      console.log(this.selectedColumn);
     }
   }
 
@@ -150,15 +147,16 @@ export class TableSettingsComponent {
     }
 
     let oldPosition = this.dialogColumns.indexOf(this.selectedColumn);
-    let newPositon = direction === 'up' ? -1 : 1;
-
-    if((oldPosition == 1 && direction === 'up') || (oldPosition === this.dialogColumns.length-1 && direction === 'down')) {
+    // in non customer table we have the select Column as first and why
+    let upperLimit = this.isCustomerTable ? 0 : 1
+    let step = direction === 'up' ? -1 : 1;
+    console.log(oldPosition, upperLimit, step)
+    if((oldPosition == upperLimit && direction === 'up') || (oldPosition === this.dialogColumns.length-1 && direction === 'down')) {
       return;
     }
-      let temp = this.dialogColumns[oldPosition+newPositon];
-    this.dialogColumns[oldPosition+newPositon] = this.selectedColumn;
+    let temp = this.dialogColumns[oldPosition+step];
+    this.dialogColumns[oldPosition+step] = this.selectedColumn;
     this.dialogColumns[oldPosition] = temp;
-    console.log(this.dialogColumns);
   }
 
 
@@ -170,15 +168,10 @@ export class TableSettingsComponent {
       this.columnOptions.set(column,isChecked);
     }
     this.selectAllSelected = true;
-    console.log(this.columnOptions);
   }
 
   resetColumns() {
     this.dialogColumns = [...this.defaultColumns];
     this.selectAll(true);
-    console.log(this.defaultColumns);
-    console.log(this.dialogColumns);
-    console.log(this.columnOptions);
-
   }
 }

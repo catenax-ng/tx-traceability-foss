@@ -25,7 +25,7 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class TableSettingsService {
-  private settingsKey = 'ViewTableSettings';
+  private settingsKey = 'TableViewSettings';
   private changeEvent = new Subject<void>();
 
   constructor() {}
@@ -36,6 +36,7 @@ export class TableSettingsService {
       const newMap = tableSettingsList[tableSetting].columnSettingsOptions;
       tableSettingsList[tableSetting].columnSettingsOptions = JSON.stringify(Array.from(newMap.entries()));
     })
+    console.log("setLocalstorage", tableSettingsList);
     localStorage.setItem(this.settingsKey, JSON.stringify(tableSettingsList));
   }
 
@@ -43,19 +44,14 @@ export class TableSettingsService {
   getColumnVisibilitySettings(): any {
     const settingsJson = localStorage.getItem(this.settingsKey);
     let settingsObject = settingsJson ? JSON.parse(settingsJson) : null;
-    if(settingsObject) {
-      // iterate through all tabletypes and parse columnSettingsOption to a map
-      Object.keys(settingsObject).forEach(tableSetting => {
-        settingsObject[tableSetting].columnSettingsOptions = new Map(JSON.parse(settingsObject[tableSetting].columnSettingsOptions));
+    if(!settingsObject) return;
 
-      })
-      console.log("getColumnVisibilitySettings with map", settingsObject);
-      return settingsObject;
-    } else {
-      console.log("getColumnVisibilitySettings no settings", settingsJson);
-      return null;
-    }
+    // iterate through all tabletypes and parse columnSettingsOption to a map
+    Object.keys(settingsObject).forEach(tableSetting => {
+      settingsObject[tableSetting].columnSettingsOptions = new Map(JSON.parse(settingsObject[tableSetting].columnSettingsOptions));
 
+    });
+    return settingsObject;
   }
 
   emitChangeEvent() {

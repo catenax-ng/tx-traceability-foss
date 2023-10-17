@@ -16,10 +16,10 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-
-export interface TableViewSettings {
-  columnsForDialog: string[],                 //--> string list in order how they are sorted
-  columnSettingsOptions: Map<string,boolean>, //--> in order of sorted Rows - also source for table -> convert to list of truth
-  columnsForTable: string[],                   //--> string list that saves the column string in the order of the dialog and only if they are true
-  filterColumnsForTable: string[],
+export interface TableViewConfig {
+  displayedColumnsForTable: string[],
+  displayedColumns: string[],
+  sortableColumns: Record<string,boolean>,
+  filterConfiguration: any[],
+  filterFormGroup: any
 }
