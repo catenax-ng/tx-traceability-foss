@@ -452,10 +452,8 @@ export class PartsTableComponent implements OnInit {
     }
   }
 
-// TODO: refactor this function
     private setupTableViewSettings() {
       const tableSettingsList = this.tableSettingsService.getColumnVisibilitySettings();
-      console.log(tableSettingsList);
       // check if there are table settings list
       if(tableSettingsList) {
         // if yes, check if there is a table-setting for this table type
