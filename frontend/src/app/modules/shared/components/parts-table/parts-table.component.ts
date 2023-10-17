@@ -766,7 +766,6 @@ export class PartsTableComponent implements OnInit {
 
     openDialog(): void {
       const config = new MatDialogConfig();
-      let my = this.tableType;
       config.data = {
         title: "table.tableSettings.title",
         panelClass: "custom",

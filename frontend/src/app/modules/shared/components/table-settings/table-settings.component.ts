@@ -29,26 +29,7 @@ import { PartTableType } from '@shared/components/table/table.model';
   styleUrls: [ 'table-settings.component.scss' ],
 })
 export class TableSettingsComponent {
-  /**
-   * What does the Component do
-   *
-   * list all possible columns for a tabletype
-   * mutate columnsettingsoption for visibilty of columns
-   * change order of all possible columns
-   * reset to default column view
-   * apply changes to the table
-   *  event when closed with boolean something changed
-   *
-   * What input does it need
-   *
-   * tabletype
-   * a list of all default columns of the table (immutable default list with a specific order and content)
-   * a list of all possible columns for a tabletype (mutable in order, add and delete columns)
-   * mutate columnsettingsoptions (set false/true)
-   *
-   *
-   *
-   */
+
   @Output() changeSettingsEvent = new EventEmitter<void>();
   title: string;
   panelClass: string;
@@ -97,6 +78,7 @@ export class TableSettingsComponent {
         // if item in dialogColumns is true in columnOptions --> add to new tableColumns
         if(this.columnOptions.get(column)) {
           newTableColumns.push(column);
+          // ignore select column in customertable
           if(column === 'select' && !this.isCustomerTable) {
             newTableFilterColumns.push('Filter');
           } else {
@@ -105,11 +87,10 @@ export class TableSettingsComponent {
         }
       }
 
-    // build visibilitySettings how they should be saved back
     // get Settingslist
-    // set this tableType Settings from SettingsList to the new one
     let tableSettingsList = this.tableSettingsService.getColumnVisibilitySettings();
 
+    // set this tableType Settings from SettingsList to the new one
     tableSettingsList[this.tableType] = {
       columnSettingsOptions: this.columnOptions,
       columnsForDialog: this.dialogColumns,
@@ -158,7 +139,6 @@ export class TableSettingsComponent {
     this.dialogColumns[oldPosition+step] = this.selectedColumn;
     this.dialogColumns[oldPosition] = temp;
   }
-
 
   selectAll(isChecked: boolean) {
     for(let column of this.dialogColumns) {

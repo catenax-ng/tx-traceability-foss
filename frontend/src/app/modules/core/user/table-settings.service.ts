@@ -28,8 +28,6 @@ export class TableSettingsService {
   private settingsKey = 'TableViewSettings';
   private changeEvent = new Subject<void>();
 
-  constructor() {}
-
   setColumnVisibilitySettings(partTableType: PartTableType, tableSettingsList: any ): void {
     // before setting anything, all maps in new tableSettingList should be stringified
     Object.keys(tableSettingsList).forEach(tableSetting => {
