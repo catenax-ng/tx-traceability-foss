@@ -462,14 +462,9 @@ export class PartsTableComponent implements OnInit {
           this.setupTableConfigurations(tableSettingsList[this.tableType].columnsForTable, tableSettingsList[this.tableType].filterColumnsForTable, this.tableViewConfig.sortableColumns, this.tableViewConfig.filterConfiguration, this.tableViewConfig.filterFormGroup);
         } else {
           // if no, create new a table setting for this.tabletype and put it into the list. Additionally, intitialize default table configuration
-          const initialColumnMap = new Map<string,boolean>();
-          for(const column of this.tableViewConfig.displayedColumnsForTable) {
-            initialColumnMap.set(column,true);
-          }
-
           tableSettingsList[this.tableType] = {
             columnsForDialog: this.tableViewConfig.displayedColumnsForTable,
-            columnSettingsOptions: initialColumnMap,
+            columnSettingsOptions: this.getDefaultColumnVisibilityMap(),
             columnsForTable: this.tableViewConfig.displayedColumnsForTable,
             filterColumnsForTable: this.tableViewConfig.displayedColumns
           };
@@ -478,15 +473,10 @@ export class PartsTableComponent implements OnInit {
         }
       } else {
         // if no, create new list and a settings entry for this.tabletype with default values and set correspondingly the tableconfig
-        const initialColumnMap = new Map<string,boolean>();
-        for(const column of this.tableViewConfig.displayedColumnsForTable) {
-          initialColumnMap.set(column,true);
-        }
-
         const newTableSettingsList = {
           [this.tableType]: {
             columnsForDialog: this.tableViewConfig.displayedColumnsForTable,
-            columnSettingsOptions: initialColumnMap,
+            columnSettingsOptions: this.getDefaultColumnVisibilityMap(),
             columnsForTable: this.tableViewConfig.displayedColumnsForTable,
             filterColumnsForTable: this.tableViewConfig.displayedColumns
           }
@@ -494,6 +484,14 @@ export class PartsTableComponent implements OnInit {
         this.tableSettingsService.setColumnVisibilitySettings(this.tableType, newTableSettingsList);
         this.setupTableConfigurations(this.tableViewConfig.displayedColumnsForTable, this.tableViewConfig.displayedColumns, this.tableViewConfig.sortableColumns, this.tableViewConfig.filterConfiguration, this.tableViewConfig.filterFormGroup);
       }
+    }
+
+    private getDefaultColumnVisibilityMap(): Map<string,boolean> {
+      const initialColumnMap = new Map<string,boolean>();
+      for(const column of this.tableViewConfig.displayedColumnsForTable) {
+        initialColumnMap.set(column,true);
+      }
+      return initialColumnMap;
     }
 
 

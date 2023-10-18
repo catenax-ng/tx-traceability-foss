@@ -34,7 +34,6 @@ export class TableSettingsService {
       const newMap = tableSettingsList[tableSetting].columnSettingsOptions;
       tableSettingsList[tableSetting].columnSettingsOptions = JSON.stringify(Array.from(newMap.entries()));
     })
-    console.log("setLocalstorage", tableSettingsList);
     localStorage.setItem(this.settingsKey, JSON.stringify(tableSettingsList));
   }
 
@@ -59,8 +58,4 @@ export class TableSettingsService {
   getEvent() {
     return this.changeEvent.asObservable();
   }
-
-
-
-
 }

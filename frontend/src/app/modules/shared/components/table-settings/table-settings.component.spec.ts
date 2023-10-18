@@ -149,7 +149,6 @@ describe('TableSettingsComponent', () => {
     component.resetColumns();
 
     expect(component.dialogColumns).toEqual(['column1', 'column2']);
-    // Ensure selectAllSelected is true after resetting columns
     expect(component.selectAllSelected).toBe(true);
   });
 

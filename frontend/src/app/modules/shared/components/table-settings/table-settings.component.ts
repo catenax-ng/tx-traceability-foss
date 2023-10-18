@@ -122,8 +122,6 @@ export class TableSettingsComponent {
 
   handleSortListItem(direction: string) {
     if(!this.selectedColumn) {
-      console.log("no list item was selected")
-      // TODO handle if no listitem was selected
       return;
     }
 
