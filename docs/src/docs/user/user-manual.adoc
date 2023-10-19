@@ -104,7 +104,7 @@ Reorder the table columns by selecting a list item (click on the right of the co
 
 Apply your changes by clicking on the "Save" - button. If you want to discard your changes, simply press you "ESC" - button, click anywhere else except in the dialog or close it explicitely with the close icon on the upper right of the dialog.
 
-The settings will be stored in the local storage of the browser and will persist until they get deleted.
+The settings will be stored in the local storage of the browser and will be persisted until they get deleted.
 
 === Part details
 Clicking on an item in the list opens "Part details" view.
