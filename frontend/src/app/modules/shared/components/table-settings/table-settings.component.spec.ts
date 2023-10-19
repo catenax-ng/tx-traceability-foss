@@ -32,12 +32,12 @@ describe('TableSettingsComponent', () => {
 
   beforeEach(async () => {
     const tableSettingsServiceSpy = jasmine.createSpyObj('TableSettingsService', [
-      'getColumnVisibilitySettings',
-      'setColumnVisibilitySettings',
+      'getStoredTableSettings',
+      'storeTableSettings',
       'emitChangeEvent',
       'getEvent',
     ]);
-    tableSettingsServiceSpy.getColumnVisibilitySettings.and.callFake(() => {
+    tableSettingsServiceSpy.getStoredTableSettings.and.callFake(() => {
       return {
         [PartTableType.AS_BUILT_OWN]: {
           columnSettingsOptions: new Map<string, boolean>(),
@@ -48,7 +48,7 @@ describe('TableSettingsComponent', () => {
       };
     });
 
-    tableSettingsServiceSpy.setColumnVisibilitySettings.and.callFake((partTableType, tableSettingsList) => {
+    tableSettingsServiceSpy.storeTableSettings.and.callFake((partTableType, tableSettingsList) => {
       console.log(`Mocked setColumnVisibilitySettings called with partTableType: ${partTableType} and tableSettingsList:`, tableSettingsList);
     });
 
