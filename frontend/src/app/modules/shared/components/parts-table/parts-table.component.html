@@ -117,7 +117,10 @@ SPDX-License-Identifier: Apache-2.0
 
             <ng-template #SelectColumn>
                 <ng-container matColumnDef="select">
-                    <th *matHeaderCellDef mat-header-cell>
+                    <th *matHeaderCellDef
+                        mat-header-cell
+                        class="table--header--select--cell"
+                    >
                         <div class="table--select-all" [class.table--select-all__menu]="isMenuOpen">
                             <mat-checkbox
                                     [checked]="selection.hasValue() && areAllRowsSelected()"
@@ -168,7 +171,7 @@ Third click:  reset sorting"
                             [mat-sort-header]="tableConfig.sortableColumns?.[column] ? '' : null"
                             [disabled]="!tableConfig.sortableColumns?.[column]"
                             mat-header-cell
-                            class="table--cell"
+                            class="table--cell table--header--normal--cell"
                     >
                         <ng-container
                                 *ngIf="tableConfig?.header?.[column]; else pureColumn"
