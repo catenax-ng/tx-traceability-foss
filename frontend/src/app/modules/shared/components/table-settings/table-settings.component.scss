@@ -21,53 +21,52 @@
   display: flex;
   flex-direction: column;
   width: 35vw;
-}
 
-.table--header--tooltip{
-  .mdc-tooltip__surface {
-    background-color: rgb(48,48,48);
-    @apply font-medium;
-    color: white;
-    max-width: 300px;
-    padding: 15px;
-    font-size: 14px;
-    line-height: 20px;
+  .table--header--tooltip{
+    .mdc-tooltip__surface {
+      background-color: rgb(48,48,48);
+      @apply font-medium;
+      color: white;
+      max-width: 300px;
+      padding: 15px;
+      font-size: 14px;
+      line-height: 20px;
 
+    }
+    .mdc-tooltip--multiline {
+      white-space: pre-line;
+    }
   }
-  .mdc-tooltip--multiline {
-    white-space: pre-line;
+
+
+  .dialog--header--container {
+    display: flex;
+    padding-bottom: 24px;
   }
-}
 
+  .mat-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 30px;
+    margin-top: 4px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-.dialog--header--container {
-  display: flex;
-  padding-bottom: 24px;
-}
+  .dialog--content--container {
+    display: flex;
+    justify-content: space-between;
+  }
 
-.mat-icon {
-  width: 32px;
-  height: 32px;
-  font-size: 30px;
-  margin-top: 4px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  .dialog--content--menu--order {
+    display: flex;
+    gap: 8px;
+    margin-right: 12px;
+  }
 
-.dialog--content--container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.dialog--content--menu--order {
-  display: flex;
-  gap: 8px;
-  margin-right: 12px;
-}
-
-.dialog--header--text {
+  .dialog--header--text {
     font-weight: 500;
     line-height: 1.6;
     color: rgb(17, 17, 17);
@@ -78,26 +77,30 @@
     Arial, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 24px;
-  text-align: center;
-  margin-left: 32px;
-}
+    text-align: center;
+    margin-left: 32px;
+  }
 
-.dialog--columns--container {
-  display: flex;
-  flex-direction: column;
-  font-size: 18px;
-  font-family: LibreFranklin, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  width: 80%
-}
+  .dialog--columns--container {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    font-family: LibreFranklin, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    width: 80%
+  }
 
-.dialog--columns--columns--list:hover {
-  background-color: rgb(237, 240, 244);
+  .dialog--columns--columns--list:hover {
+    background-color: rgb(237, 240, 244);
 
-}
+  }
 
-.selected-item {
+  .selected-item {
     background-color: rgba(139, 139, 139, 0.4);
+  }
+
 }
+
+
 
 
 .dialog--actions--container {
@@ -105,9 +108,8 @@
   width: 100%;
   display: flex;
   justify-content: center;
-}
 
-.dialog--actions--save--button {
+  .dialog--actions--save--button {
     display: inline-flex;
     -webkit-box-align: center;
     align-items: center;
@@ -136,11 +138,15 @@
     font-size: 18px;
     padding: 14px 32px;
     box-shadow: rgba(15, 113, 203, 0.4) 0px 0px 0px 3px;
+  }
+
+  .dialog--actions--save--button:hover, .dialog--actions--save--button:active, .dialog--actions--save--button:focus {
+    background-color: rgb(13, 85, 175)
+  }
+
 }
 
-.dialog--actions--save--button:hover, .dialog--actions--save--button:active, .dialog--actions--save--button:focus {
-    background-color: rgb(13, 85, 175)
-}
+
 
 
 

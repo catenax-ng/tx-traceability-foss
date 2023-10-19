@@ -17,11 +17,11 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { Component, EventEmitter, Inject, Output } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TableViewSettings } from '@core/user/table-settings.model';
-import { TableSettingsService } from '@core/user/table-settings.service';
-import { PartTableType } from '@shared/components/table/table.model';
+import {Component, EventEmitter, Inject, Output} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {TableViewSettings} from '@core/user/table-settings.model';
+import {TableSettingsService} from '@core/user/table-settings.service';
+import {PartTableType} from '@shared/components/table/table.model';
 
 @Component({
   selector: 'app-table-settings',
@@ -60,10 +60,10 @@ export class TableSettingsComponent {
     this.defaultFilterColumns = data.defaultFilterColumns;
 
     // Storage Data
-    this.columnOptions = tableSettingsService.getColumnVisibilitySettings()[this.tableType].columnSettingsOptions;
-    this.dialogColumns = tableSettingsService.getColumnVisibilitySettings()[this.tableType].columnsForDialog;
-    this.tableColumns = tableSettingsService.getColumnVisibilitySettings()[this.tableType].columnsForTable;
-    this.filterColumns = tableSettingsService.getColumnVisibilitySettings()[this.tableType].filterColumnsForTable;
+    this.columnOptions = tableSettingsService.getStoredTableSettings()[this.tableType].columnSettingsOptions;
+    this.dialogColumns = tableSettingsService.getStoredTableSettings()[this.tableType].columnsForDialog;
+    this.tableColumns = tableSettingsService.getStoredTableSettings()[this.tableType].columnsForTable;
+    this.filterColumns = tableSettingsService.getStoredTableSettings()[this.tableType].filterColumnsForTable;
 
     this.selectAllSelected = this.dialogColumns.length === this.tableColumns.length;
 
@@ -88,7 +88,7 @@ export class TableSettingsComponent {
       }
 
     // get Settingslist
-    let tableSettingsList = this.tableSettingsService.getColumnVisibilitySettings();
+    let tableSettingsList = this.tableSettingsService.getStoredTableSettings();
 
     // set this tableType Settings from SettingsList to the new one
     tableSettingsList[this.tableType] = {
@@ -99,7 +99,7 @@ export class TableSettingsComponent {
     } as TableViewSettings;
 
     // save all values back to localstorage
-    this.tableSettingsService.setColumnVisibilitySettings(this.tableType, tableSettingsList);
+    this.tableSettingsService.storeTableSettings(this.tableType, tableSettingsList);
 
     // trigger action that table will refresh
     this.tableSettingsService.emitChangeEvent();

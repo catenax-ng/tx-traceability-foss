@@ -28,7 +28,7 @@ export class TableSettingsService {
   private settingsKey = 'TableViewSettings';
   private changeEvent = new Subject<void>();
 
-  setColumnVisibilitySettings(partTableType: PartTableType, tableSettingsList: any ): void {
+  storeTableSettings(partTableType: PartTableType, tableSettingsList: any ): void {
     // before setting anything, all maps in new tableSettingList should be stringified
     Object.keys(tableSettingsList).forEach(tableSetting => {
       const newMap = tableSettingsList[tableSetting].columnSettingsOptions;
@@ -38,7 +38,7 @@ export class TableSettingsService {
   }
 
   // this returns whole settings whether empty / not for part / etc.
-  getColumnVisibilitySettings(): any {
+  getStoredTableSettings(): any {
     const settingsJson = localStorage.getItem(this.settingsKey);
     let settingsObject = settingsJson ? JSON.parse(settingsJson) : null;
     if(!settingsObject) return;

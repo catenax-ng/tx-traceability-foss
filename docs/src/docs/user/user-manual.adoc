@@ -91,7 +91,7 @@ Select one or multiple child components/parts/batches that are build into your p
 Once the quality alert is created you will get a pop-up and can directly navigate to the inbox for further action.
 
 === Parts table column settings
-On the right upper site of a table there is a settings icon in which you can set the table columns to a desired view. With a click on it a dialogg opens where you can change the settings of the corresponding table:
+On the right upper site of a table there is a settings icon in which you can set the table columns to a desired view. With a click on it a dialog opens where you can change the settings of the corresponding table:
 
 image::https://raw.githubusercontent.com/eclipse-tractusx/traceability-foss/main/docs/src/images/arc42/user-guide/table-settings-dialog.png[]
 

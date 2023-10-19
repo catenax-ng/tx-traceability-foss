@@ -453,7 +453,7 @@ export class PartsTableComponent implements OnInit {
   }
 
     private setupTableViewSettings() {
-      const tableSettingsList = this.tableSettingsService.getColumnVisibilitySettings();
+      const tableSettingsList = this.tableSettingsService.getStoredTableSettings();
       // check if there are table settings list
       if(tableSettingsList) {
         // if yes, check if there is a table-setting for this table type
@@ -468,7 +468,7 @@ export class PartsTableComponent implements OnInit {
             columnsForTable: this.tableViewConfig.displayedColumnsForTable,
             filterColumnsForTable: this.tableViewConfig.displayedColumns
           };
-          this.tableSettingsService.setColumnVisibilitySettings(this.tableType, tableSettingsList);
+          this.tableSettingsService.storeTableSettings(this.tableType, tableSettingsList);
           this.setupTableConfigurations(this.tableViewConfig.displayedColumnsForTable, this.tableViewConfig.displayedColumns, this.tableViewConfig.sortableColumns, this.tableViewConfig.filterConfiguration, this.tableViewConfig.filterFormGroup);
         }
       } else {
@@ -481,7 +481,7 @@ export class PartsTableComponent implements OnInit {
             filterColumnsForTable: this.tableViewConfig.displayedColumns
           }
         }
-        this.tableSettingsService.setColumnVisibilitySettings(this.tableType, newTableSettingsList);
+        this.tableSettingsService.storeTableSettings(this.tableType, newTableSettingsList);
         this.setupTableConfigurations(this.tableViewConfig.displayedColumnsForTable, this.tableViewConfig.displayedColumns, this.tableViewConfig.sortableColumns, this.tableViewConfig.filterConfiguration, this.tableViewConfig.filterFormGroup);
       }
     }

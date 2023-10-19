@@ -19,7 +19,6 @@ SPDX-License-Identifier: Apache-2.0
 
 <div [class.mat-elevation-z8]="!noShadow" class="table-wrapper">
     <ng-container *ngIf="tableHeader"><p class="large-text table--header">{{tableHeader | i18n }}</p></ng-container>
-    <ng-container *ngIf="selectedPartsInfoLabel">
         <div *appHasRole="tableConfig.columnRoles?.['select'] ?? 'user'" class="table--selected__container">
             <p class="regular-text table--selected--label">{{ selectedPartsInfoLabel | i18n : {count: selection?.selected?.length || 0} }}</p>
             <app-button
@@ -40,7 +39,6 @@ SPDX-License-Identifier: Apache-2.0
             settings
           </mat-icon>
         </div>
-    </ng-container>
 
     <app-scroll-with-shadow>
         <table
