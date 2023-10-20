@@ -664,7 +664,6 @@ export class PartsTableComponent implements OnInit {
 
 
     private emitMultiSelect(): void {
-      console.log("this is the selection that will be emitted: ", this.selection.selected);
         this.multiSelect.emit(this.selection.selected);
     }
 
