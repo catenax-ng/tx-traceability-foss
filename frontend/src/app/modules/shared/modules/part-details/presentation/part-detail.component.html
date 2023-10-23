@@ -53,9 +53,14 @@ SPDX-License-Identifier: Apache-2.0
         <ng-container
           *viewContainer="customerOrPartSiteDetails$ | async; main: customerOrPartSiteDetailsMainTmp; error: errorTmp; loading: loaderTmp"
         ></ng-container>
-
       </div>
+
+      <ng-container
+        *viewContainer="tractionBatteryDetails$ | async; main: tractionBatteryDetailsMainTmp; error: errorTmp; loading: loaderTmp">
+      </ng-container>
+
     </mat-expansion-panel>
+
     <mat-expansion-panel *ngIf="showStartInvestigation" [disabled]="(selectedPartDetails$ | async)?.data?.children?.length ? undefined : true">
       <mat-expansion-panel-header>
         <mat-panel-title>{{ 'partDetail.investigation.tab.header' | i18n }}</mat-panel-title>
@@ -79,6 +84,53 @@ SPDX-License-Identifier: Apache-2.0
 
 <ng-template #customerOrPartSiteDetailsMainTmp let-customerOrPartSiteDetails="view">
   <app-card-list [list]="customerOrPartSiteDetails.data" [title]=" customerOrPartSiteHeader.toString() | i18n"></app-card-list>
+</ng-template>
+
+<ng-template #tractionBatteryDetailsMainTmp let-tractionBatteryDetails="view" let-tractionBattery>
+
+  <mat-card class="part-detail--tractionBattery-info">
+    <mat-card-header>
+      <mat-card-title>{{ 'partDetail.tractionBatteryCodeTitle' | i18n }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content [class.part-detail--spinner]="!(isOpen$ | async)" class="part-detail--tractionBattery-content">
+      <ng-container *ngIf="isOpen$ | async">
+          <app-card-list [list]="tractionBatteryDetails.data" [title]="'partDetail.tractionBattery' | i18n" class="part-detail--tractionBattery-details"></app-card-list>
+
+      <mat-card>
+            <mat-card-header>
+              <mat-card-title>{{ 'partDetail.subcomponents' | i18n }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content [class.part-detail--spinner]="!(isOpen$ | async)">
+              <ng-container *ngIf="isOpen$ | async">
+                <ng-container *ngFor="let item of (tractionBatterySubcomponents$ | async)?.data?.subcomponents">
+                <!--create advanced-table (which is a table that can do all sorts of things that parts table can but is not depenend on some things (like pagination, ...) -->
+                {{item.tractionBatteryCode}}{{item.productType}}
+                  <!--                         <app-parts-table class="parts-asPlanned-table"
+                                         [paginationData]="parts.data | formatPaginationSemanticDataModelToCamelCase"
+                                         [labelId]="titleId"
+                                         [multiSelectActive]="true"
+                                         [selectedPartsInfoLabel]="'page.selectedParts.info'"
+                                         [selectedPartsActionLabel]="'page.selectedParts.action'"
+                                         [deselectTrigger]="deselectPartTrigger$ | async"
+                                         [addTrigger]="addPartTrigger$ | async"
+                                         (selected)="onSelectItem($event)"
+                                         (configChanged)="onAsPlannedTableConfigChange($event)"
+                                         (multiSelect)="currentSelectedItems$.next($event)"
+                                         (clickSelectAction)="isAlertOpen$.next(true)"
+                                         (filterActivated)="filterActivated(false, $event)"
+                                         [multiSortList]="tableAsPlannedSortList"
+                                         [tableType]="PartTableType.AS_PLANNED_OWN"
+                        ></app-parts-table>-->
+                </ng-container>
+              </ng-container>
+              <mat-spinner *ngIf="!(isOpen$ | async)"></mat-spinner>
+            </mat-card-content>
+          </mat-card>
+
+      </ng-container>
+      <mat-spinner *ngIf="!(isOpen$ | async)"></mat-spinner>
+    </mat-card-content>
+  </mat-card>
 </ng-template>
 
 

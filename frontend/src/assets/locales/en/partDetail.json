@@ -24,6 +24,11 @@
     "classification": "Classification",
     "functionValidFrom": "Function valid from",
     "functionValidUntil": "Function valid until",
+    "tractionBatteryCodeTitle": "Traction Battery Code",
+    "tractionBattery": "Traction Battery",
+    "productType": "Product type",
+    "tractionBatteryCode": "Battery Code",
+    "subcomponents": "Subcomponents",
     "tab": {
       "header": "Part details",
       "description": "Detailed information about your selected part"
