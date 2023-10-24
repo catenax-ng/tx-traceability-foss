@@ -23,7 +23,6 @@ import { AfterViewInit, Component, Input, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Pagination } from '@core/model/pagination.model';
-import { PaginationAssembler } from '@core/pagination/pagination.assembler';
 import { TractionBatteryCode } from '@page/parts/model/aspectModels.model';
 import { Part, QualityType } from '@page/parts/model/parts.model';
 import { PartsAssembler } from '@shared/assembler/parts.assembler';
@@ -76,8 +75,6 @@ export class PartDetailComponent implements AfterViewInit, OnDestroy {
 
     this.tractionBatteryDetails$ = this.partDetailsFacade.selectedPart$.pipe(PartsAssembler.mapPartForTractionBatteryCodeDetailsView());
     this.tractionBatterySubcomponents$ = this.partDetailsFacade.selectedPart$.pipe(PartsAssembler.mapPartForTractionBatteryCodeSubComponentsView()) as unknown as Observable<View<TractionBatteryCode>>;
-    // TODO preapring pagination for parts table
-    this.paginatedTractionBatterySubcomponents = this.tractionBatterySubcomponents$.subscribe(next => PaginationAssembler.assemblePagination(next.data,))
     // this is just for logging
     const sub = this.tractionBatterySubcomponents$.subscribe(next => console.log(next?.data?.subcomponents));
 
