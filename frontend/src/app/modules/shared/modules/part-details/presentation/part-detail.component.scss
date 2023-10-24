@@ -110,6 +110,11 @@
   &--tractionBattery-details {
 
   }
+
+  &-subcomponents-table-container {
+    height: 350px;
+    overflow: auto;
+  }
 }
 
 app-card-list {

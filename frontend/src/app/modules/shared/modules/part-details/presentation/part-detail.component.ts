@@ -50,6 +50,8 @@ export class PartDetailComponent implements AfterViewInit, OnDestroy {
   public readonly tractionBatterySubcomponents$: Observable<View<TractionBatteryCode>>;
   public readonly paginatedTractionBatterySubcomponents: Pagination<TractionBatteryCode>;
 
+  public readonly displayedColumns: string[];
+
   public customerOrPartSiteDetailsHeader$: Subscription;
   public customerOrPartSiteHeader: string;
 
@@ -75,8 +77,6 @@ export class PartDetailComponent implements AfterViewInit, OnDestroy {
 
     this.tractionBatteryDetails$ = this.partDetailsFacade.selectedPart$.pipe(PartsAssembler.mapPartForTractionBatteryCodeDetailsView());
     this.tractionBatterySubcomponents$ = this.partDetailsFacade.selectedPart$.pipe(PartsAssembler.mapPartForTractionBatteryCodeSubComponentsView()) as unknown as Observable<View<TractionBatteryCode>>;
-    // this is just for logging
-    const sub = this.tractionBatterySubcomponents$.subscribe(next => console.log(next?.data?.subcomponents));
 
     this.customerOrPartSiteDetailsHeader$ = this.customerOrPartSiteDetails$?.subscribe(data=> {
       if(data?.data?.functionValidFrom){
@@ -91,6 +91,10 @@ export class PartDetailComponent implements AfterViewInit, OnDestroy {
       label: value,
       value: value,
     }));
+
+    this.displayedColumns = ["position", "productType", "tractionBatteryCode"]
+
+
   }
 
   public ngOnDestroy(): void {

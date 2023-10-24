@@ -102,37 +102,31 @@ SPDX-License-Identifier: Apache-2.0
             </mat-card-header>
             <mat-card-content [class.part-detail--spinner]="!(isOpen$ | async)">
               <ng-container *ngIf="isOpen$ | async">
-                <ng-container *ngFor="let item of (tractionBatterySubcomponents$ | async)?.data?.subcomponents">
-                <!--create advanced-table (which is a table that can do all sorts of things that parts table can but is not depenend on some things (like pagination, ...) -->
-                {{item.tractionBatteryCode}}{{item.productType}}
-                  <table mat-table [dataSource]="(tractionBatterySubcomponents$ | async)?.data.subcomponents" *ngFor="let item of (tractionBatterySubcomponents$ | async)?.data.subcomponents ">
-                    <ng-container matColumnDef="position" [sticky]="true">
-                      <th mat-header-cell *matHeaderCellDef> Position </th>
-                      <td mat-cell *matCellDef="let subcomponent">0001 {{subcomponent.label}}</td>
+                <section class="part-detail-subcomponents-table-container">
+                  <table mat-table [dataSource]="(tractionBatterySubcomponents$ | async)?.data.subcomponents" *ngFor="let item of (tractionBatterySubcomponents$ | async)?.data.subcomponents; let index=index">
+                    <ng-container matColumnDef="position">
+                      <th mat-header-cell *matHeaderCellDef> {{'partDetail.position' | i18n}} </th>
+                      <td mat-cell *matCellDef="let subcomponent">000{{index+1}}</td>
+                      <td mat-footer-cell *matFooterCellDef>Footer</td>
                     </ng-container>
+                    <ng-container matColumnDef="productType">
+                      <th mat-header-cell *matHeaderCellDef> {{'partDetail.productType' | i18n }}</th>
+                      <td mat-cell *matCellDef="let subcomponent">{{subcomponent.productType}}</td>
+                      <td mat-footer-cell *matFooterCellDef>Footer</td>
+                    </ng-container>
+                    <ng-container matColumnDef="tractionBatteryCode">
+                      <th mat-header-cell *matHeaderCellDef> {{'partDetail.tractionBatteryCode' | i18n }} </th>
+                      <td mat-cell *matCellDef="let subcomponent">{{subcomponent.tractionBatteryCode}}</td>
+                      <td mat-footer-cell *matFooterCellDef>Footer</td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                   </table>
-                  <!--                         <app-parts-table class="parts-asPlanned-table"
-                                         [paginationData]="parts.data | formatPaginationSemanticDataModelToCamelCase"
-                                         [labelId]="titleId"
-                                         [multiSelectActive]="true"
-                                         [selectedPartsInfoLabel]="'page.selectedParts.info'"
-                                         [selectedPartsActionLabel]="'page.selectedParts.action'"
-                                         [deselectTrigger]="deselectPartTrigger$ | async"
-                                         [addTrigger]="addPartTrigger$ | async"
-                                         (selected)="onSelectItem($event)"
-                                         (configChanged)="onAsPlannedTableConfigChange($event)"
-                                         (multiSelect)="currentSelectedItems$.next($event)"
-                                         (clickSelectAction)="isAlertOpen$.next(true)"
-                                         (filterActivated)="filterActivated(false, $event)"
-                                         [multiSortList]="tableAsPlannedSortList"
-                                         [tableType]="PartTableType.AS_PLANNED_OWN"
-                        ></app-parts-table>-->
-                </ng-container>
+                </section>
               </ng-container>
               <mat-spinner *ngIf="!(isOpen$ | async)"></mat-spinner>
             </mat-card-content>
           </mat-card>
-
       </ng-container>
       <mat-spinner *ngIf="!(isOpen$ | async)"></mat-spinner>
     </mat-card-content>

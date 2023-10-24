@@ -222,6 +222,10 @@ export class PartsAssembler {
         return;
       }
 
+      if(!viewData.data.tractionBatteryCode) {
+        return;
+      }
+
       const { productType, tractionBatteryCode } = viewData.data;
       return { data: { productType, tractionBatteryCode } as Part };
     });
@@ -230,6 +234,14 @@ export class PartsAssembler {
   public static mapPartForTractionBatteryCodeSubComponentsView(): OperatorFunction<View<Part>, View<Part>> {
     return map(viewData => {
       if (!viewData.data) {
+        return;
+      }
+
+      if(!viewData.data.tractionBatteryCode) {
+        return;
+      }
+
+      if(!viewData.data.subcomponents.length) {
         return;
       }
 
