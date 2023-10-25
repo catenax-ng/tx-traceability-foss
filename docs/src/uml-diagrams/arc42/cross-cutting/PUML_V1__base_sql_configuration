@@ -6,7 +6,7 @@
 !define FOREIGN_KEY_FIELD field
 !define GENERATED_FIELD field
 
-ENTITY alert {
+ENTITY public.alert {
   + id : int8 GENERATED
   bpn : varchar(255)
   close_reason : varchar(1000)
@@ -20,17 +20,17 @@ ENTITY alert {
   error_message : varchar(255)
 }
 
-ENTITY asset_as_built_alert_notifications {
+ENTITY public.asset_as_built_alert_notifications {
   + alert_notification_id : varchar(255)
   + asset_id : varchar(255)
 }
 
-ENTITY asset_as_planned_alert_notifications {
+ENTITY public.asset_as_planned_alert_notifications {
   + alert_notification_id : varchar(255)
   + asset_id : varchar(255)
 }
 
-ENTITY assets_as_built {
+ENTITY public.assets_as_built {
   + id : varchar(255)
   customer_part_id : varchar(255)
   id_short : varchar(255)
@@ -38,12 +38,12 @@ ENTITY assets_as_built {
   manufacturer_name : varchar(255)
   manufacturer_part_id : varchar(255)
   manufacturing_country : varchar(255)
-  manufacturing_date : timestamp
+  manufacturing_date : timestamptz
   name_at_customer : varchar(255)
   name_at_manufacturer : varchar(255)
   quality_type : varchar(50)
   van : varchar(255)
-  owner : varchar(50)
+  "owner" : varchar(50)
   in_investigation : bool NOT NULL
   active_alert : bool NOT NULL
   semantic_model_id : varchar(255)
@@ -53,50 +53,50 @@ ENTITY assets_as_built {
   traction_battery_code : varchar(255)
 }
 
-ENTITY assets_as_planned {
+ENTITY public.assets_as_planned {
   + id : varchar(255)
   id_short : varchar(255)
   manufacturer_part_id : varchar(255)
   name_at_manufacturer : varchar(255)
   quality_type : varchar(50)
   classification : varchar(255)
-  owner : varchar(50)
+  "owner" : varchar(50)
   semantic_data_model : varchar(50)
   in_investigation : bool NOT NULL
   active_alert : bool NOT NULL
-  validity_period_from : varchar(255)
-  validity_period_to : varchar(255)
-  function_valid_until : varchar(255)
-  function_valid_from : varchar(255)
-  function : varchar(255)
+  validity_period_from : timestamptz
+  validity_period_to : timestamptz
+  function_valid_until : timestamptz
+  function_valid_from : timestamptz
+  "function" : varchar(255)
   manufacturer_name : varchar(255)
   van : varchar(255)
   semantic_model_id : varchar(255)
   catenax_site_id : varchar(255)
 }
 
-ENTITY assets_as_planned_alerts {
-  + alert_id : int8
-  + asset_id : varchar(255)
+ENTITY public.assets_as_planned_alerts {
+  alert_id : int8
+  asset_id : varchar(255)
 }
 
-ENTITY assets_as_planned_childs {
-  + asset_as_planned_id : varchar(255)
+ENTITY public.assets_as_planned_childs {
+  asset_as_planned_id : varchar(255)
   id : varchar(255)
   id_short : varchar(255)
 }
 
-ENTITY assets_as_planned_investigations {
-  + investigation_id : int8
-  + asset_id : varchar(255)
+ENTITY public.assets_as_planned_investigations {
+  investigation_id : int8
+  asset_id : varchar(255)
 }
 
-ENTITY assets_as_planned_notifications {
-  + notification_id : varchar(255)
-  + asset_id : varchar(255)
+ENTITY public.assets_as_planned_notifications {
+  notification_id : varchar(255)
+  asset_id : varchar(255)
 }
 
-ENTITY bpn_storage {
+ENTITY public.bpn_storage {
   + manufacturer_id : varchar(255)
   manufacturer_name : varchar(255)
   url : varchar(255)
@@ -104,7 +104,7 @@ ENTITY bpn_storage {
   updated : timestamptz
 }
 
-ENTITY investigation {
+ENTITY public.investigation {
   + id : int8 GENERATED
   bpn : varchar(255)
   close_reason : varchar(1000)
@@ -118,32 +118,32 @@ ENTITY investigation {
   error_message : varchar(255)
 }
 
-ENTITY shedlock {
-  + name : varchar(64)
+ENTITY public.shedlock {
+  + "name" : varchar(64)
   lock_until : timestamp
   locked_at : timestamp
   locked_by : varchar(255)
 }
 
-ENTITY shell_descriptor {
+ENTITY public.shell_descriptor {
   + id : serial4
   created : timestamptz
   updated : timestamptz
   global_asset_id : text
 }
 
-ENTITY submodel {
+ENTITY public.submodel {
   + id : varchar(255)
   submodel : varchar
 }
 
-ENTITY traction_battery_code_subcomponent {
-  + traction_battery_code : varchar(255)
-  + subcomponent_traction_battery_code : varchar(255)
+ENTITY public.traction_battery_code_subcomponent {
+  traction_battery_code : varchar(255)
+  subcomponent_traction_battery_code : varchar(255)
   product_type : varchar(255)
 }
 
-ENTITY alert_notification {
+ENTITY public.alert_notification {
   + id : varchar(255)
   contract_agreement_id : varchar(255)
   edc_url : varchar(255)
@@ -162,30 +162,42 @@ ENTITY alert_notification {
   message_id : varchar(255)
   is_initial : bool
 }
+alert -- alert_notification
 
-ENTITY assets_as_built_alerts {
-  + alert_id : int8
-  + asset_id : varchar(255)
+
+ENTITY public.assets_as_built_alerts {
+  alert_id : int8
+  asset_id : varchar(255)
 }
+assets_as_built --{ assets_as_built_alerts
+alert --{ assets_as_built
 
-ENTITY assets_as_built_childs {
+
+ENTITY public.assets_as_built_childs {
   + asset_as_built_id : varchar(255)
   id : varchar(255)
   id_short : varchar(255)
 }
+assets_as_built --{ assets_as_built_childs
 
-ENTITY assets_as_built_investigations {
-  + investigation_id : int8
-  + asset_id : varchar(255)
+
+ENTITY public.assets_as_built_investigations {
+  investigation_id : int8
+  asset_id : varchar(255)
 }
+assets_as_built --{ assets_as_built_investigations
+investigation --{ assets_as_built_investigations
 
-ENTITY assets_as_built_parents {
+
+
+ENTITY public.assets_as_built_parents {
   + asset_as_built_id : varchar(255)
   id : varchar(255)
   id_short : varchar(255)
 }
+assets_as_built --{ assets_as_built_parents
 
-ENTITY investigation_notification {
+ENTITY public.investigation_notification {
   + id : varchar(255)
   contract_agreement_id : varchar(255)
   edc_url : varchar(255)
@@ -204,24 +216,13 @@ ENTITY investigation_notification {
   message_id : varchar(255)
   is_initial : bool
 }
+investigation -- investigation_notification
 
-ENTITY assets_as_built_notifications {
-  + notification_id : varchar(255)
-  + asset_id : varchar(255)
+
+ENTITY public.assets_as_built_notifications {
+  notification_id : varchar(255)
+  asset_id : varchar(255)
 }
+investigation_notification --{ assets_as_built_notifications
 
-alert --|{ asset_as_built_alert_notifications
-alert --|{ asset_as_planned_alert_notifications
-asset_as_built_alerts --|{ alert
-asset_as_planned_alerts --|{ alert
-asset_as_built_childs --|{ assets_as_built
-asset_as_planned_childs --|{ assets_as_planned
-assets_as_built_alerts --|{ alert
-assets_as_planned_alerts --|{ alert
-assets_as_built_childs --|{ assets_as_built
-assets_as_built_investigations --|{ investigation
-assets_as_built_parents --|{ assets_as_built
-assets_as_built_notifications --|{ investigation_notification
-assets_as_planned_alerts --|{ alert
-assets_as_planned_childs --|{ assets_as_planned
 @enduml
