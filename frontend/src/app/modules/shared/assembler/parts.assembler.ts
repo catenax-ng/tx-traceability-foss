@@ -218,7 +218,7 @@ export class PartsAssembler {
 
   public static mapPartForTractionBatteryCodeDetailsView(): OperatorFunction<View<Part>, View<Part>> {
     return map(viewData => {
-      if (!viewData.data || !viewData.data.tractionBatteryCode) {
+      if (!viewData?.data?.tractionBatteryCode) {
         return;
       }
 
@@ -229,7 +229,7 @@ export class PartsAssembler {
 
   public static mapPartForTractionBatteryCodeSubComponentsView(): OperatorFunction<View<Part>, View<Part>> {
     return map(viewData => {
-      if (!viewData.data || !viewData.data.tractionBatteryCode || !viewData.data.subcomponents.length) {
+      if (!viewData?.data?.tractionBatteryCode || !viewData?.data?.subcomponents?.length) {
         return;
       }
 
