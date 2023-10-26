@@ -19,8 +19,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { Pagination, PaginationResponse } from '@core/model/pagination.model';
-import { PaginationAssembler } from '@core/pagination/pagination.assembler';
+import {Pagination, PaginationResponse} from '@core/model/pagination.model';
+import {PaginationAssembler} from '@core/pagination/pagination.assembler';
 import {
   AsBuiltAspectModel,
   AsPlannedAspectModel,
@@ -28,12 +28,12 @@ import {
   SemanticModel,
   TractionBatteryCode,
 } from '@page/parts/model/aspectModels.model';
-import { MainAspectType } from '@page/parts/model/mainAspectType.enum';
-import { Part, PartResponse, QualityType } from '@page/parts/model/parts.model';
-import { TableHeaderSort } from '@shared/components/table/table.model';
-import { View } from '@shared/model/view.model';
-import { OperatorFunction } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {MainAspectType} from '@page/parts/model/mainAspectType.enum';
+import {Part, PartResponse, QualityType} from '@page/parts/model/parts.model';
+import {TableHeaderSort} from '@shared/components/table/table.model';
+import {View} from '@shared/model/view.model';
+import {OperatorFunction} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 export class PartsAssembler {
 
@@ -218,11 +218,7 @@ export class PartsAssembler {
 
   public static mapPartForTractionBatteryCodeDetailsView(): OperatorFunction<View<Part>, View<Part>> {
     return map(viewData => {
-      if (!viewData.data) {
-        return;
-      }
-
-      if(!viewData.data.tractionBatteryCode) {
+      if (!viewData.data || !viewData.data.tractionBatteryCode) {
         return;
       }
 
@@ -233,15 +229,7 @@ export class PartsAssembler {
 
   public static mapPartForTractionBatteryCodeSubComponentsView(): OperatorFunction<View<Part>, View<Part>> {
     return map(viewData => {
-      if (!viewData.data) {
-        return;
-      }
-
-      if(!viewData.data.tractionBatteryCode) {
-        return;
-      }
-
-      if(!viewData.data.subcomponents.length) {
+      if (!viewData.data || !viewData.data.tractionBatteryCode || !viewData.data.subcomponents.length) {
         return;
       }
 
