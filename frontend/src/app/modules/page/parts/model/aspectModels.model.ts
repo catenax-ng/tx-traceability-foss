@@ -42,7 +42,6 @@ export type PartSiteInformationAsPlanned = {
 }
 
 export type TractionBatteryCode = {
-  //uuid4: string,
   productType: string,
   tractionBatteryCode: string,
   subcomponents?: TractionBatteryCode[]
