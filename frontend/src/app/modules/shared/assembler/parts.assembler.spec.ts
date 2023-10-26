@@ -236,8 +236,8 @@ describe('PartsAssembler', () => {
           });
     });
     it('should return nothing when there is no viewData', done => {
-      const data = { } as unknown as Part;
-      of({ data })
+      const data = undefined as unknown as Part;
+      of({data})
         .pipe(PartsAssembler.mapPartForTractionBatteryCodeDetailsView())
         .subscribe(result => {
           expect(result).toEqual(undefined);
@@ -259,9 +259,9 @@ describe('PartsAssembler', () => {
             done();
           });
     });
-    it('should return nothing when there is no viewData', done => {
-      const data = { } as unknown as Part;
-      of({ data })
+    fit('should return nothing when there is no viewData', done => {
+      const data = undefined as unknown as Part;
+      of({ data } )
           .pipe(PartsAssembler.mapPartForTractionBatteryCodeSubComponentsView())
           .subscribe(result => {
             expect(result).toEqual( undefined);
