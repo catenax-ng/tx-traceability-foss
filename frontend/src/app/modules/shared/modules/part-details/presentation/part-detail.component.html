@@ -95,7 +95,6 @@ SPDX-License-Identifier: Apache-2.0
     <mat-card-content [class.part-detail--spinner]="!(isOpen$ | async)" class="part-detail--tractionBattery-content">
       <ng-container *ngIf="isOpen$ | async">
           <app-card-list [list]="tractionBatteryDetails.data" [title]="'partDetail.tractionBattery' | i18n" class="part-detail--tractionBattery-details"></app-card-list>
-<!--*ngFor="let item of (tractionBatterySubcomponents$ | async)?.data.subcomponents; let index=index"-->
       <mat-card>
             <mat-card-header>
               <mat-card-title>{{ 'partDetail.subcomponents' | i18n }}</mat-card-title>
@@ -105,7 +104,6 @@ SPDX-License-Identifier: Apache-2.0
                 <section class="part-detail-subcomponents-table-container">
                   <table mat-table
                          [dataSource]="(tractionBatterySubcomponents$ | async)?.data.subcomponents"
-
                          aria-describedby="tractionBatteryCodeSubcomponentsTable"
                   >
                     <ng-container matColumnDef="position">
