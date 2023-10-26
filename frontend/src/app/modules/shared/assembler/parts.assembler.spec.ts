@@ -235,6 +235,15 @@ describe('PartsAssembler', () => {
             done();
           });
     });
+    it('should return nothing when there is no viewData', done => {
+      const data = { } as unknown as Part;
+      of({ data })
+        .pipe(PartsAssembler.mapPartForTractionBatteryCodeDetailsView())
+        .subscribe(result => {
+          expect(result).toEqual(undefined);
+          done();
+        });
+    });
   });
 
   describe('mapForTractionBatterySubComponentsView', () => {
@@ -247,6 +256,24 @@ describe('PartsAssembler', () => {
           .pipe(PartsAssembler.mapPartForTractionBatteryCodeSubComponentsView())
           .subscribe(result => {
             expect(result).toEqual({ data: { tractionBatteryCode, productType, subcomponents } as unknown as Part });
+            done();
+          });
+    });
+    it('should return nothing when there is no viewData', done => {
+      const data = { } as unknown as Part;
+      of({ data })
+          .pipe(PartsAssembler.mapPartForTractionBatteryCodeSubComponentsView())
+          .subscribe(result => {
+            expect(result).toEqual( undefined);
+            done();
+          });
+    });
+    it('should return nothing when there is no tractionbattery', done => {
+      const data = { productType, subcomponents, test: '' } as unknown as Part;
+      of({ data })
+          .pipe(PartsAssembler.mapPartForTractionBatteryCodeSubComponentsView())
+          .subscribe(result => {
+            expect(result).toEqual(undefined);
             done();
           });
     });
