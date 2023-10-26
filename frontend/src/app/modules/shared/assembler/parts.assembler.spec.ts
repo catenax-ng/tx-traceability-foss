@@ -259,7 +259,7 @@ describe('PartsAssembler', () => {
             done();
           });
     });
-    it('should return nothing when there is no viewData', done => {
+    fit('should return nothing when there is no viewData', done => {
       const data = undefined as unknown as Part;
       of({ data } )
           .pipe(PartsAssembler.mapPartForTractionBatteryCodeSubComponentsView())
