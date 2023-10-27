@@ -22,17 +22,23 @@ A list of user or technical roles can be found below:
 
 Available roles: <https://portal.int.demo.catena-x.net/appusermanagement/3bbc88ae-5f0d-45cb-ab3e-8c7602ff58b4>
 
-Assignment of roles: <https://portal.int.demo.catena-x.net/documentation>
+![app_roles](../../images/usermanual/app_roles.png)
+
+Assignment of roles: <https://portal.int.demo.catena-x.net/documentation/?path=docs%2F03.+User+Management%2F02.+Modify+User+Account%2F03.+User+Permissions.md>
+
+![assign_app_roles](../../images/usermanual/assign_app_roles.png)
 
 #### Catena-X portal roles
 
 Role details: <https://portal.int.demo.catena-x.net/role-details>
 
-User accounts: <https://portal.int.demo.catena-x.net/documentation>
+![cx_portal_roles](../../images/usermanual/cx_portal_roles.png)
+
+User accounts: <https://portal.int.demo.catena-x.net/documentation/?path=docs%2F03.+User+Management%2F01.+User+Account>
 
 #### Technical users
 
-Documentation: <https://portal.int.demo.catena-x.net/documentation>
+Documentation: <https://portal.int.demo.catena-x.net/documentation/?path=docs%2F03.+User+Management%2F01.+User+Account>
 
 To login use the credentials provided by the hosting company.
 
