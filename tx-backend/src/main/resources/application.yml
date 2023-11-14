@@ -69,6 +69,25 @@ irs-edc-client:
     timeout:
       read: PT90S # HTTP read timeout for the submodel client
       connect: PT90S # HTTP connect timeout for the submodel client
+  catalog:
+    # IRS will only negotiate contracts for offers with a policy as defined in the acceptedPolicies list.
+    # If a requested asset does not provide one of these policies, a tombstone will be created and this node will not be processed.
+    acceptedPolicies:
+      - leftOperand: "PURPOSE"
+        operator: "eq"
+        rightOperand: "ID 3.0 Trace"
+      - leftOperand: "PURPOSE"
+        operator: "eq"
+        rightOperand: "ID 3.1 Trace"
+      - leftOperand: "PURPOSE"
+        operator: "eq"
+        rightOperand: R2_Traceability
+      - leftOperand: "FrameworkAgreement.traceability"
+        operator: "eq"
+        rightOperand: "active"
+      - leftOperand: "Membership"
+        operator: "eq"
+        rightOperand: "active"
 
 server:
   servlet:
