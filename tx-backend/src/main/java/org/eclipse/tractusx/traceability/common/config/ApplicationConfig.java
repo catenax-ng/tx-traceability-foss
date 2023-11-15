@@ -73,49 +73,59 @@ public class ApplicationConfig {
     private static final String ID_TRACE_CONSTRAINT = "ID 3.0 Trace";
 
 
-	@Bean
-	public InternalResourceViewResolver defaultViewResolver() {
-		return new InternalResourceViewResolver();
-	}
+    @NotNull
+    private static AcceptedPolicy buildAcceptedPolicy() {
+        OffsetDateTime offsetDateTime = OffsetDateTime.now().plusMonths(1);
+        List<Permission> permissions = List.of(
+                new Permission(
+                        PolicyType.USE,
+                        List.of(new Constraints(
+                                List.of(
+                                        new Constraint("PURPOSE", OperatorType.EQ, List.of(ID_TRACE_CONSTRAINT)),
+                                        new Constraint("PURPOSE", OperatorType.EQ, List.of("ID 3.1 Trace")),
+                                        new Constraint("Membership", OperatorType.EQ, List.of("active"))),
+                                List.of(new Constraint("PURPOSE", OperatorType.EQ, List.of(ID_TRACE_CONSTRAINT)))))
+                )
+        );
+        Policy policy = new Policy(ID_TRACE_CONSTRAINT, OffsetDateTime.now(), offsetDateTime, permissions);
+        return new AcceptedPolicy(policy, offsetDateTime);
+    }
 
-	@Bean
-	public SpringTemplateEngine thymeleafTemplateEngine() {
-		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-		templateEngine.addTemplateResolver(htmlTemplateResolver());
-		templateEngine.addTemplateResolver(textTemplateResolver());
-		return templateEngine;
-	}
+    @Bean
+    public InternalResourceViewResolver defaultViewResolver() {
+        return new InternalResourceViewResolver();
+    }
 
-	@Bean(name = "security-context-async")
-	public ThreadPoolTaskExecutor securityContextAsyncExecutor() {
-		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(10);
-		executor.setMaxPoolSize(100);
-		executor.setQueueCapacity(50);
-		executor.setThreadNamePrefix("security-context-async-");
-		return executor;
-	}
+    @Bean
+    public SpringTemplateEngine thymeleafTemplateEngine() {
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.addTemplateResolver(htmlTemplateResolver());
+        templateEngine.addTemplateResolver(textTemplateResolver());
+        return templateEngine;
+    }
 
-	@Bean
-	public DelegatingSecurityContextAsyncTaskExecutor taskExecutor(@Qualifier("security-context-async") ThreadPoolTaskExecutor threadPoolTaskExecutor) {
-		return new DelegatingSecurityContextAsyncTaskExecutor(threadPoolTaskExecutor);
-	}
+    @Bean(name = "security-context-async")
+    public ThreadPoolTaskExecutor securityContextAsyncExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(10);
+        executor.setMaxPoolSize(100);
+        executor.setQueueCapacity(50);
+        executor.setThreadNamePrefix("security-context-async-");
+        return executor;
+    }
 
-	public ITemplateResolver htmlTemplateResolver() {
-		ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-		templateResolver.setSuffix(".html");
-		templateResolver.setTemplateMode(TemplateMode.HTML);
-		templateResolver.setCharacterEncoding("UTF-8");
-		return templateResolver;
-	}
+    @Bean
+    public DelegatingSecurityContextAsyncTaskExecutor taskExecutor(@Qualifier("security-context-async") ThreadPoolTaskExecutor threadPoolTaskExecutor) {
+        return new DelegatingSecurityContextAsyncTaskExecutor(threadPoolTaskExecutor);
+    }
 
-	public ITemplateResolver textTemplateResolver() {
-		ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-		templateResolver.setSuffix(".txt");
-		templateResolver.setTemplateMode(TemplateMode.TEXT);
-		templateResolver.setCharacterEncoding("UTF-8");
-		return templateResolver;
-	}
+    public ITemplateResolver htmlTemplateResolver() {
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setCharacterEncoding("UTF-8");
+        return templateResolver;
+    }
 
     @Bean
     public void registerDecentralRegistryPermissions() {
@@ -131,39 +141,32 @@ public class ApplicationConfig {
 
     }
 
-    @NotNull
-    private static AcceptedPolicy buildAcceptedPolicy() {
-        OffsetDateTime offsetDateTime = OffsetDateTime.now().plusMonths(1);
-        List<Permission> permissions = List.of(
-                new Permission(
-                        PolicyType.USE,
-                        List.of(new Constraints(
-                                List.of(new Constraint("PURPOSE", OperatorType.EQ, List.of(ID_TRACE_CONSTRAINT))),
-                                List.of(new Constraint("PURPOSE", OperatorType.EQ, List.of("ID 3.1 Trace")))))
-                )
-        );
-        Policy policy = new Policy(ID_TRACE_CONSTRAINT, OffsetDateTime.now(), offsetDateTime, permissions);
-        return new AcceptedPolicy(policy, offsetDateTime);
+    public ITemplateResolver textTemplateResolver() {
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setSuffix(".txt");
+        templateResolver.setTemplateMode(TemplateMode.TEXT);
+        templateResolver.setCharacterEncoding("UTF-8");
+        return templateResolver;
     }
 
     @Bean
-	public RegistryEventConsumer<Retry> myRetryRegistryEventConsumer() {
-		final Logger logger = LoggerFactory.getLogger("RetryLogger");
+    public RegistryEventConsumer<Retry> myRetryRegistryEventConsumer() {
+        final Logger logger = LoggerFactory.getLogger("RetryLogger");
 
-		return new RegistryEventConsumer<>() {
-			@Override
-			public void onEntryAddedEvent(EntryAddedEvent<Retry> entryAddedEvent) {
-				entryAddedEvent.getAddedEntry().getEventPublisher()
-					.onEvent(event -> logger.info(event.toString()));
-			}
+        return new RegistryEventConsumer<>() {
+            @Override
+            public void onEntryAddedEvent(EntryAddedEvent<Retry> entryAddedEvent) {
+                entryAddedEvent.getAddedEntry().getEventPublisher()
+                        .onEvent(event -> logger.info(event.toString()));
+            }
 
-			@Override
-			public void onEntryReplacedEvent(EntryReplacedEvent<Retry> entryReplacedEvent) {
-			}
+            @Override
+            public void onEntryReplacedEvent(EntryReplacedEvent<Retry> entryReplacedEvent) {
+            }
 
-			@Override
-			public void onEntryRemovedEvent(EntryRemovedEvent<Retry> entryRemoveEvent) {
-			}
-		};
-	}
+            @Override
+            public void onEntryRemovedEvent(EntryRemovedEvent<Retry> entryRemoveEvent) {
+            }
+        };
+    }
 }
