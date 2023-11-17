@@ -130,12 +130,6 @@ The OAuth2, Vault configuration / secrets depend on your setup and might need to
 ### Helm configuration Trace-X Backend (values.yaml)
 
 ```yaml
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchExpressions:
-                - key: app.kubernetes.io/name
                   operator: DoesNotExist
             topologyKey: kubernetes.io/hostname
 
@@ -173,7 +167,7 @@ backend:
   replicaCount: 1
 
   image:
-    repository: tractusx/tx-traceability-foss
+    repository: tractusx/traceability-foss
     pullPolicy: Always
 
   springprofile: dev  # will be set as dev

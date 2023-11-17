@@ -913,13 +913,7 @@ You can define the URLs as well as most of the secrets yourself.</p>
 <h4 id="_helm_configuration_trace_x_backend_values_yaml">Helm configuration Trace-X Backend (values.yaml)</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="yaml">      <span class="na">preferredDuringSchedulingIgnoredDuringExecution</span><span class="pi">:</span>
-        <span class="pi">-</span> <span class="na">weight</span><span class="pi">:</span> <span class="m">100</span>
-          <span class="na">podAffinityTerm</span><span class="pi">:</span>
-            <span class="na">labelSelector</span><span class="pi">:</span>
-              <span class="na">matchExpressions</span><span class="pi">:</span>
-                <span class="pi">-</span> <span class="na">key</span><span class="pi">:</span> <span class="s">app.kubernetes.io/name</span>
-                  <span class="na">operator</span><span class="pi">:</span> <span class="s">DoesNotExist</span>
+<pre class="rouge highlight"><code data-lang="yaml">                  <span class="na">operator</span><span class="pi">:</span> <span class="s">DoesNotExist</span>
             <span class="na">topologyKey</span><span class="pi">:</span> <span class="s">kubernetes.io/hostname</span>
 
   <span class="na">ingress</span><span class="pi">:</span>
@@ -956,7 +950,7 @@ You can define the URLs as well as most of the secrets yourself.</p>
   <span class="na">replicaCount</span><span class="pi">:</span> <span class="m">1</span>
 
   <span class="na">image</span><span class="pi">:</span>
-    <span class="na">repository</span><span class="pi">:</span> <span class="s">tractusx/tx-traceability-foss</span>
+    <span class="na">repository</span><span class="pi">:</span> <span class="s">tractusx/traceability-foss</span>
     <span class="na">pullPolicy</span><span class="pi">:</span> <span class="s">Always</span>
 
   <span class="na">springprofile</span><span class="pi">:</span> <span class="s">dev</span>  <span class="c1"># will be set as dev</span>
@@ -1401,7 +1395,7 @@ and <a href="https://cloud.google.com/blog/products/containers-kubernetes/kubern
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-11-09 11:44:20 UTC
+Last updated 2023-11-17 13:45:08 UTC
 </div>
 </div>
 </body>
