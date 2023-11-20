@@ -253,19 +253,29 @@ public class NotificationPublisherService {
         log.info("::updateNotificationPublisher::allLatestNotificationForEdcNotificationId {}", allLatestNotificationForEdcNotificationId);
         allLatestNotificationForEdcNotificationId.forEach(qNotification -> {
             QualityNotificationMessage notificationToSend = qNotification.copyAndSwitchSenderAndReceiver(applicationBPN);
-            switch (status) {
-                case ACKNOWLEDGED -> notification.acknowledge(notificationToSend);
-                case ACCEPTED -> notification.accept(reason, notificationToSend);
-                case DECLINED -> notification.decline(reason, notificationToSend);
-                case CLOSED -> notification.close(reason, notificationToSend);
-                default ->
-                        throw new QualityNotificationIllegalUpdate("Transition from status '%s' to status '%s' is not allowed for notification with id '%s'".formatted(notification.getNotificationStatus().name(), status, notification.getNotificationId()));
-            }
             log.info("::updateNotificationPublisher::notificationToSend {}", notificationToSend);
             notification.addNotification(notificationToSend);
             notificationsToSend.add(notificationToSend);
         });
         notificationsToSend.forEach(edcNotificationService::asyncNotificationExecutor);
+
+        List<Boolean> completableFutures = notificationsToSend.stream().map(edcNotificationService::asyncNotificationExecutor)
+                .map(CompletableFuture::join)
+                .toList();
+
+        if(completableFutures.stream().anyMatch(BooleanUtils::isTrue)) {
+            notificationsToSend.forEach( notificationToSend -> {
+                switch (status) {
+                    case ACKNOWLEDGED -> notification.acknowledge(notificationToSend);
+                    case ACCEPTED -> notification.accept(reason, notificationToSend);
+                    case DECLINED -> notification.decline(reason, notificationToSend);
+                    case CLOSED -> notification.close(reason, notificationToSend);
+                    default ->
+                            throw new QualityNotificationIllegalUpdate("Transition from status '%s' to status '%s' is not allowed for notification with id '%s'".formatted(notification.getNotificationStatus().name(), status, notification.getNotificationId()));
+                }
+            });
+        }
+
         return notification;
     }
 
