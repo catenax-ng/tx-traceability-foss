@@ -24,6 +24,8 @@ import org.eclipse.tractusx.traceability.assets.domain.asbuilt.service.AssetAsBu
 import org.eclipse.tractusx.traceability.bpn.domain.service.BpnRepository;
 import org.eclipse.tractusx.traceability.common.model.BPN;
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
+import org.eclipse.tractusx.traceability.discovery.domain.model.Discovery;
+import org.eclipse.tractusx.traceability.discovery.domain.service.DiscoveryService;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.base.InvestigationRepository;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.base.model.QualityNotification;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.base.model.QualityNotificationAffectedPart;
@@ -39,9 +41,11 @@ import org.eclipse.tractusx.traceability.testdata.InvestigationTestDataFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Clock;
@@ -51,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -61,6 +66,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 @ExtendWith(MockitoExtension.class)
 class NotificationPublisherServiceTest {
     @InjectMocks
@@ -81,6 +87,9 @@ class NotificationPublisherServiceTest {
     @Mock
     private TraceabilityProperties traceabilityProperties;
 
+    @Mock
+    private DiscoveryService discoveryService;
+
     @Test
     void testStartInvestigationSuccessful() {
         // Given
@@ -97,7 +106,7 @@ class NotificationPublisherServiceTest {
         assertThat(result.getNotificationStatus()).isEqualTo(QualityNotificationStatus.CREATED);
         assertThat(result.getDescription()).isEqualTo(description);
         assertThat(result.getNotificationSide()).isEqualTo(QualityNotificationSide.SENDER);
-        assertThat(result.getNotifications()).extracting("severity")
+        assertThat(result.getNotificationMessages()).extracting("severity")
                 .containsExactly(QualityNotificationSeverity.MINOR);
         verify(assetRepository).getAssetsById(Arrays.asList("asset-1", "asset-2"));
     }
@@ -117,9 +126,9 @@ class NotificationPublisherServiceTest {
         assertThat(result.getNotificationStatus()).isEqualTo(QualityNotificationStatus.CREATED);
         assertThat(result.getDescription()).isEqualTo(description);
         assertThat(result.getNotificationSide()).isEqualTo(QualityNotificationSide.SENDER);
-        assertThat(result.getNotifications()).extracting("severity")
+        assertThat(result.getNotificationMessages()).extracting("severity")
                 .containsExactly(QualityNotificationSeverity.MINOR);
-        assertThat(result.getNotifications()).hasSize(1)
+        assertThat(result.getNotificationMessages()).hasSize(1)
                 .first()
                 .hasFieldOrPropertyWithValue("sendTo", receiverBPN);
         verify(assetRepository).getAssetsById(Arrays.asList("asset-1", "asset-2"));
@@ -145,6 +154,7 @@ class NotificationPublisherServiceTest {
         final BPN bpn = new BPN("bpn123");
         QualityNotification investigation = InvestigationTestDataFactory.createInvestigationTestData(QualityNotificationStatus.CREATED, QualityNotificationStatus.CREATED);
         when(traceabilityProperties.getBpn()).thenReturn(bpn);
+        when(notificationsService.asyncNotificationExecutor(any())).thenReturn(CompletableFuture.completedFuture(true));
 
         // When
         QualityNotification result = notificationPublisherService.approveNotification(investigation);

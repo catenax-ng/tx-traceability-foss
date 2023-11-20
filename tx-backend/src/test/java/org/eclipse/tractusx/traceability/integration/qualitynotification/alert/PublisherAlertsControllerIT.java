@@ -26,6 +26,7 @@ import org.eclipse.tractusx.traceability.assets.domain.asbuilt.repository.AssetA
 import org.eclipse.tractusx.traceability.assets.domain.asplanned.repository.AssetAsPlannedRepository;
 import org.eclipse.tractusx.traceability.assets.domain.base.model.AssetBase;
 import org.eclipse.tractusx.traceability.common.security.JwtRole;
+import org.eclipse.tractusx.traceability.discovery.infrastructure.repository.FeignDiscoveryRepositoryImpl;
 import org.eclipse.tractusx.traceability.integration.IntegrationTestSpecification;
 import org.eclipse.tractusx.traceability.integration.common.support.AlertNotificationsSupport;
 import org.eclipse.tractusx.traceability.integration.common.support.AlertsSupport;
@@ -42,7 +43,9 @@ import org.hamcrest.Matchers;
 import org.jose4j.lang.JoseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,10 +57,12 @@ import qualitynotification.base.request.UpdateQualityNotificationStatusRequest;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN;
+import static org.mockito.ArgumentMatchers.any;
 
 class PublisherAlertsControllerIT extends IntegrationTestSpecification {
 

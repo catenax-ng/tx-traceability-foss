@@ -25,6 +25,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.eclipse.tractusx.traceability.assets.domain.asbuilt.repository.AssetAsBuiltRepository;
 import org.eclipse.tractusx.traceability.assets.domain.base.model.AssetBase;
 import org.eclipse.tractusx.traceability.common.security.JwtRole;
+import org.eclipse.tractusx.traceability.discovery.domain.model.Discovery;
+import org.eclipse.tractusx.traceability.discovery.domain.service.DiscoveryServiceImpl;
 import org.eclipse.tractusx.traceability.integration.IntegrationTestSpecification;
 import org.eclipse.tractusx.traceability.integration.common.support.AssetsSupport;
 import org.eclipse.tractusx.traceability.integration.common.support.InvestigationNotificationsSupport;
@@ -41,7 +43,9 @@ import org.hamcrest.Matchers;
 import org.jose4j.lang.JoseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,8 +59,10 @@ import java.time.Instant;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.anyOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.tractusx.traceability.common.security.JwtRole.ADMIN;
+import static org.mockito.ArgumentMatchers.any;
 
 class PublisherInvestigationsControllerIT extends IntegrationTestSpecification {
 
@@ -70,6 +76,8 @@ class PublisherInvestigationsControllerIT extends IntegrationTestSpecification {
     InvestigationNotificationsSupport investigationNotificationsSupport;
     @Autowired
     AssetAsBuiltRepository assetAsBuiltRepository;
+//    @MockBean
+//    DiscoveryServiceImpl discoveryService;
 
     ObjectMapper objectMapper;
 
@@ -269,6 +277,9 @@ class PublisherInvestigationsControllerIT extends IntegrationTestSpecification {
                 .severity(QualityNotificationSeverityRequest.MAJOR)
                 .isAsBuilt(true)
                 .build();
+//        Mockito.when(
+//                discoveryService.getDiscoveryByBPN(any())
+//        ).thenReturn(Discovery.builder().build());
 
         val investigationId = given()
                 .contentType(ContentType.JSON)

@@ -44,8 +44,8 @@ public class AlertResponseMapper {
                 .id(qualityNotification.getNotificationId().value())
                 .status(QualityNotificationMapper.from(qualityNotification.getNotificationStatus()))
                 .description(qualityNotification.getDescription())
-                .createdBy(getSenderBPN(qualityNotification.getNotifications()))
-                .createdByName(getSenderName(qualityNotification.getNotifications()))
+                .createdBy(getSenderBPN(qualityNotification.getNotificationMessages()))
+                .createdByName(getSenderName(qualityNotification.getNotificationMessages()))
                 .createdDate(qualityNotification.getCreatedAt().toString())
                 .assetIds(Collections.unmodifiableList(qualityNotification.getAssetIds()))
                 .channel(QualityNotificationMapper.from(qualityNotification.getNotificationSide()))
@@ -54,10 +54,10 @@ public class AlertResponseMapper {
                         qualityNotification.getAcceptReason(),
                         qualityNotification.getDeclineReason()
                 ))
-                .sendTo(getReceiverBPN(qualityNotification.getNotifications()))
-                .sendToName(getReceiverName(qualityNotification.getNotifications()))
-                .severity(QualityNotificationMapper.from(qualityNotification.getNotifications().stream().findFirst().map(QualityNotificationMessage::getSeverity).orElse(QualityNotificationSeverity.MINOR)))
-                .targetDate(qualityNotification.getNotifications().stream().findFirst().map(QualityNotificationMessage::getTargetDate).map(Instant::toString).orElse(null))
+                .sendTo(getReceiverBPN(qualityNotification.getNotificationMessages()))
+                .sendToName(getReceiverName(qualityNotification.getNotificationMessages()))
+                .severity(QualityNotificationMapper.from(qualityNotification.getNotificationMessages().stream().findFirst().map(QualityNotificationMessage::getSeverity).orElse(QualityNotificationSeverity.MINOR)))
+                .targetDate(qualityNotification.getNotificationMessages().stream().findFirst().map(QualityNotificationMessage::getTargetDate).map(Instant::toString).orElse(null))
                 .errorMessage(qualityNotification.getErrorMessage())
                 .build();
     }

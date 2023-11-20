@@ -117,7 +117,7 @@ public class AlertsRepositoryImpl implements AlertRepository {
 
         AlertEntity alertEntity = AlertEntity.from(alert, assetAsBuiltEntities);
         jpaAlertRepository.save(alertEntity);
-        alert.getNotifications()
+        alert.getNotificationMessages()
                 .forEach(notification -> handleNotificationCreate(alertEntity, notification, assetAsBuiltEntities, assetAsPlannedEntities));
         return new QualityNotificationId(alertEntity.getId());
     }
@@ -166,7 +166,7 @@ public class AlertsRepositoryImpl implements AlertRepository {
 
         List<AlertNotificationEntity> notificationEntities = new ArrayList<>(alertEntity.getNotifications());
         Map<String, AlertNotificationEntity> notificationEntityMap = notificationEntities.stream().collect(Collectors.toMap(AlertNotificationEntity::getId, notificationEntity -> notificationEntity));
-        for (QualityNotificationMessage notification : alert.getNotifications()) {
+        for (QualityNotificationMessage notification : alert.getNotificationMessages()) {
             if (notificationExists(alertEntity, notification.getId())) {
                 log.info("handleNotificationUpdate::notificationExists with id {} for alert with id {}", notification.getId(), alert.getNotificationId());
                 handleNotificationUpdate(notificationEntityMap.get(notification.getId()), notification);

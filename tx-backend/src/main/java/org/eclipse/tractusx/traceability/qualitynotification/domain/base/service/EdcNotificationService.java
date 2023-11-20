@@ -35,7 +35,12 @@ import org.eclipse.tractusx.traceability.qualitynotification.domain.base.excepti
 import org.eclipse.tractusx.traceability.qualitynotification.domain.base.model.QualityNotificationMessage;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.base.model.QualityNotificationType;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 import static org.apache.commons.collections4.ListUtils.emptyIfNull;
 
@@ -51,28 +56,35 @@ public class EdcNotificationService {
 
 
     @Async(value = AssetsAsyncConfig.UPDATE_NOTIFICATION_EXECUTOR)
-    public void asyncNotificationExecutor(QualityNotificationMessage notification) {
+    public CompletableFuture<Boolean> asyncNotificationExecutor(QualityNotificationMessage notification) {
         log.info("::asyncNotificationExecutor::notification {}", notification);
         Discovery discovery = discoveryService.getDiscoveryByBPN(notification.getSendTo());
         String senderEdcUrl = discovery.getSenderUrl();
+        List<String> receiverUrls = emptyIfNull(discovery.getReceiverUrls());
+
+        List<Boolean> sendResults = null;
 
         if (notification.getType().equals(QualityNotificationType.ALERT)) {
             log.info("::asyncNotificationExecutor::isQualityAlert");
-            emptyIfNull(discovery.getReceiverUrls())
-                    .forEach(receiverUrl -> handleSendingAlert(notification, senderEdcUrl, receiverUrl));
+            sendResults = receiverUrls
+                    .stream().map(receiverUrl -> handleSendingAlert(notification, senderEdcUrl, receiverUrl)).toList();
         }
 
         if (notification.getType().equals(QualityNotificationType.INVESTIGATION)) {
             log.info("::asyncNotificationExecutor::isQualityInvestigation");
-            emptyIfNull(discovery.getReceiverUrls())
-                    .forEach(receiverUrl -> handleSendingInvestigation(notification, senderEdcUrl, receiverUrl));
+            sendResults = receiverUrls
+                    .stream().map(receiverUrl -> handleSendingInvestigation(notification, senderEdcUrl, receiverUrl)).toList();
         }
+        Boolean wasSent = sendResults.stream().anyMatch(Boolean.TRUE::equals);
+
+        return CompletableFuture.completedFuture(true);
     }
 
-    private void handleSendingAlert(QualityNotificationMessage notification, String senderEdcUrl, String receiverUrl) {
+    private boolean handleSendingAlert(QualityNotificationMessage notification, String senderEdcUrl, String receiverUrl) {
         try {
             edcFacade.startEdcTransfer(notification, receiverUrl, senderEdcUrl);
             alertRepository.updateQualityNotificationMessageEntity(notification);
+            return true;
         } catch (NoCatalogItemException e) {
             log.warn("Could not send alert to {} no catalog item found. ", receiverUrl, e);
         } catch (SendNotificationException e) {
@@ -82,12 +94,14 @@ public class EdcNotificationService {
         } catch (ContractNegotiationException e) {
             log.warn("Could not send alert to {} could not negotiate contract agreement", receiverUrl, e);
         }
+        return false;
     }
 
-    private void handleSendingInvestigation(QualityNotificationMessage notification, String senderEdcUrl, String receiverUrl) {
+    private boolean handleSendingInvestigation(QualityNotificationMessage notification, String senderEdcUrl, String receiverUrl) {
         try {
             edcFacade.startEdcTransfer(notification, receiverUrl, senderEdcUrl);
             investigationRepository.updateQualityNotificationMessageEntity(notification);
+            return true;
         } catch (NoCatalogItemException e) {
             log.warn("Could not send investigation to {} no catalog item found.", receiverUrl, e);
         } catch (SendNotificationException e) {
@@ -97,5 +111,6 @@ public class EdcNotificationService {
         } catch (ContractNegotiationException e) {
             log.warn("Could not send investigation to {} could not negotiate contract agreement", receiverUrl, e);
         }
+        return false;
     }
 }

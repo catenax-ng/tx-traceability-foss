@@ -22,6 +22,7 @@ package org.eclipse.tractusx.traceability.qualitynotification.domain.base.servic
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.tractusx.traceability.assets.domain.asbuilt.repository.AssetAsBuiltRepository;
 import org.eclipse.tractusx.traceability.assets.domain.asbuilt.service.AssetAsBuiltServiceImpl;
@@ -50,6 +51,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -88,7 +91,7 @@ public class NotificationPublisherService {
             assetsAsBuiltBPNMap
                     .entrySet()
                     .stream()
-                    .map(it -> createInvestigation(applicationBPN, receiverBpn, description, targetDate, severity, it))
+                    .map(it -> createInvestigationMessage(applicationBPN, receiverBpn, description, targetDate, severity, it))
                     .forEach(notification::addNotification);
             assetAsBuiltService.setAssetsInvestigationStatus(notification);
             return notification;
@@ -98,7 +101,7 @@ public class NotificationPublisherService {
             assetsAsPlannedBPNMap
                     .entrySet()
                     .stream()
-                    .map(it -> createInvestigation(applicationBPN, receiverBpn, description, targetDate, severity, it))
+                    .map(it -> createInvestigationMessage(applicationBPN, receiverBpn, description, targetDate, severity, it))
                     .forEach(notification::addNotification);
             assetAsPlannedService.setAssetsInvestigationStatus(notification);
             return notification;
@@ -129,7 +132,7 @@ public class NotificationPublisherService {
         }
 
 
-        QualityNotificationMessage qualityNotificationMessage = createAlert(applicationBPN, description, targetDate, severity, assets, receiverBpn);
+        QualityNotificationMessage qualityNotificationMessage = createAlertMessage(applicationBPN, description, targetDate, severity, assets, receiverBpn);
         notification.addNotification(qualityNotificationMessage);
 
         if (isAsBuilt) {
@@ -140,7 +143,7 @@ public class NotificationPublisherService {
         return notification;
     }
 
-    private QualityNotificationMessage createInvestigation(BPN applicationBpn, String receiverBpn, String description, Instant targetDate, QualityNotificationSeverity severity, Map.Entry<String, List<AssetBase>> asset) {
+    private QualityNotificationMessage createInvestigationMessage(BPN applicationBpn, String receiverBpn, String description, Instant targetDate, QualityNotificationSeverity severity, Map.Entry<String, List<AssetBase>> asset) {
         final String notificationId = UUID.randomUUID().toString();
         final String messageId = UUID.randomUUID().toString();
         return QualityNotificationMessage.builder()
@@ -161,7 +164,7 @@ public class NotificationPublisherService {
                 .build();
     }
 
-    private QualityNotificationMessage createAlert(BPN applicationBpn, String description, Instant targetDate, QualityNotificationSeverity severity, List<AssetBase> affectedAssets, String targetBpn) {
+    private QualityNotificationMessage createAlertMessage(BPN applicationBpn, String description, Instant targetDate, QualityNotificationSeverity severity, List<AssetBase> affectedAssets, String targetBpn) {
         final String notificationId = UUID.randomUUID().toString();
         final String messageId = UUID.randomUUID().toString();
         return QualityNotificationMessage.builder()
@@ -205,12 +208,33 @@ public class NotificationPublisherService {
      */
     public QualityNotification approveNotification(QualityNotification notification) {
         BPN applicationBPN = traceabilityProperties.getBpn();
-        notification.send(applicationBPN);
 
         // For each asset within investigation a notification was created before
-        notification.getNotifications().forEach(edcNotificationService::asyncNotificationExecutor);
+
+        List<Boolean> completableFutures = notification.getNotificationMessages().stream().map(edcNotificationService::asyncNotificationExecutor)
+                .map(CompletableFuture::join)
+                .toList();
+
+
+        //CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture[0] )).join();
+
+        if(completableFutures.stream().anyMatch(BooleanUtils::isTrue)) {
+            notification.send(applicationBPN);
+        }
 
         return notification;
+    }
+
+    private boolean successfulTransfer(List<CompletableFuture<Boolean>> results) {
+            return results.stream().map(it -> {
+                try {
+                    return it.get();
+                }catch (InterruptedException | ExecutionException exception) {
+                    log.warn("Completable future failed");
+                    return false;
+                }
+            }).anyMatch(BooleanUtils::isTrue);
+
     }
 
     /**
@@ -268,7 +292,7 @@ public class NotificationPublisherService {
     private List<QualityNotificationMessage> getAllLatestNotificationForEdcNotificationId(QualityNotification notification) {
         Map<String, List<QualityNotificationMessage>> notificationMap = new HashMap<>();
 
-        for (QualityNotificationMessage notificationMessage : notification.getNotifications()) {
+        for (QualityNotificationMessage notificationMessage : notification.getNotificationMessages()) {
             String edcNotificationId = notificationMessage.getEdcNotificationId();
             List<QualityNotificationMessage> notificationGroup = notificationMap.getOrDefault(edcNotificationId, new ArrayList<>());
             if (notificationGroup.isEmpty()) {

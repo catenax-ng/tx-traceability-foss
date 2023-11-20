@@ -27,7 +27,6 @@ import org.eclipse.tractusx.traceability.qualitynotification.domain.investigatio
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -172,7 +171,7 @@ public class QualityNotification {
         this.notificationStatus = to;
     }
 
-    public List<QualityNotificationMessage> getNotifications() {
+    public List<QualityNotificationMessage> getNotificationMessages() {
         return new ArrayList<>(notifications.values());
     }
 

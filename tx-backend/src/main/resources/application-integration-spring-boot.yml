@@ -34,6 +34,9 @@ spring:
           OKTA:
             client-id: "traceability-foss-integration-tests"
             client-secret: "integration-tests"
+          keycloak:
+            client-id: "traceability-foss-integration-tests"
+            client-secret: "integration-tests"
   main:
     allow-bean-definition-overriding: true
   datasource:
@@ -60,6 +63,11 @@ resilience4j:
         waitDuration: 10s
         enableExponentialBackoff: true
         exponentialBackoffMultiplier: 2
+      registry:
+        maxAttempts: 1
+        waitDuration: 1s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 1
 server:
   port: 9998
 management:
@@ -74,7 +82,7 @@ logging:
 
 digitalTwinRegistryClient:
   oAuthClientId: keycloak
-  discoveryFinderUrl: ""
+  discoveryFinderUrl: "https://test.com"
 
   descriptorEndpoint: "" # required if type is "central", must contain the placeholder {aasIdentifier}
   shellLookupEndpoint: "" # required if type is "central", must contain the placeholder {assetIds}

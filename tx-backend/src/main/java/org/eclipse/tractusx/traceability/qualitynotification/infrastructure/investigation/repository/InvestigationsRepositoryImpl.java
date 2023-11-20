@@ -109,7 +109,7 @@ public class InvestigationsRepositoryImpl implements InvestigationRepository {
 
             jpaInvestigationRepository.save(investigationEntity);
 
-            investigation.getNotifications()
+            investigation.getNotificationMessages()
                     .forEach(notification -> handleNotificationCreate(investigationEntity, notification, assetEntities));
 
             return new QualityNotificationId(investigationEntity.getId());
@@ -150,7 +150,7 @@ public class InvestigationsRepositoryImpl implements InvestigationRepository {
 
         List<InvestigationNotificationEntity> notificationEntities = new ArrayList<>(investigationEntity.getNotifications());
         Map<String, InvestigationNotificationEntity> notificationEntityMap = notificationEntities.stream().collect(Collectors.toMap(InvestigationNotificationEntity::getId, notificationEntity -> notificationEntity));
-        for (QualityNotificationMessage notification : investigation.getNotifications()) {
+        for (QualityNotificationMessage notification : investigation.getNotificationMessages()) {
             if (notificationExists(investigationEntity, notification.getId())) {
                 log.info("handleNotificationUpdate::notificationExists with id {} for investigation with id {}", notification.getId(), investigation.getNotificationId());
                 handleNotificationUpdate(notificationEntityMap.get(notification.getId()), notification);
