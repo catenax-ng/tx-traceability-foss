@@ -18,6 +18,8 @@
 ###############################################################
 
 registry:
+  nameOverride: "tx-registry-dev"
+  fullnameOverride: "tx-registry-dev"
   enableKeycloak: false
   postgresql:
     primary:
