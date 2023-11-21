@@ -46,7 +46,9 @@ registry:
         nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
         nginx.ingress.kubernetes.io/rewrite-target: /$2
         nginx.ingress.kubernetes.io/use-regex: "true"
-
+    pods:
+      init-script-vol:
+        name:test_init_script-vol
     resources:
       limits:
         cpu: 1500m
