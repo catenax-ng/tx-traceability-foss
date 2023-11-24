@@ -491,12 +491,12 @@ We generally follow the <https://swagger.io/specification/>
 * Writing methods which provide a response to be better testable (avoid void if feasible).
 * Naming of unit tests are as follows:
 
-![unit_test_naming](../../../images/arc42/user-guide/unit_test_naming.png)
+![unit_test_naming](https://raw.githubusercontent.com/eclipse-tractusx/traceability-foss/main/docs/src/images/arc42/user-guide/unit_test_naming.png)
 
 * Use given/when/then pattern for unit test structuring.
 E.g:
 
-![given_when_then_pattern](../../../images/arc42/user-guide/given_when_then_pattern.png)
+![given_when_then_pattern](https://raw.githubusercontent.com/eclipse-tractusx/traceability-foss/main/docs/src/images/arc42/user-guide/given_when_then_pattern.png)
 
 #### Integration Testing
 
@@ -513,7 +513,7 @@ We follow the rules and behaviour of: <https://clean-code-developer.com/.>
 
 As there is no other guideline of C-X, we fix any Vulnerabilities, Exposures, Flaw detected by one of our SAST, DAST, Pentesting tools which is higher than "Very Low".
 
-![vulnerability_level](../../../images/arc42/user-guide/vulnerability_level.png)
+![vulnerability_level](https://raw.githubusercontent.com/eclipse-tractusx/traceability-foss/main/docs/src/images/arc42/user-guide/vulnerability_level.png)
 
 ### TRACE-X Technical class responsibilities
 
