@@ -38,8 +38,12 @@ export interface DashboardStats {
   ownOpenInvestigationsReceived: number,
   ownOpenInvestigationsCreated: number,
   ownOpenAlertsReceived: number,
-  ownOpenAlertsCreated: number
+  ownOpenAlertsCreated: number,
 
+  receivedActiveAlerts: number,
+  receivedActiveInvestigations: number,
+  sentActiveAlerts: number,
+  sentActiveInvestigations: number
 }
 
 export interface DashboardStatsResponse {
@@ -57,5 +61,9 @@ export interface DashboardStatsResponse {
   asBuiltSupplierParts: number,
   asPlannedSupplierParts: number,
   asBuiltOwnParts: number,
-  asPlannedOwnParts: number
+  asPlannedOwnParts: number,
+  receivedActiveAlerts: number,
+  receivedActiveInvestigations: number,
+  sentActiveAlerts: number,
+  sentActiveInvestigations: number
 }

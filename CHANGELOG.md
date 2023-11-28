@@ -15,6 +15,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added a step-by-step guide to register a server in pgAdmin in the database dump README
 - Documentation about technical users
 - Added new dashboard layout and additional widgets
+- Added new fields to dashboard response
 
 ### Changed
 - Fixed helm repository path for backend & frontend (wrong prefix)
