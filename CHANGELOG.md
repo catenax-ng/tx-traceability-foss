@@ -32,6 +32,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Default pagination size to 50.
 - Split up bpn column in notification table views to show bpn and name separately
 - Changed detailed part view action from clicking on list item to a menu action column
+- Updated spring boot from 3.1.3 to 3.2.0
 
 
 ### Removed
