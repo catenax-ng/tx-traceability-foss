@@ -38,7 +38,7 @@ SPDX-License-Identifier: Apache-2.0
     </modules>
 
     <properties>
-        <springboot.version>3.2.0</springboot.version>
+        <springboot.version>3.1.3</springboot.version>
         <spring-core.version>6.0.13</spring-core.version>
         <spring-security-config.version>6.1.3</spring-security-config.version>
         <java.version>17</java.version>
@@ -57,8 +57,7 @@ SPDX-License-Identifier: Apache-2.0
         <jar-plugin.version>3.3.0</jar-plugin.version>
         <owasp-plugin.version>8.4.0</owasp-plugin.version>
         <spotbugs-plugin.version>4.7.3.0</spotbugs-plugin.version>
-        <spring-boot-maven-plugin.version>3.2.0</spring-boot-maven-plugin.version>
-        <apache-commons-text.version>1.11.0</apache-commons-text.version>
+        <spring-boot-maven-plugin.version>3.1.3</spring-boot-maven-plugin.version>
         <maven-project-info-reports-plugin.version>3.4.5</maven-project-info-reports-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>

@@ -16,7 +16,6 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added new step definition for cucumber tests "I use assets with ids {string}" allowing to specify assets used for notification creation
 - Added BPN column to parts table
 - Emit change check to observables in frontend
-- Added apache-commons-text for sanitizing
 
 ### Changed
 - Filter configuration for tables to be resuable and easy to adapt
@@ -33,7 +32,6 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Default pagination size to 50.
 - Split up bpn column in notification table views to show bpn and name separately
 - Changed detailed part view action from clicking on list item to a menu action column
-- Updated spring boot from 3.1.3 to 3.2.0
 
 
 ### Removed
