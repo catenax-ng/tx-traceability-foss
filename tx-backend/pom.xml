@@ -66,6 +66,11 @@ SPDX-License-Identifier: Apache-2.0
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>${apache-commons-text.version}</version>
+        </dependency>
         <!-- Remove once org.eclipse.tractusx.irs#irs-registry-client delivers the correct version.-->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>

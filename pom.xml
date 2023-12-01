@@ -46,7 +46,7 @@ SPDX-License-Identifier: Apache-2.0
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <start-class>org.eclipse.tractusx.traceability.TraceabilityApplication</start-class>
-
+        <apache-commons-text.version>1.11.0</apache-commons-text.version>
         <!-- versions for Maven plugin -->
         <ascii-doctor.maven.plugin.version>2.2.4</ascii-doctor.maven.plugin.version>
         <checkstyle-plugin.version>3.3.0</checkstyle-plugin.version>
