@@ -46,7 +46,7 @@ SPDX-License-Identifier: Apache-2.0
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <start-class>org.eclipse.tractusx.traceability.TraceabilityApplication</start-class>
-        <apache-commons-text.version>1.11.0</apache-commons-text.version>
+
         <!-- versions for Maven plugin -->
         <ascii-doctor.maven.plugin.version>2.2.4</ascii-doctor.maven.plugin.version>
         <checkstyle-plugin.version>3.3.0</checkstyle-plugin.version>
@@ -58,6 +58,7 @@ SPDX-License-Identifier: Apache-2.0
         <owasp-plugin.version>8.4.0</owasp-plugin.version>
         <spotbugs-plugin.version>4.7.3.0</spotbugs-plugin.version>
         <spring-boot-maven-plugin.version>3.2.0</spring-boot-maven-plugin.version>
+        <apache-commons-text.version>1.11.0</apache-commons-text.version>
         <maven-project-info-reports-plugin.version>3.4.5</maven-project-info-reports-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>

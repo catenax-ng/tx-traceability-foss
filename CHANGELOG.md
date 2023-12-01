@@ -16,6 +16,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added new step definition for cucumber tests "I use assets with ids {string}" allowing to specify assets used for notification creation
 - Added BPN column to parts table
 - Emit change check to observables in frontend
+- Added apache-commons-text for sanitizing
 
 ### Changed
 - Filter configuration for tables to be resuable and easy to adapt
