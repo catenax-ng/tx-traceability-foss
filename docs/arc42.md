@@ -31,6 +31,8 @@ in which context the service runs and which stakeholders are involved.
 ### Essential features
 
 * List and view manufactured parts based on BoM AsBuild
+* List and view planned parts based on BoM AsPlanned
+* Filter and search functionality on part views
 * Show detailed information on manufactured parts from AAS description assets and Aspects
 * Uses Submodels SerialPart, AssemblyPartRelationship and Batch
 * List and view Supplier parts (AssemblyPartRelationship) based on BoM AsBuild lifecycle
