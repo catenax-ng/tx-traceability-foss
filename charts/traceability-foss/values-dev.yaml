@@ -64,11 +64,11 @@ configuration:
       url: &irs_database_url 'http://tx-irs-minio-dev:9000'
 
   edc:
-    name: &edc_name 'tx-edc-consumer-dev'
+    name: &edc_name 'trace-x-edc.dev.demo.catena-x.net'
     apiKey: &edc_api_key <path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>
     controlplane:
-      hostName: &edc_controlplane_hostname 'trace-x-edc.dev.demo.catena-x.net/api/v1/dsp'
-      url: &edc_controlplane_url 'https://trace-x-edc.dev.demo.catena-x.net/api/v1/dsp'
+      hostName: &edc_controlplane_hostname 'trace-x-edc.dev.demo.catena-x.net'
+      url: &edc_controlplane_url 'https://trace-x-edc.dev.demo.catena-x.net'
       managementUrl: &edc_controlplane_management_url 'https://trace-x-edc.dev.demo.catena-x.net/api/v1/dsp/management'
     dataplane:
       hostName: &edc_dataplane_hostname 'trace-x-edc-dataplane.dev.demo.catena-x.net'
