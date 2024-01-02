@@ -67,11 +67,11 @@ configuration:
     name: &edc_name 'tx-edc-consumer-test'
     apiKey: &edc_api_key <path:traceability-foss/data/dev/edc/controlplane#edc.api.control.auth.apikey.value>
     controlplane:
-      hostName: &edc_controlplane_hostname 'tx-edc-consumer-test-controlplane.dev.demo.catena-x.net'
-      url: &edc_controlplane_url 'https://tx-edc-consumer-test-controlplane.dev.demo.catena-x.net'
-      managementUrl: &edc_controlplane_management_url 'https://tx-edc-consumer-test-controlplane.dev.demo.catena-x.net/management'
+      hostName: &edc_controlplane_hostname 'trace-x-test-edc.dev.demo.catena-x.net'
+      url: &edc_controlplane_url 'https://trace-x-test-edc.dev.demo.catena-x.net'
+      managementUrl: &edc_controlplane_management_url 'https://trace-x-test-edc.dev.demo.catena-x.net/management'
     dataplane:
-      hostName: &edc_dataplane_hostname 'tx-edc-consumer-test-dataplane.dev.demo.catena-x.net'
+      hostName: &edc_dataplane_hostname 'trace-x-test-edc-dataplane.dev.demo.catena-x.net'
     edcDatabase:
       name: &edc_database_name 'tx-edc-consumer-postgresql-test'
       username: &edc_database_username <path:traceability-foss/data/dev/edc/database#user>
