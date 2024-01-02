@@ -44,12 +44,3 @@ dependencies:
     repository: https://eclipse-tractusx.github.io/item-relationship-service
     version: 6.12.0
     condition: irs-helm.enabled
-  - name: tractusx-connector
-    repository: https://eclipse-tractusx.github.io/tractusx-edc
-    version: 0.5.3
-    condition: tractusx-connector.enabled
-  - name: postgresql
-    alias: edc-postgresql
-    repository: https://charts.bitnami.com/bitnami
-    version: 12.1.6
-    condition: edc-postgresql.enabled
