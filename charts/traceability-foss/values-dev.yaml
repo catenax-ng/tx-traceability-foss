@@ -69,7 +69,7 @@ configuration:
     controlplane:
       hostName: &edc_controlplane_hostname 'trace-x-edc.dev.demo.catena-x.net'
       url: &edc_controlplane_url 'https://trace-x-edc.dev.demo.catena-x.net'
-      managementUrl: &edc_controlplane_management_url 'https://trace-x-edc.dev.demo.catena-x.net/api/v1/dsp/management'
+      managementUrl: &edc_controlplane_management_url 'https://trace-x-edc.dev.demo.catena-x.net/management'
     dataplane:
       hostName: &edc_dataplane_hostname 'trace-x-edc-dataplane.dev.demo.catena-x.net'
     edcDatabase:
