@@ -7,8 +7,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [UNRELEASED - DD.MM.YYYY]
 ### Added
+
 ### Changed
+
 ### Removed
+- Removed consumer EDC
 
 ## [10.1.0 - 22.12.2023]
 ### Added
