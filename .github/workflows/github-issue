@@ -1,0 +1,49 @@
+name: Connect Pull Request with Github Issue Workflow
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14
+
+    - name: Install Dependencies
+      run: npm install github
+
+    - name: Extract Numbers from PR Title
+      id: extract_numbers
+      run: |
+
+        PR_TITLE=$(echo "${{ github.event.pull_request.title }}" | grep -Eo '[0-9]{3}')
+        echo "::set-output name=pr_number::$PR_TITLE"
+
+    - name: Create PR Description
+      id: create_description
+      run: |
+        PR_NUMBER=${{ steps.extract_numbers.outputs.pr_number }}
+        echo "resolves eclipse-tractusx/traceability-foss#$PR_NUMBER" > pr_description.txt
+
+    - name: Update Pull Request
+      uses: actions/github-script@v5
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const fs = require('fs');
+          const description = fs.readFileSync('pr_description.txt', 'utf8');
+          github.rest.issues.update({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.pull_request.number,
+            body: description
+          });
