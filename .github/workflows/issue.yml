@@ -3,8 +3,7 @@ name: Connect Pull Request with Github Issue Workflow
 on:
   workflow_dispatch: # Trigger manually 
   pull_request:
-    types:
-      - opened
+
 
 jobs:
   build:
