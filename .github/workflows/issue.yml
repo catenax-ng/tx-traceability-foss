@@ -23,7 +23,7 @@ jobs:
     - name: Extract Numbers from PR Title
       id: extract_numbers
       run: |
-        PR_TITLE=$(echo "${{ github.event.pull_request.title }}" | grep -Eo '[0-9]+')
+        PR_TITLE=$(echo "${{ github.event.pull_request.title }}" | grep -Eo '[0-9]{3,}')
         if [ -z "$PR_TITLE" ]; then
           echo "::set-output name=pr_number::"  # Leer lassen, wenn keine Ziffern gefunden wurden
         else
