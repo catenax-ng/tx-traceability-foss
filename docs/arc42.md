@@ -363,7 +363,7 @@ The raw data which is needed for the shared services (DTR / EDC) will be persist
 
 ```
 
-Modul 2
+Modul 2 - DRAFT
 
 The frontend is able to select assets and publish / syncronize them with the shared services. DTR / EDC / Submodel API.
 
@@ -372,7 +372,7 @@ The frontend is able to select assets and publish / syncronize them with the sha
 
 ```
 
-Modul 3
+Modul 3 - DRAFT
 
 The backend is able to persist the data in the DTR / EDC and allows to use IRS for resolving assets.
 
@@ -380,11 +380,6 @@ The backend is able to persist the data in the DTR / EDC and allows to use IRS f
 ```bash
 
 ```
-
-### Overview
-
-Data has to be provided to the Catena-X network using a EDC Provider, since Trace-X is not a data provider and therefore no possibility for data provisioning with Trace-X exists.
-For digital twins the Asset Administration Shell (AAS) standard is used. For fetching data with Trace-X, a Digital Twin Registry and an IRS instance are required. Data should represent parts, supplier and customer parts, parts tree / parts relations.
 
 ## Deployment view
 
