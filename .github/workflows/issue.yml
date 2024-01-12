@@ -16,7 +16,6 @@
 #  SPDX-License-Identifier: Apache-2.0
 
 name: Connect Pull Request with Github Issue Workflow
-
 on:
   workflow_dispatch: # Trigger manually 
   pull_request:
