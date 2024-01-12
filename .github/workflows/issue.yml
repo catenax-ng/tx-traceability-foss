@@ -41,7 +41,7 @@ jobs:
       id: extract_numbers
       run: |
 
-        PR_TITLE=$(echo "${{ github.event.pull_request.title }}" | grep -Eo '[0-9]{3}')
+        PR_TITLE=$(echo "${{ github.event.pull_request.title }}" | grep -Eo '[0-9]{3,}')
         echo "::set-output name=pr_number::$PR_TITLE"
 
     - name: Create PR Description
