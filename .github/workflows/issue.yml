@@ -1,9 +1,8 @@
 name: Connect Pull Request with Github Issue Workflow
 
 on:
-  workflow_dispatch: # Trigger manually 
+  workflow_dispatch: # Manuell auslösen
   pull_request:
-
 
 jobs:
   build:
@@ -24,15 +23,20 @@ jobs:
     - name: Extract Numbers from PR Title
       id: extract_numbers
       run: |
-
-        PR_TITLE=$(echo "${{ github.event.pull_request.title }}" | grep -Eo '[0-9]{3}')
-        echo "::set-output name=pr_number::$PR_TITLE"
+        PR_TITLE=$(echo "${{ github.event.pull_request.title }}" | grep -Eo '[0-9]+')
+        if [ -z "$PR_TITLE" ]; then
+          echo "::set-output name=pr_number::"  # Leer lassen, wenn keine Ziffern gefunden wurden
+        else
+          echo "::set-output name=pr_number::$PR_TITLE"
+        fi
 
     - name: Create PR Description
       id: create_description
       run: |
         PR_NUMBER=${{ steps.extract_numbers.outputs.pr_number }}
-        echo "resolves eclipse-tractusx/traceability-foss#$PR_NUMBER" > pr_description.txt
+        if [ -n "$PR_NUMBER" ]; then
+          echo "resolves eclipse-tractusx/traceability-foss#$PR_NUMBER" > pr_description.txt
+        fi
 
     - name: Update Pull Request
       uses: actions/github-script@v5
