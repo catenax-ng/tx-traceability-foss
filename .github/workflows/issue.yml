@@ -1,53 +1,49 @@
-name: Connect Pull Request with Github Issue Workflow
+name Connect Pull Request with Github Issue Workflow
 
-on:
-  workflow_dispatch: # Manuell auslösen
-  pull_request:
+on
+  workflow_dispatch # Trigger manually 
+  pull_request
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+jobs
+  build
+    runs-on ubuntu-latest
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14
+    steps
+    - name Checkout Repository
+      uses actionscheckout@v2
 
-    - name: Install Dependencies
-      run: npm install github
+    - name Set up Node.js
+      uses actionssetup-node@v3
+      with
+        node-version 14
 
-    - name: Extract Numbers from PR Title
-      id: extract_numbers
-      run: |
-        PR_TITLE=$(echo "${{ github.event.pull_request.title }}" | grep -Eo '[0-9]{3,}')
-        if [ -z "$PR_TITLE" ]; then
-          echo "::set-output name=pr_number::"  # Leer lassen, wenn keine Ziffern gefunden wurden
-        else
-          echo "::set-output name=pr_number::$PR_TITLE"
-        fi
+    - name Install Dependencies
+      run npm install github
 
-    - name: Create PR Description
-      id: create_description
-      run: |
+    - name Extract Numbers from PR Title
+      id extract_numbers
+      run 
+
+        PR_TITLE=$(echo ${{ github.event.pull_request.title }}  grep -Eo '[0-9]{3}')
+        echo set-output name=pr_number$PR_TITLE
+
+    - name Create PR Description
+      id create_description
+      run 
         PR_NUMBER=${{ steps.extract_numbers.outputs.pr_number }}
-        if [ -n "$PR_NUMBER" ]; then
-          echo "resolves eclipse-tractusx/traceability-foss#$PR_NUMBER" > pr_description.txt
-        fi
+        echo resolves eclipse-tractusxtraceability-foss#$PR_NUMBER  pr_description.txt
 
-    - name: Update Pull Request
-      uses: actions/github-script@v5
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
+    - name Update Pull Request
+      uses actionsgithub-script@v5
+      with
+        github-token ${{ secrets.GITHUB_TOKEN }}
+        script 
           const fs = require('fs');
           const description = fs.readFileSync('pr_description.txt', 'utf8');
           github.rest.issues.update({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.payload.pull_request.number,
-            body: description
+            owner context.repo.owner,
+            repo context.repo.repo,
+            issue_number context.payload.pull_request.number,
+            body description
           });
