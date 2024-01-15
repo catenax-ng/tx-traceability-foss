@@ -20,7 +20,6 @@ on:
   workflow_dispatch: # Trigger manually 
   pull_request:
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
