@@ -44,15 +44,11 @@ jobs:
         PR_TITLE=$(echo "${{ github.event.pull_request.title }}" | tr '[:upper:]' '[:lower:]')
         if [[ $PR_TITLE == *xxx* ]]; then
           echo "skip workflow"
-          exit 78
+          echo "" > pr_description.txt
         else
           PR_NUMBER=$(echo "$PR_TITLE" | grep -Eo '[0-9]{3,}' | head -n 1)
           echo "resolves eclipse-tractusx/traceability-foss#$PR_NUMBER" > pr_description.txt
         fi
-        
-    - name: Check if workflow should be skipped
-      if: ${{ failure() }}
-      run: exit 0 
         
     - name: Update Pull Request
       uses: actions/github-script@v5
@@ -60,6 +56,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const fs = require('fs');
+
           const description = fs.readFileSync('pr_description.txt', 'utf8');
           
           const currentPR = await github.rest.pulls.get({
