@@ -37,7 +37,7 @@ jobs:
     - name: Install Dependencies
       run: npm install github
 
-    - name: Extract Numbers from PR Title
+    - name: Extract Numbers from PR Title and create description
       id: extract_numbers
       run: |
       
@@ -46,14 +46,8 @@ jobs:
           echo "skip workflow"
         else
           PR_NUMBER=$(echo "$PR_TITLE" | grep -Eo '[0-9]{3,}')
-          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "resolves eclipse-tractusx/traceability-foss#$PR_NUMBER" > pr_description.txt
         fi
-
-    - name: Create PR Description
-      id: create_description
-      run: |
-        PR_NUMBER=${{ steps.extract_numbers.outputs.pr_number }}
-        echo "resolves eclipse-tractusx/traceability-foss#$PR_NUMBER" > pr_description.txt
 
     - name: Update Pull Request
       uses: actions/github-script@v5
