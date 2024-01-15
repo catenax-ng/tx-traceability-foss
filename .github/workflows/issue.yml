@@ -44,7 +44,7 @@ jobs:
         PR_TITLE=$(echo "${{ github.event.pull_request.title }}" | tr '[:upper:]' '[:lower:]')
         if [[ $PR_TITLE == *xxx* ]]; then
           echo "skip workflow"
-          exit 0
+          exit 78
         else
           PR_NUMBER=$(echo "$PR_TITLE" | grep -Eo '[0-9]{3,}' | head -n 1)
           echo "resolves eclipse-tractusx/traceability-foss#$PR_NUMBER" > pr_description.txt
