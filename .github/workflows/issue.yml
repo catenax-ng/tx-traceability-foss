@@ -41,7 +41,7 @@ jobs:
       run: |
       
         PR_TITLE=$(echo "${{ github.event.pull_request.title }}" | tr '[:upper:]' '[:lower:]')
-        if [[ $PR_TITLE == *xxx*]]; then
+        if [[ $PR_TITLE == *xxx* ]]; then
           echo "skip workflow"
         else
           PR_NUMBER=$(echo "$PR_TITLE" | grep -Eo '[0-9]{3,}')
