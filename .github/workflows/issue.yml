@@ -45,7 +45,7 @@ jobs:
         if [[ $PR_TITLE == *xxx* ]]; then
           echo "skip workflow"
         else
-          PR_NUMBER=$(echo "$PR_TITLE" | grep -Eo '[0-9]{3,}')
+          PR_NUMBER=$(echo "$PR_TITLE" | grep -Eo '[0-9]{3,}' | head -n 1)
           echo "resolves eclipse-tractusx/traceability-foss#$PR_NUMBER" > pr_description.txt
         fi
 
