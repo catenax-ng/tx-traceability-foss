@@ -46,7 +46,7 @@ jobs:
           echo "skip workflow"
         else
           PR_NUMBER=$(echo "$PR_TITLE" | grep -Eo '[0-9]{3,}')
-          echo "::set-output name=pr_number::$PR_NUMBER"
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
         fi
 
     - name: Create PR Description
