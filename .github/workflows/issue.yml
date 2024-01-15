@@ -49,7 +49,11 @@ jobs:
           PR_NUMBER=$(echo "$PR_TITLE" | grep -Eo '[0-9]{3,}' | head -n 1)
           echo "resolves eclipse-tractusx/traceability-foss#$PR_NUMBER" > pr_description.txt
         fi
-
+        
+    - name: Check if workflow should be skipped
+      if: ${{ failure() }}
+      run: exit 0 
+        
     - name: Update Pull Request
       uses: actions/github-script@v5
       with:
