@@ -39,9 +39,14 @@ jobs:
     - name: Extract Numbers from PR Title
       id: extract_numbers
       run: |
-
-        PR_TITLE=$(echo "${{ github.event.pull_request.title }}" | grep -Eo '[0-9]{3,}')
-        echo "::set-output name=pr_number::$PR_TITLE"
+      
+        PR_TITLE=$(echo "${{ github.event.pull_request.title }}" | tr '[:upper:]' '[:lower:]')
+        if [[ $PR_TITLE == *xxx*]]; then
+          echo "skip workflow"
+        else
+          PR_NUMBER=$(echo "$PR_TITLE" | grep -Eo '[0-9]{3,}')
+          echo "::set-output name=pr_number::$PR_NUMBER"
+        fi
 
     - name: Create PR Description
       id: create_description
@@ -56,9 +61,20 @@ jobs:
         script: |
           const fs = require('fs');
           const description = fs.readFileSync('pr_description.txt', 'utf8');
-          github.rest.issues.update({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.payload.pull_request.number,
-            body: description
+          
+          const currentPR = await github.rest.pulls.get({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          pull_number: context.payload.pull_request.number
           });
+          
+          const combinedDescription = currentPR.data.body + '\n\n' + description;
+          
+          await github.rest.issues.update({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: context.payload.pull_request.number,
+          body: combinedDescription
+          });
+
+          
