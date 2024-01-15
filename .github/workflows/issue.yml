@@ -62,12 +62,13 @@ jobs:
           repo: context.repo.repo,
           pull_number: context.payload.pull_request.number
           });
-
-          if [[ currentPR.data.body == null ]]; then 
-             const combinedDescription = description;
-          else
-            const combinedDescription = currentPR.data.body + '\n\n' + description;
-          fi
+          
+          let combinedDescription;
+          if (currentPR.data.body === null) {
+            combinedDescription = description;
+          } else {
+            combinedDescription = currentPR.data.body + '\n\n' + description;
+          }
           
           await github.rest.issues.update({
           owner: context.repo.owner,
