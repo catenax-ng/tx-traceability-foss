@@ -1,9 +1,0 @@
-= Cross-cutting concepts
-
-include::entity-relationship-model.adoc[leveloffset=+1]
-include::domain-concepts.adoc[leveloffset=+1]
-include::safety-security.adoc[leveloffset=+1]
-include::architecture-design-patterns.adoc[leveloffset=+1]
-include::under-the-hood.adoc[leveloffset=+1]
-include::development-concepts.adoc[leveloffset=+1]
-include::operational-concepts.adoc[leveloffset=+1]
