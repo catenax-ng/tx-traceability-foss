@@ -23,12 +23,13 @@ package org.eclipse.tractusx.traceability.qualitynotification.domain.base.servic
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.squareup.okhttp.HttpUrl;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
+
 import org.eclipse.edc.catalog.spi.CatalogRequest;
 import org.eclipse.edc.spi.query.Criterion;
 import org.eclipse.edc.spi.query.QuerySpec;
@@ -62,7 +63,7 @@ public class InvestigationsEDCFacade {
 
     public static final String DEFAULT_PROTOCOL = "dataspace-protocol-http";
 
-    private static final MediaType JSON = MediaType.get("application/json");
+    private static final MediaType JSON = MediaType.parse("application/json");
 
     private final HttpCallService httpCallService;
 
@@ -154,7 +155,7 @@ public class InvestigationsEDCFacade {
                 .url(url)
                 .addHeader(dataReference.getAuthKey(), dataReference.getAuthCode())
                 .addHeader("Content-Type", JSON.type())
-                .post(RequestBody.create(body, JSON))
+                .post(RequestBody.create(JSON, body))
                 .build();
     }
 

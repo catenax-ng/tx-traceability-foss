@@ -20,9 +20,9 @@
  ********************************************************************************/
 package org.eclipse.tractusx.traceability.qualitynotification.domain.base.service;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.base.exception.BadRequestException;
 import org.springframework.stereotype.Component;
 
@@ -43,16 +43,18 @@ public class HttpCallService {
     }
 
     private static OkHttpClient withIncreasedTimeout(OkHttpClient httpClient) {
-        return httpClient.newBuilder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(25, TimeUnit.SECONDS)
-                .writeTimeout(50, TimeUnit.SECONDS)
-                .build();
+        httpClient = new OkHttpClient();
+        httpClient.setReadTimeout(25, TimeUnit.SECONDS);
+        httpClient.setConnectTimeout(10, TimeUnit.SECONDS);
+        httpClient.setWriteTimeout(50, TimeUnit.SECONDS);
+
+        return httpClient;
     }
 
 
     public void sendRequest(Request request) throws IOException {
-        try (var response = httpClient.newCall(request).execute()) {
+        try {
+            var response = httpClient.newCall(request).execute();
             var body = response.body();
             if (!response.isSuccessful() || body == null) {
                 throw new BadRequestException(format("Control plane responded with: %s %s", response.code(), body != null ? body.string() : ""));
