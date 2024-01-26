@@ -60,7 +60,7 @@ public class IrsApiConfig {
     }
 
     @Bean
-    public OkHttpClient catenaApiOkHttpClient(@Autowired FeignDefaultProperties feignDefaultProperties) {
+    public OkHttpClient okhttpClient(@Autowired FeignDefaultProperties feignDefaultProperties) {
 
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setConnectionPool(new ConnectionPool(

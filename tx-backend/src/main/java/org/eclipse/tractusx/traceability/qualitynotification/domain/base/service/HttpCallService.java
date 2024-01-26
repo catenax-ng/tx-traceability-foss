@@ -22,8 +22,10 @@ package org.eclipse.tractusx.traceability.qualitynotification.domain.base.servic
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.base.exception.BadRequestException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -36,10 +38,11 @@ import static java.lang.String.format;
 @Component
 public class HttpCallService {
 
-    private final OkHttpClient httpClient;
+    private OkHttpClient okhttpClient;
 
-    public HttpCallService(OkHttpClient httpClient) {
-        this.httpClient = withIncreasedTimeout(httpClient);
+    @Autowired
+    public HttpCallService(OkHttpClient okhttpClient) {
+        this.okhttpClient = withIncreasedTimeout(okhttpClient);
     }
 
     private static OkHttpClient withIncreasedTimeout(OkHttpClient httpClient) {
@@ -54,7 +57,7 @@ public class HttpCallService {
 
     public void sendRequest(Request request) throws IOException {
         try {
-            var response = httpClient.newCall(request).execute();
+            var response = okhttpClient.newCall(request).execute();
             var body = response.body();
             if (!response.isSuccessful() || body == null) {
                 throw new BadRequestException(format("Control plane responded with: %s %s", response.code(), body != null ? body.string() : ""));
