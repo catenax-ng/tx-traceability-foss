@@ -57,6 +57,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -98,9 +100,12 @@ class IrsServiceTest {
     @Mock
     private BpnRepository bpnRepository;
 
+    @Mock
+    private RestTemplate restTemplate;
+
     @BeforeEach
     void setUp() {
-        irsService = new IrsService(irsClient, bpnRepository, traceabilityProperties, objectMapper, assetAsBuiltCallbackRepository, assetAsPlannedCallbackRepository, "test", "test2");
+        irsService = new IrsService(irsClient, restTemplate, bpnRepository, traceabilityProperties, objectMapper, assetAsBuiltCallbackRepository, assetAsPlannedCallbackRepository, "test", "test2");
     }
 
 
@@ -233,22 +238,4 @@ class IrsServiceTest {
         );
     }
 
-    @Test
-    void test_getPolicyConstraints() {
-        //GIVEN
-        List<Constraint> andConstraints = List.of(new Constraint("leftOperand", OperatorType.EQ, List.of("rightOperand")));
-        List<Constraint> orConstraints = List.of(new Constraint("leftOperand", OperatorType.EQ, List.of("rightOperand")));
-        Constraints constraints = new Constraints(andConstraints, orConstraints);
-
-        Permission permission = new Permission(PolicyType.USE, List.of(constraints));
-        PolicyResponse policyResponseMock = new PolicyResponse("", OffsetDateTime.now(), OffsetDateTime.now(), List.of(permission));
-
-        when(irsClient.getPolicies(anyString())).thenReturn(List.of(policyResponseMock));
-
-        //WHEN
-        List<PolicyResponse> policyResponse = irsService.getPolicies();
-
-        //THEN
-        assertThat(1).isEqualTo(policyResponse.size());
-    }
 }

@@ -37,11 +37,17 @@ import org.eclipse.tractusx.traceability.bpn.domain.service.BpnRepository;
 import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static org.eclipse.tractusx.traceability.common.config.EdcRestTemplateConfiguration.EDC_REST_TEMPLATE;
 
 @Slf4j
 @Service
@@ -57,8 +63,11 @@ public class IrsService implements IrsRepository {
     private String adminApiKey;
     private String regularApiKey;
 
+    private final RestTemplate edcRestTemplate;
+
     public IrsService(
             IRSApiClient irsApiClient,
+            @Qualifier(EDC_REST_TEMPLATE) RestTemplate edcRestTemplate,
             BpnRepository bpnRepository,
             TraceabilityProperties traceabilityProperties,
             ObjectMapper objectMapper,
@@ -76,6 +85,7 @@ public class IrsService implements IrsRepository {
         this.assetAsPlannedCallbackRepository = assetAsPlannedCallbackRepository;
         this.adminApiKey = adminApiKey;
         this.regularApiKey = regularApikey;
+        this.edcRestTemplate = edcRestTemplate;
     }
 
     @Override
@@ -179,7 +189,18 @@ public class IrsService implements IrsRepository {
     }
 
     public List<PolicyResponse> getPolicies() {
-        return irsApiClient.getPolicies(adminApiKey);
+
+        ResponseEntity<List<PolicyResponse>> responseEntity = edcRestTemplate.exchange(
+                "/irs/policies",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        log.info(responseEntity.getStatusCode() + "code");
+        log.info(responseEntity.getHeaders() + "headers");
+        return responseEntity.getBody();
+        //return irsApiClient.getPolicies(adminApiKey);
     }
 
 }
