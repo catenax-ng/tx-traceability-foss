@@ -23,6 +23,7 @@ package org.eclipse.tractusx.traceability.common.config;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.common.properties.EdcProperties;
+import org.eclipse.tractusx.traceability.common.properties.TraceabilityProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -41,6 +42,8 @@ import org.springframework.web.client.RestTemplate;
 public class EdcRestTemplateConfiguration {
 
     public static final String EDC_REST_TEMPLATE = "edcRestTemplate";
+
+    public static final String IRS_REST_TEMPLATE = "irsRestTemplateForTraceX";
     public static final String REST_TEMPLATE = "restTemplate";
 
     private static final String EDC_API_KEY_HEADER_NAME = "X-Api-Key";
@@ -54,6 +57,15 @@ public class EdcRestTemplateConfiguration {
         return new RestTemplateBuilder()
                 .rootUri(edcProperties.getProviderEdcUrl())
                 .defaultHeader(EDC_API_KEY_HEADER_NAME, edcProperties.getApiAuthKey())
+                .build();
+    }
+
+    @Bean
+    @Qualifier(IRS_REST_TEMPLATE)
+    public RestTemplate irsRestTemplateForTraceX(TraceabilityProperties traceabilityProperties) {
+        return new RestTemplateBuilder()
+                .rootUri("https://tx-irs-int-b.int.demo.catena-x.net")
+                .defaultHeader("X-API-KEY", traceabilityProperties.getAdminApiKey())
                 .build();
     }
 

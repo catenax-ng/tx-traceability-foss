@@ -48,6 +48,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static org.eclipse.tractusx.traceability.common.config.EdcRestTemplateConfiguration.EDC_REST_TEMPLATE;
+import static org.eclipse.tractusx.traceability.common.config.EdcRestTemplateConfiguration.IRS_REST_TEMPLATE;
 
 @Slf4j
 @Service
@@ -67,7 +68,7 @@ public class IrsService implements IrsRepository {
 
     public IrsService(
             IRSApiClient irsApiClient,
-            @Qualifier(EDC_REST_TEMPLATE) RestTemplate edcRestTemplate,
+            @Qualifier(IRS_REST_TEMPLATE) RestTemplate edcRestTemplate,
             BpnRepository bpnRepository,
             TraceabilityProperties traceabilityProperties,
             ObjectMapper objectMapper,

@@ -48,6 +48,10 @@ public class TraceabilityProperties {
 
     private SupportedAspectTypes supportedAspectTypes;
 
+    private String adminApiKey;
+
+    private String regularApiKey;
+
     public String getIrsJobCallbackUrl() {
         return url+"/irs/job/callback?id={id}&state={state}";
     }
