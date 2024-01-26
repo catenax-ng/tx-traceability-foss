@@ -71,7 +71,7 @@ public class IrsApiConfig {
         okHttpClient.interceptors().add(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
         okHttpClient.setConnectTimeout(feignDefaultProperties.getConnectionTimeoutMillis(), TimeUnit.MILLISECONDS);
         okHttpClient.setReadTimeout(feignDefaultProperties.getReadTimeoutMillis(), TimeUnit.MILLISECONDS);
-
+        log.info("okhttpClient initialized");
         return okHttpClient;
 
     }

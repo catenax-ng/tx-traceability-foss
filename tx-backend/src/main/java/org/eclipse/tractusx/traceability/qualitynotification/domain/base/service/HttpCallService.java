@@ -22,6 +22,7 @@ package org.eclipse.tractusx.traceability.qualitynotification.domain.base.servic
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.tractusx.traceability.qualitynotification.domain.base.exception.BadRequestException;
@@ -38,20 +39,20 @@ import static java.lang.String.format;
 @Component
 public class HttpCallService {
 
-    private OkHttpClient okhttpClient;
+    private final OkHttpClient okhttpClient;
 
     @Autowired
     public HttpCallService(OkHttpClient okhttpClient) {
         this.okhttpClient = withIncreasedTimeout(okhttpClient);
     }
 
-    private static OkHttpClient withIncreasedTimeout(OkHttpClient httpClient) {
-        httpClient = new OkHttpClient();
-        httpClient.setReadTimeout(25, TimeUnit.SECONDS);
-        httpClient.setConnectTimeout(10, TimeUnit.SECONDS);
-        httpClient.setWriteTimeout(50, TimeUnit.SECONDS);
-
-        return httpClient;
+    private static OkHttpClient withIncreasedTimeout(OkHttpClient okhttpClient) {
+        okhttpClient = new OkHttpClient();
+        okhttpClient.setReadTimeout(25, TimeUnit.SECONDS);
+        okhttpClient.setConnectTimeout(10, TimeUnit.SECONDS);
+        okhttpClient.setWriteTimeout(50, TimeUnit.SECONDS);
+        okhttpClient.interceptors().add(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
+        return okhttpClient;
     }
 
 
