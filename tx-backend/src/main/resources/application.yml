@@ -163,6 +163,10 @@ jwt:
   resource-client: ${JWT_RESOURCE_CLIENT}
 
 feign:
+  client:
+    config:
+      default:
+        loggerLevel: full
   submodelApi:
     url: ${SUBMODEL_URL}
   irsApi:
