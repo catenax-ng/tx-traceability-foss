@@ -154,7 +154,7 @@ public class IrsService implements IrsRepository {
     @Override
     public void createIrsPolicyIfMissing() {
         log.info("Check if irs policy exists");
-        List<PolicyResponse> irsPolicies = irsApiClient.getPolicies(adminApiKey);
+        List<PolicyResponse> irsPolicies = getPolicies();
         log.info("Irs has following policies: {}", irsPolicies);
 
         log.info("Required constraints from application yaml are : {}", traceabilityProperties.getRightOperand());
