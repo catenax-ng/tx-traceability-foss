@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import feign.Logger;
 import feign.codec.Decoder;
 import feign.jackson.JacksonDecoder;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,12 @@ public class IrsApiConfig {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .build()
                 .registerModules(new JavaTimeModule())));
+    }
+
+
+    @Bean
+    public Logger.Level feignLoggerLevel() {
+        return Logger.Level.FULL;
     }
 
     @Bean
