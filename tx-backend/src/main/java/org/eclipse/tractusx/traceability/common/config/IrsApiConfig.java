@@ -23,14 +23,13 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.squareup.okhttp.ConnectionPool;
+import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 import feign.Logger;
 import feign.codec.Decoder;
 import feign.jackson.JacksonDecoder;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.ConnectionPool;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
 import org.eclipse.tractusx.traceability.common.properties.FeignDefaultProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
@@ -63,18 +62,18 @@ public class IrsApiConfig {
     @Bean
     public OkHttpClient catenaApiOkHttpClient(@Autowired FeignDefaultProperties feignDefaultProperties) {
 
-        return new OkHttpClient.Builder()
-                .addInterceptor((Interceptor) new LoggingInterceptor())
-                .connectTimeout(feignDefaultProperties.getConnectionTimeoutMillis(), TimeUnit.MILLISECONDS)
-                .readTimeout(feignDefaultProperties.getReadTimeoutMillis(), TimeUnit.MILLISECONDS)
-                .connectionPool(
-                        new ConnectionPool(
-                                feignDefaultProperties.getMaxIdleConnections(),
-                                feignDefaultProperties.getKeepAliveDurationMinutes(),
-                                TimeUnit.MINUTES
-                        )
-                )
-                .build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setConnectionPool(new ConnectionPool(
+                feignDefaultProperties.getMaxIdleConnections(),
+                feignDefaultProperties.getKeepAliveDurationMinutes(),
+                TimeUnit.MINUTES
+        ));
+        okHttpClient.interceptors().add(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC));
+        okHttpClient.setConnectTimeout(feignDefaultProperties.getConnectionTimeoutMillis(), TimeUnit.MILLISECONDS);
+        okHttpClient.setReadTimeout(feignDefaultProperties.getReadTimeoutMillis(), TimeUnit.MILLISECONDS);
+
+        return okHttpClient;
+
     }
 
 }
