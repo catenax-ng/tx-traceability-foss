@@ -68,7 +68,7 @@ public class IrsApiConfig {
                 feignDefaultProperties.getKeepAliveDurationMinutes(),
                 TimeUnit.MINUTES
         ));
-        okHttpClient.interceptors().add(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC));
+        okHttpClient.interceptors().add(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
         okHttpClient.setConnectTimeout(feignDefaultProperties.getConnectionTimeoutMillis(), TimeUnit.MILLISECONDS);
         okHttpClient.setReadTimeout(feignDefaultProperties.getReadTimeoutMillis(), TimeUnit.MILLISECONDS);
 
