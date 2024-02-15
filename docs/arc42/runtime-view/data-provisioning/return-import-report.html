@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
-<title>System scope and context</title>
+<title>Scenario 1: Receive import report</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -439,23 +439,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>System scope and context</h1>
+<h1>Scenario 1: Receive import report</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_business_context">Business context</a>
-<ul class="sectlevel2">
-<li><a href="#_user">User</a></li>
-<li><a href="#_irs">IRS</a></li>
-<li><a href="#_catena_x_network">Catena-X network</a></li>
-<li><a href="#_any_other_traceability_app">Any other Traceability App</a></li>
-</ul>
-</li>
-<li><a href="#_technical_context">Technical context</a>
-<ul class="sectlevel2">
-<li><a href="#_component_overview">Component overview</a></li>
-</ul>
-</li>
+<ul class="sectlevel3">
+<li><a href="#_overview">Overview</a></li>
 </ul>
 </div>
 </div>
@@ -463,116 +451,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Trace-X is an end user application to visualize and utilize data provided to the Catena-X network. This includes the traceability of manufactured parts and batches as well as the shipped and supplied components. To utilize the CX open ecosystem it is necessary to exchange information on serialized parts and batches with supply chain partners in a standardized, data sovereign and interoperable way. This section describes the environment of Trace-X, its intended users and which  systems and components it interacts with.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_business_context">Business context</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Trace-X exchanges data with any other Traceability applications within the CX ecosystem. This is implemented by integrating the service into the CX network and the usage of required central components and services provided by CX.</p>
+<p>This section describes what happens when the user wants to get a report of the imported assets associated to a importJobId.
+In this example, the user requests an import report.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="business-context.svg" alt="business context" width="476" height="450">
+<img src="import-report-receive.svg" alt="import report receive" width="1732" height="542">
 </div>
 </div>
-<div class="sect2">
-<h3 id="_user">User</h3>
-<div class="paragraph">
-<p>Trace-X can be deployed, hosted and run by every party that is part of the Catena-X network. They need to be registered, have a BPN, technical user as well as provide valid credentials. An end-user in Trace-X can have roles provided by the CX Portal (User, Supervisor, Admin). As a prerequisite for Trace-X, valid data must already be provided to CX network since Trace-X only consumes data but has no import interface or data provisioning functionality.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_irs">IRS</h3>
-<div class="paragraph">
-<p>Item Relationship Service is the component that is used by Trace-X to fetch the data chains from Catena-X network. Data that is provided by IRS gets extracted, aggregated, transformed and is used for further actions in Trace-X. Further information can be found in the <a href="https://eclipse-tractusx.github.io/item-relationship-service/docs/arc42/">IRS architecture documentation (arc42)</a>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_catena_x_network">Catena-X network</h3>
-<div class="paragraph">
-<p>Trace-X and IRS are retrieving necessary information and data from the Catena-X network (Users, digital twins, aspects, submodels, Business Partner information). If CX services are unavailable, Trace-X will not be able to perform most of its work.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_any_other_traceability_app">Any other Traceability App</h3>
-<div class="paragraph">
-<p>Trace-X interacts with any other Traceability app using the CX standards. This enables sovereign data exchange as well as receiving and sending notifications to interact between different parties.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_technical_context">Technical context</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_component_overview">Component overview</h3>
-<div class="sect3">
-<h4 id="_trace_x_api">Trace-X API</h4>
-<div class="paragraph">
-<p>We provide a REST API that is consumed by Trace-X frontend in order to deliver Trace-X related features such as quality-investigations or assets chain visibility.
-Since Trace-X component is a very last component in the Catena-X ecosystem we are mostly depend on the other services and theirs APIs in other to deliver desired functionalities. The development of the services is not a part of the Trace-X application and each of the system that we utilize exposes REST API that we consume and interact directly.</p>
-</div>
-<div class="paragraph">
-<p>Trace-X is a Spring Boot based application and is secured with the OpenID connector provider Keycloak and the OAuth2. This means for the company that utilize Trace-X component
-it is required to obtain technical user in order to be authorized to get access to the external components within Catena-X ecosystem.</p>
-</div>
-<div class="paragraph">
-<p>In order to use Trace-X frontend with Trace-X backend, users need to authenticate themselves in order to be authorized to get access to the Trace-X.
-By the frontend UI users provide valid credentials and the system generates a bearer token that it gets from Keycloak and attaches it to the HTTP header parameter Authorization.
-Then once a user is authorized and has proper role within Trace-X backend, the backend delegates HTTP calls to specific service in their behalf as technical user in order to fulfill specific functionality.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_registry_api">Registry API</h4>
-<div class="imageblock">
-<div class="content">
-<img src="technical-context-registry.svg" alt="technical context registry" width="772" height="377">
-</div>
+<h4 id="_overview">Overview</h4>
+<div class="paragraph">
+<p>When a user requests an import report, TraceX-FOSS checks if the user has an adequate role ('ROLE_ADMIN', 'ROLE_SUPERVISOR').
+If yes, then the endpoint returns an import report to the given importJobId.</p>
 </div>
 <div class="paragraph">
-<p>The Trace-X acts as a consumer of the Asset Administration Shell Registry component. The Trace-X contains a Restful client (REST template) that build a REST call to the mentioned Digital Twin Registry API based on its known URL (the AAS registry URL is configurable in the Trace-X).
-Requests contain "assetIds" provided by the component during assets synchronization. Like described in the above section, the security aspect is required in order to achieve a REST call against the AAS Registry. As a response, the Trace-X gets the corresponding shells and shell descriptors utilized then later for assets synchronization. The HTTP(s) transport protocol is used for the REST call communication.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_irs_api">IRS API</h4>
-<div class="imageblock">
-<div class="content">
-<img src="technical-context-irs.svg" alt="technical context irs" width="803" height="377">
-</div>
-</div>
-<div class="paragraph">
-<p>The Trace-X acts as a consumer of the IRS component. The Trace-X contains a Restful client (REST template) that build a REST call to the mentioned IRS API based on its known URL (the IRS URL is configurable in the Trace-X).
-Request contains details required to start IRS fetch job provided by the component during assets synchronization. Like described in the above section, the security aspect is required in order to achieve a REST call against the IRS. As a response, the Trace-X gets the created job id and periodically pulls for the job details that contains assets that will be uploaded to the system. And as mentioned above, the transport protocol HTTP(S) is used for the REST call communication.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_portal_api">Portal API</h4>
-<div class="imageblock">
-<div class="content">
-<img src="technical-context-portal.svg" alt="technical context portal" width="772" height="357">
-</div>
-</div>
-<div class="paragraph">
-<p>The Trace-X acts as a consumer of the Portal component. The Trace-X contains a Restful client (REST template) that build a REST call to the mentioned Portal API based on its known URL (the Portal URL is configurable in the Trace-X).
-Request contains "bpns" provided by the component during sending notifications. Like described in the above section, the security aspect is required in order to achieve a REST call against the Portal. As a response, the Trace-X gets the corresponding BPN mappings to EDC urls where a notification should be send over. And as mentioned above, the transport protocol HTTP(S) is used for the REST call communication.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_edc_api">EDC API</h4>
-<div class="imageblock">
-<div class="content">
-<img src="technical-context-edc.svg" alt="technical context edc" width="816" height="142">
-</div>
-</div>
-<div class="paragraph">
-<p>The Trace-X acts as a consumer of the EDC component. In Trace-X we communicate with EDC directly only for the sake of fulfilling quality-investigation functionality. Specific use cases can be viewed in <a href="../runtime-view/index.html">Runtime view</a> section. For this purposes the integrated EDC clients in the Trace-X are responsible for creating restful requests to the EDC component. And as mentioned above, the transport protocol HTTP(S) is used for the REST call communication.</p>
-</div>
-</div>
-</div>
+<p>If the importJobId is not known to Trace-X, an HTTP 404 error is returned.</p>
 </div>
 </div>
 </div>
