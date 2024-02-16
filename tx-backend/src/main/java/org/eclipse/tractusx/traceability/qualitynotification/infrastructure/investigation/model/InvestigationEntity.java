@@ -44,6 +44,7 @@ import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.mode
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.model.NotificationSideBaseEntity;
 import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.model.NotificationStatusBaseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.collections4.ListUtils.emptyIfNull;
@@ -72,8 +73,8 @@ public class InvestigationEntity extends NotificationBaseEntity {
     )
     private List<AssetAsPlannedEntity> assetsAsPlanned;
 
-    @OneToMany(mappedBy = "investigation")
-    private List<InvestigationNotificationEntity> notifications;
+    @OneToMany(mappedBy = "investigation", cascade = CascadeType.ALL)
+    private List<InvestigationNotificationEntity> notifications = new ArrayList<>();
 
 
     public static QualityNotification toDomain(InvestigationEntity investigationEntity) {
@@ -107,6 +108,7 @@ public class InvestigationEntity extends NotificationBaseEntity {
                 // TODO clarify how to handle assetsAsPlanned
                 .assetsAsPlanned(null)
                 .bpn(qualityNotification.getBpn())
+                .notifications(new ArrayList<>())
                 .description(qualityNotification.getDescription())
                 .status(NotificationStatusBaseEntity.fromStringValue(qualityNotification.getNotificationStatus().name()))
                 .side(NotificationSideBaseEntity.valueOf(qualityNotification.getNotificationSide().name()))

@@ -43,6 +43,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 
@@ -122,17 +123,13 @@ class EdcControllerIT extends IntegrationTestSpecification {
                 .status(NotificationStatusBaseEntity.SENT)
                 .side(NotificationSideBaseEntity.SENDER)
                 .createdDate(Instant.now())
+                .notifications(List.of(notification))
                 .build();
 
         InvestigationEntity persistedInvestigation = investigationsSupport.storedInvestigationFullObject(investigation);
-
-        InvestigationNotificationEntity notificationEntity = investigationNotificationsSupport.storedNotification(notification);
+        InvestigationNotificationEntity notificationEntity = persistedInvestigation.getNotifications().stream().findFirst().get();
         notificationEntity.setInvestigation(persistedInvestigation);
-        InvestigationNotificationEntity persistedNotification = investigationNotificationsSupport.storedNotification(notificationEntity);
-
-        investigation.setNotifications(List.of(persistedNotification));
-
-        investigationsSupport.storedInvestigationFullObject(investigation);
+        investigationNotificationsSupport.storedNotification(notificationEntity);
 
         String notificationJson = readFile("/testdata/edc_notification_okay_update.json").replaceAll("REPLACE_ME", notificationEntity.getEdcNotificationId());
         EDCNotification edcNotification = objectMapper.readValue(notificationJson, EDCNotification.class);
@@ -177,12 +174,6 @@ class EdcControllerIT extends IntegrationTestSpecification {
 
         InvestigationNotificationEntity notificationEntity = investigationNotificationsSupport.storedNotification(notification);
         notificationEntity.setInvestigation(persistedInvestigation);
-        InvestigationNotificationEntity persistedNotification = investigationNotificationsSupport.storedNotification(notificationEntity);
-
-        investigation.setNotifications(List.of(persistedNotification));
-
-        investigationsSupport.storedInvestigationFullObject(investigation);
-
 
         String notificationJson = readFile("/testdata/edc_notification_classification_unsupported.json").replaceAll("REPLACE_ME", notificationEntity.getEdcNotificationId());
         EDCNotification edcNotification = objectMapper.readValue(notificationJson, EDCNotification.class);

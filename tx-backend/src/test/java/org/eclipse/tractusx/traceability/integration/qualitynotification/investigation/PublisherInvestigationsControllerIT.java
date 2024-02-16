@@ -481,6 +481,7 @@ class PublisherInvestigationsControllerIT extends IntegrationTestSpecification {
                 "urn:uuid:d387fa8e-603c-42bd-98c3-4d87fef8d2bb", // BPN: BPNL00000003AYRE
                 "urn:uuid:0ce83951-bc18-4e8f-892d-48bad4eb67ef"  // BPN: BPNL00000003AXS3
         );
+
         String description = "at least 15 characters long investigation description";
         assetsSupport.defaultAssetsStored();
         val startInvestigationRequest = StartQualityNotificationRequest.builder()

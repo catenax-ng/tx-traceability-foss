@@ -97,7 +97,6 @@ public class InvestigationsRepositoryImpl implements InvestigationRepository {
     public QualityNotificationId updateQualityNotificationEntity(QualityNotification investigation) {
         InvestigationEntity investigationEntity = jpaInvestigationRepository.findById(investigation.getNotificationId().value())
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Investigation with id %s not found!", investigation.getNotificationId().value())));
-
         investigationEntity.setStatus(NotificationStatusBaseEntity.fromStringValue(investigation.getNotificationStatus().name()));
         investigationEntity.setUpdated(clock.instant());
         investigationEntity.setCloseReason(investigation.getCloseReason());
@@ -117,12 +116,9 @@ public class InvestigationsRepositoryImpl implements InvestigationRepository {
 
         if (!assetEntities.isEmpty()) {
             InvestigationEntity investigationEntity = InvestigationEntity.from(investigation, assetEntities);
-
-            jpaInvestigationRepository.save(investigationEntity);
-
             investigation.getNotifications()
                     .forEach(notification -> handleNotificationCreate(investigationEntity, notification, assetEntities));
-
+            jpaInvestigationRepository.save(investigationEntity);
             return new QualityNotificationId(investigationEntity.getId());
         } else {
             throw new IllegalArgumentException("No assets found for %s asset ids".formatted(String.join(", ", investigation.getAssetIds())));
@@ -161,6 +157,7 @@ public class InvestigationsRepositoryImpl implements InvestigationRepository {
             }
         }
 
+
     }
 
     private List<AssetAsBuiltEntity> getAssetEntitiesByInvestigation(QualityNotification investigation) {
@@ -169,8 +166,8 @@ public class InvestigationsRepositoryImpl implements InvestigationRepository {
 
     private void handleNotificationCreate(InvestigationEntity investigationEntity, QualityNotificationMessage notificationDomain, List<AssetAsBuiltEntity> assetEntities) {
         InvestigationNotificationEntity notificationEntity = toNotificationEntity(investigationEntity, notificationDomain, assetEntities);
-        InvestigationNotificationEntity savedEntity = notificationRepository.save(notificationEntity);
-        log.info("Successfully persisted notification entity {}", savedEntity);
+        List<InvestigationNotificationEntity> notifications = investigationEntity.getNotifications();
+        notifications.add(notificationEntity);
     }
 
     private boolean notificationExists(InvestigationEntity investigationEntity, String notificationId) {
@@ -183,7 +180,7 @@ public class InvestigationsRepositoryImpl implements InvestigationRepository {
         notificationEntity.setContractAgreementId(notification.getContractAgreementId());
         notificationEntity.setNotificationReferenceId(notification.getNotificationReferenceId());
         notificationEntity.setTargetDate(notification.getTargetDate());
-        notificationRepository.save(notificationEntity);
+       // notificationRepository.save(notificationEntity);
     }
 
 

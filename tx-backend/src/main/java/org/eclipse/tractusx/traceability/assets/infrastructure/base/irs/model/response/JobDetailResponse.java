@@ -120,9 +120,6 @@ public record JobDetailResponse(
 
     private List<AssetBase> convertAssets(BomLifecycle bomLifecycle) {
 
-        log.info(":: convertAssets(\"{}\")", bomLifecycle.getRealName());
-        log.info(":: relationships: {}", relationships.toString());
-
         Map<String, String> shortIds = shells().stream()
                 .collect(Collectors.toMap(
                         Shell::globalAssetId,
@@ -163,8 +160,6 @@ public record JobDetailResponse(
                 .filter(semanticDataModel -> !(semanticDataModel instanceof DetailAspectDataTractionBatteryCode)).filter(semanticDataModel -> !isOwnPart(semanticDataModel, jobStatus))
                 .toList();
 
-        log.info(":: mapToOtherPartsAsBuilt()");
-        log.info(":: otherParts: {}", otherParts);
         final List<AssetBase> assets = otherParts
                 .stream()
                 .map(semanticDataModel -> semanticDataModel.toDomainAsBuilt(semanticDataModel.localIdentifiers(), shortIds, owner, bpnMapping,
@@ -303,10 +298,7 @@ public record JobDetailResponse(
     }
 
     private boolean isOwnPart(SemanticDataModel semanticDataModel, JobStatus jobStatus) {
-        final boolean result = semanticDataModel.getCatenaXId().equals(jobStatus.globalAssetId());
-        log.info(":: isOwnPart() {}", semanticDataModel);
-        log.info(":: result: {}", result);
-        return result;
+        return semanticDataModel.getCatenaXId().equals(jobStatus.globalAssetId());
     }
 
 }

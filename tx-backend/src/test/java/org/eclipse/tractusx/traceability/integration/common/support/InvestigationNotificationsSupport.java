@@ -60,6 +60,10 @@ public class InvestigationNotificationsSupport {
         return jpaInvestigationNotificationRepository.save(notification);
     }
 
+    public List<InvestigationNotificationEntity> findAll() {
+        return jpaInvestigationNotificationRepository.findAll();
+    }
+
     public void storedNotifications(InvestigationNotificationEntity... notifications) {
         Arrays.stream(notifications)
                 .forEach(this::storedNotification);

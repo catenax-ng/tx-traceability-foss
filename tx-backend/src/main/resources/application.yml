@@ -18,6 +18,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ################################################################################
+logging:
+  level:
+    org.hibernate.SQL: TRACE
+
 traceability:
   bpn: ${TRACEABILITY_BPN}
   url: ${TRACEABILITY_URL}
@@ -139,6 +143,11 @@ management:
     port: 8081
 
 spring:
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
   main:
     allow-bean-definition-overriding: true
   datasource:
@@ -186,6 +195,7 @@ cors:
   origins: >
     ${ALLOWED_CORS_ORIGIN_FIRST},
     ${ALLOWED_CORS_ORIGIN_SECOND}
+
 
 digitalTwinRegistryClient:
   shellDescriptorTemplate: /shell-descriptors/{aasIdentifier} # The path to retrieve AAS descriptors from the decentral DTR, must contain the placeholder {aasIdentifier}
