@@ -109,6 +109,8 @@ jobs:
           wait-on-timeout: 120
           browser: chrome
           working-directory: frontend
+          install: false
+          headless: true
         env:
           CYPRESS_SUPERVISOR_LOGIN: ${{ secrets.TRACE_X_SUPERVISOR_LOGIN }}
           CYPRESS_SUPERVISOR_PW: ${{ secrets.TRACE_X_SUPERVISOR_PW }}

@@ -24,13 +24,13 @@ let notificationDescription = null;
 let desiredSemanticModelId = null;
 let desiredId = null;
 
-Then("select other part with semantic-model-id {string}", function(semanticModelId) {
+Then("select other part with semantic-model-id {string}", function(semanticModelId: string) {
 //since IDs of desired asset are not shown in FE the selection has to be done by other number.
   desiredSemanticModelId = semanticModelId;
   cy.get('span').contains(semanticModelId).closest('tr').find('.mdc-checkbox').click();
 });
 
-Then("select part with id {string}", function(id) {
+Then("select part with id {string}", function(id: string) {
   desiredId = id;
   cy.get('span').contains(id).closest('tr').find('.mdc-checkbox').click();
 });
@@ -50,19 +50,18 @@ Then("start {string} creation with description {string}", function(notificationT
     }
     default: {
       throw new Error("Set notification type '" + notificationType + "' is not one of valid types [investigation, alert].");
-      break;
     }
   }
   cy.get('mat-label').contains(/^Description$/i).click().type(notificationDescription);
 });
 
 
-When("receiver BPN {string}", function(receiverBPN) {
+When("receiver BPN {string}", function(receiverBPN: string) {
   cy.get('mat-label').contains(/^BPN$/i).click().type(receiverBPN);
 });
 
 
-When("severity {string}", function(severity) {
+When("severity {string}", function(severity: string) {
   cy.get('div').contains('Severity').click(); // First the dropdown has to be opened.
   cy.get('p').contains(severity).click();
 });
@@ -94,7 +93,6 @@ Then("selected parts are marked as {string}", function(notificationType) {
     }
     default: {
       throw new Error("Set notificationType change'" + notificationType + "' is not one of valid types [investigated, alerted].");
-      break;
     }
   }
 });
@@ -112,7 +110,6 @@ When("popup with information about queued {string} is shown", function(notificat
     }
     default: {
       throw new Error("Set notificationType '" + notificationType + "' is not one of valid types [investigation, alert].");
-      break;
     }
   }
 });
