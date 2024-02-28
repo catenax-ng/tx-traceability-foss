@@ -291,10 +291,10 @@ maven/mavencentral/org.eclipse.jetty/jetty-webapp/11.0.17, EPL-2.0 OR Apache-2.0
 maven/mavencentral/org.eclipse.jetty/jetty-webapp/11.0.19, EPL-2.0 OR Apache-2.0, approved, rt.jetty
 maven/mavencentral/org.eclipse.jetty/jetty-xml/11.0.17, EPL-2.0 OR Apache-2.0, approved, rt.jetty
 maven/mavencentral/org.eclipse.jetty/jetty-xml/11.0.19, EPL-2.0 OR Apache-2.0, approved, rt.jetty
-maven/mavencentral/org.eclipse.tractusx.irs/irs-common/1.6.0-20240221.100031-9, Apache-2.0, approved, automotive.tractusx
-maven/mavencentral/org.eclipse.tractusx.irs/irs-edc-client/1.6.0-20240221.100031-9, Apache-2.0, approved, automotive.tractusx
-maven/mavencentral/org.eclipse.tractusx.irs/irs-models/1.6.0-20240221.100031-9, Apache-2.0, approved, automotive.tractusx
-maven/mavencentral/org.eclipse.tractusx.irs/irs-registry-client/1.6.0-20240221.100031-9, Apache-2.0, approved, automotive.tractusx
+maven/mavencentral/org.eclipse.tractusx.irs/irs-common/1.6.0-20240228.074621-15, Apache-2.0, approved, automotive.tractusx
+maven/mavencentral/org.eclipse.tractusx.irs/irs-edc-client/1.6.0-20240228.074621-15, Apache-2.0, approved, automotive.tractusx
+maven/mavencentral/org.eclipse.tractusx.irs/irs-models/1.6.0-20240228.074621-15, Apache-2.0, approved, automotive.tractusx
+maven/mavencentral/org.eclipse.tractusx.irs/irs-registry-client/1.6.0-20240228.074621-15, Apache-2.0, approved, automotive.tractusx
 maven/mavencentral/org.eclipse.tractusx.traceability/tx-backend/0.0.1-SNAPSHOT, Apache-2.0, approved, automotive.tractusx
 maven/mavencentral/org.eclipse.tractusx.traceability/tx-models/0.0.1-SNAPSHOT, Apache-2.0, approved, automotive.tractusx
 maven/mavencentral/org.flywaydb/flyway-core/9.16.3, Apache-2.0, approved, #7935
@@ -434,6 +434,7 @@ maven/mavencentral/org.springframework/spring-beans/6.0.16, Apache-2.0, approved
 maven/mavencentral/org.springframework/spring-context/6.0.11, Apache-2.0, approved, #5936
 maven/mavencentral/org.springframework/spring-context/6.0.16, Apache-2.0, approved, #5936
 maven/mavencentral/org.springframework/spring-core/6.0.16, Apache-2.0 AND BSD-3-Clause, approved, #5948
+maven/mavencentral/org.springframework/spring-core/6.0.17, Apache-2.0 AND BSD-3-Clause, approved, #5948
 maven/mavencentral/org.springframework/spring-expression/6.0.16, Apache-2.0, approved, #3284
 maven/mavencentral/org.springframework/spring-jcl/6.0.16, Apache-2.0, approved, #3283
 maven/mavencentral/org.springframework/spring-jdbc/6.0.13, Apache-2.0, approved, #5924
