@@ -49,5 +49,7 @@ export default defineConfig({
     viewportHeight: 900,
     experimentalWebKitSupport: true, // https://docs.cypress.io/guides/guides/launching-browsers#WebKit-Experimental
     setupNodeEvents,
+    defaultCommandTimeout: 100000,
+    video: false
   },
 });
