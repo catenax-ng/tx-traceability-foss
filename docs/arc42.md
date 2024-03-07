@@ -406,6 +406,13 @@ Please be informed that the 'as-planned' version currently lacks the database re
 image::./assets/arc42/arc42_015.png[]
 ```
 
+#### Quality Notifications
+
+![arc42_016](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_016.png)
+```bash
+
+```
+
 ## Safety and security concepts
 
 ### Authentication / Authorization
@@ -686,7 +693,7 @@ This section includes concrete quality scenarios to better capture the key quali
 
 The tree structure provides an overview for a sometimes large number of quality requirements.
 
-![arc42_016](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_016.png)
+![arc42_017](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_017.png)
 
 ## Quality scenarios
 
