@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
-<title>Scenario 2: Return specific Assets</title>
+<title>Scenario 1: Return Asset Contract Agreements</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -439,7 +439,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Scenario 2: Return specific Assets</h1>
+<h1>Scenario 1: Return Asset Contract Agreements</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel3">
@@ -451,13 +451,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This section describes what happens when user searches for a specific asset.
-This example shows the request of one as built asset.
-The same can be done with as planned assets.</p>
+<p>This section describes functionality and the behavior in case a user requests contract agreements from Trace-X via the Trace-X contracts API (/contracts).</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="return-specific-assets.svg" alt="return specific assets" width="1309" height="542">
+<img src="return-all-assets.svg" alt="return all assets" width="1105" height="554">
 </div>
 </div>
 </div>
@@ -465,10 +463,15 @@ The same can be done with as planned assets.</p>
 <div class="sect3">
 <h4 id="_overview">Overview</h4>
 <div class="paragraph">
-<p>When a user requests a specific asset, TraceX-FOSS checks if the user has an adequate role ('ROLE_ADMIN', 'ROLE_SUPERVISOR', 'ROLE_USER'). If yes, then the endpoint returns a precise Asset for the given assetId, if it is found.</p>
+<p>In case a user requests contract agreements, Trace-X checks if the user has required roles ('ROLE_ADMIN', 'ROLE_SUPERVISOR').
+If yes, then the requested assets will be mapped to the related contract agreement id.
+These contract agreement ids will be then requested on EDC side via POST (/management/v2/contractagreements/request) and GET (/management/v2/contractagreements/{ContractAgreementId}/negotiation) to get the relevant information.</p>
 </div>
 <div class="paragraph">
-<p>If no asset has been found for the given ID, an AssetNotFoundException is thrown.</p>
+<p>The contract information is then returned by the endpoint as a pageable result.</p>
+</div>
+<div class="paragraph">
+<p>If no asset ids are provided in the request, 50 contract agreement ids are handled by default.</p>
 </div>
 </div>
 </div>
