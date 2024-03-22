@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
-<title>Solution strategy</title>
+<title>Untitled</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,173 +437,39 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="article toc2 toc-left">
+<body class="article">
 <div id="header">
-<h1>Solution strategy</h1>
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_introduction">Introduction</a></li>
-<li><a href="#_technology">Technology</a></li>
-<li><a href="#_structure">Structure</a></li>
-</ul>
-</div>
 </div>
 <div id="content">
-<div id="preamble">
-<div class="sectionbody">
 <div class="paragraph">
-<p>This section contains summarized architectural overview. A comparison of the most important goals and the corresponding solution approaches.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_introduction">Introduction</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Following table describes the quality goals of Trace-X (see chapter quality goals) and their matching solution approaches.</p>
+<p>An overview of the scheduler tasks configured in the system.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Quality goal</th>
-<th class="tableblock halign-left valign-top">Matching approaches in the solution</th>
+<th class="tableblock halign-left valign-top">Scheduler Name</th>
+<th class="tableblock halign-left valign-top">Execution Interval</th>
+<th class="tableblock halign-left valign-top">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Running reference application for Catena-X Traceability</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>Published open source, Trace-X application can be used as a reference by anyone.</p>
-</li>
-</ul>
-</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PublishAssetsJob</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Every hour at 30min</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Publishes assets in IN_SYNCHRONIZATION state to core services. The process combines 'as-built' and 'as-planned' assets and initiates their publication for synchronization in the traceability system.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Accessible and easy to use</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>Established programming languages are used.</p>
-</li>
-<li>
-<p>Backend written in Java</p>
-</li>
-<li>
-<p>Frontend written in Typescript based on the Angular framework.</p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Cloud agnostic solution</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>Helm charts to support the deployment of the application in a Kubernetes environment</p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Application reliability</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>Data source is the Catena-X notwork. Data is fetched with IRS directly from the data owner and the Digital Twin Registry of CX.</p>
-</li>
-<li>
-<p>Trace-X can be hosted decentralized since it is an open source reference implementation.</p>
-</li>
-</ul>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Security</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>Static Application Security Testing (SAST) and Dynamic Application Security Testing (DAST) are executed automatically and regularly with tools as part of the pipeline.</p>
-</li>
-</ul>
-</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AssetsRefreshJob</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Every 2 hours</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invokes the synchronization of asset shell descriptors with the decentralized registry. It ensures the latest asset information is fetched and updated in the system from external sources.</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_technology">Technology</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Trace-X is developed using Java and the Spring Boot framework for the Backend and Typescript based on the Angular framework for the Frontend. This decision was taken due to the support of the frameworks as well as technical knowledge of the team members.</p>
-</div>
-<div class="paragraph">
-<p>The application can be hosted using Docker and Kubernetes. This is commonly used and widespread. With this the application has no vendor lock in regarding the hosting provider.</p>
-</div>
-<div class="paragraph">
-<p>The communication between Frontend and Backend is done using REST APIs. This is the standard method in the Catena-X landscape and makes the application components easy to use for any third party client.</p>
-</div>
-<div class="paragraph">
-<p>As the database to store parts information etc. PostgreSQL Database is used.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_structure">Structure</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Trace-X is divided into two components: Frontend and Backend.
-It roughly can be broken down into the following parts:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Asset controllers to get the asset information</p>
-</li>
-<li>
-<p>Dashboard controller to get dashboard related summed up information</p>
-</li>
-<li>
-<p>Registry controller to fetch assets from the Digital Twin Registry</p>
-</li>
-<li>
-<p>Notification controllers to get notification information and create EDC notification offers</p>
-</li>
-<li>
-<p>Submodel controller for providing asset data functionality</p>
-</li>
-<li>
-<p>Import controller for importing Trace-X data for data provisioning</p>
-</li>
-<li>
-<p>Contract controller to get information about contract agreements</p>
-</li>
-<li>
-<p>EDC controller to retrieve notifications</p>
-</li>
-<li>
-<p>IRS callback controller to retrieve asynchronous jobs completed by IRS</p>
-</li>
-<li>
-<p>Policy controller to retrieve information about policies</p>
-</li>
-<li>
-<p>BPN controller to retrieve information about business partners</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The backend does a request to the Digital Twin Registry utilizing the Registry controller. Extracted data from the response is made available through the Asset controller and the Dashboard controller to the Frontend.</p>
-</div>
-</div>
-</div>
 </div>
 <div id="footer">
 <div id="footer-text">

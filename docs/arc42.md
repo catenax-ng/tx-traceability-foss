@@ -484,6 +484,16 @@ This sequence diagram describes the process of how the policy with the defined c
 
 ![arc42_018](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_018.png)
 
+## Scheduler
+
+An overview of the scheduler tasks configured in the system.
+
+|     |     |     |
+| --- | --- | --- |
+| Scheduler Name | Execution Interval | Description |
+| PublishAssetsJob | Every hour at 30min | Publishes assets in IN_SYNCHRONIZATION state to core services. The process combines 'as-built' and 'as-planned' assets and initiates their publication for synchronization in the traceability system. |
+| AssetsRefreshJob | Every 2 hours | Invokes the synchronization of asset shell descriptors with the decentralized registry. It ensures the latest asset information is fetched and updated in the system from external sources. |
+
 ## Deployment view
 
 ## Cross-cutting concepts
