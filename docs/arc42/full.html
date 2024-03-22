@@ -474,7 +474,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_building_block_view">Building block view</a>
 <ul class="sectlevel2">
-<li><a href="#_whitebox_overall_system">Whitebox overall system</a></li>
+<li><a href="#_blackbox_overall_system">Blackbox overall system</a></li>
 <li><a href="#_level_1">Level 1</a></li>
 </ul>
 </li>
@@ -942,7 +942,7 @@ Then once a user is authorized and has proper role within Trace-X backend, the b
 <h5 id="_outdated_registry_api">[Outdated] Registry API</h5>
 <div class="imageblock">
 <div class="content">
-<img src="architecture-constraints/technical-context-registry.svg" alt="technical context registry" width="772" height="377">
+<img src="architecture-constraints/technical-context-registry.svg" alt="technical context registry" width="747" height="586">
 </div>
 </div>
 <div class="paragraph">
@@ -970,8 +970,10 @@ Request contains details required to start IRS fetch job provided by the compone
 </div>
 </div>
 <div class="paragraph">
-<p>The Trace-X acts as a consumer of the Portal component. The Trace-X contains a Restful client (REST template) that build a REST call to the mentioned Portal API based on its known URL (the Portal URL is configurable in the Trace-X).
-Request contains "bpns" provided by the component during sending notifications. Like described in the above section, the security aspect is required in order to achieve a REST call against the Portal. As a response, the Trace-X gets the corresponding BPN mappings to EDC urls where a notification should be send over. And as mentioned above, the transport protocol HTTP(S) is used for the REST call communication.</p>
+<p>The Trace-X acts as a consumer of the Portal component.
+The Trace-X contains a Restful client (REST template) that builds a REST call to the mentioned Portal API based on its known URL (the Portal URL is configurable in the Trace-X).
+The Portal is used to authenticate users and requests against the backend.
+And as mentioned above, the transport protocol HTTP(S) is used for the REST call communication.</p>
 </div>
 </div>
 <div class="sect4">
@@ -982,7 +984,11 @@ Request contains "bpns" provided by the component during sending notifications. 
 </div>
 </div>
 <div class="paragraph">
-<p>The Trace-X acts as a consumer of the EDC component. In Trace-X we communicate with EDC directly only for the sake of fulfilling quality-investigation functionality. Specific use cases can be viewed in <a href="../runtime-view/index.html">Runtime view</a> section. For this purposes the integrated EDC clients in the Trace-X are responsible for creating restful requests to the EDC component. And as mentioned above, the transport protocol HTTP(S) is used for the REST call communication.</p>
+<p>The Trace-X acts as a consumer and provider of the EDC component.
+In Trace-X we communicate with EDC directly only for the sake of fulfilling quality-investigation functionality.
+Specific use cases can be viewed in <a href="../runtime-view/index.html">Runtime view</a> section.
+For these purposes the integrated EDC clients in the Trace-X are responsible for creating restful requests to the EDC component.
+And as mentioned above, the transport protocol HTTP(S) is used for the REST call communication.</p>
 </div>
 </div>
 </div>
@@ -1142,9 +1148,9 @@ It roughly can be broken down into the following parts:</p>
 <h2 id="_building_block_view">Building block view</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_whitebox_overall_system">Whitebox overall system</h3>
+<h3 id="_blackbox_overall_system">Blackbox overall system</h3>
 <div class="sect3">
-<h4 id="_outdated_component_diagram">[Outdated] Component diagram</h4>
+<h4 id="_component_diagram">Component diagram</h4>
 <div class="imageblock">
 <div class="content">
 <img src="architecture-constraints/whitebox-overview.svg" alt="whitebox overview" width="781" height="770">
@@ -1152,7 +1158,7 @@ It roughly can be broken down into the following parts:</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_outdated_component_description">[Outdated] Component description</h4>
+<h4 id="_component_description">Component description</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -1175,15 +1181,11 @@ It roughly can be broken down into the following parts:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">EDC Provider</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The EDC Provider Component connects with EDC Consumer component and  forms the end point for the actual exchange of data. It handles automatic contract negotiation and the subsequent exchange of data assets for connected applications.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The EDC Provider Component connects with EDC Consumer component and forms the endpoint for the actual exchange of data. It handles automatic contract negotiation and the subsequent exchange of data assets for connected applications.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Submodel Server</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The Submodel Server offers endpoints for requesting the Submodel aspects.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">IAM/DAPS</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">DAPS as central Identity Provider</p></td>
 </tr>
 </tbody>
 </table>
@@ -1192,7 +1194,7 @@ It roughly can be broken down into the following parts:</p>
 <div class="sect2">
 <h3 id="_level_1">Level 1</h3>
 <div class="sect3">
-<h4 id="_component_diagram">Component diagram</h4>
+<h4 id="_component_diagram_2">Component diagram</h4>
 <div class="imageblock">
 <div class="content">
 <img src="architecture-constraints/level-1.svg" alt="level 1" width="876" height="663">
@@ -1200,7 +1202,7 @@ It roughly can be broken down into the following parts:</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_component_description">Component description</h4>
+<h4 id="_component_description_2">Component description</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2343,7 +2345,7 @@ Note: as soon as a resume feature is implemented, this needs to be addressed her
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-03-22 06:27:54 UTC
+Last updated 2024-03-22 09:04:53 UTC
 </div>
 </div>
 </body>

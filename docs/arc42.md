@@ -161,14 +161,20 @@ Request contains details required to start IRS fetch job provided by the compone
 
 ![arc42_003](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_003.png)
 
-The Trace-X acts as a consumer of the Portal component. The Trace-X contains a Restful client (REST template) that build a REST call to the mentioned Portal API based on its known URL (the Portal URL is configurable in the Trace-X).
-Request contains "bpns" provided by the component during sending notifications. Like described in the above section, the security aspect is required in order to achieve a REST call against the Portal. As a response, the Trace-X gets the corresponding BPN mappings to EDC urls where a notification should be send over. And as mentioned above, the transport protocol HTTP(S) is used for the REST call communication.
+The Trace-X acts as a consumer of the Portal component.
+The Trace-X contains a Restful client (REST template) that builds a REST call to the mentioned Portal API based on its known URL (the Portal URL is configurable in the Trace-X).
+The Portal is used to authenticate users and requests against the backend.
+And as mentioned above, the transport protocol HTTP(S) is used for the REST call communication.
 
 #### [Outdated] EDC API
 
 ![arc42_004](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_004.png)
 
-The Trace-X acts as a consumer of the EDC component. In Trace-X we communicate with EDC directly only for the sake of fulfilling quality-investigation functionality. Specific use cases can be viewed in [Runtime view](../runtime-view/index.adoc) section. For this purposes the integrated EDC clients in the Trace-X are responsible for creating restful requests to the EDC component. And as mentioned above, the transport protocol HTTP(S) is used for the REST call communication.
+The Trace-X acts as a consumer and provider of the EDC component.
+In Trace-X we communicate with EDC directly only for the sake of fulfilling quality-investigation functionality.
+Specific use cases can be viewed in [Runtime view](../runtime-view/index.adoc) section.
+For these purposes the integrated EDC clients in the Trace-X are responsible for creating restful requests to the EDC component.
+And as mentioned above, the transport protocol HTTP(S) is used for the REST call communication.
 
 ## Solution strategy
 
@@ -217,9 +223,9 @@ The backend does a request to the Digital Twin Registry utilizing the Registry c
 
 ## Building block view
 
-## Whitebox overall system
+## Blackbox overall system
 
-### [Outdated] Component diagram
+### Component diagram
 
 ![arc42_005](https://catenax-ng.github.io/tx-traceability-foss/docs/assets/arc42/arc42_005.png)
 ```bash
@@ -229,15 +235,14 @@ Component Diagram
 
 ```
 
-### [Outdated] Component description
+### Component description
 
 | Components | Description |
 | --- | --- |
 | IRS | The IRS consumes relationship information across the CX-Network and builds the graph view. Within this Documentation, the focus lies on the IRS |
 | EDC Consumer | The EDC Consumer Component is there to fulfill the GAIA-X and IDSA-data sovereignty principles. The EDC Consumer consists out of a control plane and a data plane. |
-| EDC Provider | The EDC Provider Component connects with EDC Consumer component and  forms the end point for the actual exchange of data. It handles automatic contract negotiation and the subsequent exchange of data assets for connected applications. |
+| EDC Provider | The EDC Provider Component connects with EDC Consumer component and forms the endpoint for the actual exchange of data. It handles automatic contract negotiation and the subsequent exchange of data assets for connected applications. |
 | Submodel Server | The Submodel Server offers endpoints for requesting the Submodel aspects. |
-| IAM/DAPS | DAPS as central Identity Provider |
 
 ## Level 1
 
