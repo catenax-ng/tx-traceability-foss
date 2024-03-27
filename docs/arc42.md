@@ -528,7 +528,7 @@ JWT token should also contain two claims:
 The list of values will be converted to roles by Trace-X.
 Currently, Trace-X API handles three roles: ***'User'*** and ***'Supervisor'*** and ***'Admin'.***
 
-You can have a look at the rights and roles matrix in the system overview of the administration guide.
+You can have a look at the [rights and role matrix](https://github.com/eclipse-tractusx/traceability-foss/blob/main/docs/src/docs/administration/system-overview.adoc#rights-and-role-matrix-of-trace-x) in the system overview of the administration guide.
 
 #### Trace-X as EDC client
 
