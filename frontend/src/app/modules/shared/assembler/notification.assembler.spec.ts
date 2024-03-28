@@ -26,7 +26,7 @@ import {
   NotificationStatus,
   NotificationType,
   NotificationTypeResponse,
-} from '@shared/model/notification.model';
+} from '@page/notifications/model/notification.model';
 import { Severity } from '@shared/model/severity.model';
 import { NotificationAssembler } from './notification.assembler';
 

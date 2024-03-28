@@ -30,7 +30,7 @@ import {
   Notifications,
   NotificationStatusGroup,
   NotificationType,
-} from '@shared/model/notification.model';
+} from '@page/notifications/model/notification.model';
 import { View } from '@shared/model/view.model';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

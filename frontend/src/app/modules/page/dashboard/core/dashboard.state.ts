@@ -22,7 +22,7 @@
 import { Injectable } from '@angular/core';
 import { DashboardStats } from '@page/dashboard/model/dashboard.model';
 
-import { Notifications } from '@shared/model/notification.model';
+import { Notifications } from '@page/notifications/model/notification.model';
 import { State } from '@shared/model/state';
 import { Observable } from 'rxjs';
 import { View } from 'src/app/modules/shared/model/view.model';

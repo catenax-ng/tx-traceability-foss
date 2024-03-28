@@ -7,7 +7,7 @@ import { ContractsFacade } from '@page/admin/presentation/contracts/contracts.fa
 import { TableType } from '@shared/components/multi-select-autocomplete/table-type.model';
 import { CreateHeaderFromColumns, TableConfig, TableEventConfig } from '@shared/components/table/table.model';
 import { View } from '@shared/model/view.model';
-import { NotificationAction } from '@shared/modules/notification/notification-action.enum';
+import { NotificationAction } from '@page/notifications/model/notification-action.enum';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 

@@ -18,7 +18,7 @@
  ********************************************************************************/
 
 import { Injectable } from '@angular/core';
-import { Notifications } from '@shared/model/notification.model';
+import { Notifications } from '@page/notifications/model/notification.model';
 import { State } from '@shared/model/state';
 import { View } from '@shared/model/view.model';
 import { Observable } from 'rxjs';

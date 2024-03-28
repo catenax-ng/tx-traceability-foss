@@ -29,7 +29,7 @@ import {
   NotificationsResponse,
   NotificationStatus,
   NotificationType,
-} from '../model/notification.model';
+} from '@page/notifications/model/notification.model';
 
 export class NotificationAssembler {
   public static assembleNotifications(response: NotificationsResponse): Notifications {

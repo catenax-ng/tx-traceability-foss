@@ -19,8 +19,8 @@
 import { NotificationActionHelperService } from '@shared/assembler/notification-action-helper.service';
 import { NotificationCommonModalComponent } from '@shared/components/notification-common-modal/notification-common-modal.component';
 import { MenuActionConfig } from '@shared/components/table/table.model';
-import { Notification } from '@shared/model/notification.model';
-import { NotificationAction } from '@shared/modules/notification/notification-action.enum';
+import { Notification } from '@page/notifications/model/notification.model';
+import { NotificationAction } from '@page/notifications/model/notification-action.enum';
 
 export class NotificationMenuActionsAssembler {
   public static getMenuActions(helperService: NotificationActionHelperService, modal: NotificationCommonModalComponent): MenuActionConfig<Notification>[] {

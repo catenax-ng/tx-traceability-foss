@@ -19,7 +19,7 @@
 
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NotificationDetailComponent } from '@page/notifications/detail/notification-detail.component';
+import { NotificationDetailComponent } from '@page/notifications/presentation/detail/notification-detail.component';
 import { NotificationsComponent } from '@page/notifications/presentation/notifications.component';
 import { I18NEXT_NAMESPACE_RESOLVER } from 'angular-i18next';
 

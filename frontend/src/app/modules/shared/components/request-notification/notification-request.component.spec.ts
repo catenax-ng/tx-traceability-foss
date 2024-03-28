@@ -21,13 +21,13 @@
 
 import {LayoutModule} from '@layout/layout.module';
 import {OtherPartsModule} from '@page/other-parts/other-parts.module';
-import {NotificationType} from '@shared/model/notification.model';
+import {NotificationType} from '@page/notifications/model/notification.model';
 import {SharedModule} from '@shared/shared.module';
 import {fireEvent, screen, waitFor} from '@testing-library/angular';
 import {renderComponent} from '@tests/test-render.utils';
 import {sleepForTests} from '../../../../../test';
 import {RequestNotificationComponent} from '@shared/components/request-notification/request-notification.component';
-import {NotificationService} from "@shared/service/notification.service";
+import {NotificationService} from "@page/notifications/core/notification.service";
 import { of } from 'rxjs';
 
 

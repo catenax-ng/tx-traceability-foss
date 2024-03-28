@@ -20,7 +20,7 @@
 import { Injectable } from '@angular/core';
 import { NotificationDetailState } from '@page/notifications/core/notification-detail.state';
 import { Part } from '@page/parts/model/parts.model';
-import { Notification } from '@shared/model/notification.model';
+import { Notification } from '@page/notifications/model/notification.model';
 import { View } from '@shared/model/view.model';
 import { FormatPartlistSemanticDataModelToCamelCasePipe } from '@shared/pipes/format-partlist-semantic-data-model-to-camelcase.pipe';
 import { PartsService } from '@shared/service/parts.service';

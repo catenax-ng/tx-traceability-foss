@@ -21,8 +21,8 @@
 
 import { Injectable } from '@angular/core';
 import { RoleService } from '@core/user/role.service';
-import { Notification, NotificationStatus } from '@shared/model/notification.model';
-import { NotificationAction } from '@shared/modules/notification/notification-action.enum';
+import { Notification, NotificationStatus } from '@page/notifications/model/notification.model';
+import { NotificationAction } from '@page/notifications/model/notification-action.enum';
 
 @Injectable({
   providedIn: 'root',

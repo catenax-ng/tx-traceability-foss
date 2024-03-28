@@ -26,9 +26,18 @@ import { NotificationDetailState } from '@page/notifications/core/notification-d
 import { NotificationHelperService } from '@page/notifications/core/notification-helper.service';
 import { NotificationsFacade } from '@page/notifications/core/notifications.facade';
 import { NotificationsState } from '@page/notifications/core/notifications.state';
-import { NotificationDetailComponent } from '@page/notifications/detail/notification-detail.component';
+import { NotificationDetailComponent } from '@page/notifications/presentation/detail/notification-detail.component';
+import { AcceptNotificationModalComponent } from '@page/notifications/presentation/modal/accept/accept-notification-modal.component';
+import { AcknowledgeNotificationModalComponent } from '@page/notifications/presentation/modal/acknowledge/acknowledge-notification-modal.component';
+import { ApproveNotificationModalComponent } from '@page/notifications/presentation/modal/approve/approve-notification-modal.component';
+import { CancelNotificationModalComponent } from '@page/notifications/presentation/modal/cancel/cancel-notification-modal.component';
+import { CloseNotificationModalComponent } from '@page/notifications/presentation/modal/close/close-notification-modal.component';
+import { DeclineNotificationModalComponent } from '@page/notifications/presentation/modal/decline/decline-notification-modal.component';
+import { NotificationTabComponent } from '@page/notifications/presentation/notification-tab/notification-tab.component';
+import { NotificationComponent } from '@page/notifications/presentation/notification/notification.component';
 import { PartsModule } from '@page/parts/parts.module';
-import { NotificationModule } from '@shared/modules/notification/notification.module';
+import { NotificationCommonModalComponent } from '@shared/components/notification-common-modal/notification-common-modal.component';
+import { ModalModule } from '@shared/modules/modal/modal.module';
 import { FormatPartSemanticDataModelToCamelCasePipe } from '@shared/pipes/format-part-semantic-data-model-to-camelcase.pipe';
 import { FormatPaginationSemanticDataModelToCamelCasePipe } from '@shared/pipes/format-pagination-semantic-data-model-to-camelcase.pipe';
 import { FormatPartlistSemanticDataModelToCamelCasePipe } from '@shared/pipes/format-partlist-semantic-data-model-to-camelcase.pipe';
@@ -40,14 +49,23 @@ import { NotificationsComponent } from './presentation/notifications.component';
 @NgModule({
   declarations: [
     NotificationsComponent, NotificationDetailComponent,
+    NotificationComponent,
+    NotificationTabComponent,
+    CloseNotificationModalComponent,
+    ApproveNotificationModalComponent,
+    CancelNotificationModalComponent,
+    AcceptNotificationModalComponent,
+    AcknowledgeNotificationModalComponent,
+    DeclineNotificationModalComponent,
+    NotificationCommonModalComponent,
   ],
   imports: [
     CommonModule,
     TemplateModule,
     SharedModule,
     NotificationsRoutingModule,
-    NotificationModule,
     PartsModule,
+    ModalModule,
   ],
   providers: [
     NotificationsFacade,
@@ -58,7 +76,19 @@ import { NotificationsComponent } from './presentation/notifications.component';
     FormatPartSemanticDataModelToCamelCasePipe,
     FormatPaginationSemanticDataModelToCamelCasePipe,
     FormatPartlistSemanticDataModelToCamelCasePipe,
+    NotificationCommonModalComponent,
+    NotificationComponent,
+    NotificationTabComponent,
+    CloseNotificationModalComponent,
+    ApproveNotificationModalComponent,
+    CancelNotificationModalComponent,
+    AcknowledgeNotificationModalComponent,
+    AcceptNotificationModalComponent,
+    DeclineNotificationModalComponent,
     ...getI18nPageProvider('page.alert'),
+  ],
+  exports: [
+    NotificationTabComponent,
   ],
 })
 export class NotificationsModule {

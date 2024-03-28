@@ -41,7 +41,7 @@ import { SeverityComponent } from '@shared/components/severity/severity.componen
 import { TableSettingsComponent } from '@shared/components/table-settings/table-settings.component';
 import { TextWithIconComponent } from '@shared/components/text-with-icon/text-with-icon.component';
 import { ViewSelectorComponent } from '@shared/components/view-selector/view-selector.component';
-import { NotificationModalContentComponent } from '@shared/modules/notification/modal/content/notification-modal-content.component';
+import { NotificationModalContentComponent } from '@page/notifications/presentation/modal/content/notification-modal-content.component';
 import { AbbreviateNumberPipe } from '@shared/pipes/abbreviate-number.pipe';
 import { FlattenObjectPipe } from '@shared/pipes/flatten-object.pipe';
 import { FormatPaginationSemanticDataModelToCamelCasePipe } from '@shared/pipes/format-pagination-semantic-data-model-to-camelcase.pipe';

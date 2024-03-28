@@ -26,9 +26,9 @@ import { NotificationsState } from '@page/notifications/core/notifications.state
 import { NotificationActionHelperService } from '@shared/assembler/notification-action-helper.service';
 import { NotificationMenuActionsAssembler } from '@shared/assembler/notificationMenuActions.assembler';
 import { NotificationCommonModalComponent } from '@shared/components/notification-common-modal/notification-common-modal.component';
-import { Notification, NotificationStatus } from '@shared/model/notification.model';
+import { Notification, NotificationStatus } from '@page/notifications/model/notification.model';
 import { Severity } from '@shared/model/severity.model';
-import { CloseNotificationModalComponent } from '@shared/modules/notification/modal/close/close-notification-modal.component';
+import { CloseNotificationModalComponent } from '@page/notifications/presentation/modal/close/close-notification-modal.component';
 import { KeycloakService } from 'keycloak-angular';
 
 describe('NotificationMenuActionsAssembler', () => {

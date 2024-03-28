@@ -58,7 +58,7 @@ import {
 import { ToastService } from '@shared/components/toasts/toast.service';
 import { isDateFilter } from '@shared/helper/filter-helper';
 import { addSelectedValues, removeSelectedValues } from '@shared/helper/table-helper';
-import { NotificationColumn } from '@shared/model/notification.model';
+import { NotificationColumn } from '@page/notifications/model/notification.model';
 import { DeeplinkService } from '@shared/service/deeplink.service';
 
 

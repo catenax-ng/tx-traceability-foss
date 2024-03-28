@@ -19,7 +19,7 @@
 
 import { Injectable } from '@angular/core';
 import { Part } from '@page/parts/model/parts.model';
-import { Notification } from '@shared/model/notification.model';
+import { Notification } from '@page/notifications/model/notification.model';
 import { State } from '@shared/model/state';
 import { View } from '@shared/model/view.model';
 import { Observable } from 'rxjs';

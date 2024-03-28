@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core';
 import { AdminService } from '@page/admin/core/admin.service';
 import { Owner } from '@page/parts/model/owner.enum';
 import { NotificationChannel, TableType } from '@shared/components/multi-select-autocomplete/table-type.model';
-import { NotificationService } from '@shared/service/notification.service';
+import { NotificationService } from '@page/notifications/core/notification.service';
 import { PartsService } from '@shared/service/parts.service';
 
 export abstract class AutocompleteStrategy {

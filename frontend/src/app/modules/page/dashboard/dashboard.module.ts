@@ -22,7 +22,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { getI18nPageProvider } from '@core/i18n';
-import { NotificationModule } from '@shared/modules/notification/notification.module';
+import { NotificationsModule } from '@page/notifications/notifications.module';
 import { SharedModule } from '@shared/shared.module';
 import { TemplateModule } from '@shared/template.module';
 import { DashboardFacade } from './abstraction/dashboard.facade';
@@ -33,7 +33,7 @@ import { DashboardComponent } from './presentation/dashboard.component';
 
 @NgModule({
   declarations: [ DashboardComponent ],
-  imports: [ CommonModule, TemplateModule, SharedModule, DashboardRoutingModule, NotificationModule ],
+  imports: [ CommonModule, TemplateModule, SharedModule, DashboardRoutingModule, NotificationsModule ],
   providers: [ DashboardService, DashboardFacade, DashboardState, ...getI18nPageProvider('page.dashboard') ],
 })
 export class DashboardModule {

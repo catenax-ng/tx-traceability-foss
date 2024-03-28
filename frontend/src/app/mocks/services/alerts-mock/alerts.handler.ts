@@ -20,7 +20,7 @@
  ********************************************************************************/
 
 import { environment } from '@env';
-import { NotificationStatus } from '@shared/model/notification.model';
+import { NotificationStatus } from '@page/notifications/model/notification.model';
 import { rest } from 'msw';
 import { applyPagination, extractPaginationOfNotifications } from '../pagination.helper';
 import { buildMockAlerts, getAlertById } from './alerts.model';

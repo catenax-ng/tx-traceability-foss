@@ -27,7 +27,7 @@ import { View } from '@shared/model/view.model';
 import { PartDetailsFacade } from '@shared/modules/part-details/core/partDetails.facade';
 import { StaticIdService } from '@shared/service/staticId.service';
 import { Observable, Subject, Subscription } from 'rxjs';
-import {NotificationType} from "@shared/model/notification.model";
+import {NotificationType} from "@page/notifications/model/notification.model";
 
 @Component({
   selector: 'app-start-investigation',

@@ -26,9 +26,9 @@ import {
   NotificationDeeplinkFilter,
   Notifications,
   NotificationStatus,
-} from '@shared/model/notification.model';
+} from '@page/notifications/model/notification.model';
 import { View } from '@shared/model/view.model';
-import { NotificationService } from '@shared/service/notification.service';
+import { NotificationService } from '@page/notifications/core/notification.service';
 import { Observable, Subscription } from 'rxjs';
 
 @Injectable()

@@ -20,9 +20,9 @@
  ********************************************************************************/
 
 import { Injectable } from '@angular/core';
-import { Notifications } from '@shared/model/notification.model';
+import { Notifications } from '@page/notifications/model/notification.model';
 import { View } from '@shared/model/view.model';
-import { NotificationService } from '@shared/service/notification.service';
+import { NotificationService } from '@page/notifications/core/notification.service';
 import { Observable, Subscription } from 'rxjs';
 import { DashboardService } from '../core/dashboard.service';
 import { DashboardState } from '../core/dashboard.state';

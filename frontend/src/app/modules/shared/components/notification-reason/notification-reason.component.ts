@@ -21,7 +21,7 @@
 
 import { Component, Input } from '@angular/core';
 import { CalendarDateModel } from '@core/model/calendar-date.model';
-import { Notification, NotificationStatus } from '@shared/model/notification.model';
+import { Notification, NotificationStatus } from '@page/notifications/model/notification.model';
 
 type TextMessageDirection = 'left' | 'right';
 

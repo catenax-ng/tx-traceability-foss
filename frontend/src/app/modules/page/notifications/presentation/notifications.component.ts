@@ -31,13 +31,13 @@ import { TableSortingUtil } from '@shared/components/table/table-sorting.util';
 import { MenuActionConfig, TableEventConfig, TableHeaderSort } from '@shared/components/table/table.model';
 import { createDeeplinkNotificationFilter } from '@shared/helper/notification-helper';
 import { setMultiSorting } from '@shared/helper/table-helper';
-import { NotificationTabInformation } from '@shared/model/notification-tab-information';
+import { NotificationTabInformation } from '@page/notifications/model/notification-tab-information';
 import {
   Notification,
   NotificationFilter,
   NotificationStatusGroup,
   NotificationType,
-} from '@shared/model/notification.model';
+} from '@page/notifications/model/notification.model';
 import { TranslationContext } from '@shared/model/translation-context.model';
 import { Subscription } from 'rxjs';
 

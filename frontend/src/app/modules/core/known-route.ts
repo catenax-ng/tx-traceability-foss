@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { NotificationStatusGroup } from '@shared/model/notification.model';
+import { NotificationStatusGroup } from '@page/notifications/model/notification.model';
 import { PageRoute } from '@shared/model/page-route.model';
 
 export const PARTS_BASE_ROUTE = 'parts';

@@ -18,7 +18,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-import { NotificationDeeplinkFilter } from '@shared/model/notification.model';
+import { NotificationDeeplinkFilter } from '@page/notifications/model/notification.model';
 
 export interface DeeplinkNotificationFilter {
   receivedFilter: NotificationDeeplinkFilter,

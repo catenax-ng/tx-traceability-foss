@@ -25,9 +25,9 @@ import { Part, SemanticDataModel } from '@page/parts/model/parts.model';
 import { BaseInputHelper } from '@shared/abstraction/baseInput/baseInput.helper';
 import { DateValidators } from '@shared/components/dateTime/dateValidators.model';
 import { ToastService } from '@shared/components/toasts/toast.service';
-import { NotificationStatusGroup, NotificationType } from '@shared/model/notification.model';
+import { NotificationStatusGroup, NotificationType } from '@page/notifications/model/notification.model';
 import { Severity } from '@shared/model/severity.model';
-import { NotificationService } from '@shared/service/notification.service';
+import { NotificationService } from '@page/notifications/core/notification.service';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({

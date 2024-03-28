@@ -19,8 +19,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import type { NotificationResponse } from '@shared/model/notification.model';
-import { NotificationStatus, NotificationTypeResponse } from '@shared/model/notification.model';
+import type { NotificationResponse } from '@page/notifications/model/notification.model';
+import { NotificationStatus, NotificationTypeResponse } from '@page/notifications/model/notification.model';
 import { Severity } from '@shared/model/severity.model';
 import { getRandomAsset } from '../parts-mock/partsAsPlanned/partsAsPlanned.model';
 import { MOCK_part_1 } from '../parts-mock/partsAsPlanned/partsAsPlanned.test.model';

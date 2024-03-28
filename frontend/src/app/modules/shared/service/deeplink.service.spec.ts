@@ -22,7 +22,7 @@
 import { TestBed } from '@angular/core/testing';
 import { NOTIFICATION_BASE_ROUTE } from '@core/known-route';
 import { DeeplinkModel } from '@shared/model/deeplink.model';
-import { NotificationColumn } from '@shared/model/notification.model';
+import { NotificationColumn } from '@page/notifications/model/notification.model';
 import { DeeplinkService } from '@shared/service/deeplink.service';
 
 describe('DeeplinkService', () => {

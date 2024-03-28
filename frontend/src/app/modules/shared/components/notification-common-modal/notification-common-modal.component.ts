@@ -19,14 +19,14 @@
 import { Component, EventEmitter, Input, Optional, Output, ViewChild } from '@angular/core';
 import { NotificationHelperService } from '@page/notifications/core/notification-helper.service';
 import { NotificationsFacade } from '@page/notifications/core/notifications.facade';
-import { Notification } from '@shared/model/notification.model';
+import { Notification } from '@page/notifications/model/notification.model';
 import { TranslationContext } from '@shared/model/translation-context.model';
-import { AcceptNotificationModalComponent } from '@shared/modules/notification/modal/accept/accept-notification-modal.component';
-import { AcknowledgeNotificationModalComponent } from '@shared/modules/notification/modal/acknowledge/acknowledge-notification-modal.component';
-import { ApproveNotificationModalComponent } from '@shared/modules/notification/modal/approve/approve-notification-modal.component';
-import { CancelNotificationModalComponent } from '@shared/modules/notification/modal/cancel/cancel-notification-modal.component';
-import { CloseNotificationModalComponent } from '@shared/modules/notification/modal/close/close-notification-modal.component';
-import { DeclineNotificationModalComponent } from '@shared/modules/notification/modal/decline/decline-notification-modal.component';
+import { AcceptNotificationModalComponent } from '@page/notifications/presentation/modal/accept/accept-notification-modal.component';
+import { AcknowledgeNotificationModalComponent } from '@page/notifications/presentation/modal/acknowledge/acknowledge-notification-modal.component';
+import { ApproveNotificationModalComponent } from '@page/notifications/presentation/modal/approve/approve-notification-modal.component';
+import { CancelNotificationModalComponent } from '@page/notifications/presentation/modal/cancel/cancel-notification-modal.component';
+import { CloseNotificationModalComponent } from '@page/notifications/presentation/modal/close/close-notification-modal.component';
+import { DeclineNotificationModalComponent } from '@page/notifications/presentation/modal/decline/decline-notification-modal.component';
 
 @Component({
   selector: 'app-notification-common-modal',

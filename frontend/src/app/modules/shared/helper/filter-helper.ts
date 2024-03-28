@@ -23,7 +23,7 @@ import {
   FilterOperator,
   getFilterOperatorValue,
 } from '@page/parts/model/parts.model';
-import { NotificationDeeplinkFilter } from '@shared/model/notification.model';
+import { NotificationDeeplinkFilter } from '@page/notifications/model/notification.model';
 
 
 export const DATE_FILTER_KEYS = [ 'manufacturingDate', 'functionValidFrom', 'functionValidUntil', 'validityPeriodFrom', 'validityPeriodTo', 'createdDate', 'targetDate', 'creationDate', 'endDate' ];

@@ -19,8 +19,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-import { NotificationStatus } from '@shared/model/notification.model';
-import { notificationTemplate } from '@shared/modules/notification/modal/modalTestHelper.spec';
+import { NotificationStatus } from '@page/notifications/model/notification.model';
+import { notificationTemplate } from '@page/notifications/presentation/modal/modalTestHelper.spec';
 import { SharedModule } from '@shared/shared.module';
 import { screen } from '@testing-library/angular';
 import { renderComponent } from '@tests/test-render.utils';

@@ -35,7 +35,7 @@ import {TableEventConfig, TableHeaderSort} from '@shared/components/table/table.
 import {ToastService} from '@shared/components/toasts/toast.service';
 import {containsAtleastOneFilterEntry, toAssetFilter, toGlobalSearchAssetFilter} from '@shared/helper/filter-helper';
 import {setMultiSorting} from '@shared/helper/table-helper';
-import {NotificationType} from '@shared/model/notification.model';
+import {NotificationType} from '@page/notifications/model/notification.model';
 import {View} from '@shared/model/view.model';
 import {PartDetailsFacade} from '@shared/modules/part-details/core/partDetails.facade';
 import {BomLifecycleSettingsService, UserSettingView} from '@shared/service/bom-lifecycle-settings.service';

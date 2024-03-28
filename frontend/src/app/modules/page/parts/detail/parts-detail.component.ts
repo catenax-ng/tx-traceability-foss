@@ -9,10 +9,10 @@ import {Owner} from '@page/parts/model/owner.enum';
 import {ImportState, Part, QualityType} from '@page/parts/model/parts.model';
 import {PartsAssembler} from '@shared/assembler/parts.assembler';
 import {SelectOption} from '@shared/components/select/select.component';
-import {NotificationType} from '@shared/model/notification.model';
+import {NotificationType} from '@page/notifications/model/notification.model';
 import {State} from '@shared/model/state';
 import {View} from '@shared/model/view.model';
-import {NotificationAction} from '@shared/modules/notification/notification-action.enum';
+import {NotificationAction} from '@page/notifications/model/notification-action.enum';
 
 import {PartDetailsFacade} from '@shared/modules/part-details/core/partDetails.facade';
 import {BehaviorSubject, Observable, Subject, Subscription} from 'rxjs';

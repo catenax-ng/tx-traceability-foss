@@ -30,7 +30,7 @@ import {TableSortingUtil} from '@shared/components/table/table-sorting.util';
 import {TableEventConfig, TableHeaderSort} from '@shared/components/table/table.model';
 import {containsAtleastOneFilterEntry, toAssetFilter, toGlobalSearchAssetFilter} from '@shared/helper/filter-helper';
 import {setMultiSorting} from '@shared/helper/table-helper';
-import {NotificationType} from '@shared/model/notification.model';
+import {NotificationType} from '@page/notifications/model/notification.model';
 import {View} from '@shared/model/view.model';
 import {PartDetailsFacade} from '@shared/modules/part-details/core/partDetails.facade';
 import {StaticIdService} from '@shared/service/staticId.service';

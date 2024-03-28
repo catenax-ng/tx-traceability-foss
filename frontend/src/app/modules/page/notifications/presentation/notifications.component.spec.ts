@@ -18,8 +18,8 @@
  ********************************************************************************/
 
 import { NotificationsModule } from '@page/notifications/notifications.module';
-import { NotificationTabInformation } from '@shared/model/notification-tab-information';
-import { NotificationService } from '@shared/service/notification.service';
+import { NotificationTabInformation } from '@page/notifications/model/notification-tab-information';
+import { NotificationService } from '@page/notifications/core/notification.service';
 import { fireEvent, screen, waitFor } from '@testing-library/angular';
 import { renderComponent } from '@tests/test-render.utils';
 

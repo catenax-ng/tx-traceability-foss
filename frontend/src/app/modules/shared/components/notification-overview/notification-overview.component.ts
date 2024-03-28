@@ -20,14 +20,14 @@
  ********************************************************************************/
 
 import { Component, Input } from '@angular/core';
-import { Notification } from '@shared/model/notification.model';
+import { Notification } from '@page/notifications/model/notification.model';
 
 @Component({
   selector: 'app-notification-overview',
   templateUrl: './notification-overview.component.html',
   styleUrls: [
     '../card-list/card-list.component.scss',
-    '../../modules/notification/notification-tab/notification-tab.component.scss',
+    '../../../page/notifications/presentation/notification-tab/notification-tab.component.scss',
     './notification-overview.component.scss',
   ],
 })
