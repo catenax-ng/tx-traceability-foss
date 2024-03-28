@@ -230,8 +230,8 @@
   "commonAlert": {
     "viewAll": "View all",
     "tabs": {
-      "received": "received",
-      "queuedAndRequested": "sent"
+      "received": "Received",
+      "queuedAndRequested": "Sent"
     },
     "status": {
       "SENT": "Requested",

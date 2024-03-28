@@ -93,6 +93,11 @@ table {
   padding: 0 10px;
 }
 
+.table--header--text {
+  display: flex;
+  justify-content: space-between;
+}
+
 .table--selected__container {
   z-index: 1;
   display: flex;

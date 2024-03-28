@@ -21,7 +21,9 @@ SPDX-License-Identifier: Apache-2.0
 
 <div *ngIf="additionalTableHeader" class="table-header-wrapper">
   <div class="table-header-container">
-    <div class="large-text table--header--text">{{tableHeader | i18n}}</div>
+    <div class="large-text table--header--text">{{tableHeader | i18n}}
+      <app-button *ngIf="hasTableSettings" iconName="settings" (click)="openDialog()"></app-button>
+    </div>
   </div>
 </div>
 <div [class.mat-elevation-z8]="!noShadow" class="table-wrapper" [ngClass]="labelId?.startsWith('dashboard') ? 'rows-dashboard' : ''">
@@ -67,7 +69,7 @@ SPDX-License-Identifier: Apache-2.0
           data-testid="table-component--head-row" class="table--header--row"></tr>
     </ng-container>
     <ng-container *ngIf="autocompleteEnabled">
-    <tr class="filter-row" mat-header-row *matHeaderRowDef="tableViewConfig?.filterColumns; sticky: true"></tr>
+    <tr class="filter-row" mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     </ng-container>
     <ng-container matColumnDef="{{ filter.headerKey }}"
                   *ngFor="let filter of tableViewConfig.displayFilterColumnMappings">
