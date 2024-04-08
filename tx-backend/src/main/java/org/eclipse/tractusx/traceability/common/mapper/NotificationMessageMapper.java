@@ -22,18 +22,20 @@ package org.eclipse.tractusx.traceability.common.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.eclipse.tractusx.traceability.bpn.domain.service.BpnRepository;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.model.QualityNotificationMessage;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.model.QualityNotificationSeverity;
-import org.eclipse.tractusx.traceability.qualitynotification.domain.base.model.QualityNotificationType;
-import org.eclipse.tractusx.traceability.qualitynotification.infrastructure.edc.model.EDCNotification;
+import org.eclipse.tractusx.traceability.notification.domain.base.model.NotificationMessage;
+import org.eclipse.tractusx.traceability.notification.domain.base.model.NotificationSeverity;
+import org.eclipse.tractusx.traceability.notification.domain.base.model.NotificationType;
+import org.eclipse.tractusx.traceability.notification.infrastructure.edc.model.EDCNotification;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static org.apache.commons.collections4.ListUtils.emptyIfNull;
+
 @Component
 @RequiredArgsConstructor
-public class NotificationMessageMapper { // rename to QualityNotificationMessageMapper
+public class NotificationMessageMapper {
 
     private final BpnRepository bpnRepository;
 
@@ -43,9 +45,9 @@ public class NotificationMessageMapper { // rename to QualityNotificationMessage
      * @param edcNotification the EDCNotification received by the receiver
      * @return a Notification object representing the notification received by the receiver
      */
-    public QualityNotificationMessage toNotification(EDCNotification edcNotification, QualityNotificationType type) {
+    public NotificationMessage toNotification(EDCNotification edcNotification, NotificationType type) {
         String notificationId = UUID.randomUUID().toString();
-        return QualityNotificationMessage.builder()
+        return NotificationMessage.builder()
                 .id(notificationId)
                 .created(LocalDateTime.now())
                 .notificationReferenceId(edcNotification.getNotificationId())
@@ -56,9 +58,9 @@ public class NotificationMessageMapper { // rename to QualityNotificationMessage
                 .sendToName(getManufacturerName(edcNotification.getRecipientBPN()))
                 .description(edcNotification.getInformation())
                 .notificationStatus(edcNotification.convertNotificationStatus())
-                .affectedParts(edcNotification.getListOfAffectedItems())
+                .affectedParts(emptyIfNull(edcNotification.getListOfAffectedItems()))
                 .targetDate(edcNotification.getTargetDate())
-                .severity(QualityNotificationSeverity.fromString(edcNotification.getSeverity()))
+                .severity(NotificationSeverity.fromString(edcNotification.getSeverity()))
                 .edcNotificationId(edcNotification.getNotificationId())
                 .messageId(edcNotification.getMessageId())
                 .build();

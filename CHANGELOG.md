@@ -6,8 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 _**For better traceability add the corresponding GitHub issue number in each changelog entry, please.**_
-
 ## [UNRELEASED - DD.MM.YYYY]
+
+## Changed
+- #823 migrate to irs-helm 6.18.0
+- #636 migrate to digital-twin-registry version 0.4.9 from 0.3.22
+
+
+### Added
+- #780 store api documenation in docs/api to conform with TRG 1.08
+
+## [10.8.2 - 05.04.2024]
+### Removed
+- #547 Removed classification check on alert / investigation update callback methods
+
+## [10.8.1 - 04.04.2024]
+
 ### Added
 - #695 OAuth2.0 Client scope configuration
 - #606 Added error message into notifications on failure
@@ -18,6 +32,8 @@ _**For better traceability add the corresponding GitHub issue number in each cha
 - #706 Notification controller having the same endpoints as alerts and investigations controllers
 - #736 add contractAgreementId as searchable field for /contracts
 - Added capitalization section in guidelines.md
+- #616 Allow edc notification update with empty asset list
+- #630 Added Parts extended detailed view
 
 ### Changed
 - #709 Bumped spring-core from 6.0.17 to 6.1.5
@@ -37,13 +53,13 @@ _**For better traceability add the corresponding GitHub issue number in each cha
 - #630 Updated user manual with new part detailed view also for supplier and customer parts
 - #736 fixed bug in request logic of contracts detailed view
 - Improved the release documentation
+- #706 QualityNotification naming in code replaced with Notification
 
 ### Removed
 - Shedlock, resilence4j, templateResolver as not used anymore
 - #706 Removed alert and investigation specific classes and services to replace them with merged notification classes
 
-### Added
-- #630 Added Parts extended detailed view
+## [10.8.0 - 03.04.2024] - BROKEN RELEASE - DO NOT USE
 
 ## [10.7.0 - 18.03.2024]
 
