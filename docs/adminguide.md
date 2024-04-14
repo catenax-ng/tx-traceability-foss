@@ -41,17 +41,10 @@ Currently, Trace-X API handles three roles: ***'User'*** and ***'Supervisor'*** 
 | View | View Dashboard | x | x | x |
 |  | View Parts | x | x | x |
 |  | View Other parts | x | x | x |
-|  | View Inbox | x | x | x |
+|  | View Quality notifications | x | x | x |
 |  | View Administration |  |  | x |
-| Investigation | Create | x | x |  |
-|  | Send (Approve) |  | x |  |
-|  | Read | x | x | x |
-|  | Cancel | x | x |  |
-|  | Acknowledge | x | x |  |
-|  | Accept | x | x |  |
-|  | Decline | x | x |  |
-|  | Close |  | x |  |
-| Alert | Create | x | x |  |
+| Edit | Edit Quality notifications |  | x |  |
+| Quality notification | Create | x | x |  |
 |  | Send (Approve) |  | x |  |
 |  | Read | x | x | x |
 |  | Cancel | x | x |  |
@@ -61,6 +54,7 @@ Currently, Trace-X API handles three roles: ***'User'*** and ***'Supervisor'*** 
 |  | Close |  | x |  |
 | Administration panel | Access "BPN EDC config panel" |  |  | x |
 |  | Access "Registry lookup Panel" |  |  | x |
+|  | Access "Data Import Interface" |  |  | x |
 
 ## Installation
 
