@@ -25,7 +25,7 @@ SPDX-License-Identifier: Apache-2.0
     <textarea
       #inputElement
       [formControl]="control"
-      [attr.data-testId]="htmlId"
+      [attr.data-testId]="dataTestId ? dataTestId : htmlId"
       [errorStateMatcher]="matcher"
       style="line-height: 1.5;"
       matInput

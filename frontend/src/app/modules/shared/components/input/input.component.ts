@@ -30,10 +30,10 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { ThemePalette } from '@angular/material/core';
 import { BaseInputComponent } from '@shared/abstraction/baseInput/baseInput.component';
 import { StaticIdService } from '@shared/service/staticId.service';
-import { ThemePalette } from '@angular/material/core';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
@@ -50,6 +50,7 @@ export class InputComponent extends BaseInputComponent<string> {
   @Input() parentControlName: string;
   @Output() suffixIconClick = new EventEmitter<void>();
   @ViewChild('inputElement') inputElement: ElementRef;
+  @Input() dataTestId: string;
 
   constructor(@Inject(Injector) injector: Injector, staticIdService: StaticIdService) {
     super(injector, staticIdService);

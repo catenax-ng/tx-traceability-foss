@@ -22,7 +22,8 @@ SPDX-License-Identifier: Apache-2.0
 <div class="textarea--container">
   <mat-form-field [style.fontSize]="'16'" appearance="fill">
     <mat-label>{{ label }}</mat-label>
-    <input #inputElement [formControl]="control" [attr.data-testId]="htmlId" [errorStateMatcher]="matcher" matInput />
+    <input #inputElement [formControl]="control" [attr.data-testId]="dataTestId ? dataTestId : htmlId"
+           [errorStateMatcher]="matcher" matInput />
     <mat-icon *ngIf="matcher.isErrorState(control)" color="warn" matSuffix>error_outline</mat-icon>
     <mat-icon
       *ngIf="!matcher.isErrorState(control) && suffixIcon"

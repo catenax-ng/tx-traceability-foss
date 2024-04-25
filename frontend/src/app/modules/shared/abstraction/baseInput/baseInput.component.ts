@@ -29,16 +29,17 @@ import {
   NgControl,
   NgModel,
 } from '@angular/forms';
+import { MyErrorStateMatcher } from '@shared/abstraction/baseInput/baseInput.helper';
 import { StaticIdService } from '@shared/service/staticId.service';
 import { Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
-import { MyErrorStateMatcher } from '@shared/abstraction/baseInput/baseInput.helper';
 
 @Component({ selector: 'app-baseInput', template: '' })
 export class BaseInputComponent<T> implements ControlValueAccessor, OnInit {
   @ViewChild('inputElement') inputElement: ElementRef<HTMLInputElement>;
   @Input() label = '';
   @Input() hint = '';
+  @Input() dataTestId: string;
 
   public control!: FormControl;
   public matcher = new MyErrorStateMatcher();

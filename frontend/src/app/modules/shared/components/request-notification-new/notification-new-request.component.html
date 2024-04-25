@@ -34,6 +34,7 @@ SPDX-License-Identifier: Apache-2.0
       class="title--input"
       formControlName="title"
       data-testId="title-input"
+      [dataTestId]="'title-input-element'"
     ></app-input>
   </div>
 
@@ -44,6 +45,7 @@ SPDX-License-Identifier: Apache-2.0
       class="bpn-config--input"
       formControlName="bpn"
       data-testId="bpn-input"
+      [dataTestId]="'bpn-input-element'"
     ></app-input>
   </div>
 
@@ -67,6 +69,7 @@ SPDX-License-Identifier: Apache-2.0
 
   <app-textarea
     data-testId="description-input"
+    [dataTestId]="'description-input-element'"
     [label]="'requestNotification.textAreaLabel' | i18n"
     [hint]="'requestNotification.textAreaDescription' | i18n"
     formControlName="description"
