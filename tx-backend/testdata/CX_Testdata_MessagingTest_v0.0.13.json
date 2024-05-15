@@ -29,6 +29,14 @@
                     "@id": "odrl:eq"
                   },
                   "odrl:rightOperand": "cx.core.industrycore:1"
+                },
+                {
+                  "@type": "Constraint",
+                  "odrl:leftOperand": "cx-policy:MyOwn",
+                  "odrl:operator": {
+                    "@id": "odrl:eq"
+                  },
+                  "odrl:rightOperand": "cx.core.notCore:1"
                 }
               ]
             }
