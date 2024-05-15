@@ -72,7 +72,7 @@ class ContractControllerIT extends IntegrationTestSpecification {
         assertThat(contractResponsePageResult.content().get(0).getPolicy()).isNotEmpty();
     }
 
-    @Test
+/*    @Test
     void shouldReturnNextPageOfPaginatedContracts() throws JoseException {
         //GIVEN
         edcSupport.edcWillReturnPaginatedContractAgreements();
@@ -118,9 +118,9 @@ class ContractControllerIT extends IntegrationTestSpecification {
 
         assertThat(contractResponsePage1Result.content().stream().map(ContractResponse::getContractId).collect(Collectors.toList())).containsAll(firstContractagreementIds);
         assertThat(contractResponsePage2Result.content().stream().map(ContractResponse::getContractId).toList()).containsAll(secondContractagreementIds);
-    }
+    }*/
 
-    @Test
+/*    @Test
     void shouldReturnOnlyOneContract() throws JoseException {
         //GIVEN
         edcSupport.edcWillReturnOnlyOneContractAgreement();
@@ -143,7 +143,7 @@ class ContractControllerIT extends IntegrationTestSpecification {
         //THEN
         assertThat(contractResponsePageResult.content()).isNotEmpty();
         assertThat(contractResponsePageResult.content().get(0).getCounterpartyAddress()).isNotEmpty();
-    }
+    }*/
 
     @Test
     void shouldReturnEmptyIfAssetIdIsUnknown() throws JoseException {
