@@ -1090,34 +1090,58 @@
             "subcomponents" : [
               {
                 "tractionBatteryCode" : "X12MCPM27KLPCLX2M2382320",
-                "productType" : "module"
+                "productType": {
+                  "type": "Battery",
+                  "characteristics": "Lithium-Ion"
+                }
               },
               {
                 "tractionBatteryCode" : "X12MCPM27KLPCLX2M2382321",
-                "productType" : "module"
+                "productType": {
+                  "type": "Battery",
+                  "characteristics": "Lithium-Ion"
+                }
               },
               {
                 "tractionBatteryCode" : "X12MCPM27KLPCLX2M2382322",
-                "productType" : "module"
+                "productType": {
+                  "type": "Battery",
+                  "characteristics": "Lithium-Ion"
+                }
               },
               {
                 "tractionBatteryCode" : "X12MCPM27KLPCLX2M2382323",
-                "productType" : "module"
+                "productType": {
+                  "type": "Battery",
+                  "characteristics": "Lithium-Ion"
+                }
               },
               {
                 "tractionBatteryCode" : "X12MCPM27KLPCLX2M2382324",
-                "productType" : "module"
+                "productType": {
+                  "type": "Battery",
+                  "characteristics": "Lithium-Ion"
+                }
               },
               {
                 "tractionBatteryCode" : "X12MCPM27KLPCLX2M2382325",
-                "productType" : "module"
+                "productType": {
+                  "type": "Battery",
+                  "characteristics": "Lithium-Ion"
+                }
               },
               {
                 "tractionBatteryCode" : "X12MCPM27KLPCLX2M2382326",
-                "productType" : "module"
+                "productType": {
+                  "type": "Battery",
+                  "characteristics": "Lithium-Ion"
+                }
               }
             ],
-            "productType" : "module"
+            "productType": {
+              "type": "Battery",
+              "characteristics": "Lithium-Ion"
+            }
           }
         }
       ]
@@ -1161,10 +1185,16 @@
             "subcomponents" : [
               {
                 "tractionBatteryCode" : "X12MCPM27KLPCLX2M2382320",
-                "productType" : "cell"
+                "productType": {
+                  "type": "Battery",
+                  "characteristics": "Lithium-Ion"
+                }
               }
             ],
-            "productType" : "cell"
+            "productType": {
+              "type": "Battery",
+              "characteristics": "Lithium-Ion"
+            }
           }
         }
       ]
