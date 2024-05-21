@@ -25,4 +25,6 @@ import java.util.concurrent.CompletableFuture;
 
 public interface EdcNotificationService {
     CompletableFuture<NotificationMessage> asyncNotificationMessageExecutor(NotificationMessage notification);
+
+    //test
 }
