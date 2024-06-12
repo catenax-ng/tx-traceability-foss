@@ -1,0 +1,25 @@
+# Fügt das Label 'Documentation' hinzu, wenn Dateien im 'docs' oder 'guides' Verzeichnis geändert werden
+Documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'docs/*'
+
+
+# Fügt das Label 'feature' hinzu, wenn der Branch-Name mit 'feature' beginnt oder 'feature' enthält
+feature:
+  - head-branch: [ '^feature', 'feature' ]
+
+
+# Fügt das Label 'bug' hinzu, wenn 'bug' im Titel des PR steht
+bug:
+  - title: 'bug'
+
+# Fügt das Label 'frontend' hinzu, wenn Dateien mit der Endung .ts geändert wurden
+frontend:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.ts'
+
+# Fügt das Label 'BE' hinzu, wenn Dateien mit der Endung .java geändert wurden
+BE:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.java'
