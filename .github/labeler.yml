@@ -1,0 +1,22 @@
+Documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'docs/*'
+          - '**/*.md'
+
+feature:
+  - head-branch: [ '^feature', 'feature' ]
+
+
+bug:
+  - title: 'bug'
+
+
+frontend:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.ts'
+
+
+BE:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.java'
